@@ -1,4 +1,5 @@
 <div align="center">
+<img src="https://i.ibb.co/fV94VT6P/compound-v.png" alt="Logo" width="250"/>
 
 # 🧪 CompoundV
 
