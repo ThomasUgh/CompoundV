@@ -192,6 +192,15 @@ Main command: `/compoundv` — alias: `/cv`
 
 ---
 
+## 🐛 Bug Reports & Suggestions
+ 
+Found a bug or have an idea? Open an [issue on GitHub](https://github.com/thomasugh/compoundv/issues). Please include:
+ 
+- Server software and version *(e.g. `Paper 1.21.4 v1.0.0`)*
+- Plugin version
+- A clear description and, if possible, console logs
+---
+
 ## 📜 Credits
 
 <div align="center">
