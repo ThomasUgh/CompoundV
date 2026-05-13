@@ -192,6 +192,12 @@ Main command: `/compoundv` — alias: `/cv`
 
 ---
 
+## 🌍 Languages
+ 
+CompoundV ships with **English** (`messages_en.yml`) and **German** (`messages_de.yml`). Switch by setting `language: en` or `language: de` in `config.yml`. Custom translations can be added by dropping a new file into `plugins/CompoundV/lang/`.
+ 
+---
+
 ## 🐛 Bug Reports & Suggestions
  
 Found a bug or have an idea? Open an [issue on GitHub](https://github.com/thomasugh/compoundv/issues). Please include:
