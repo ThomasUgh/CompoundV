@@ -1,0 +1,21 @@
+name: CompoundV
+version: 1.0.0-BETA
+main: de.thomasugh.compoundv.CompoundVPlugin
+api-version: '1.21'
+author: Thomas U.
+description: CompoundV - modular ability serums for Minecraft
+website: https://github.com/thomasugh/compoundv
+
+commands:
+  compoundv:
+    description: CompoundV main command
+    aliases: [cv]
+    usage: /cv <give|remove|info|reload|help>
+
+permissions:
+  compoundv.use:
+    description: Allows drinking CompoundV potions and using abilities
+    default: true
+  compoundv.admin:
+    description: Allows /cv give, /cv remove and /cv reload
+    default: op

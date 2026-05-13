@@ -1,0 +1,103 @@
+language: en
+
+compound_v:
+  chances:
+    the_patriot: 1
+    fly: 15
+    heat_vision: 8
+    speedster: 10
+    strength: 18
+    invisibility: 7
+    fire: 20
+
+temp_v:
+  chances:
+    fly: 10
+    heat_vision: 5
+    speedster: 20
+    strength: 25
+    invisibility: 15
+    fire: 10
+  min_duration_minutes: 15
+  max_duration_minutes: 120
+
+v_one:
+  chances:
+    the_patriot_v_one: 1
+    the_veteran: 3
+  drink_effect_seconds: 5
+
+heat_vision:
+  range: 43
+  damage_amount: 2.0
+  damage_interval: 2
+  ignite_blocks: true
+  ignite_entities: true
+  break_glass: true
+  break_leaves: true
+  fire_particles: false
+
+abilities:
+  the_patriot:
+    shared:
+      launch_velocity: 3.5
+      launch_peak_ticks: 28
+      launch_cooldown_ms: 10000
+      launch_fly_speed: 0.375
+      glow_radius: 50
+      fall_impact_height: 30
+      fall_impact_power: 4.0
+      fall_impact_block_damage: true
+      extra_hearts: 10
+
+    compound_v:
+      strength_level: 3
+      resistance_level: 2
+      regen_level: 1
+      fire_resistance: false
+      launch_fly_speed: 0.375
+      heat_vision_damage_amount: 8.0
+
+    v_one:
+      strength_level: 4
+      resistance_level: 3
+      regen_level: 1
+      fire_resistance: true
+      launch_fly_speed: 0.400
+      heat_vision_damage_amount: 10.0
+
+  the_veteran:
+    strength_level: 5
+    resistance_level: 3
+    burst_cooldown_ms: 45000
+    charge_duration_ticks: 100
+    charge_period_ticks: 5
+    beam_duration_ticks: 80
+    beam_period_ticks: 2
+    beam_range: 48.0
+    beam_radius: 1.35
+    beam_damage_amount: 50.0
+    beam_damage_multiplier: 5.0
+    beam_damage_interval_ticks: 2
+    beam_break_blocks: true
+    beam_ignite_blocks: true
+    beam_block_affect_interval_ticks: 5
+    beam_max_blocks_per_pulse: 4
+    beam_block_hits_to_break: 5
+    beam_surface_only: true
+    beam_removes_player_abilities: true
+    ground_zero_radius: 14.0
+    ground_zero_damage: 500.0
+    ground_zero_knockback: 7.5
+    ground_zero_set_fire: true
+
+  speedster:
+    speed_level: 4
+    resistance_level: 1
+
+  strength:
+    level: 3
+    resistance_level: 1
+
+  fire:
+    radius: 3.5

@@ -1,0 +1,153 @@
+language_file_version: 6
+prefix: "&8[&b&lCV&r&8] "
+
+general:
+  no_permission: "<prefix>&cYou do not have permission to do this."
+  player_not_found: "<prefix>&cPlayer not found."
+  reloaded: "<prefix>&aCompoundV has been reloaded."
+  not_a_player: "<prefix>&cThis command can only be used by players."
+
+potion:
+  drinking: "<prefix>&7The &bserum&7 is activating..."
+  drink_temp_v: "<prefix>&aTemp V&7 is activating. Your ability will only last for a limited time."
+  drink_v_one: "<prefix>&3V One&7 is activating. Brace yourself."
+  drink_anti_v: "<prefix>&cAnti V&7 is removing your active ability."
+  no_ability: "<prefix>&7You do not have an active ability."
+  no_chances: "<prefix>&cThis potion has no valid abilities configured. Please contact an admin."
+  roll_failed: "<prefix>&cThe serum could not be processed. Please contact an admin."
+
+ability:
+  granted_header: "<prefix>&8━━━━━━━━ &aAbility Unlocked &8━━━━━━━━"
+  granted_name: "<prefix>&7You unlocked &a&l{name}&r&7 through &b{potion}&7."
+  controls_header: "<prefix>&8────── &aControls & Effects &8──────"
+  granted_expires: "<prefix>&8• &7Duration: &e{minutes}m {seconds}s"
+  granted_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  lost_on_death: "<prefix>&cYou lost your ability on death."
+  expired: "<prefix>&eYour temporary ability has expired."
+  removed_admin: "<prefix>&cYour ability was removed by an admin."
+  removed_anti_v: "<prefix>&cAnti V removed your ability."
+
+  the_patriot:
+    description:
+      - "<prefix>&8• &aFlight&7 is enabled automatically."
+      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle the strong red beam."
+      - "<prefix>&8• &bXRay&7: &dSneak + Right-Click&7 while looking at a block or while holding a normal item to reveal nearby entities."
+      - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
+      - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7 and &cBonus Hearts&7."
+  the_patriot_v_one:
+    description:
+      - "<prefix>&8• &aFlight&7 is enabled automatically with stronger V One boosts."
+      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle a denser red beam."
+      - "<prefix>&8• &bXRay&7: &dSneak + Right-Click&7 while looking at a block or while holding a normal item to reveal nearby entities."
+      - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
+      - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7, &6Fire Resistance&7 and &cBonus Hearts&7."
+  heat_vision:
+    description:
+      - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the lighter cyan beam."
+      - "<prefix>&8• &7This version is &eweaker&7 than &cThe Patriot&7 Heat Vision but can still damage entities and affect configured blocks."
+  fly:
+    description:
+      - "<prefix>&8• &aFlight&7 is enabled automatically."
+      - "<prefix>&8• &7Use normal Minecraft flight controls to move."
+  speedster:
+    description:
+      - "<prefix>&8• &eSuper Speed&7: press &dF&7 to toggle it on/off."
+      - "<prefix>&8• &7Includes a small &9Resistance&7 bonus while active."
+  strength:
+    description:
+      - "<prefix>&8• &aStrength&7 is active permanently while you own this ability."
+      - "<prefix>&8• &7Includes a small &9Resistance&7 bonus."
+  invisibility:
+    description:
+      - "<prefix>&8• &5Ghost Mode&7: press &dF&7 to toggle invisibility, using the same key as Heat Vision."
+      - "<prefix>&8• &7When enabled you receive &5Invisibility II&7."
+      - "<prefix>&8• &7Includes a &9Resistance&7 bonus."
+  fire:
+    description:
+      - "<prefix>&8• &cFire Aura&7 ignites nearby enemies automatically."
+      - "<prefix>&8• &6Fire Resistance&7 is enabled."
+      - "<prefix>&8• &7Vanilla right-click fire placement with &6Flint and Steel&7 or &6Fire Charges&7 is blocked while you own this ability."
+  the_veteran:
+    description:
+      - "<prefix>&8• &7Passive boosts: high &aStrength&7, &9Resistance&7 and &6Fire Resistance&7."
+      - "<prefix>&8• &eChest Beam&7: &dSneak + Right-Click&7 while looking at a block or while holding a normal item."
+      - "<prefix>&8• &7The attack first &echarges for 5 seconds&7, then fires for about &a3-4 seconds&7."
+      - "<prefix>&8• &7The thick &eyellow fire beam&7 deals extreme damage and slowly burns through surface blocks."
+      - "<prefix>&8• &7When released, it creates a &c20 TNT-style nuclear shockwave&7 with a small mushroom cloud and &cno block damage&7 around the player."
+
+toggle:
+  heat_vision_on: "&bHeat Vision &aenabled"
+  heat_vision_off: "&7Heat Vision disabled"
+  xray_on: "&bXRay &aenabled"
+  xray_off: "&7XRay disabled"
+  speed_on: "&eSuper Speed &aenabled"
+  speed_off: "&7Super Speed disabled"
+  ghost_on: "&5Ghost Mode &aenabled"
+  ghost_off: "&7Ghost Mode disabled"
+
+veteran:
+  charge_start: "&eThe Veteran &7is charging the &eChest Beam&7..."
+  charge_progress: "&eCharging... &7release in &a{seconds}s"
+  burst_start: "&eThe Veteran &7released the &eChest Beam&7."
+  burst_end: "&7Chest Beam finished."
+  cooldown: "&cChest Beam ready in {seconds}s"
+  hit_target: "<prefix>&7You removed the ability from &a{target}&7."
+  hit_by: "<prefix>&c{source}&7 removed your ability."
+
+fall_impact: "&cImpact"
+launch_cooldown: "&cJump Start ready in {seconds}s"
+
+command:
+  header: "<prefix>&8━━━━━━━━ &aCompoundV Help &8━━━━━━━━"
+  give_bottle: "<prefix>&8• &7/cv give &a<player>&7 bottle &d[compoundv|tempv|vone|antiv]"
+  give_ability: "<prefix>&8• &7/cv give &a<player>&7 &c<ability>&7 &d[potionType]"
+  remove: "<prefix>&8• &7/cv remove &a<player>"
+  info_self: "<prefix>&8• &7/cv info &d[player]"
+  reload: "<prefix>&8• &7/cv reload"
+  abilities_list: "<prefix>&8• &7Abilities: &a{list}"
+  footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  give_bottle_ok: "<prefix>&7Gave &b{bottle}&7 to &a{player}&7."
+  give_ability_ok: "<prefix>&a{name}&7 was assigned to &a{player}&7. The player received the usage guide."
+  unknown_ability: "<prefix>&cUnknown ability: &f{ability}"
+  remove_ok: "<prefix>&7Removed the ability from &a{player}&7."
+  usage_give: "<prefix>&cUsage: &7/cv give <player> <bottle|ability> [potionType]"
+  usage_remove: "<prefix>&cUsage: &7/cv remove <player>"
+
+info:
+  plugin_header: "<prefix>&8━━━━━━━━ &aCompoundV Info &8━━━━━━━━"
+  plugin_version: "<prefix>&8• &7Version: &a{version}"
+  plugin_author: "<prefix>&8• &7Author: &aThomas U."
+  plugin_ability_count: "<prefix>&8• &7Loaded abilities: &a{count}"
+  plugin_language: "<prefix>&8• &7Language: &a{language}"
+  help_hint: "<prefix>&8• &7Help: &f/cv help"
+  player_header: "<prefix>&8────── &aPlayer Status &8──────"
+  player_target: "<prefix>&8• &7Player: &a{player}"
+  player_none: "<prefix>&8• &a{player}&7 has no active ability."
+  player_ability: "<prefix>&8• &7Ability: &a&l{name}"
+  player_potion: "<prefix>&8• &7Source: &b{potion}"
+  player_status_permanent: "<prefix>&8• &7Status: &aPermanent"
+  player_status_temporary: "<prefix>&8• &7Status: &eTemporary"
+  player_expires: "<prefix>&8• &7Expires in: &e{minutes}m {seconds}s"
+  player_controls_header: "<prefix>&8────── &aControls & Effects &8──────"
+  player_no_target_hint: "<prefix>&8• &7Use &f/cv info <player>&7 to inspect a player."
+  plugin_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+bottle:
+  compound_v:
+    name: "&b&lCompound V"
+    lore_1: "&7Experimental serum with a random ability."
+    lore_2: "&8Drink to unlock your power."
+  temp_v:
+    name: "&a&lTemp V"
+    lore_1: "&7Temporary serum with a random ability."
+    lore_2: "&8Expires after the configured duration."
+  v_one:
+    name: "&3&lV One"
+    lore_1: "&7Refined serum with powerful abilities."
+    lore_2: "&8Use with care."
+  anti_v:
+    name: "&c&lAnti V"
+    lore_1: "&7Removes your active ability."
+    lore_2: "&8Drink to reset your power."
