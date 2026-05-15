@@ -57,10 +57,12 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected Color  coreColor()      { return Color.fromRGB(255, 20, 8); }
     @Override protected Color  glowColor()      { return Color.fromRGB(255, 65, 35); }
     @Override protected boolean fireParticles() { return false; }
+    @Override protected boolean cooksMeatDrops() { return plugin.getConfig().getBoolean(t("heat_vision_cooks_meat"), true); }
 
     @Override
     protected double damageAmount() {
-        return plugin.getConfig().getDouble(t("heat_vision_damage_amount"), isVOne() ? 10.0 : 8.0);
+        double base = plugin.getConfig().getDouble(t("heat_vision_damage_amount"), isVOne() ? 5.0 : 5.2);
+        return base * plugin.getConfig().getDouble(t("heat_vision_damage_multiplier"), 1.0);
     }
 
     private boolean isVOne() { return "v_one".equalsIgnoreCase(tierKey); }
@@ -75,8 +77,8 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         p.setAllowFlight(true);
 
         int str   = plugin.getConfig().getInt(t("strength_level"),   3);
-        int res   = plugin.getConfig().getInt(t("resistance_level"), 2);
-        int regen = plugin.getConfig().getInt(t("regen_level"),      1);
+        int res   = plugin.getConfig().getInt(t("resistance_level"), isVOne() ? 4 : 2);
+        int regen = plugin.getConfig().getInt(t("regen_level"),      isVOne() ? 3 : 1);
         boolean fireRes = plugin.getConfig().getBoolean(t("fire_resistance"), true);
 
         p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
