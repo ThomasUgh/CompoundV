@@ -102,7 +102,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
             Location imp = le.getLocation().add(0, 1, 0);
             w.spawnParticle(Particle.DUST,  imp, impactParticles(), 0.3, 0.4, 0.3, 0, core);
             w.spawnParticle(Particle.SMOKE, imp,  5, 0.1, 0.2, 0.1, 0.02);
-            w.playSound(imp, Sound.ENTITY_PLAYER_HURT, 0.8f, 1.0f);
+            w.playSound(imp, hurtSoundFor(le), 0.8f, 1.0f);
         }
 
         if (hit.getHitBlock() != null) {
@@ -127,6 +127,37 @@ public abstract class BaseHeatVisionAbility implements Ability {
                 if (t.getType() == Material.AIR) t.setType(Material.FIRE);
             }
         }
+    }
+
+
+    private Sound hurtSoundFor(LivingEntity target) {
+        String entityName = target.getType().name();
+
+        try {
+            return Sound.valueOf("ENTITY_" + entityName + "_HURT");
+        } catch (IllegalArgumentException ignored) {
+        }
+
+        return switch (entityName) {
+            case "PLAYER" -> Sound.ENTITY_PLAYER_HURT;
+            case "COW", "MOOSHROOM" -> Sound.ENTITY_COW_HURT;
+            case "PIG" -> Sound.ENTITY_PIG_HURT;
+            case "SHEEP" -> Sound.ENTITY_SHEEP_HURT;
+            case "CHICKEN" -> Sound.ENTITY_CHICKEN_HURT;
+            case "WOLF" -> Sound.ENTITY_WOLF_HURT;
+            case "CAT" -> Sound.ENTITY_CAT_HURT;
+            case "VILLAGER" -> Sound.ENTITY_VILLAGER_HURT;
+            case "IRON_GOLEM" -> Sound.ENTITY_IRON_GOLEM_HURT;
+            case "ZOMBIE" -> Sound.ENTITY_ZOMBIE_HURT;
+            case "SKELETON" -> Sound.ENTITY_SKELETON_HURT;
+            case "CREEPER" -> Sound.ENTITY_CREEPER_HURT;
+            case "SPIDER", "CAVE_SPIDER" -> Sound.ENTITY_SPIDER_HURT;
+            case "ENDERMAN" -> Sound.ENTITY_ENDERMAN_HURT;
+            case "BLAZE" -> Sound.ENTITY_BLAZE_HURT;
+            case "WITHER" -> Sound.ENTITY_WITHER_HURT;
+            case "ENDER_DRAGON" -> Sound.ENTITY_ENDER_DRAGON_HURT;
+            default -> Sound.ENTITY_GENERIC_HURT;
+        };
     }
 
     private void strand(World w, Location origin, Vector dir, double dist,
