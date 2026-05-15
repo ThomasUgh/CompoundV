@@ -22,6 +22,8 @@ import java.util.UUID;
 public abstract class BaseHeatVisionAbility implements Ability {
 
     protected final CompoundVPlugin plugin;
+    private static final Map<UUID, Long> COOKED_BY_HEAT_VISION = new HashMap<>();
+
     protected final Map<UUID, Boolean> beamActive    = new HashMap<>();
     protected final Map<UUID, Integer> damageCounter = new HashMap<>();
 
@@ -93,7 +95,9 @@ public abstract class BaseHeatVisionAbility implements Ability {
         if (cnt % ivl != 0 || hit == null) return;
 
         if (hit.getHitEntity() instanceof LivingEntity le) {
-            le.damage(damage, player);
+            double finalDamage = adjustedDamageForTarget(le, damage);
+            if (cooksMeatDrops()) markCookedByHeatVision(le);
+            le.damage(finalDamage, player);
             if (igniteE) le.setFireTicks(entityFireTicks());
             Location imp = le.getLocation().add(0, 1, 0);
             w.spawnParticle(Particle.DUST,  imp, impactParticles(), 0.3, 0.4, 0.3, 0, core);
@@ -138,6 +142,26 @@ public abstract class BaseHeatVisionAbility implements Ability {
     }
 
     protected double damageAmount() { return plugin.getConfig().getDouble("heat_vision.damage_amount", 2.0); }
+    protected boolean cooksMeatDrops() { return false; }
+
+    protected double adjustedDamageForTarget(LivingEntity target, double damage) {
+        if (target instanceof Player targetPlayer) {
+            var ability = plugin.getAbilityManager().getAbility(targetPlayer);
+            if (ability != null && "the_patriot_v_one".equalsIgnoreCase(ability.getId())) {
+                return damage * plugin.getConfig().getDouble("heat_vision.v_one_received_damage_multiplier", 0.5);
+            }
+        }
+        return damage;
+    }
+
+    private static void markCookedByHeatVision(LivingEntity entity) {
+        COOKED_BY_HEAT_VISION.put(entity.getUniqueId(), System.currentTimeMillis() + 5000L);
+    }
+
+    public static boolean shouldCookDrops(LivingEntity entity) {
+        Long until = COOKED_BY_HEAT_VISION.remove(entity.getUniqueId());
+        return until != null && until >= System.currentTimeMillis();
+    }
     protected int damageInterval()  { return plugin.getConfig().getInt("heat_vision.damage_interval", 2); }
     protected Color coreColor()     { return Color.fromRGB(45, 210, 255); }
     protected Color glowColor()     { return Color.fromRGB(150, 235, 255); }
