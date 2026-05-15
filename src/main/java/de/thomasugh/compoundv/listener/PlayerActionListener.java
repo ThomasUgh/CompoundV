@@ -21,6 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -224,6 +225,30 @@ public class PlayerActionListener implements Listener {
                 && p.getLocation().getPitch() < -40f) {
             ha.tryLaunch(p);
         }
+    }
+
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent e) {
+        if (!de.thomasugh.compoundv.ability.shared.BaseHeatVisionAbility.shouldCookDrops(e.getEntity())) return;
+
+        for (ItemStack drop : e.getDrops()) {
+            Material cooked = cookedVariant(drop.getType());
+            if (cooked != null) drop.setType(cooked);
+        }
+    }
+
+    private Material cookedVariant(Material material) {
+        return switch (material) {
+            case BEEF -> Material.COOKED_BEEF;
+            case PORKCHOP -> Material.COOKED_PORKCHOP;
+            case CHICKEN -> Material.COOKED_CHICKEN;
+            case MUTTON -> Material.COOKED_MUTTON;
+            case RABBIT -> Material.COOKED_RABBIT;
+            case COD -> Material.COOKED_COD;
+            case SALMON -> Material.COOKED_SALMON;
+            default -> null;
+        };
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
