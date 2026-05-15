@@ -1,4 +1,4 @@
-language_file_version: 6
+language_file_version: 7
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -72,7 +72,7 @@ ability:
     description:
       - "<prefix>&8• &7Passive Effekte: hohe &aStärke&7, &9Resistenz&7 und &6Feuerresistenz&7."
       - "<prefix>&8• &eBruststrahl&7: &dSchleichen + Linksklick&7, während du einen Block anschaust oder ein normales Item hältst."
-      - "<prefix>&8• &7Der Angriff lädt zuerst &e5 Sekunden&7 auf und feuert danach ca. &a3-4 Sekunden&7."
+      - "<prefix>&8• &7Eine kurze stille Verzögerung verhindert versehentliches Aktivieren, bevor die &e5-Sekunden-Aufladung&7 beginnt."
       - "<prefix>&8• &7Der dicke &egelbe Feuerstrahl&7 verursacht extremen Schaden und brennt sich langsam durch Oberflächenblöcke."
       - "<prefix>&8• &7Beim Auslösen entsteht eine &c20-TNT-artige Atom-Druckwelle&7 mit größerem, länger sichtbarem Atompilz und &ckeinem Blockschaden&7 um den Spieler."
 

@@ -141,19 +141,42 @@ public class CompoundVPlugin extends JavaPlugin {
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_duration_ticks", 60.0, 80);
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_duration_ticks", 100.0, 80);
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_damage_interval_ticks", 6.0, 2);
-        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_block_affect_interval_ticks", 4.0, 5);
-        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_max_blocks_per_pulse", 6.0, 4);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_block_affect_interval_ticks", 5.0, 4);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_block_affect_interval_ticks", 4.0, 4);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_max_blocks_per_pulse", 4.0, 5);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_max_blocks_per_pulse", 6.0, 5);
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_block_hits_to_break", 3.0, 5);
         changed |= replaceIfNumericEquals("abilities.the_veteran.ground_zero_radius", 8.0, 14.0);
         changed |= replaceIfNumericEquals("abilities.the_veteran.ground_zero_damage", 240.0, 500.0);
         changed |= replaceIfNumericEquals("abilities.the_veteran.ground_zero_knockback", 4.0, 7.5);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_duration_ticks", 900.0, 1200);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_period_ticks", 10.0, 8);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_height", 26.0, 32.0);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_radius", 13.0, 15.5);
 
+        changed |= replaceIfNumericEquals("abilities.the_veteran.pre_charge_hold_ticks", 40.0, 20);
+        if (!getConfig().contains("abilities.the_veteran.pre_charge_hold_ticks")) {
+            getConfig().set("abilities.the_veteran.pre_charge_hold_ticks", 20);
+            changed = true;
+        }
         if (!getConfig().contains("abilities.the_veteran.charge_duration_ticks")) {
             getConfig().set("abilities.the_veteran.charge_duration_ticks", 100);
             changed = true;
         }
         if (!getConfig().contains("abilities.the_veteran.charge_period_ticks")) {
             getConfig().set("abilities.the_veteran.charge_period_ticks", 5);
+            changed = true;
+        }
+        if (!getConfig().contains("abilities.the_veteran.melee_knockback_horizontal")) {
+            getConfig().set("abilities.the_veteran.melee_knockback_horizontal", 1.35);
+            changed = true;
+        }
+        if (!getConfig().contains("abilities.the_veteran.melee_knockback_vertical")) {
+            getConfig().set("abilities.the_veteran.melee_knockback_vertical", 0.28);
+            changed = true;
+        }
+        if (!getConfig().contains("abilities.the_veteran.beam_hit_knockback")) {
+            getConfig().set("abilities.the_veteran.beam_hit_knockback", 0.45);
             changed = true;
         }
 
