@@ -74,7 +74,7 @@ ability:
       - "<prefix>&8• &eChest Beam&7: &dSneak + Left-Click&7 while looking at a block or while holding a normal item."
       - "<prefix>&8• &7The attack first &echarges for 5 seconds&7, then fires for about &a3-4 seconds&7."
       - "<prefix>&8• &7The thick &eyellow fire beam&7 deals extreme damage and slowly burns through surface blocks."
-      - "<prefix>&8• &7When released, it creates a &c20 TNT-style nuclear shockwave&7 with a small mushroom cloud and &cno block damage&7 around the player."
+      - "<prefix>&8• &7When released, it creates a &c20 TNT-style nuclear shockwave&7 with a large lingering mushroom cloud and &cno block damage&7 around the player."
 
 toggle:
   heat_vision_on: "&bHeat Vision &aenabled"
@@ -89,6 +89,7 @@ toggle:
 veteran:
   charge_start: "&eThe Veteran &7is charging the &eChest Beam&7..."
   charge_progress: "&eCharging... &7release in &a{seconds}s"
+  charge_cancelled: "&cChest Beam charge cancelled."
   burst_start: "&eThe Veteran &7released the &eChest Beam&7."
   burst_end: "&7Chest Beam finished."
   cooldown: "&cChest Beam ready in {seconds}s"

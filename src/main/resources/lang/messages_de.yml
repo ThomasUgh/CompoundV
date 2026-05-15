@@ -74,7 +74,7 @@ ability:
       - "<prefix>&8• &eBruststrahl&7: &dSchleichen + Linksklick&7, während du einen Block anschaust oder ein normales Item hältst."
       - "<prefix>&8• &7Der Angriff lädt zuerst &e5 Sekunden&7 auf und feuert danach ca. &a3-4 Sekunden&7."
       - "<prefix>&8• &7Der dicke &egelbe Feuerstrahl&7 verursacht extremen Schaden und brennt sich langsam durch Oberflächenblöcke."
-      - "<prefix>&8• &7Beim Auslösen entsteht eine &c20-TNT-artige Atom-Druckwelle&7 mit kleinem Atompilz und &ckeinem Blockschaden&7 um den Spieler."
+      - "<prefix>&8• &7Beim Auslösen entsteht eine &c20-TNT-artige Atom-Druckwelle&7 mit größerem, länger sichtbarem Atompilz und &ckeinem Blockschaden&7 um den Spieler."
 
 toggle:
   heat_vision_on: "&bHeat Vision &aaktiviert"
@@ -89,6 +89,7 @@ toggle:
 veteran:
   charge_start: "&eThe Veteran &7lädt den &eBruststrahl&7 auf..."
   charge_progress: "&eAufladung... &7Auslösung in &a{seconds}s"
+  charge_cancelled: "&cBruststrahl-Aufladung abgebrochen."
   burst_start: "&eThe Veteran &7hat den &eBruststrahl&7 ausgelöst."
   burst_end: "&7Bruststrahl beendet."
   cooldown: "&cBruststrahl bereit in {seconds}s"
