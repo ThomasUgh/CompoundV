@@ -32,14 +32,14 @@ ability:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
       - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten des starken roten Strahls."
-      - "<prefix>&8• &bXRay&7: &dSchleichen + Rechtsklick&7, während du einen Block anschaust oder ein normales Item hältst, um nahe Entities zu sehen."
+      - "<prefix>&8• &bXRay&7: &dSchleichen + Linksklick&7, während du einen Block anschaust oder ein normales Item hältst, um nahe Entities zu sehen."
       - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen."
       - "<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7 und &cExtra-Herzen&7."
   the_patriot_v_one:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch mit stärkeren V-One-Effekten aktiviert."
       - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten eines dichteren roten Strahls."
-      - "<prefix>&8• &bXRay&7: &dSchleichen + Rechtsklick&7, während du einen Block anschaust oder ein normales Item hältst, um nahe Entities zu sehen."
+      - "<prefix>&8• &bXRay&7: &dSchleichen + Linksklick&7, während du einen Block anschaust oder ein normales Item hältst, um nahe Entities zu sehen."
       - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen."
       - "<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7, &6Feuerresistenz&7 und &cExtra-Herzen&7."
   heat_vision:
@@ -71,7 +71,7 @@ ability:
   the_veteran:
     description:
       - "<prefix>&8• &7Passive Effekte: hohe &aStärke&7, &9Resistenz&7 und &6Feuerresistenz&7."
-      - "<prefix>&8• &eBruststrahl&7: &dSchleichen + Rechtsklick&7, während du einen Block anschaust oder ein normales Item hältst."
+      - "<prefix>&8• &eBruststrahl&7: &dSchleichen + Linksklick&7, während du einen Block anschaust oder ein normales Item hältst."
       - "<prefix>&8• &7Der Angriff lädt zuerst &e5 Sekunden&7 auf und feuert danach ca. &a3-4 Sekunden&7."
       - "<prefix>&8• &7Der dicke &egelbe Feuerstrahl&7 verursacht extremen Schaden und brennt sich langsam durch Oberflächenblöcke."
       - "<prefix>&8• &7Beim Auslösen entsteht eine &c20-TNT-artige Atom-Druckwelle&7 mit kleinem Atompilz und &ckeinem Blockschaden&7 um den Spieler."

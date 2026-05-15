@@ -133,7 +133,8 @@ public class PlayerActionListener implements Listener {
         Player p = e.getPlayer();
 
         Action a = e.getAction();
-        if (a != Action.RIGHT_CLICK_AIR && a != Action.RIGHT_CLICK_BLOCK) return;
+        if (a != Action.RIGHT_CLICK_AIR && a != Action.RIGHT_CLICK_BLOCK
+                && a != Action.LEFT_CLICK_AIR && a != Action.LEFT_CLICK_BLOCK) return;
 
         if (ItemUtil.isCompoundVBottle(p.getInventory().getItemInMainHand())) return;
         if (ItemUtil.isCompoundVBottle(p.getInventory().getItemInOffHand()))  return;
@@ -149,7 +150,7 @@ public class PlayerActionListener implements Listener {
         if (e.getHand() != EquipmentSlot.HAND) return;
 
         if (ab instanceof ThePatriotAbility ha) {
-            if (canUseSneakRightClick(p, a)) {
+            if (canUseSneakLeftClick(p, a)) {
                 cancelAbilityInteraction(e);
                 ha.toggleGlowRadar(p);
             }
@@ -157,7 +158,7 @@ public class PlayerActionListener implements Listener {
         }
 
         if (ab instanceof TheVeteranAbility veteran) {
-            if (canUseSneakRightClick(p, a)) {
+            if (canUseSneakLeftClick(p, a)) {
                 cancelAbilityInteraction(e);
                 veteran.startBurst(p);
             }
@@ -187,6 +188,10 @@ public class PlayerActionListener implements Listener {
 
     private boolean canUseSneakRightClick(Player p, Action action) {
         return p.isSneaking() && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK);
+    }
+
+    private boolean canUseSneakLeftClick(Player p, Action action) {
+        return p.isSneaking() && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
