@@ -7,9 +7,13 @@ import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -29,10 +33,14 @@ import java.util.UUID;
 public class TheVeteranAbility implements Ability {
 
     private final CompoundVPlugin plugin;
+    private final NamespacedKey healthModKey;
     private final Set<UUID>       activeBursts  = new HashSet<>();
     private final Map<UUID, Long> burstCooldown = new HashMap<>();
 
-    public TheVeteranAbility(CompoundVPlugin p) { plugin = p; }
+    public TheVeteranAbility(CompoundVPlugin p) {
+        plugin = p;
+        healthModKey = new NamespacedKey(plugin, "veteran_hearts");
+    }
 
     @Override public String    getId()          { return "the_veteran"; }
     @Override public String    getDisplayName() { return "The Veteran"; }
@@ -41,13 +49,15 @@ public class TheVeteranAbility implements Ability {
     @Override
     public void apply(Player p) {
         int str = plugin.getConfig().getInt("abilities.the_veteran.strength_level",   5);
-        int res = plugin.getConfig().getInt("abilities.the_veteran.resistance_level", 3);
+        int res = plugin.getConfig().getInt("abilities.the_veteran.resistance_level", 4);
+        double extraHp = plugin.getConfig().getDouble("abilities.the_veteran.extra_hearts", 20.0) * 2.0;
         p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
                 Integer.MAX_VALUE, str - 1, false, false, true));
         p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE,
                 Integer.MAX_VALUE, res - 1, false, false, true));
         p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
                 Integer.MAX_VALUE, 0, false, false, true));
+        setMaxHealthBonus(p, extraHp);
     }
 
     @Override
@@ -58,6 +68,7 @@ public class TheVeteranAbility implements Ability {
         p.removePotionEffect(PotionEffectType.STRENGTH);
         p.removePotionEffect(PotionEffectType.RESISTANCE);
         p.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+        setMaxHealthBonus(p, 0);
     }
 
     public boolean isBurstActive(Player p) { return activeBursts.contains(p.getUniqueId()); }
@@ -65,7 +76,7 @@ public class TheVeteranAbility implements Ability {
     public void startBurst(Player p) {
         UUID u = p.getUniqueId();
 
-        long cd  = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 45_000L);
+        long cd  = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 60_000L);
         long now = System.currentTimeMillis();
         long last = burstCooldown.getOrDefault(u, 0L);
         if (now - last < cd) {
@@ -77,7 +88,6 @@ public class TheVeteranAbility implements Ability {
         if (activeBursts.contains(u)) return;
 
         activeBursts.add(u);
-        burstCooldown.put(u, now);
 
         p.sendActionBar(plugin.getLocaleManager().msg("veteran.charge_start"));
         p.playSound(p.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.0f, 0.45f);
@@ -98,8 +108,16 @@ public class TheVeteranAbility implements Ability {
                     cancel();
                     return;
                 }
+                if (!shooter.isSneaking()) {
+                    activeBursts.remove(uuid);
+                    shooter.sendActionBar(plugin.getLocaleManager().msg("veteran.charge_cancelled"));
+                    shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.9f, 0.65f);
+                    cancel();
+                    return;
+                }
 
                 if (age >= chargeTicks) {
+                    burstCooldown.put(uuid, System.currentTimeMillis());
                     shooter.sendActionBar(plugin.getLocaleManager().msg("veteran.burst_start"));
                     shooter.playSound(shooter.getLocation(), Sound.ITEM_TOTEM_USE,            0.8f, 0.65f);
                     shooter.playSound(shooter.getLocation(), Sound.ENTITY_WITHER_SPAWN,       1.0f, 1.45f);
@@ -185,42 +203,60 @@ public class TheVeteranAbility implements Ability {
         World w = base.getWorld();
         if (w == null) return;
 
+        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 900);
+        int periodTicks = Math.max(2, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_period_ticks", 10));
+        double maxHeight = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_height", 26.0);
+        double maxRadius = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_radius", 13.0);
+
         new BukkitRunnable() {
             int age = 0;
 
             @Override public void run() {
-                if (age > 70) {
+                if (age > durationTicks) {
                     cancel();
                     return;
                 }
 
-                double progress = age / 70.0;
-                double stemHeight = 1.2 + progress * 9.0;
-                double stemRadius = 0.7 + progress * 1.2;
-                double capHeight = 5.0 + progress * 5.0;
-                double capRadius = 2.6 + progress * 5.8;
+                double progress = Math.min(1.0, age / Math.max(1.0, (double) durationTicks));
+                double rise = Math.sin(progress * Math.PI * 0.5);
+                double fade = Math.max(0.0, 1.0 - progress);
 
-                Particle.DustOptions yellow = new Particle.DustOptions(Color.fromRGB(255, 210, 40), 2.2f);
-                Particle.DustOptions smoke = new Particle.DustOptions(Color.fromRGB(85, 78, 65), 2.5f);
+                double stemHeight = 3.5 + rise * (maxHeight * 0.55);
+                double stemRadius = 1.2 + rise * 2.4;
+                double capHeight = 9.0 + rise * (maxHeight * 0.65);
+                double capRadius = 4.0 + rise * maxRadius;
+                int particleScale = Math.max(6, (int) Math.round(48.0 * fade));
 
-                Location stem = base.clone().add(0, stemHeight, 0);
-                w.spawnParticle(Particle.LARGE_SMOKE, stem, 45, stemRadius, 1.3, stemRadius, 0.08);
-                w.spawnParticle(Particle.CLOUD, stem, 36, stemRadius * 0.8, 1.1, stemRadius * 0.8, 0.18);
-                w.spawnParticle(Particle.DUST, stem, 28, stemRadius * 0.55, 0.9, stemRadius * 0.55, 0, smoke);
+                Particle.DustOptions darkSmoke = new Particle.DustOptions(Color.fromRGB(68, 65, 58), 3.0f);
+                Particle.DustOptions ash = new Particle.DustOptions(Color.fromRGB(105, 98, 86), 2.4f);
+                Particle.DustOptions ember = new Particle.DustOptions(Color.fromRGB(255, 145, 20), 1.8f);
 
+                Location lowerStem = base.clone().add(0, stemHeight * 0.45, 0);
+                Location upperStem = base.clone().add(0, stemHeight, 0);
                 Location cap = base.clone().add(0, capHeight, 0);
-                w.spawnParticle(Particle.LARGE_SMOKE, cap, 80, capRadius, 1.0, capRadius, 0.08);
-                w.spawnParticle(Particle.CLOUD, cap, 65, capRadius * 0.85, 0.75, capRadius * 0.85, 0.20);
-                w.spawnParticle(Particle.DUST, cap, 34, capRadius * 0.8, 0.5, capRadius * 0.8, 0, yellow);
+                Location capTop = cap.clone().add(0, 2.4 + rise * 2.0, 0);
 
-                if (age % 10 == 0) {
-                    w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 1.2 + progress * 2.0, 0), 8, 3.5 + progress * 4.0, 0.8, 3.5 + progress * 4.0, 0.0);
-                    w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 0.25f + (float) progress * 0.2f);
+                w.spawnParticle(Particle.LARGE_SMOKE, lowerStem, particleScale, stemRadius, 2.1, stemRadius, 0.045 + fade * 0.035);
+                w.spawnParticle(Particle.CLOUD, lowerStem, Math.max(10, particleScale / 2), stemRadius * 0.9, 1.4, stemRadius * 0.9, 0.08 + fade * 0.10);
+                w.spawnParticle(Particle.DUST, upperStem, Math.max(8, particleScale / 2), stemRadius * 0.8, 2.8, stemRadius * 0.8, 0, darkSmoke);
+
+                w.spawnParticle(Particle.LARGE_SMOKE, cap, particleScale * 2, capRadius, 2.1 + rise * 1.2, capRadius, 0.035 + fade * 0.045);
+                w.spawnParticle(Particle.CLOUD, cap, particleScale, capRadius * 0.85, 1.4, capRadius * 0.85, 0.07 + fade * 0.12);
+                w.spawnParticle(Particle.DUST, capTop, Math.max(10, particleScale / 2), capRadius * 0.75, 0.8, capRadius * 0.75, 0, ash);
+
+                if (progress < 0.35) {
+                    w.spawnParticle(Particle.FLAME, base.clone().add(0, 2.0 + rise * 4.0, 0), 36, 5.5 + rise * 3.5, 2.0, 5.5 + rise * 3.5, 0.08);
+                    w.spawnParticle(Particle.DUST, cap, 28, capRadius * 0.55, 0.9, capRadius * 0.55, 0, ember);
                 }
 
-                age += 2;
+                if (age % 40 == 0 && progress < 0.25) {
+                    w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 2.0 + rise * 3.0, 0), 6, 5.5 + rise * 5.0, 1.2, 5.5 + rise * 5.0, 0.0);
+                    w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 0.25f + (float) progress * 0.25f);
+                }
+
+                age += periodTicks;
             }
-        }.runTaskTimer(plugin, 0L, 2L);
+        }.runTaskTimer(plugin, 0L, periodTicks);
     }
 
     private void fireChestBeam(Player shooter, UUID uuid) {
@@ -232,6 +268,8 @@ public class TheVeteranAbility implements Ability {
         double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 10.0);
         double damageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
         double damage = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_amount", patriotDamage * damageMultiplier);
+        double fullDamageRange = plugin.getConfig().getDouble("abilities.the_veteran.beam_full_damage_range", 7.0);
+        double farDamageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_far_damage_multiplier", 0.5);
 
         int damageEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_damage_interval_ticks", 2));
         boolean breakBlocks = plugin.getConfig().getBoolean("abilities.the_veteran.beam_break_blocks", true);
@@ -260,7 +298,7 @@ public class TheVeteranAbility implements Ability {
 
                 Location chest = shooter.getLocation().add(0, 1.25, 0);
                 Vector dir = shooter.getEyeLocation().getDirection().normalize();
-                renderAndApplyBeam(shooter, chest, dir, range, radius, damage,
+                renderAndApplyBeam(shooter, chest, dir, range, radius, damage, fullDamageRange, farDamageMultiplier,
                         age % damageEveryTicks == 0,
                         age % blockAffectEveryTicks == 0,
                         breakBlocks, igniteBlocks, maxBlocksPerPulse, blockHitsToBreak,
@@ -278,6 +316,7 @@ public class TheVeteranAbility implements Ability {
 
     private void renderAndApplyBeam(Player shooter, Location origin, Vector dir,
                                     double range, double radius, double damage,
+                                    double fullDamageRange, double farDamageMultiplier,
                                     boolean damageThisTick, boolean affectBlocksThisTick,
                                     boolean breakBlocks, boolean igniteBlocks,
                                     int maxBlocksPerPulse, int blockHitsToBreak,
@@ -320,7 +359,9 @@ public class TheVeteranAbility implements Ability {
         for (Entity entity : w.getNearbyEntities(origin.clone().add(dir.clone().multiply(effectiveRange / 2.0)), effectiveRange / 2.0 + radius, effectiveRange / 2.0 + radius, effectiveRange / 2.0 + radius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(shooter)) continue;
             if (!isNearBeam(origin, dir, effectiveRange, radius + 0.65, target.getEyeLocation())) continue;
-            target.damage(damage, shooter);
+            double along = distanceAlongBeam(origin, dir, target.getEyeLocation());
+            double targetDamage = along <= fullDamageRange ? damage : damage * farDamageMultiplier;
+            target.damage(targetDamage, shooter);
             target.setFireTicks(160);
             w.spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), 22, 0.4, 0.5, 0.4, 0.06);
 
@@ -329,19 +370,21 @@ public class TheVeteranAbility implements Ability {
                     plugin.getAbilityManager().removeAndForget(playerTarget);
                     playerTarget.sendMessage(plugin.getLocaleManager().msg(
                             "veteran.hit_by", "source", shooter.getName()));
-                    shooter.sendMessage(plugin.getLocaleManager().msg(
-                            "veteran.hit_target", "target", playerTarget.getName()));
                 }
             }
         }
     }
 
     private boolean isNearBeam(Location origin, Vector dir, double range, double radius, Location target) {
-        Vector rel = target.toVector().subtract(origin.toVector());
-        double along = rel.dot(dir);
+        double along = distanceAlongBeam(origin, dir, target);
         if (along < 0 || along > range) return false;
         Vector closest = origin.toVector().add(dir.clone().multiply(along));
         return closest.distanceSquared(target.toVector()) <= radius * radius;
+    }
+
+    private double distanceAlongBeam(Location origin, Vector dir, Location target) {
+        Vector rel = target.toVector().subtract(origin.toVector());
+        return rel.dot(dir);
     }
 
     private void affectBlocksAround(Location center, double radius, boolean breakBlocks,
@@ -408,4 +451,20 @@ public class TheVeteranAbility implements Ability {
                 && !name.equals("VAULT")
                 && !name.equals("TRIAL_SPAWNER");
     }
+
+    private void setMaxHealthBonus(Player p, double amount) {
+        AttributeInstance attr = p.getAttribute(Attribute.MAX_HEALTH);
+        if (attr == null) return;
+
+        attr.getModifiers().stream()
+                .filter(m -> healthModKey.equals(m.getKey()))
+                .toList()
+                .forEach(attr::removeModifier);
+        if (amount > 0) {
+            attr.addModifier(new AttributeModifier(
+                    healthModKey, amount, AttributeModifier.Operation.ADD_NUMBER));
+            p.setHealth(Math.min(attr.getValue(), p.getHealth() + amount));
+        }
+    }
+
 }

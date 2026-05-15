@@ -71,8 +71,9 @@ abilities:
 
   the_veteran:
     strength_level: 5
-    resistance_level: 3
-    burst_cooldown_ms: 45000
+    resistance_level: 4
+    extra_hearts: 20
+    burst_cooldown_ms: 60000
     charge_duration_ticks: 100
     charge_period_ticks: 5
     beam_duration_ticks: 80
@@ -81,6 +82,8 @@ abilities:
     beam_radius: 1.35
     beam_damage_amount: 50.0
     beam_damage_multiplier: 5.0
+    beam_full_damage_range: 7.0
+    beam_far_damage_multiplier: 0.5
     beam_damage_interval_ticks: 2
     beam_break_blocks: true
     beam_ignite_blocks: true
@@ -93,6 +96,10 @@ abilities:
     ground_zero_damage: 500.0
     ground_zero_knockback: 7.5
     ground_zero_set_fire: true
+    mushroom_cloud_duration_ticks: 900
+    mushroom_cloud_period_ticks: 10
+    mushroom_cloud_height: 26.0
+    mushroom_cloud_radius: 13.0
 
   speedster:
     speed_level: 4
