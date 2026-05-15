@@ -63,11 +63,13 @@ abilities:
 
     v_one:
       strength_level: 4
-      resistance_level: 3
-      regen_level: 1
+      resistance_level: 4
+      regen_level: 3
       fire_resistance: true
       launch_fly_speed: 0.400
-      heat_vision_damage_amount: 10.0
+      heat_vision_damage_amount: 5.0
+      heat_vision_damage_multiplier: 1.0
+      heat_vision_cooks_meat: true
 
   the_veteran:
     strength_level: 5
