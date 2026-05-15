@@ -1,5 +1,5 @@
 name: CompoundV
-version: 1.0.0-BETA
+version: 1.0.1-BETA
 main: de.thomasugh.compoundv.CompoundVPlugin
 api-version: '1.21'
 author: Thomas U.
