@@ -31,6 +31,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -256,6 +257,23 @@ public class PlayerActionListener implements Listener {
         if (!(e.getEntity() instanceof Player p)) return;
         if (e.getCause() == EntityDamageEvent.DamageCause.FALL
                 && manager.isThePatriot(p)) e.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onVeteranMeleeHit(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player attacker)) return;
+        if (!(manager.getAbility(attacker) instanceof TheVeteranAbility)) return;
+        if (!(e.getEntity() instanceof org.bukkit.entity.LivingEntity target)) return;
+        if (e.getDamager() instanceof Projectile) return;
+
+        double horizontal = plugin.getConfig().getDouble("abilities.the_veteran.melee_knockback_horizontal", 1.35);
+        double vertical = plugin.getConfig().getDouble("abilities.the_veteran.melee_knockback_vertical", 0.28);
+        if (horizontal <= 0 && vertical <= 0) return;
+
+        Vector dir = target.getLocation().toVector().subtract(attacker.getLocation().toVector());
+        if (dir.lengthSquared() < 0.0001) dir = attacker.getLocation().getDirection().clone();
+        dir.setY(0).normalize().multiply(horizontal).setY(vertical);
+        target.setVelocity(target.getVelocity().add(dir));
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
