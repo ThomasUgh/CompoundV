@@ -56,7 +56,9 @@ abilities:
       regen_level: 1
       fire_resistance: false
       launch_fly_speed: 0.375
-      heat_vision_damage_amount: 8.0
+      heat_vision_damage_amount: 5.2
+      heat_vision_damage_multiplier: 1.0
+      heat_vision_cooks_meat: true
 
     v_one:
       strength_level: 4
