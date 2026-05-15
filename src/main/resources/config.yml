@@ -30,6 +30,7 @@ v_one:
 heat_vision:
   range: 43
   damage_amount: 2.0
+  v_one_received_damage_multiplier: 0.5
   damage_interval: 2
   ignite_blocks: true
   ignite_entities: true
