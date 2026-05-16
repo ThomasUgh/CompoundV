@@ -8,6 +8,7 @@ import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
 import de.thomasugh.compoundv.ability.compoundv.SpeedsterAbility;
 import de.thomasugh.compoundv.ability.compoundv.StrengthAbility;
+import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.command.CompoundVCommand;
@@ -65,6 +66,7 @@ public class CompoundVPlugin extends JavaPlugin {
         registry.register(new InvisibilityAbility(this));
         registry.register(new FireAbility(this));
         registry.register(new TheDiverAbility(this));
+        registry.register(new VisionAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one",      TextColor.color(0xFF5252)));
         registry.register(new TheVeteranAbility(this));
 
@@ -119,6 +121,7 @@ public class CompoundVPlugin extends JavaPlugin {
                 "invisibility", 7,
                 "fire", 20,
                 "the_diver", 7,
+                "vision", 7
         ));
         changed |= ensureChanceSection("temp_v.chances", Map.of(
                 "fly", 10,

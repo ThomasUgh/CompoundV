@@ -10,6 +10,7 @@ compound_v:
     invisibility: 7
     fire: 20
     the_diver: 7
+    vision: 7
 
 temp_v:
   chances:
@@ -129,3 +130,6 @@ abilities:
     resistance_level: 1
     water_bonus_levels: 1
     sonar_radius: 45.0
+
+  vision:
+    xray_radius: 35.0

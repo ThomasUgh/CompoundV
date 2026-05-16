@@ -34,6 +34,12 @@ public final class AbilityAliases {
             Map.entry("the_deep", "the_diver"),
             Map.entry("deep", "the_diver"),
             Map.entry("sonar", "the_diver"),
+
+            Map.entry("xray", "vision"),
+            Map.entry("x-ray", "vision"),
+            Map.entry("x_ray", "vision"),
+            Map.entry("visions", "vision"),
+
             Map.entry("flight", "fly"),
             Map.entry("the_ghost", "invisibility"),
             Map.entry("ghost", "invisibility"),
