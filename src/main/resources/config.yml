@@ -58,6 +58,7 @@ abilities:
       regen_level: 1
       fire_resistance: false
       launch_fly_speed: 0.375
+      heat_vision_range: 43.0
       heat_vision_damage_amount: 5.2
       heat_vision_damage_multiplier: 1.0
       heat_vision_cooks_meat: true
@@ -68,8 +69,9 @@ abilities:
       regen_level: 3
       fire_resistance: true
       launch_fly_speed: 0.400
-      heat_vision_damage_amount: 5.0
-      heat_vision_damage_multiplier: 1.0
+      heat_vision_range: 48.0
+      heat_vision_damage_amount: 5.2
+      heat_vision_damage_multiplier: 1.33
       heat_vision_cooks_meat: true
 
   the_veteran:

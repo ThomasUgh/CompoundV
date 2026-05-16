@@ -184,17 +184,17 @@ public class CompoundVPlugin extends JavaPlugin {
         }
 
         if (!getConfig().contains("abilities.the_patriot.compound_v.heat_vision_damage_amount")) {
-            getConfig().set("abilities.the_patriot.compound_v.heat_vision_damage_amount", 8.0);
+            getConfig().set("abilities.the_patriot.compound_v.heat_vision_damage_amount", 5.2);
             changed = true;
         }
         if (!getConfig().contains("abilities.the_patriot.v_one.heat_vision_damage_amount")) {
-            getConfig().set("abilities.the_patriot.v_one.heat_vision_damage_amount", 10.0);
+            getConfig().set("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.2);
             changed = true;
         }
 
         if (getConfig().contains("abilities.the_veteran.beam_damage")) {
             double oldDamage = getConfig().getDouble("abilities.the_veteran.beam_damage", 12.0);
-            double patriotDamage = Math.max(0.1, getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 10.0));
+            double patriotDamage = Math.max(0.1, getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.2));
             double multiplier = Math.abs(oldDamage - 12.0) < 0.0001 ? 5.0 : Math.max(0.1, oldDamage / patriotDamage);
             getConfig().set("abilities.the_veteran.beam_damage_multiplier", multiplier);
             getConfig().set("abilities.the_veteran.beam_damage_amount", patriotDamage * multiplier);
@@ -202,7 +202,7 @@ public class CompoundVPlugin extends JavaPlugin {
             changed = true;
         }
         if (!getConfig().contains("abilities.the_veteran.beam_damage_amount")) {
-            double patriotDamage = Math.max(0.1, getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 10.0));
+            double patriotDamage = Math.max(0.1, getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.2));
             double multiplier = getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
             getConfig().set("abilities.the_veteran.beam_damage_amount", patriotDamage * multiplier);
             changed = true;

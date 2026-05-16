@@ -60,7 +60,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     private void beam(Player player) {
 
-        double  range   = plugin.getConfig().getDouble ("heat_vision.range",          43);
+        double  range   = range();
         double  damage  = damageAmount();
         int     ivl     = damageInterval();
         boolean ignite  = plugin.getConfig().getBoolean("heat_vision.ignite_blocks",   true);
@@ -172,6 +172,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         }
     }
 
+    protected double range()        { return plugin.getConfig().getDouble("heat_vision.range", 43); }
     protected double damageAmount() { return plugin.getConfig().getDouble("heat_vision.damage_amount", 2.0); }
     protected boolean cooksMeatDrops() { return false; }
 

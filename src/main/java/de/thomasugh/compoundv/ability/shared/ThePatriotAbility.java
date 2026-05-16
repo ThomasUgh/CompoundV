@@ -60,9 +60,18 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected boolean cooksMeatDrops() { return plugin.getConfig().getBoolean(t("heat_vision_cooks_meat"), true); }
 
     @Override
+    protected double range() {
+        double global = plugin.getConfig().getDouble("heat_vision.range", 43);
+        double standard = plugin.getConfig().getDouble("abilities.the_patriot.compound_v.heat_vision_range", global);
+        return plugin.getConfig().getDouble(t("heat_vision_range"), isVOne() ? standard + 5.0 : standard);
+    }
+
+    @Override
     protected double damageAmount() {
-        double base = plugin.getConfig().getDouble(t("heat_vision_damage_amount"), isVOne() ? 5.0 : 5.2);
-        return base * plugin.getConfig().getDouble(t("heat_vision_damage_multiplier"), 1.0);
+        double standard = plugin.getConfig().getDouble("abilities.the_patriot.compound_v.heat_vision_damage_amount", 5.2);
+        double base = plugin.getConfig().getDouble(t("heat_vision_damage_amount"), standard);
+        double defaultMultiplier = isVOne() ? 1.33 : 1.0;
+        return base * plugin.getConfig().getDouble(t("heat_vision_damage_multiplier"), defaultMultiplier);
     }
 
     private boolean isVOne() { return "v_one".equalsIgnoreCase(tierKey); }
