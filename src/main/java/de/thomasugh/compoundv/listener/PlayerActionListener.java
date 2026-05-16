@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.listener;
 import de.thomasugh.compoundv.CompoundVPlugin;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.data.CompoundPotion;
@@ -159,6 +160,13 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
+        if (ab instanceof TheDiverAbility diver) {
+            if (canUseSneakLeftClick(p, a)) {
+                cancelAbilityInteraction(e);
+                diver.toggleSonar(p);
+            }
+            return;
+        }
         if (ab instanceof TheVeteranAbility veteran) {
             if (canUseSneakLeftClick(p, a)) {
                 cancelAbilityInteraction(e);

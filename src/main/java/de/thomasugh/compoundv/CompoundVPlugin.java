@@ -4,6 +4,7 @@ import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FlyAbility;
 import de.thomasugh.compoundv.ability.compoundv.HeatVisionAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
 import de.thomasugh.compoundv.ability.compoundv.SpeedsterAbility;
 import de.thomasugh.compoundv.ability.compoundv.StrengthAbility;
@@ -63,6 +64,7 @@ public class CompoundVPlugin extends JavaPlugin {
         registry.register(new StrengthAbility(this));
         registry.register(new InvisibilityAbility(this));
         registry.register(new FireAbility(this));
+        registry.register(new TheDiverAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one",      TextColor.color(0xFF5252)));
         registry.register(new TheVeteranAbility(this));
 
@@ -115,7 +117,8 @@ public class CompoundVPlugin extends JavaPlugin {
                 "speedster", 10,
                 "strength", 18,
                 "invisibility", 7,
-                "fire", 20
+                "fire", 20,
+                "the_diver", 7,
         ));
         changed |= ensureChanceSection("temp_v.chances", Map.of(
                 "fly", 10,
@@ -205,7 +208,51 @@ public class CompoundVPlugin extends JavaPlugin {
             changed = true;
         }
 
+        changed |= migrateVersion102Defaults();
+
         return changed;
+    }
+
+
+    private boolean migrateVersion102Defaults() {
+        boolean changed = false;
+
+        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.0, 5.2);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.0, 1.33);
+
+        if (!getConfig().contains("abilities.the_patriot.compound_v.heat_vision_range")) {
+            getConfig().set("abilities.the_patriot.compound_v.heat_vision_range",
+                    getConfig().getDouble("heat_vision.range", 43.0));
+            changed = true;
+        }
+        if (!getConfig().contains("abilities.the_patriot.v_one.heat_vision_range")) {
+            double standardRange = getConfig().getDouble("abilities.the_patriot.compound_v.heat_vision_range",
+                    getConfig().getDouble("heat_vision.range", 43.0));
+            getConfig().set("abilities.the_patriot.v_one.heat_vision_range", standardRange + 5.0);
+            changed = true;
+        }
+        if (!getConfig().contains("abilities.the_patriot.v_one.strength_level")) {
+            int standardStrength = getConfig().getInt("abilities.the_patriot.compound_v.strength_level", 3);
+            getConfig().set("abilities.the_patriot.v_one.strength_level", standardStrength + 1);
+            changed = true;
+        }
+
+        changed |= setIfMissing("abilities.the_diver.water_breathing_level", 1);
+        changed |= setIfMissing("abilities.the_diver.dolphins_grace_level", 3);
+        changed |= setIfMissing("abilities.the_diver.conduit_power_level", 2);
+        changed |= setIfMissing("abilities.the_diver.strength_level", 2);
+        changed |= setIfMissing("abilities.the_diver.resistance_level", 1);
+        changed |= setIfMissing("abilities.the_diver.water_bonus_levels", 1);
+        changed |= setIfMissing("abilities.the_diver.sonar_radius", 45.0);
+        changed |= setIfMissing("abilities.vision.xray_radius", 35.0);
+
+        return changed;
+    }
+
+    private boolean setIfMissing(String path, Object value) {
+        if (getConfig().contains(path)) return false;
+        getConfig().set(path, value);
+        return true;
     }
 
     private boolean replaceIfNumericEquals(String path, double oldValue, Object newValue) {

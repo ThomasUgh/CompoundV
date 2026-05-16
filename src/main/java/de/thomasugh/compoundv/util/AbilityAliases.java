@@ -28,6 +28,12 @@ public final class AbilityAliases {
             Map.entry("the-veteran", "the_veteran"),
             Map.entry("the_veteran", "the_veteran"),
 
+            Map.entry("diver", "the_diver"),
+            Map.entry("thediver", "the_diver"),
+            Map.entry("the-diver", "the_diver"),
+            Map.entry("the_deep", "the_diver"),
+            Map.entry("deep", "the_diver"),
+            Map.entry("sonar", "the_diver"),
             Map.entry("flight", "fly"),
             Map.entry("the_ghost", "invisibility"),
             Map.entry("ghost", "invisibility"),

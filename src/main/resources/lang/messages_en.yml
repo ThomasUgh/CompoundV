@@ -1,4 +1,4 @@
-language_file_version: 7
+language_file_version: 8
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -46,6 +46,12 @@ ability:
     description:
       - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the lighter cyan beam."
       - "<prefix>&8• &7This version is &eweaker&7 than &cThe Patriot&7 Heat Vision but can still damage entities and affect configured blocks."
+  the_diver:
+    description:
+      - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace III&7 and &3Heart of the Sea / Conduit Power II&7 are active permanently."
+      - "<prefix>&8• &bSonar&7: &dSneak + Left-Click&7 while underwater to reveal nearby entities."
+      - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
+      - "<prefix>&8• &7While underwater, Strength and Resistance are increased by &a+1 level&7."
   fly:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
@@ -81,6 +87,9 @@ toggle:
   heat_vision_off: "&7Heat Vision disabled"
   xray_on: "&bXRay &aenabled"
   xray_off: "&7XRay disabled"
+  sonar_on: "&bSonar &aenabled"
+  sonar_off: "&7Sonar disabled"
+  sonar_water_only: "&bSonar &7only works underwater"
   speed_on: "&eSuper Speed &aenabled"
   speed_off: "&7Super Speed disabled"
   ghost_on: "&5Ghost Mode &aenabled"
