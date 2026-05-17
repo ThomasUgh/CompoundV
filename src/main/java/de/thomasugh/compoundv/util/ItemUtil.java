@@ -1,70 +1,100 @@
 package de.thomasugh.compoundv.util;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.locale.LocaleManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionType;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ItemUtil {
 
-    private ItemUtil() {}
+    private ItemUtil() {
+    }
 
-    public static ItemStack createBottle(CompoundVPlugin plugin, CompoundPotion type) {
+    public static ItemStack createBottle(CompoundV plugin, CompoundPotion type) {
         ItemStack item = new ItemStack(Material.POTION);
         PotionMeta meta = (PotionMeta) item.getItemMeta();
-        if (meta == null) return item;
+        if (meta == null) {
+            return item;
+        }
 
-        meta.setBasePotionType(PotionType.WATER);
+        setWaterPotion(meta);
         meta.setColor(type.getPotionColor());
 
         LocaleManager loc = plugin.getLocaleManager();
         String bundleKey = "bottle." + type.name().toLowerCase();
 
-        Component name = loc.msg(bundleKey + ".name")
-                .decoration(TextDecoration.ITALIC, false);
-        List<Component> lore = new ArrayList<>();
-        lore.add(loc.msg(bundleKey + ".lore_1").decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.empty());
-        lore.add(loc.msg(bundleKey + ".lore_2").decoration(TextDecoration.ITALIC, false));
+        meta.setDisplayName(loc.msg(bundleKey + ".name"));
 
-        meta.displayName(name);
-        meta.lore(lore);
+        List<String> lore = new ArrayList<>();
+        lore.add(loc.msg(bundleKey + ".lore_1"));
+        lore.add("");
+        lore.add(loc.msg(bundleKey + ".lore_2"));
+        meta.setLore(lore);
 
-        meta.getPersistentDataContainer()
-                .set(CompoundVPlugin.BOTTLE_KEY, PersistentDataType.STRING, type.name());
-
-        try {
-            meta.setEnchantmentGlintOverride(true);
-        } catch (NoSuchMethodError | NoSuchFieldError ignored) {
-
-            meta.addEnchant(org.bukkit.enchantments.Enchantment.LUCK_OF_THE_SEA, 1, true);
-            meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS);
-        }
-
-        meta.addItemFlags(
-                org.bukkit.inventory.ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
-                org.bukkit.inventory.ItemFlag.HIDE_ATTRIBUTES);
+        meta.getPersistentDataContainer().set(CompoundV.BOTTLE_KEY, PersistentDataType.STRING, type.name());
+        applyGlint(meta);
+        addItemFlagIfPresent(meta, "HIDE_ADDITIONAL_TOOLTIP");
+        addItemFlagIfPresent(meta, "HIDE_ATTRIBUTES");
 
         item.setItemMeta(meta);
         return item;
     }
 
+    private static void setWaterPotion(PotionMeta meta) {
+        try {
+            Method method = meta.getClass().getMethod("setBasePotionType", PotionType.class);
+            method.invoke(meta, PotionType.WATER);
+        } catch (Throwable ignored) {
+            // Default POTION items are water on supported 1.20.x/1.21.x servers.
+        }
+    }
+
+    private static void applyGlint(ItemMeta meta) {
+        try {
+            Method method = meta.getClass().getMethod("setEnchantmentGlintOverride", Boolean.class);
+            method.invoke(meta, Boolean.TRUE);
+            return;
+        } catch (Throwable ignored) {
+            // Older Spigot versions do not expose setEnchantmentGlintOverride.
+        }
+
+        meta.addEnchant(Enchantment.LUCK_OF_THE_SEA, 1, true);
+        addItemFlagIfPresent(meta, "HIDE_ENCHANTS");
+    }
+
+    private static void addItemFlagIfPresent(ItemMeta meta, String flagName) {
+        try {
+            meta.addItemFlags(ItemFlag.valueOf(flagName));
+        } catch (IllegalArgumentException ignored) {
+            // ItemFlag does not exist on this server version.
+        }
+    }
+
     public static CompoundPotion getBottleType(ItemStack item) {
-        if (item == null || item.getType() != Material.POTION || !item.hasItemMeta()) return null;
-        String v = item.getItemMeta().getPersistentDataContainer()
-                .get(CompoundVPlugin.BOTTLE_KEY, PersistentDataType.STRING);
-        if (v == null) return null;
-        try { return CompoundPotion.valueOf(v); }
-        catch (IllegalArgumentException e) { return null; }
+        if (item == null || item.getType() != Material.POTION || !item.hasItemMeta()) {
+            return null;
+        }
+        String value = item.getItemMeta().getPersistentDataContainer()
+                .get(CompoundV.BOTTLE_KEY, PersistentDataType.STRING);
+        if (value == null) {
+            return null;
+        }
+        try {
+            return CompoundPotion.valueOf(value);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 
     public static boolean isCompoundVBottle(ItemStack item) {

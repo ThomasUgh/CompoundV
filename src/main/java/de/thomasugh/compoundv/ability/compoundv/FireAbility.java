@@ -1,13 +1,12 @@
 package de.thomasugh.compoundv.ability.compoundv;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import de.thomasugh.compoundv.util.PotionEffects;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,25 +14,25 @@ import java.util.UUID;
 
 public class FireAbility implements Ability {
 
-    private final CompoundVPlugin plugin;
+    private final CompoundV plugin;
     private final Map<UUID, Integer> ticker = new HashMap<>();
-    public FireAbility(CompoundVPlugin p) { plugin = p; }
+    public FireAbility(CompoundV p) { plugin = p; }
 
     @Override public String    getId()          { return "fire"; }
     @Override public String    getDisplayName() { return "Fire Control"; }
-    @Override public TextColor getColor()       { return TextColor.color(0xFF5500); }
+    @Override public int getColor()       { return 0xFF5500; }
     @Override public boolean   needsTick()      { return true; }
 
     @Override
     public void apply(Player p) {
-        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
+        p.addPotionEffect(new PotionEffect(PotionEffects.FIRE_RESISTANCE,
                 Integer.MAX_VALUE, 0, false, false, true));
     }
 
     @Override
     public void remove(Player p) {
         ticker.remove(p.getUniqueId());
-        p.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+        p.removePotionEffect(PotionEffects.FIRE_RESISTANCE);
     }
 
     @Override

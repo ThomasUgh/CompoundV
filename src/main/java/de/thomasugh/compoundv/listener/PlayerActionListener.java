@@ -1,6 +1,6 @@
 package de.thomasugh.compoundv.listener;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -41,14 +41,14 @@ import java.util.UUID;
 
 public class PlayerActionListener implements Listener {
 
-    private final CompoundVPlugin   plugin;
+    private final CompoundV   plugin;
     private final AbilityManager    manager;
     private final PotionRollManager roller;
 
     private final Map<UUID, Boolean> wasOnGround = new HashMap<>();
     private final Map<UUID, Double>  fallPeakY   = new HashMap<>();
 
-    public PlayerActionListener(CompoundVPlugin plugin, AbilityManager manager, PotionRollManager roller) {
+    public PlayerActionListener(CompoundV plugin, AbilityManager manager, PotionRollManager roller) {
         this.plugin = plugin; this.manager = manager; this.roller = roller;
     }
 
@@ -72,15 +72,15 @@ public class PlayerActionListener implements Listener {
             } else {
                 p.sendMessage(plugin.getLocaleManager().msg("potion.no_ability"));
             }
-            p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 100, 0, false, true));
+            p.addPotionEffect(new PotionEffect(PotionEffects.NAUSEA, 100, 0, false, true));
             return;
         }
 
         if (type == CompoundPotion.V_ONE) {
             int ticks = plugin.getConfig().getInt("v_one.drink_effect_seconds", 5) * 20;
-            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, ticks, 0, false, true));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,  ticks, 2, false, true));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,  ticks, 2, false, true));
+            p.addPotionEffect(new PotionEffect(PotionEffects.BLINDNESS, ticks, 0, false, true));
+            p.addPotionEffect(new PotionEffect(PotionEffects.WEAKNESS,  ticks, 2, false, true));
+            p.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS,  ticks, 2, false, true));
             p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_HURT, 0.8f, 0.6f);
             p.sendMessage(plugin.getLocaleManager().msg("potion.drink_v_one"));
         } else if (type == CompoundPotion.TEMP_V) {
@@ -216,7 +216,7 @@ public class PlayerActionListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent e) {
-        if (!e.hasChangedPosition()) return;
+        if (!hasChangedPosition(e)) return;
         Player p = e.getPlayer();
         if (!(manager.getAbility(p) instanceof ThePatriotAbility ha)) return;
 
@@ -246,6 +246,14 @@ public class PlayerActionListener implements Listener {
         }
     }
 
+    private boolean hasChangedPosition(PlayerMoveEvent event) {
+        if (event.getTo() == null) {
+            return false;
+        }
+        return event.getFrom().getX() != event.getTo().getX()
+                || event.getFrom().getY() != event.getTo().getY()
+                || event.getFrom().getZ() != event.getTo().getZ();
+    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent e) {

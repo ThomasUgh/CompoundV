@@ -1,6 +1,6 @@
 package de.thomasugh.compoundv.manager;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.util.AbilityAliases;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,10 +13,10 @@ import java.util.logging.Level;
 
 public class PotionRollManager {
 
-    private final CompoundVPlugin plugin;
+    private final CompoundV plugin;
     private final AbilityManager  abilityManager;
 
-    public PotionRollManager(CompoundVPlugin plugin, AbilityManager am) {
+    public PotionRollManager(CompoundV plugin, AbilityManager am) {
         this.plugin = plugin;
         this.abilityManager = am;
     }

@@ -1,8 +1,8 @@
 package de.thomasugh.compoundv.ability.compoundv;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import net.kyori.adventure.text.format.TextColor;
+import de.thomasugh.compoundv.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
@@ -19,17 +19,17 @@ import java.util.UUID;
 
 public class TheDiverAbility implements Ability {
 
-    private final CompoundVPlugin plugin;
+    private final CompoundV plugin;
     private final Map<UUID, Boolean> sonarActive = new HashMap<>();
     private final Map<UUID, Integer> ticker = new HashMap<>();
 
-    public TheDiverAbility(CompoundVPlugin plugin) {
+    public TheDiverAbility(CompoundV plugin) {
         this.plugin = plugin;
     }
 
     @Override public String getId() { return "the_diver"; }
     @Override public String getDisplayName() { return "The Diver"; }
-    @Override public TextColor getColor() { return TextColor.color(0x1EA7FF); }
+    @Override public int getColor() { return 0x1EA7FF; }
     @Override public boolean needsTick() { return true; }
 
     @Override
@@ -43,12 +43,12 @@ public class TheDiverAbility implements Ability {
         if (sonarActive.getOrDefault(player.getUniqueId(), false)) clearSonar(player);
         sonarActive.remove(player.getUniqueId());
         ticker.remove(player.getUniqueId());
-        player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-        player.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
-        player.removePotionEffect(PotionEffectType.CONDUIT_POWER);
-        player.removePotionEffect(PotionEffectType.STRENGTH);
-        player.removePotionEffect(PotionEffectType.RESISTANCE);
-        player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+        player.removePotionEffect(PotionEffects.WATER_BREATHING);
+        player.removePotionEffect(PotionEffects.DOLPHINS_GRACE);
+        player.removePotionEffect(PotionEffects.CONDUIT_POWER);
+        player.removePotionEffect(PotionEffects.STRENGTH);
+        player.removePotionEffect(PotionEffects.RESISTANCE);
+        player.removePotionEffect(PotionEffects.NIGHT_VISION);
     }
 
     @Override
@@ -63,8 +63,8 @@ public class TheDiverAbility implements Ability {
         if (!player.isInWater()) {
             sonarActive.put(player.getUniqueId(), false);
             clearSonar(player);
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            player.sendActionBar(plugin.getLocaleManager().msg("toggle.sonar_water_only"));
+            player.removePotionEffect(PotionEffects.NIGHT_VISION);
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.sonar_water_only"));
             return;
         }
         if (tick % 15 == 0) refreshSonar(player);
@@ -72,7 +72,7 @@ public class TheDiverAbility implements Ability {
 
     public void toggleSonar(Player player) {
         if (!player.isInWater()) {
-            player.sendActionBar(plugin.getLocaleManager().msg("toggle.sonar_water_only"));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.sonar_water_only"));
             player.playSound(player.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE, 0.45f, 0.65f);
             return;
         }
@@ -81,14 +81,14 @@ public class TheDiverAbility implements Ability {
         sonarActive.put(player.getUniqueId(), next);
         if (next) {
             refreshSonar(player);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,
+            player.addPotionEffect(new PotionEffect(PotionEffects.NIGHT_VISION,
                     Integer.MAX_VALUE, 0, false, false, false));
-            player.sendActionBar(plugin.getLocaleManager().msg("toggle.sonar_on"));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.sonar_on"));
             player.playSound(player.getLocation(), Sound.ENTITY_DOLPHIN_AMBIENT_WATER, 0.75f, 1.25f);
         } else {
             clearSonar(player);
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            player.sendActionBar(plugin.getLocaleManager().msg("toggle.sonar_off"));
+            player.removePotionEffect(PotionEffects.NIGHT_VISION);
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.sonar_off"));
             player.playSound(player.getLocation(), Sound.ENTITY_DOLPHIN_SPLASH, 0.5f, 0.9f);
         }
     }
@@ -97,11 +97,11 @@ public class TheDiverAbility implements Ability {
         int waterBreathing = plugin.getConfig().getInt("abilities.the_diver.water_breathing_level", 1);
         int dolphinsGrace = plugin.getConfig().getInt("abilities.the_diver.dolphins_grace_level", 3);
         int conduit = plugin.getConfig().getInt("abilities.the_diver.conduit_power_level", 2);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING,
+        player.addPotionEffect(new PotionEffect(PotionEffects.WATER_BREATHING,
                 Integer.MAX_VALUE, Math.max(0, waterBreathing - 1), false, false, true));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE,
+        player.addPotionEffect(new PotionEffect(PotionEffects.DOLPHINS_GRACE,
                 Integer.MAX_VALUE, Math.max(0, dolphinsGrace - 1), false, false, true));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.CONDUIT_POWER,
+        player.addPotionEffect(new PotionEffect(PotionEffects.CONDUIT_POWER,
                 Integer.MAX_VALUE, Math.max(0, conduit - 1), false, false, true));
     }
 
@@ -109,9 +109,9 @@ public class TheDiverAbility implements Ability {
         int strength = plugin.getConfig().getInt("abilities.the_diver.strength_level", 2);
         int resistance = plugin.getConfig().getInt("abilities.the_diver.resistance_level", 1);
         int bonus = player.isInWater() ? plugin.getConfig().getInt("abilities.the_diver.water_bonus_levels", 1) : 0;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
+        player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
                 Integer.MAX_VALUE, Math.max(0, strength + bonus - 1), false, false, true));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE,
+        player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
                 Integer.MAX_VALUE, Math.max(0, resistance + bonus - 1), false, false, true));
     }
 
@@ -120,7 +120,7 @@ public class TheDiverAbility implements Ability {
         Team team = sonarTeam();
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (!(entity instanceof LivingEntity living) || entity.equals(player)) continue;
-            living.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,
+            living.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
                     45, 0, false, false, false));
             team.addEntry(entity.getUniqueId().toString());
         }
@@ -130,7 +130,7 @@ public class TheDiverAbility implements Ability {
         double radius = plugin.getConfig().getDouble("abilities.the_diver.sonar_radius", 45.0) + 15.0;
         Team team = sonarTeam();
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-            if (entity instanceof LivingEntity living) living.removePotionEffect(PotionEffectType.GLOWING);
+            if (entity instanceof LivingEntity living) living.removePotionEffect(PotionEffects.GLOWING);
             team.removeEntry(entity.getUniqueId().toString());
         }
     }

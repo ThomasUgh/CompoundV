@@ -1,7 +1,8 @@
 package de.thomasugh.compoundv.ability.shared;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
+import de.thomasugh.compoundv.util.MessageUtil;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -21,13 +22,13 @@ import java.util.UUID;
 
 public abstract class BaseHeatVisionAbility implements Ability {
 
-    protected final CompoundVPlugin plugin;
+    protected final CompoundV plugin;
     private static final Map<UUID, Long> COOKED_BY_HEAT_VISION = new HashMap<>();
 
     protected final Map<UUID, Boolean> beamActive    = new HashMap<>();
     protected final Map<UUID, Integer> damageCounter = new HashMap<>();
 
-    protected BaseHeatVisionAbility(CompoundVPlugin plugin) { this.plugin = plugin; }
+    protected BaseHeatVisionAbility(CompoundV plugin) { this.plugin = plugin; }
 
     @Override public boolean needsTick() { return true; }
     @Override public boolean hasToggle() { return true; }
@@ -41,7 +42,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         boolean next = !beamActive.getOrDefault(p.getUniqueId(), false);
         beamActive.put(p.getUniqueId(), next);
         if (!next) damageCounter.remove(p.getUniqueId());
-        p.sendActionBar(next
+        MessageUtil.sendActionBar(p, next
                 ? plugin.getLocaleManager().msg("toggle.heat_vision_on")
                 : plugin.getLocaleManager().msg("toggle.heat_vision_off"));
         if (next) p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.6f);

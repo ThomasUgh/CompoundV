@@ -1,8 +1,8 @@
 package de.thomasugh.compoundv.ability.vone;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import net.kyori.adventure.text.format.TextColor;
+import de.thomasugh.compoundv.util.MessageUtil;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -11,16 +11,15 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
+import de.thomasugh.compoundv.util.AttributeUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import de.thomasugh.compoundv.util.PotionEffects;
+import de.thomasugh.compoundv.server.SchedulerAdapter;
+import de.thomasugh.compoundv.server.TaskHandle;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -32,30 +31,30 @@ import java.util.UUID;
 
 public class TheVeteranAbility implements Ability {
 
-    private final CompoundVPlugin plugin;
+    private final CompoundV plugin;
     private final NamespacedKey healthModKey;
     private final Set<UUID>       activeBursts  = new HashSet<>();
     private final Map<UUID, Long> burstCooldown = new HashMap<>();
 
-    public TheVeteranAbility(CompoundVPlugin p) {
+    public TheVeteranAbility(CompoundV p) {
         plugin = p;
         healthModKey = new NamespacedKey(plugin, "veteran_hearts");
     }
 
     @Override public String    getId()          { return "the_veteran"; }
     @Override public String    getDisplayName() { return "The Veteran"; }
-    @Override public TextColor getColor()       { return TextColor.color(0xC0C0C0); }
+    @Override public int getColor()       { return 0xC0C0C0; }
 
     @Override
     public void apply(Player p) {
         int str = plugin.getConfig().getInt("abilities.the_veteran.strength_level",   5);
         int res = plugin.getConfig().getInt("abilities.the_veteran.resistance_level", 4);
         double extraHp = plugin.getConfig().getDouble("abilities.the_veteran.extra_hearts", 20.0) * 2.0;
-        p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
+        p.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
                 Integer.MAX_VALUE, str - 1, false, false, true));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE,
+        p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
                 Integer.MAX_VALUE, res - 1, false, false, true));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
+        p.addPotionEffect(new PotionEffect(PotionEffects.FIRE_RESISTANCE,
                 Integer.MAX_VALUE, 0, false, false, true));
         setMaxHealthBonus(p, extraHp);
     }
@@ -65,9 +64,9 @@ public class TheVeteranAbility implements Ability {
         UUID u = p.getUniqueId();
         activeBursts.remove(u);
         burstCooldown.remove(u);
-        p.removePotionEffect(PotionEffectType.STRENGTH);
-        p.removePotionEffect(PotionEffectType.RESISTANCE);
-        p.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+        p.removePotionEffect(PotionEffects.STRENGTH);
+        p.removePotionEffect(PotionEffects.RESISTANCE);
+        p.removePotionEffect(PotionEffects.FIRE_RESISTANCE);
         setMaxHealthBonus(p, 0);
     }
 
@@ -81,7 +80,7 @@ public class TheVeteranAbility implements Ability {
         long last = burstCooldown.getOrDefault(u, 0L);
         if (now - last < cd) {
             long secs = (cd - (now - last)) / 1000 + 1;
-            p.sendActionBar(plugin.getLocaleManager().msg(
+            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg(
                     "veteran.cooldown", "seconds", Long.toString(secs)));
             return;
         }
@@ -98,26 +97,27 @@ public class TheVeteranAbility implements Ability {
         int holdTicks = plugin.getConfig().getInt("abilities.the_veteran.pre_charge_hold_ticks", 20);
         int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.charge_period_ticks", 5));
 
-        new BukkitRunnable() {
+        final TaskHandle[] task = new TaskHandle[1];
+        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
             int age = 0;
 
             @Override public void run() {
                 if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
                     activeBursts.remove(uuid);
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
                 if (!shooter.isSneaking()) {
                     activeBursts.remove(uuid);
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
 
                 if (age >= holdTicks) {
-                    shooter.sendActionBar(plugin.getLocaleManager().msg("veteran.charge_start"));
+                    MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.charge_start"));
                     shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.1f, 0.5f);
                     chargeThenFire(shooter, uuid);
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
 
@@ -125,52 +125,53 @@ public class TheVeteranAbility implements Ability {
 
                 age += periodTicks;
             }
-        }.runTaskTimer(plugin, 0L, periodTicks);
+        }, 0L, periodTicks);
     }
 
     private void chargeThenFire(Player shooter, UUID uuid) {
         int chargeTicks = plugin.getConfig().getInt("abilities.the_veteran.charge_duration_ticks", 100);
         int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.charge_period_ticks", 5));
 
-        new BukkitRunnable() {
+        final TaskHandle[] task = new TaskHandle[1];
+        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
             int age = 0;
 
             @Override public void run() {
                 if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
                     activeBursts.remove(uuid);
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
                 if (!shooter.isSneaking()) {
                     activeBursts.remove(uuid);
-                    shooter.sendActionBar(plugin.getLocaleManager().msg("veteran.charge_cancelled"));
+                    MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.charge_cancelled"));
                     shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.9f, 0.65f);
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
 
                 if (age >= chargeTicks) {
                     burstCooldown.put(uuid, System.currentTimeMillis());
-                    shooter.sendActionBar(plugin.getLocaleManager().msg("veteran.burst_start"));
+                    MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.burst_start"));
                     shooter.playSound(shooter.getLocation(), Sound.ITEM_TOTEM_USE,            0.8f, 0.65f);
                     shooter.playSound(shooter.getLocation(), Sound.ENTITY_WITHER_SPAWN,       1.0f, 1.45f);
                     shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.2f, 0.65f);
                     triggerGroundZeroExplosion(shooter);
                     fireChestBeam(shooter, uuid);
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
 
                 animateCharge(shooter, age, chargeTicks);
                 if (age % 20 == 0) {
                     long seconds = Math.max(1, (long) Math.ceil((chargeTicks - age) / 20.0));
-                    shooter.sendActionBar(plugin.getLocaleManager().msg(
+                    MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg(
                             "veteran.charge_progress", "seconds", Long.toString(seconds)));
                 }
 
                 age += periodTicks;
             }
-        }.runTaskTimer(plugin, 0L, periodTicks);
+        }, 0L, periodTicks);
     }
 
     private void animatePreChargeHold(Player shooter, int age, int holdTicks) {
@@ -259,12 +260,13 @@ public class TheVeteranAbility implements Ability {
         double maxHeight = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_height", 32.0);
         double maxRadius = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_radius", 15.5);
 
-        new BukkitRunnable() {
+        final TaskHandle[] task = new TaskHandle[1];
+        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
             int age = 0;
 
             @Override public void run() {
                 if (age > durationTicks) {
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
 
@@ -323,7 +325,7 @@ public class TheVeteranAbility implements Ability {
 
                 age += periodTicks;
             }
-        }.runTaskTimer(plugin, 0L, periodTicks);
+        }, 0L, periodTicks);
     }
 
     private void fireChestBeam(Player shooter, UUID uuid) {
@@ -346,20 +348,21 @@ public class TheVeteranAbility implements Ability {
         int blockHitsToBreak = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_hits_to_break", 5));
         boolean surfaceOnly = plugin.getConfig().getBoolean("abilities.the_veteran.beam_surface_only", true);
 
-        new BukkitRunnable() {
+        final TaskHandle[] task = new TaskHandle[1];
+        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
             int age = 0;
             final Map<Block, Integer> weakenedBlocks = new HashMap<>();
 
             @Override public void run() {
                 if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
                     activeBursts.remove(uuid);
-                    cancel();
+                    task[0].cancel();
                     return;
                 }
                 if (age >= durationTicks) {
                     activeBursts.remove(uuid);
-                    shooter.sendActionBar(plugin.getLocaleManager().msg("veteran.burst_end"));
-                    cancel();
+                    MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.burst_end"));
+                    task[0].cancel();
                     return;
                 }
 
@@ -378,7 +381,7 @@ public class TheVeteranAbility implements Ability {
 
                 age += periodTicks;
             }
-        }.runTaskTimer(plugin, 0L, periodTicks);
+        }, 0L, periodTicks);
     }
 
     private void renderAndApplyBeam(Player shooter, Location origin, Vector dir,
@@ -525,18 +528,7 @@ public class TheVeteranAbility implements Ability {
     }
 
     private void setMaxHealthBonus(Player p, double amount) {
-        AttributeInstance attr = p.getAttribute(Attribute.MAX_HEALTH);
-        if (attr == null) return;
-
-        attr.getModifiers().stream()
-                .filter(m -> healthModKey.equals(m.getKey()))
-                .toList()
-                .forEach(attr::removeModifier);
-        if (amount > 0) {
-            attr.addModifier(new AttributeModifier(
-                    healthModKey, amount, AttributeModifier.Operation.ADD_NUMBER));
-            p.setHealth(Math.min(attr.getValue(), p.getHealth() + amount));
-        }
+        AttributeUtil.setMaxHealthBonus(p, healthModKey, amount);
     }
 
 }

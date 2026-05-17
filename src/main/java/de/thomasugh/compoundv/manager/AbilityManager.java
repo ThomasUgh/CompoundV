@@ -1,6 +1,6 @@
 package de.thomasugh.compoundv.manager;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
@@ -8,13 +8,12 @@ import de.thomasugh.compoundv.util.AbilityAliases;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.data.PlayerAbilityData;
 import de.thomasugh.compoundv.locale.LocaleManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import de.thomasugh.compoundv.server.SchedulerAdapter;
+import de.thomasugh.compoundv.server.TaskHandle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,15 +24,15 @@ import java.util.UUID;
 
 public class AbilityManager {
 
-    private final CompoundVPlugin    plugin;
+    private final CompoundV    plugin;
     private final AbilityRegistry    registry;
     private final PersistenceManager persistence;
 
     private final Map<UUID, Ability>           activeAbility = new HashMap<>();
     private final Map<UUID, PlayerAbilityData> playerData    = new HashMap<>();
-    private BukkitRunnable tickTask;
+    private TaskHandle tickTask = TaskHandle.NOOP;
 
-    public AbilityManager(CompoundVPlugin plugin, AbilityRegistry registry, PersistenceManager persistence) {
+    public AbilityManager(CompoundV plugin, AbilityRegistry registry, PersistenceManager persistence) {
         this.plugin = plugin;
         this.registry = registry;
         this.persistence = persistence;
@@ -65,10 +64,10 @@ public class AbilityManager {
         ph.put("potion", type.getDisplayName());
         player.sendMessage(loc.msg("ability.granted_name", ph));
 
-        List<Component> desc = loc.msgList(ability.getDescriptionKey());
+        List<String> desc = loc.msgList(ability.getDescriptionKey());
         if (!desc.isEmpty()) {
             player.sendMessage(loc.msg("ability.controls_header"));
-            for (Component c : desc) player.sendMessage(c);
+            for (String line : desc) player.sendMessage(line);
         }
 
         if (data.isTemporary()) {
@@ -80,10 +79,7 @@ public class AbilityManager {
         }
         player.sendMessage(loc.msg("ability.granted_footer"));
 
-        player.getWorld().playSound(player.getLocation(),
-                Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.8f, 1.4f);
-        player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,
-                player.getLocation().add(0, 1, 0), 40, 0.5, 0.6, 0.5, 0.15);
+        playGrantEffects(player, type);
     }
 
     public void removeAbility(Player player) {
@@ -137,27 +133,47 @@ public class AbilityManager {
     public List<String> abilityList() { return new ArrayList<>(registry.ids()); }
 
     private void startTicker() {
-        tickTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                List<UUID> expired = new ArrayList<>();
-                for (Map.Entry<UUID, Ability> e : activeAbility.entrySet()) {
-                    Player p = Bukkit.getPlayer(e.getKey());
-                    if (p == null || !p.isOnline()) continue;
-                    if (e.getValue().needsTick()) e.getValue().onTick(p);
-                    PlayerAbilityData d = playerData.get(e.getKey());
-                    if (d != null && d.isExpired()) expired.add(e.getKey());
-                }
-                for (UUID u : expired) {
-                    Player p = Bukkit.getPlayer(u);
-                    if (p != null) {
-                        removeAndForget(p);
-                        p.sendMessage(plugin.getLocaleManager().msg("ability.expired"));
-                    }
-                }
+        tickTask = SchedulerAdapter.runTimer(plugin, this::tickAbilities, 1L, 1L);
+    }
+
+    private void tickAbilities() {
+        List<UUID> expired = new ArrayList<>();
+
+        for (Map.Entry<UUID, Ability> entry : activeAbility.entrySet()) {
+            Player player = Bukkit.getPlayer(entry.getKey());
+            if (player == null || !player.isOnline()) continue;
+
+            Ability ability = entry.getValue();
+            if (ability.needsTick()) {
+                ability.onTick(player);
             }
-        };
-        tickTask.runTaskTimer(plugin, 1L, 1L);
+
+            PlayerAbilityData data = playerData.get(entry.getKey());
+            if (data != null && data.isExpired()) {
+                expired.add(entry.getKey());
+            }
+        }
+
+        for (UUID uuid : expired) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) continue;
+
+            removeAndForget(player);
+            player.sendMessage(plugin.getLocaleManager().msg("ability.expired"));
+        }
+    }
+
+    private void playGrantEffects(Player player, CompoundPotion type) {
+        if (type == CompoundPotion.V_ONE) {
+            player.getWorld().playSound(player.getLocation(),
+                    Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.8f, 1.4f);
+        } else {
+            player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 0.8f, 1.25f);
+            player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.55f, 1.6f);
+        }
+
+        player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,
+                player.getLocation().add(0, 1, 0), 40, 0.5, 0.6, 0.5, 0.15);
     }
 
     public void cleanup() {
@@ -169,8 +185,7 @@ public class AbilityManager {
         playerData.clear();
     }
 
-    public static String colorHex(TextColor color) {
-        if (color == null) return "FFFFFF";
-        return String.format(Locale.ROOT, "%06X", color.value() & 0xFFFFFF);
+    public static String colorHex(int color) {
+        return String.format(Locale.ROOT, "%06X", color & 0xFFFFFF);
     }
 }

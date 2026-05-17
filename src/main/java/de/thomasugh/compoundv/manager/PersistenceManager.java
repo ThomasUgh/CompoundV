@@ -1,5 +1,5 @@
 package de.thomasugh.compoundv.manager;
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.data.PlayerAbilityData;
 import de.thomasugh.compoundv.util.AbilityAliases;
@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 public class PersistenceManager {
-    private final CompoundVPlugin plugin;
+    private final CompoundV plugin;
     private final File dataDir;
-    public PersistenceManager(CompoundVPlugin plugin) {
+    public PersistenceManager(CompoundV plugin) {
         this.plugin  = plugin;
         this.dataDir = new File(plugin.getDataFolder(), "playerdata");
         dataDir.mkdirs();

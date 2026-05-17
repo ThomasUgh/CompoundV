@@ -1,36 +1,35 @@
 package de.thomasugh.compoundv.ability.compoundv;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import de.thomasugh.compoundv.util.PotionEffects;
 
 public class StrengthAbility implements Ability {
 
-    private final CompoundVPlugin plugin;
-    public StrengthAbility(CompoundVPlugin p) { plugin = p; }
+    private final CompoundV plugin;
+    public StrengthAbility(CompoundV p) { plugin = p; }
 
     @Override public String    getId()          { return "strength"; }
     @Override public String    getDisplayName() { return "Strength-Men"; }
-    @Override public TextColor getColor()       { return TextColor.color(0xFF6600); }
+    @Override public int getColor()       { return 0xFF6600; }
 
     @Override
     public void apply(Player p) {
         int str = plugin.getConfig().getInt("abilities.strength.level", 2);
         int res = plugin.getConfig().getInt("abilities.strength.resistance_level", 0);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
+        p.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
                 Integer.MAX_VALUE, Math.max(0, str - 1), false, false, true));
         if (res > 0) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE,
+            p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
                     Integer.MAX_VALUE, res - 1, false, false, true));
         }
     }
 
     @Override
     public void remove(Player p) {
-        p.removePotionEffect(PotionEffectType.STRENGTH);
-        p.removePotionEffect(PotionEffectType.RESISTANCE);
+        p.removePotionEffect(PotionEffects.STRENGTH);
+        p.removePotionEffect(PotionEffects.RESISTANCE);
     }
 }

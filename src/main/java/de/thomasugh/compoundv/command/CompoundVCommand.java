@@ -1,6 +1,6 @@
 package de.thomasugh.compoundv.command;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.data.CompoundPotion;
@@ -25,12 +25,12 @@ import java.util.Map;
 
 public class CompoundVCommand implements CommandExecutor, TabCompleter {
 
-    private final CompoundVPlugin   plugin;
+    private final CompoundV   plugin;
     private final AbilityManager    manager;
     private final AbilityRegistry   registry;
     private final PotionRollManager roller;
 
-    public CompoundVCommand(CompoundVPlugin plugin, AbilityManager manager,
+    public CompoundVCommand(CompoundV plugin, AbilityManager manager,
                             AbilityRegistry registry, PotionRollManager roller) {
         this.plugin = plugin;
         this.manager = manager;
@@ -145,7 +145,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
 
         sender.sendMessage(loc().msg("info.plugin_header"));
         sender.sendMessage(loc().msg("info.plugin_version",
-                "version", plugin.getPluginMeta().getVersion()));
+                "version", plugin.getDescription().getVersion()));
         sender.sendMessage(loc().msg("info.plugin_ability_count",
                 "count", Integer.toString(manager.abilityCount())));
         sender.sendMessage(loc().msg("info.plugin_language",

@@ -1,11 +1,11 @@
 package de.thomasugh.compoundv.ability.compoundv;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
+import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import net.kyori.adventure.text.format.TextColor;
+import de.thomasugh.compoundv.util.MessageUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import de.thomasugh.compoundv.util.PotionEffects;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,21 +13,21 @@ import java.util.UUID;
 
 public class SpeedsterAbility implements Ability {
 
-    private final CompoundVPlugin plugin;
+    private final CompoundV plugin;
     private final Map<UUID, Boolean> speedOn = new HashMap<>();
 
-    public SpeedsterAbility(CompoundVPlugin p) { plugin = p; }
+    public SpeedsterAbility(CompoundV p) { plugin = p; }
 
     @Override public String    getId()          { return "speedster"; }
     @Override public String    getDisplayName() { return "Speedster"; }
-    @Override public TextColor getColor()       { return TextColor.color(0xFFDD00); }
+    @Override public int getColor()       { return 0xFFDD00; }
     @Override public boolean   hasToggle()      { return true; }
 
     @Override
     public void apply(Player p) {
         int res = plugin.getConfig().getInt("abilities.speedster.resistance_level", 1);
         if (res > 0) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE,
+            p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
                     Integer.MAX_VALUE, res - 1, false, false, true));
         }
     }
@@ -35,8 +35,8 @@ public class SpeedsterAbility implements Ability {
     @Override
     public void remove(Player p) {
         speedOn.remove(p.getUniqueId());
-        p.removePotionEffect(PotionEffectType.RESISTANCE);
-        p.removePotionEffect(PotionEffectType.SPEED);
+        p.removePotionEffect(PotionEffects.RESISTANCE);
+        p.removePotionEffect(PotionEffects.SPEED);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class SpeedsterAbility implements Ability {
         if (next) {
             int lvl = plugin.getConfig().getInt("abilities.speedster.speed_level", 4);
 
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,
+            p.addPotionEffect(new PotionEffect(PotionEffects.SPEED,
                     Integer.MAX_VALUE, Math.max(0, lvl - 1), false, false, true));
-            p.sendActionBar(plugin.getLocaleManager().msg("toggle.speed_on"));
+            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.speed_on"));
         } else {
-            p.removePotionEffect(PotionEffectType.SPEED);
-            p.sendActionBar(plugin.getLocaleManager().msg("toggle.speed_off"));
+            p.removePotionEffect(PotionEffects.SPEED);
+            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.speed_off"));
         }
     }
 }

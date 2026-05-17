@@ -1,13 +1,12 @@
 package de.thomasugh.compoundv.ability;
 
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 
 public interface Ability {
 
     String    getId();
     String    getDisplayName();
-    TextColor getColor();
+    int getColor();
 
     void apply(Player player);
     void remove(Player player);

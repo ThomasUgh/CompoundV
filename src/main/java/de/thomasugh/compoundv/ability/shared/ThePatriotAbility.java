@@ -1,8 +1,9 @@
 package de.thomasugh.compoundv.ability.shared;
 
-import de.thomasugh.compoundv.CompoundVPlugin;
-import net.kyori.adventure.text.format.TextColor;
+import de.thomasugh.compoundv.CompoundV;
+import de.thomasugh.compoundv.util.MessageUtil;
 import org.bukkit.Bukkit;
+import de.thomasugh.compoundv.server.SchedulerAdapter;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -10,14 +11,12 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
+import de.thomasugh.compoundv.util.AttributeUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
@@ -31,14 +30,14 @@ import java.util.UUID;
 public class ThePatriotAbility extends BaseHeatVisionAbility {
 
     private final String id, tierKey;
-    private final TextColor color;
+    private final int color;
     private final NamespacedKey healthModKey;
     private final Map<UUID, Boolean> glowActive     = new HashMap<>();
     private final Map<UUID, Integer> glowTicker     = new HashMap<>();
     private final Set<UUID>          launching      = new HashSet<>();
     private final Map<UUID, Long>    launchCooldown = new HashMap<>();
 
-    public ThePatriotAbility(CompoundVPlugin plugin, String id, String tierKey, TextColor color) {
+    public ThePatriotAbility(CompoundV plugin, String id, String tierKey, int color) {
         super(plugin);
         this.id = id; this.tierKey = tierKey; this.color = color;
         this.healthModKey = new NamespacedKey(plugin, "patriot_hearts");
@@ -46,7 +45,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
 
     @Override public String    getId()          { return id; }
     @Override public String    getDisplayName() { return "The Patriot"; }
-    @Override public TextColor getColor()       { return color; }
+    @Override public int getColor()       { return color; }
     @Override protected float  size()           { return isVOne() ? 0.82f : 0.72f; }
     @Override protected float  glowSize()       { return isVOne() ? 0.55f : 0.45f; }
     @Override protected double step()           { return isVOne() ? 0.18 : 0.24;  }
@@ -90,16 +89,16 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         int regen = plugin.getConfig().getInt(t("regen_level"),      isVOne() ? 3 : 1);
         boolean fireRes = plugin.getConfig().getBoolean(t("fire_resistance"), true);
 
-        p.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
+        p.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
                 Integer.MAX_VALUE, str - 1, false, false, true));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE,
+        p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
                 Integer.MAX_VALUE, res - 1, false, false, true));
         if (fireRes) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,
+            p.addPotionEffect(new PotionEffect(PotionEffects.FIRE_RESISTANCE,
                     Integer.MAX_VALUE, 0, false, false, true));
         }
         if (regen > 0) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,
+            p.addPotionEffect(new PotionEffect(PotionEffects.REGENERATION,
                     Integer.MAX_VALUE, regen - 1, false, false, true));
         }
 
@@ -112,9 +111,9 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         super.remove(p);
         UUID u = p.getUniqueId();
         p.setAllowFlight(false); p.setFlying(false); p.setFlySpeed(0.1f);
-        List.of(PotionEffectType.STRENGTH, PotionEffectType.RESISTANCE,
-                PotionEffectType.FIRE_RESISTANCE, PotionEffectType.REGENERATION,
-                PotionEffectType.NIGHT_VISION).forEach(p::removePotionEffect);
+        List.of(PotionEffects.STRENGTH, PotionEffects.RESISTANCE,
+                PotionEffects.FIRE_RESISTANCE, PotionEffects.REGENERATION,
+                PotionEffects.NIGHT_VISION).forEach(p::removePotionEffect);
         if (glowActive.getOrDefault(u, false)) clearGlow(p);
         glowActive.remove(u); glowTicker.remove(u);
         launching.remove(u); launchCooldown.remove(u);
@@ -133,14 +132,14 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         glowActive.put(p.getUniqueId(), next);
         if (next) {
             refreshGlow(p);
-            p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,
+            p.addPotionEffect(new PotionEffect(PotionEffects.NIGHT_VISION,
                     Integer.MAX_VALUE, 0, false, false, false));
-            p.sendActionBar(plugin.getLocaleManager().msg("toggle.xray_on"));
+            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.xray_on"));
             p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 0.5f, 1.8f);
         } else {
             clearGlow(p);
-            p.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            p.sendActionBar(plugin.getLocaleManager().msg("toggle.xray_off"));
+            p.removePotionEffect(PotionEffects.NIGHT_VISION);
+            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.xray_off"));
         }
     }
 
@@ -153,7 +152,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         Team   t = redTeam();
         for (Entity e : p.getNearbyEntities(r, r, r)) {
             if (!(e instanceof LivingEntity le) || e == p) continue;
-            le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,
+            le.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
                     40, 0, false, false, false));
             t.addEntry(e.getUniqueId().toString());
         }
@@ -163,7 +162,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         double r = plugin.getConfig().getDouble(s("glow_radius"), 50) + 20;
         Team   t = redTeam();
         for (Entity e : p.getNearbyEntities(r, r, r)) {
-            if (e instanceof LivingEntity le) le.removePotionEffect(PotionEffectType.GLOWING);
+            if (e instanceof LivingEntity le) le.removePotionEffect(PotionEffects.GLOWING);
             t.removeEntry(e.getUniqueId().toString());
         }
     }
@@ -186,7 +185,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         long lst = launchCooldown.getOrDefault(u, 0L);
         if (now - lst < cd) {
             long secs = (cd - (now - lst)) / 1000 + 1;
-            p.sendActionBar(plugin.getLocaleManager().msg("launch_cooldown",
+            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("launch_cooldown",
                     "seconds", Long.toString(secs)));
             return;
         }
@@ -209,7 +208,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         int    peak = plugin.getConfig().getInt(s("launch_peak_ticks"), 28);
         double spd  = plugin.getConfig().getDouble(t("launch_fly_speed"),
                 plugin.getConfig().getDouble(s("launch_fly_speed"), 0.375));
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, () -> {
             launching.remove(u);
             if (p.isOnline()) {
                 p.setAllowFlight(true); p.setFlying(true);
@@ -230,22 +229,10 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         w.spawnParticle(Particle.LARGE_SMOKE, loc.clone().add(0, .5, 0), 35, 1.3, .1,  1.3, .05);
         w.spawnParticle(Particle.DUST, loc.clone().add(0, .6, 0), 30, 1.3, .3, 1.3, 0,
                 new Particle.DustOptions(Color.fromRGB(200, 10, 0), 1.1f));
-        p.sendActionBar(plugin.getLocaleManager().msg("fall_impact"));
+        MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("fall_impact"));
     }
 
     private void setMaxHealthBonus(Player p, double amount) {
-        AttributeInstance attr = p.getAttribute(Attribute.MAX_HEALTH);
-        if (attr == null) return;
-
-        attr.getModifiers().stream()
-                .filter(m -> healthModKey.equals(m.getKey()))
-                .toList()
-                .forEach(attr::removeModifier);
-        if (amount > 0) {
-            attr.addModifier(new AttributeModifier(
-                    healthModKey, amount, AttributeModifier.Operation.ADD_NUMBER));
-
-            p.setHealth(Math.min(attr.getValue(), p.getHealth() + amount));
-        }
+        AttributeUtil.setMaxHealthBonus(p, healthModKey, amount);
     }
 }
