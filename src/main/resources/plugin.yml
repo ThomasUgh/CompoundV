@@ -1,7 +1,8 @@
 name: CompoundV
-version: 1.0.1-BETA
-main: de.thomasugh.compoundv.CompoundVPlugin
-api-version: '1.21'
+version: 1.0.2-BETA
+main: de.thomasugh.compoundv.CompoundV
+api-version: '1.20'
+folia-supported: true
 author: Thomas U.
 description: CompoundV - modular ability serums for Minecraft
 website: https://github.com/thomasugh/compoundv
