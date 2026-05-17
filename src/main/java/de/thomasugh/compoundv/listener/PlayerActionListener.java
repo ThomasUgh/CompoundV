@@ -165,6 +165,11 @@ public class PlayerActionListener implements Listener {
             if (canUseSneakLeftClick(p, a)) {
                 cancelAbilityInteraction(e);
                 diver.toggleSonar(p);
+                return;
+            }
+            if (canUseSneakRightClick(p, a)) {
+                cancelAbilityInteraction(e);
+                diver.useRiptide(p);
             }
             return;
         }

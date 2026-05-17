@@ -151,12 +151,17 @@ public final class ConfigMigrationService {
         }
 
         changed |= setIfMissing("abilities.the_diver.water_breathing_level", 1);
-        changed |= setIfMissing("abilities.the_diver.dolphins_grace_level", 3);
+        changed |= replaceIfNumericEquals("abilities.the_diver.dolphins_grace_level", 3.0, 4);
+        changed |= setIfMissing("abilities.the_diver.dolphins_grace_level", 4);
         changed |= setIfMissing("abilities.the_diver.conduit_power_level", 2);
         changed |= setIfMissing("abilities.the_diver.strength_level", 2);
         changed |= setIfMissing("abilities.the_diver.resistance_level", 1);
         changed |= setIfMissing("abilities.the_diver.water_bonus_levels", 1);
         changed |= setIfMissing("abilities.the_diver.sonar_radius", 45.0);
+        changed |= setIfMissing("abilities.the_diver.riptide_level", 4);
+        changed |= setIfMissing("abilities.the_diver.riptide_velocity", 3.85);
+        changed |= setIfMissing("abilities.the_diver.riptide_vertical_boost", 0.22);
+        changed |= setIfMissing("abilities.the_diver.riptide_cooldown_ms", 1800);
         changed |= setIfMissing("abilities.vision.xray_radius", 35.0);
 
         return changed;
