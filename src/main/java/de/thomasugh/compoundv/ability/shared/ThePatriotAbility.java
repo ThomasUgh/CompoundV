@@ -218,17 +218,39 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     }
 
     public void triggerFallImpact(Player p) {
-        Location loc = p.getLocation(); World w = p.getWorld();
-        float   power = (float) plugin.getConfig().getDouble(s("fall_impact_power"), 4.0);
-        boolean bDmg  = plugin.getConfig().getBoolean(s("fall_impact_block_damage"), true);
-        w.createExplosion(loc, power, false, bDmg, p);
+        triggerFallImpact(p, plugin.getConfig().getDouble(s("fall_impact_block_height"), 50.0));
+    }
+
+    public void triggerFallImpact(Player p, double fallenBlocks) {
+        Location loc = p.getLocation();
+        World w = p.getWorld();
+        double blockHeight = plugin.getConfig().getDouble(s("fall_impact_block_height"),
+                plugin.getConfig().getDouble(s("fall_impact_height"), 50.0));
+
+        if (fallenBlocks < blockHeight) {
+            triggerSoftFallImpact(p, loc, w);
+            return;
+        }
+
+        float power = (float) plugin.getConfig().getDouble(s("fall_impact_power"), 4.0);
+        boolean blockDamage = plugin.getConfig().getBoolean(s("fall_impact_block_damage"), true);
+        w.createExplosion(loc, power, false, blockDamage, p);
         w.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 2.2f, 0.45f);
-        w.playSound(loc, Sound.BLOCK_STONE_BREAK,      1.3f, 0.4f);
-        w.spawnParticle(Particle.CLOUD,       loc.clone().add(0, .3, 0), 50, 1.6, .15, 1.6, .2);
-        w.spawnParticle(Particle.EXPLOSION,   loc.clone().add(0, .5, 0),  7, 1.2,  0,  1.2,  0);
-        w.spawnParticle(Particle.LARGE_SMOKE, loc.clone().add(0, .5, 0), 35, 1.3, .1,  1.3, .05);
+        w.playSound(loc, Sound.BLOCK_STONE_BREAK, 1.3f, 0.4f);
+        w.spawnParticle(Particle.CLOUD, loc.clone().add(0, .3, 0), 50, 1.6, .15, 1.6, .2);
+        w.spawnParticle(Particle.EXPLOSION, loc.clone().add(0, .5, 0), 7, 1.2, 0, 1.2, 0);
+        w.spawnParticle(Particle.LARGE_SMOKE, loc.clone().add(0, .5, 0), 35, 1.3, .1, 1.3, .05);
         w.spawnParticle(Particle.DUST, loc.clone().add(0, .6, 0), 30, 1.3, .3, 1.3, 0,
                 new Particle.DustOptions(Color.fromRGB(200, 10, 0), 1.1f));
+        MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("fall_impact"));
+    }
+
+    private void triggerSoftFallImpact(Player p, Location loc, World w) {
+        w.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 0.75f, 0.9f);
+        w.playSound(loc, Sound.BLOCK_STONE_HIT, 0.8f, 0.65f);
+        w.spawnParticle(Particle.CLOUD, loc.clone().add(0, .18, 0), 18, .75, .08, .75, .08);
+        w.spawnParticle(Particle.POOF, loc.clone().add(0, .28, 0), 10, .55, .05, .55, 0.02);
+        w.spawnParticle(Particle.LARGE_SMOKE, loc.clone().add(0, .25, 0), 8, .5, .05, .5, .02);
         MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("fall_impact"));
     }
 

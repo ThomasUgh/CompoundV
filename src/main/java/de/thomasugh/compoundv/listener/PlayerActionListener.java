@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,6 +25,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -123,6 +125,18 @@ public class PlayerActionListener implements Listener {
         }
     }
 
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPotionLaunch(ProjectileLaunchEvent e) {
+        if (!(e.getEntity() instanceof ThrownPotion potion)) return;
+        if (!ItemUtil.isThrowableCompoundVBottle(potion.getItem())) return;
+
+        e.setCancelled(true);
+        if (potion.getShooter() instanceof Player player) {
+            player.sendMessage(plugin.getLocaleManager().msg("potion.only_drinkable"));
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onSwapHands(PlayerSwapHandItemsEvent e) {
         Ability ab = manager.getAbility(e.getPlayer());
@@ -139,6 +153,12 @@ public class PlayerActionListener implements Listener {
         Action a = e.getAction();
         if (a != Action.RIGHT_CLICK_AIR && a != Action.RIGHT_CLICK_BLOCK
                 && a != Action.LEFT_CLICK_AIR && a != Action.LEFT_CLICK_BLOCK) return;
+
+        if (ItemUtil.isThrowableCompoundVBottle(e.getItem())) {
+            cancelAbilityInteraction(e);
+            p.sendMessage(plugin.getLocaleManager().msg("potion.only_drinkable"));
+            return;
+        }
 
         if (ItemUtil.isCompoundVBottle(p.getInventory().getItemInMainHand())) return;
         if (ItemUtil.isCompoundVBottle(p.getInventory().getItemInOffHand()))  return;
@@ -236,9 +256,13 @@ public class PlayerActionListener implements Listener {
         if (!prevGround && currGround) {
             if (fallPeakY.containsKey(u)) {
                 double dist = fallPeakY.remove(u) - y;
-                double min  = plugin.getConfig().getDouble(
-                        "abilities.the_patriot.shared.fall_impact_height", 30);
-                if (p.isSneaking() && dist >= min) ha.triggerFallImpact(p);
+                double particleMin = plugin.getConfig().getDouble(
+                        "abilities.the_patriot.shared.fall_impact_particle_height", 20);
+                double blockMin = plugin.getConfig().getDouble(
+                        "abilities.the_patriot.shared.fall_impact_block_height",
+                        plugin.getConfig().getDouble("abilities.the_patriot.shared.fall_impact_height", 50));
+                double min = Math.min(particleMin, blockMin);
+                if (p.isSneaking() && dist >= min) ha.triggerFallImpact(p, dist);
             }
             if (p.getFlySpeed() > 0.15f) p.setFlySpeed(0.1f);
         }
