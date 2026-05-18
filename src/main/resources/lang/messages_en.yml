@@ -1,4 +1,4 @@
-language_file_version: 9
+language_file_version: 10
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -15,6 +15,7 @@ potion:
   no_ability: "<prefix>&7You do not have an active ability."
   no_chances: "<prefix>&cThis potion has no valid abilities configured. Please contact an admin."
   roll_failed: "<prefix>&cThe serum could not be processed. Please contact an admin."
+  only_drinkable: "<prefix>&cCompound V serums can only be used as normal drinkable potions."
 
 ability:
   granted_header: "<prefix>&8━━━━━━━━ &aAbility Unlocked &8━━━━━━━━"
@@ -57,6 +58,10 @@ ability:
     description:
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click&7 to reveal nearby entities."
       - "<prefix>&8• &7Default range: &e35 blocks&7."
+  teleporter:
+    description:
+      - "<prefix>&8• &5Blink&7: press &dF&7 to teleport up to &e50 blocks&7."
+      - "<prefix>&8• &7Cooldown: &e2 seconds&7. Includes &9Resistance II&7."
   fly:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."

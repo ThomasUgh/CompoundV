@@ -68,6 +68,7 @@ public final class ConfigMigrationService {
                 "fire", 20,
                 "the_diver", 7,
                 "vision", 7
+                "teleporter", 2
         ));
         changed |= ensureChanceSection("temp_v.chances", orderedMap(
                 "fly", 10,
@@ -79,7 +80,8 @@ public final class ConfigMigrationService {
         ));
         changed |= ensureChanceSection("v_one.chances", orderedMap(
                 "the_patriot_v_one", 1,
-                "the_veteran", 3
+                "the_veteran", 3,
+                "teleporter", 5
         ));
         return changed;
     }

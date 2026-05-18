@@ -11,6 +11,7 @@ compound_v:
     fire: 20
     the_diver: 7
     vision: 7
+    teleporter: 2
 
 temp_v:
   chances:
@@ -27,6 +28,7 @@ v_one:
   chances:
     the_patriot_v_one: 1
     the_veteran: 3
+    teleporter: 5
   drink_effect_seconds: 5
 
 heat_vision:
@@ -110,6 +112,10 @@ abilities:
     melee_knockback_horizontal: 1.35
     melee_knockback_vertical: 0.28
     beam_hit_knockback: 0.45
+  teleporter:
+    range: 50.0
+    cooldown_ms: 2000
+    resistance_level: 2
 
   speedster:
     speed_level: 4

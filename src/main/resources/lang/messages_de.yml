@@ -1,4 +1,4 @@
-language_file_version: 9
+language_file_version: 10
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -57,6 +57,10 @@ ability:
     description:
       - "<prefix>&8• &bRöntgenblick&7: &dSchleichen + Linksklick&7, um nahe Entities sichtbar zu machen."
       - "<prefix>&8• &7Standard-Reichweite: &e35 Blöcke&7."
+  teleporter:
+    description:
+      - "<prefix>&8• &5Blink&7: Drücke &dF&7, um bis zu &e50 Blöcke&7 zu teleportieren."
+      - "<prefix>&8• &7Cooldown: &e2 Sekunden&7. Enthält &9Resistenz II&7."
   fly:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
@@ -102,6 +106,11 @@ toggle:
   speed_off: "&7Super Speed deaktiviert"
   ghost_on: "&5Ghost Mode &aaktiviert"
   ghost_off: "&7Ghost Mode deaktiviert"
+
+teleporter:
+  used: "&5Blink &aabgeschlossen"
+  cooldown: "&cBlink bereit in {seconds}s"
+  no_safe_location: "&cKeine sichere Teleport-Position gefunden."
 
 veteran:
   charge_start: "&eThe Veteran &7lädt den &eBruststrahl&7 auf..."
