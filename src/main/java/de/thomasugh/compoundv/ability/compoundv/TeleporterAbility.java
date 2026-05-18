@@ -2,7 +2,6 @@ package de.thomasugh.compoundv.ability.compoundv;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -56,15 +55,12 @@ public class TeleporterAbility implements Ability {
         long now = System.currentTimeMillis();
         long last = cooldowns.getOrDefault(player.getUniqueId(), 0L);
         if (now - last < cooldownMs) {
-            long seconds = Math.max(1, (cooldownMs - (now - last) + 999L) / 1000L);
-            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("teleporter.cooldown",
-                    "seconds", Long.toString(seconds)));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.45f, 0.9f);
             return;
         }
 
         Location destination = findDestination(player);
         if (destination == null) {
-            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("teleporter.no_safe_location"));
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.55f, 0.75f);
             return;
         }
@@ -78,7 +74,6 @@ public class TeleporterAbility implements Ability {
         player.teleport(destination);
         world.spawnParticle(Particle.PORTAL, destination.clone().add(0, 1, 0), 72, 0.35, 0.65, 0.35, 0.45);
         world.playSound(destination, Sound.ENTITY_ENDERMAN_TELEPORT, 0.75f, 1.45f);
-        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("teleporter.used"));
     }
 
     private Location findDestination(Player player) {
