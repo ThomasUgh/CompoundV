@@ -51,8 +51,8 @@ abilities:
       launch_cooldown_ms: 10000
       launch_fly_speed: 0.375
       glow_radius: 50
-      fall_impact_particle_height: 20
-      fall_impact_block_height: 50
+      fall_impact_particle_height: 15
+      fall_impact_block_height: 40
       fall_impact_power: 4.0
       fall_impact_block_damage: true
       extra_hearts: 10

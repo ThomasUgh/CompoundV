@@ -255,12 +255,13 @@ public class PlayerActionListener implements Listener {
 
         if (!prevGround && currGround) {
             if (fallPeakY.containsKey(u)) {
-                double dist = fallPeakY.remove(u) - y;
+                double trackedDistance = fallPeakY.remove(u) - y;
+                double dist = Math.max(trackedDistance, p.getFallDistance());
                 double particleMin = plugin.getConfig().getDouble(
-                        "abilities.the_patriot.shared.fall_impact_particle_height", 20);
+                        "abilities.the_patriot.shared.fall_impact_particle_height", 15);
                 double blockMin = plugin.getConfig().getDouble(
                         "abilities.the_patriot.shared.fall_impact_block_height",
-                        plugin.getConfig().getDouble("abilities.the_patriot.shared.fall_impact_height", 50));
+                        plugin.getConfig().getDouble("abilities.the_patriot.shared.fall_impact_height", 40));
                 double min = Math.min(particleMin, blockMin);
                 if (p.isSneaking() && dist >= min) ha.triggerFallImpact(p, dist);
             }

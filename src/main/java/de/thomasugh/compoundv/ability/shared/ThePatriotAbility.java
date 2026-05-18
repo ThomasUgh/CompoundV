@@ -218,14 +218,14 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     }
 
     public void triggerFallImpact(Player p) {
-        triggerFallImpact(p, plugin.getConfig().getDouble(s("fall_impact_block_height"), 50.0));
+        triggerFallImpact(p, plugin.getConfig().getDouble(s("fall_impact_block_height"), 40.0));
     }
 
     public void triggerFallImpact(Player p, double fallenBlocks) {
         Location loc = p.getLocation();
         World w = p.getWorld();
         double blockHeight = plugin.getConfig().getDouble(s("fall_impact_block_height"),
-                plugin.getConfig().getDouble(s("fall_impact_height"), 50.0));
+                plugin.getConfig().getDouble(s("fall_impact_height"), 40.0));
 
         if (fallenBlocks < blockHeight) {
             triggerSoftFallImpact(p, loc, w);

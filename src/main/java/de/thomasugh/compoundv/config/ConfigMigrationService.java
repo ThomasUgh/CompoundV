@@ -105,7 +105,7 @@ public final class ConfigMigrationService {
                 new NumberMigration("abilities.the_veteran.ground_zero_damage", 240.0, 500.0),
                 new NumberMigration("abilities.the_veteran.ground_zero_knockback", 4.0, 7.5),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_duration_ticks", 900.0, 1200),
-                new NumberMigration("abilities.the_veteran.mushroom_cloud_period_ticks", 10.0, 8),
+                new NumberMigration("abilities.the_veteran.mushroom_cloud_period_ticks", 10.0, 12),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_height", 26.0, 32.0),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_radius", 13.0, 15.5),
                 new NumberMigration("abilities.the_veteran.pre_charge_hold_ticks", 40.0, 20)
@@ -181,15 +181,25 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.post_burst_strength_reduction_ticks",
                 plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 2400));
 
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_particle_height", 20.0, 15);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_block_height", 50.0, 40);
         if (!plugin.getConfig().contains("abilities.the_patriot.shared.fall_impact_particle_height")) {
-            plugin.getConfig().set("abilities.the_patriot.shared.fall_impact_particle_height", 20);
+            plugin.getConfig().set("abilities.the_patriot.shared.fall_impact_particle_height", 15);
             changed = true;
         }
         if (!plugin.getConfig().contains("abilities.the_patriot.shared.fall_impact_block_height")) {
-            plugin.getConfig().set("abilities.the_patriot.shared.fall_impact_block_height", 50);
+            plugin.getConfig().set("abilities.the_patriot.shared.fall_impact_block_height", 40);
             changed = true;
         }
-        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_height", 30.0, 50);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_height", 30.0, 40);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_height", 50.0, 40);
+
+        changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_period_ticks", 8.0, 12);
+        changed |= setIfMissing("abilities.the_veteran.mushroom_cloud_particle_multiplier", 0.65);
+        changed |= setIfMissing("abilities.the_veteran.ground_zero_particle_multiplier", 0.65);
+        changed |= setIfMissing("abilities.the_veteran.mushroom_cloud_sound_duration_ticks", 80);
+        changed |= setIfMissing("abilities.the_veteran.beam_sound_duration_ticks", 40);
+        changed |= setIfMissing("abilities.the_veteran.beam_sound_period_ticks", 20);
 
         changed |= setIfMissing("abilities.the_runner.speed_min_level", 9);
         changed |= setIfMissing("abilities.the_runner.speed_max_level", 12);
