@@ -67,7 +67,8 @@ public final class ConfigMigrationService {
                 "invisibility", 7,
                 "fire", 20,
                 "the_diver", 7,
-                "vision", 7
+                "the_runner", 4,
+                "vision", 7,
                 "teleporter", 2
         ));
         changed |= ensureChanceSection("temp_v.chances", orderedMap(

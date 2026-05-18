@@ -15,6 +15,7 @@ potion:
   no_ability: "<prefix>&7Du hast keine aktive Fähigkeit."
   no_chances: "<prefix>&cFür diesen Trank sind keine gültigen Fähigkeiten konfiguriert. Bitte melde dich bei einem Admin."
   roll_failed: "<prefix>&cDas Serum konnte nicht verarbeitet werden. Bitte melde dich bei einem Admin."
+  only_drinkable: "<prefix>&cCompound-V-Seren können nur als normaler trinkbarer Trank genutzt werden."
 
 ability:
   granted_header: "<prefix>&8━━━━━━━━ &aFähigkeit freigeschaltet &8━━━━━━━━"
@@ -57,6 +58,11 @@ ability:
     description:
       - "<prefix>&8• &bRöntgenblick&7: &dSchleichen + Linksklick&7, um nahe Entities sichtbar zu machen."
       - "<prefix>&8• &7Standard-Reichweite: &e35 Blöcke&7."
+  the_runner:
+    description:
+      - "<prefix>&8• &eRunner Speed&7: Drücke &dF&7, um Speed IX-XII und aus durchzuschalten."
+      - "<prefix>&8• &bWasserlauf&7 friert Wasser unter dir ähnlich wie Frost Walker ein."
+      - "<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz I&7, &c5 Extra-Herzen&7 und kein Nahkampf-Cooldown."
   teleporter:
     description:
       - "<prefix>&8• &5Blink&7: Drücke &dF&7, um bis zu &e50 Blöcke&7 zu teleportieren."
@@ -89,7 +95,8 @@ ability:
       - "<prefix>&8• &eBruststrahl&7: &dSchleichen + Linksklick&7, während du einen Block anschaust oder ein normales Item hältst."
       - "<prefix>&8• &7Eine kurze stille Verzögerung verhindert versehentliches Aktivieren, bevor die &e5-Sekunden-Aufladung&7 beginnt."
       - "<prefix>&8• &7Der dicke &egelbe Feuerstrahl&7 verursacht extremen Schaden und brennt sich langsam durch Oberflächenblöcke."
-      - "<prefix>&8• &7Beim Auslösen entsteht eine &c20-TNT-artige Atom-Druckwelle&7 mit größerem, länger sichtbarem Atompilz und &ckeinem Blockschaden&7 um den Spieler."
+      - "<prefix>&8• &7Beim Auslösen entsteht eine &c20-TNT-artige Atom-Druckwelle&7 mit größerem &c2-Minuten-Atompilz&7 und &ckeinem Blockschaden&7 um den Spieler."
+      - "<prefix>&8• &7Nach dem Blast wird The Veterans Stärke um &e50%&7 reduziert, bis der Atompilz verschwindet."
 
 toggle:
   heat_vision_on: "&bHeat Vision &aaktiviert"
@@ -104,6 +111,8 @@ toggle:
   diver_riptide_cooldown: "&cSog-Dash bereit in {seconds}s"
   speed_on: "&eSuper Speed &aaktiviert"
   speed_off: "&7Super Speed deaktiviert"
+  runner_speed_level: "&eRunner Speed &7Level &a{level}"
+  runner_speed_off: "&7Runner Speed deaktiviert"
   ghost_on: "&5Ghost Mode &aaktiviert"
   ghost_off: "&7Ghost Mode deaktiviert"
 

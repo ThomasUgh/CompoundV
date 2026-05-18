@@ -58,6 +58,11 @@ ability:
     description:
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click&7 to reveal nearby entities."
       - "<prefix>&8• &7Default range: &e35 blocks&7."
+  the_runner:
+    description:
+      - "<prefix>&8• &eRunner Speed&7: press &dF&7 to cycle Speed IX-XII and off."
+      - "<prefix>&8• &bWater Walk&7 freezes water below you like Frost Walker."
+      - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance I&7, &c5 extra hearts&7 and no melee cooldown."
   teleporter:
     description:
       - "<prefix>&8• &5Blink&7: press &dF&7 to teleport up to &e50 blocks&7."
@@ -90,7 +95,8 @@ ability:
       - "<prefix>&8• &eChest Beam&7: &dSneak + Left-Click&7 while looking at a block or while holding a normal item."
       - "<prefix>&8• &7A short silent delay prevents accidental activation before the &e5 second charge&7 begins."
       - "<prefix>&8• &7The thick &eyellow fire beam&7 deals extreme damage and slowly burns through surface blocks."
-      - "<prefix>&8• &7When released, it creates a &c20 TNT-style nuclear shockwave&7 with a large lingering mushroom cloud and &cno block damage&7 around the player."
+      - "<prefix>&8• &7When released, it creates a &c20 TNT-style nuclear shockwave&7 with a large &c2-minute mushroom cloud&7 and &cno block damage&7 around the player."
+      - "<prefix>&8• &7After the blast, The Veteran's Strength is reduced by &e50%&7 until the cloud fades."
 
 toggle:
   heat_vision_on: "&bHeat Vision &aenabled"
@@ -105,8 +111,15 @@ toggle:
   diver_riptide_cooldown: "&cRiptide Dash ready in {seconds}s"
   speed_on: "&eSuper Speed &aenabled"
   speed_off: "&7Super Speed disabled"
+  runner_speed_level: "&eRunner Speed &7Level &a{level}"
+  runner_speed_off: "&7Runner Speed disabled"
   ghost_on: "&5Ghost Mode &aenabled"
   ghost_off: "&7Ghost Mode disabled"
+
+teleporter:
+  used: "&5Blink &acompleted"
+  cooldown: "&cBlink ready in {seconds}s"
+  no_safe_location: "&cNo safe teleport location found."
 
 veteran:
   charge_start: "&eThe Veteran &7is charging the &eChest Beam&7..."
