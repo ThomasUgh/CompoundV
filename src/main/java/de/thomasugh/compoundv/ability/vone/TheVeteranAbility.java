@@ -33,8 +33,9 @@ public class TheVeteranAbility implements Ability {
 
     private final CompoundV plugin;
     private final NamespacedKey healthModKey;
-    private final Set<UUID>       activeBursts  = new HashSet<>();
+    private final Set<UUID> activeBursts = new HashSet<>();
     private final Map<UUID, Long> burstCooldown = new HashMap<>();
+    private final Map<UUID, TaskHandle> strengthRecoveryTasks = new HashMap<>();
 
     public TheVeteranAbility(CompoundV p) {
         plugin = p;
@@ -47,11 +48,9 @@ public class TheVeteranAbility implements Ability {
 
     @Override
     public void apply(Player p) {
-        int str = plugin.getConfig().getInt("abilities.the_veteran.strength_level",   5);
         int res = plugin.getConfig().getInt("abilities.the_veteran.resistance_level", 4);
         double extraHp = plugin.getConfig().getDouble("abilities.the_veteran.extra_hearts", 20.0) * 2.0;
-        p.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
-                Integer.MAX_VALUE, str - 1, false, false, true));
+        applyStrength(p, plugin.getConfig().getInt("abilities.the_veteran.strength_level", 5));
         p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
                 Integer.MAX_VALUE, res - 1, false, false, true));
         p.addPotionEffect(new PotionEffect(PotionEffects.FIRE_RESISTANCE,
@@ -64,10 +63,43 @@ public class TheVeteranAbility implements Ability {
         UUID u = p.getUniqueId();
         activeBursts.remove(u);
         burstCooldown.remove(u);
+        TaskHandle recoveryTask = strengthRecoveryTasks.remove(u);
+        if (recoveryTask != null) recoveryTask.cancel();
         p.removePotionEffect(PotionEffects.STRENGTH);
         p.removePotionEffect(PotionEffects.RESISTANCE);
         p.removePotionEffect(PotionEffects.FIRE_RESISTANCE);
         setMaxHealthBonus(p, 0);
+    }
+
+    private void applyStrength(Player player, int level) {
+        if (level <= 0) {
+            player.removePotionEffect(PotionEffects.STRENGTH);
+            return;
+        }
+        player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
+                Integer.MAX_VALUE, Math.max(0, level - 1), false, false, true));
+    }
+
+    private void applyTemporaryStrengthPenalty(Player player) {
+        UUID uuid = player.getUniqueId();
+        int baseStrength = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.strength_level", 5));
+        int reducedStrength = Math.max(1, (int) Math.floor(baseStrength * plugin.getConfig().getDouble(
+                "abilities.the_veteran.post_burst_strength_multiplier", 0.5)));
+        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.post_burst_strength_reduction_ticks",
+                plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 2400));
+
+        applyStrength(player, reducedStrength);
+
+        TaskHandle previous = strengthRecoveryTasks.remove(uuid);
+        if (previous != null) previous.cancel();
+
+        TaskHandle handle = SchedulerAdapter.runLater(plugin, () -> {
+            strengthRecoveryTasks.remove(uuid);
+            if (player.isOnline() && plugin.getAbilityManager().getAbility(player) == this) {
+                applyStrength(player, plugin.getConfig().getInt("abilities.the_veteran.strength_level", 5));
+            }
+        }, Math.max(20, durationTicks));
+        strengthRecoveryTasks.put(uuid, handle);
     }
 
     public boolean isBurstActive(Player p) { return activeBursts.contains(p.getUniqueId()); }
@@ -75,7 +107,7 @@ public class TheVeteranAbility implements Ability {
     public void startBurst(Player p) {
         UUID u = p.getUniqueId();
 
-        long cd  = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 60_000L);
+        long cd  = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 300_000L);
         long now = System.currentTimeMillis();
         long last = burstCooldown.getOrDefault(u, 0L);
         if (now - last < cd) {
@@ -157,6 +189,7 @@ public class TheVeteranAbility implements Ability {
                     shooter.playSound(shooter.getLocation(), Sound.ENTITY_WITHER_SPAWN,       1.0f, 1.45f);
                     shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.2f, 0.65f);
                     triggerGroundZeroExplosion(shooter);
+                    applyTemporaryStrengthPenalty(shooter);
                     fireChestBeam(shooter, uuid);
                     task[0].cancel();
                     return;
@@ -255,7 +288,7 @@ public class TheVeteranAbility implements Ability {
         World w = base.getWorld();
         if (w == null) return;
 
-        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 1200);
+        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 2400);
         int periodTicks = Math.max(2, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_period_ticks", 8));
         double maxHeight = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_height", 32.0);
         double maxRadius = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_radius", 15.5);
@@ -271,51 +304,59 @@ public class TheVeteranAbility implements Ability {
                 }
 
                 double progress = Math.min(1.0, age / Math.max(1.0, (double) durationTicks));
-                double rise = Math.sin(progress * Math.PI * 0.5);
-                double fade = Math.max(0.0, 1.0 - progress);
-                double thickness = 0.65 + fade * 0.85;
+                double build = Math.min(1.0, progress / 0.22);
+                double fade = progress < 0.84 ? 1.0 : Math.max(0.0, 1.0 - ((progress - 0.84) / 0.16));
+                double rise = Math.sin(build * Math.PI * 0.5);
+                double thickness = 0.85 + fade * 0.75;
 
-                double stemHeight = 4.5 + rise * (maxHeight * 0.58);
-                double stemRadius = 1.6 + rise * 3.2;
-                double capHeight = 10.0 + rise * (maxHeight * 0.68);
-                double capRadius = 5.6 + rise * maxRadius;
-                double outerRingRadius = capRadius * (0.9 + progress * 0.18);
+                double stemHeight = 5.0 + rise * (maxHeight * 0.56);
+                double stemRadius = 1.8 + rise * 2.4;
+                double capHeight = 11.0 + rise * (maxHeight * 0.66);
+                double capRadius = 6.2 + rise * maxRadius;
+                double outerRingRadius = capRadius * 1.08;
 
-                int stemParticles = Math.max(18, (int) Math.round(88.0 * fade));
-                int capParticles = Math.max(32, (int) Math.round(140.0 * fade));
-                int ringParticles = Math.max(20, (int) Math.round(60.0 * fade));
+                int stemParticles = Math.max(18, (int) Math.round(70.0 * fade));
+                int capParticles = Math.max(34, (int) Math.round(122.0 * fade));
+                int ringParticles = Math.max(22, (int) Math.round(54.0 * fade));
+                int undersideParticles = Math.max(14, (int) Math.round(48.0 * fade));
 
-                Particle.DustOptions darkSmoke = new Particle.DustOptions(Color.fromRGB(58, 56, 52), 3.25f);
-                Particle.DustOptions ash = new Particle.DustOptions(Color.fromRGB(112, 106, 96), 2.8f);
-                Particle.DustOptions ember = new Particle.DustOptions(Color.fromRGB(255, 150, 35), 2.0f);
-                Particle.DustOptions hotCore = new Particle.DustOptions(Color.fromRGB(255, 225, 140), 1.45f);
+                Particle.DustOptions darkSmoke = new Particle.DustOptions(Color.fromRGB(44, 48, 46), 3.4f);
+                Particle.DustOptions ash = new Particle.DustOptions(Color.fromRGB(104, 112, 106), 3.0f);
+                Particle.DustOptions ember = new Particle.DustOptions(Color.fromRGB(255, 122, 28), 2.2f);
+                Particle.DustOptions hotCore = new Particle.DustOptions(Color.fromRGB(255, 224, 112), 1.6f);
+                Particle.DustOptions orangeUnderbelly = new Particle.DustOptions(Color.fromRGB(230, 82, 18), 2.6f);
 
-                Location lowerStem = base.clone().add(0, stemHeight * 0.32, 0);
-                Location midStem = base.clone().add(0, stemHeight * 0.72, 0);
+                Location lowerStem = base.clone().add(0, stemHeight * 0.30, 0);
+                Location midStem = base.clone().add(0, stemHeight * 0.70, 0);
+                Location upperStem = base.clone().add(0, stemHeight, 0);
                 Location cap = base.clone().add(0, capHeight, 0);
-                Location capTop = cap.clone().add(0, 2.8 + rise * 2.6, 0);
+                Location capTop = cap.clone().add(0, 2.6 + rise * 1.4, 0);
+                Location capUnderside = cap.clone().subtract(0, 2.2, 0);
 
-                w.spawnParticle(Particle.LARGE_SMOKE, lowerStem, stemParticles, stemRadius * 0.85, 2.8 * thickness, stemRadius * 0.85, 0.05 + fade * 0.04);
-                w.spawnParticle(Particle.CLOUD, lowerStem, Math.max(20, stemParticles / 2), stemRadius * 0.9, 1.8 * thickness, stemRadius * 0.9, 0.1 + fade * 0.12);
-                w.spawnParticle(Particle.DUST, midStem, Math.max(16, stemParticles / 2), stemRadius * 0.8, 3.2 * thickness, stemRadius * 0.8, 0, darkSmoke);
-                w.spawnParticle(Particle.DUST, midStem, Math.max(8, stemParticles / 4), stemRadius * 0.45, 2.0 * thickness, stemRadius * 0.45, 0, ember);
+                w.spawnParticle(Particle.LARGE_SMOKE, lowerStem, stemParticles, stemRadius, 3.2 * thickness, stemRadius, 0.045 + fade * 0.035);
+                w.spawnParticle(Particle.CLOUD, lowerStem, Math.max(18, stemParticles / 2), stemRadius * 1.1, 1.9 * thickness, stemRadius * 1.1, 0.08 + fade * 0.10);
+                w.spawnParticle(Particle.DUST, midStem, Math.max(16, stemParticles / 2), stemRadius * 0.9, 3.7 * thickness, stemRadius * 0.9, 0, darkSmoke);
+                w.spawnParticle(Particle.DUST, midStem, Math.max(10, stemParticles / 4), stemRadius * 0.5, 2.3 * thickness, stemRadius * 0.5, 0, ember);
+                w.spawnParticle(Particle.DUST, upperStem, Math.max(10, stemParticles / 5), stemRadius * 0.75, 1.8, stemRadius * 0.75, 0, hotCore);
 
-                w.spawnParticle(Particle.LARGE_SMOKE, cap, capParticles, capRadius, 3.0 * thickness, capRadius, 0.045 + fade * 0.05);
-                w.spawnParticle(Particle.CLOUD, cap, Math.max(30, capParticles / 2), capRadius * 0.92, 1.8 * thickness, capRadius * 0.92, 0.08 + fade * 0.14);
-                w.spawnParticle(Particle.DUST, capTop, Math.max(16, capParticles / 3), capRadius * 0.78, 0.95, capRadius * 0.78, 0, ash);
-                w.spawnParticle(Particle.DUST, cap, Math.max(10, capParticles / 5), capRadius * 0.52, 0.8, capRadius * 0.52, 0, darkSmoke);
+                w.spawnParticle(Particle.LARGE_SMOKE, cap, capParticles, capRadius, 3.4 * thickness, capRadius, 0.035 + fade * 0.04);
+                w.spawnParticle(Particle.CLOUD, cap, Math.max(28, capParticles / 2), capRadius * 0.96, 1.9 * thickness, capRadius * 0.96, 0.06 + fade * 0.10);
+                w.spawnParticle(Particle.DUST, capTop, Math.max(18, capParticles / 3), capRadius * 0.82, 1.0, capRadius * 0.82, 0, ash);
+                w.spawnParticle(Particle.DUST, cap, Math.max(12, capParticles / 5), capRadius * 0.56, 0.9, capRadius * 0.56, 0, darkSmoke);
+                w.spawnParticle(Particle.DUST, capUnderside, undersideParticles, capRadius * 0.82, 0.55, capRadius * 0.82, 0, orangeUnderbelly);
 
-                for (int i = 0; i < 2; i++) {
-                    double ringY = capHeight - 0.6 + i * 1.2;
+                for (int i = 0; i < 3; i++) {
+                    double ringY = capHeight - 1.4 + i * 1.05;
                     Location ringCenter = base.clone().add(0, ringY, 0);
-                    w.spawnParticle(Particle.SMOKE, ringCenter, ringParticles, outerRingRadius, 0.45, outerRingRadius, 0.02 + fade * 0.03);
-                    w.spawnParticle(Particle.CLOUD, ringCenter, Math.max(12, ringParticles / 2), outerRingRadius * 0.92, 0.25, outerRingRadius * 0.92, 0.04 + fade * 0.05);
+                    double ringRadius = outerRingRadius * (0.84 + i * 0.08);
+                    w.spawnParticle(Particle.SMOKE, ringCenter, ringParticles, ringRadius, 0.48, ringRadius, 0.015 + fade * 0.025);
+                    w.spawnParticle(Particle.CLOUD, ringCenter, Math.max(10, ringParticles / 2), ringRadius * 0.94, 0.28, ringRadius * 0.94, 0.03 + fade * 0.04);
                 }
 
-                if (progress < 0.38) {
-                    w.spawnParticle(Particle.FLAME, base.clone().add(0, 2.2 + rise * 4.2, 0), 54, 6.5 + rise * 4.8, 2.4, 6.5 + rise * 4.8, 0.10);
-                    w.spawnParticle(Particle.DUST, cap, 40, capRadius * 0.55, 1.15, capRadius * 0.55, 0, ember);
-                    w.spawnParticle(Particle.DUST, base.clone().add(0, 2.4 + rise * 2.0, 0), 22, 3.4 + rise * 1.8, 1.0, 3.4 + rise * 1.8, 0, hotCore);
+                if (progress < 0.72) {
+                    w.spawnParticle(Particle.FLAME, base.clone().add(0, 2.0 + rise * 4.4, 0), 38, 5.8 + rise * 4.2, 2.2, 5.8 + rise * 4.2, 0.09);
+                    w.spawnParticle(Particle.DUST, capUnderside, 34, capRadius * 0.66, 0.85, capRadius * 0.66, 0, ember);
+                    w.spawnParticle(Particle.DUST, base.clone().add(0, 2.2 + rise * 2.1, 0), 20, 3.2 + rise * 1.7, 1.0, 3.2 + rise * 1.7, 0, hotCore);
                 }
 
                 if (age % 32 == 0 && progress < 0.30) {

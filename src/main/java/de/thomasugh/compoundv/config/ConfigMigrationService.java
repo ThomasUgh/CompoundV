@@ -26,6 +26,7 @@ public final class ConfigMigrationService {
         changed |= ensureRollChances();
         changed |= migrateVeteranBalance();
         changed |= migrateVersion102Defaults();
+        changed |= migrateVersion103Defaults();
 
         if (changed) {
             plugin.saveConfig();
@@ -166,6 +167,44 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_diver.riptide_vertical_boost", 0.22);
         changed |= setIfMissing("abilities.the_diver.riptide_cooldown_ms", 1800);
         changed |= setIfMissing("abilities.vision.xray_radius", 35.0);
+
+        return changed;
+    }
+
+
+    private boolean migrateVersion103Defaults() {
+        boolean changed = false;
+
+        changed |= replaceIfNumericEquals("abilities.the_veteran.burst_cooldown_ms", 60000.0, 300000);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_duration_ticks", 1200.0, 2400);
+        changed |= setIfMissing("abilities.the_veteran.post_burst_strength_multiplier", 0.5);
+        changed |= setIfMissing("abilities.the_veteran.post_burst_strength_reduction_ticks",
+                plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 2400));
+
+        if (!plugin.getConfig().contains("abilities.the_patriot.shared.fall_impact_particle_height")) {
+            plugin.getConfig().set("abilities.the_patriot.shared.fall_impact_particle_height", 20);
+            changed = true;
+        }
+        if (!plugin.getConfig().contains("abilities.the_patriot.shared.fall_impact_block_height")) {
+            plugin.getConfig().set("abilities.the_patriot.shared.fall_impact_block_height", 50);
+            changed = true;
+        }
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_height", 30.0, 50);
+
+        changed |= setIfMissing("abilities.the_runner.speed_min_level", 9);
+        changed |= setIfMissing("abilities.the_runner.speed_max_level", 12);
+        changed |= setIfMissing("abilities.the_runner.default_speed_level", 9);
+        changed |= setIfMissing("abilities.the_runner.resistance_level", 1);
+        changed |= setIfMissing("abilities.the_runner.strength_level", 2);
+        changed |= setIfMissing("abilities.the_runner.extra_hearts", 5);
+        changed |= setIfMissing("abilities.the_runner.attack_speed_bonus", 1024.0);
+        changed |= setIfMissing("abilities.the_runner.water_walk", true);
+        changed |= setIfMissing("abilities.the_runner.water_walk_radius", 2);
+        changed |= setIfMissing("abilities.the_runner.water_walk_ice_ticks", 100);
+
+        changed |= setIfMissing("abilities.teleporter.range", 50.0);
+        changed |= setIfMissing("abilities.teleporter.cooldown_ms", 2000);
+        changed |= setIfMissing("abilities.teleporter.resistance_level", 2);
 
         return changed;
     }

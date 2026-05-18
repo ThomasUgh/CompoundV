@@ -82,7 +82,7 @@ abilities:
     strength_level: 5
     resistance_level: 4
     extra_hearts: 20
-    burst_cooldown_ms: 60000
+    burst_cooldown_ms: 300000
     pre_charge_hold_ticks: 20
     charge_duration_ticks: 100
     charge_period_ticks: 5
@@ -106,7 +106,7 @@ abilities:
     ground_zero_damage: 500.0
     ground_zero_knockback: 7.5
     ground_zero_set_fire: true
-    mushroom_cloud_duration_ticks: 1200
+    mushroom_cloud_duration_ticks: 2400
     mushroom_cloud_period_ticks: 8
     mushroom_cloud_height: 32.0
     mushroom_cloud_radius: 15.5
