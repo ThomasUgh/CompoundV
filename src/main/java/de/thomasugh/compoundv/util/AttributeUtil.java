@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public final class AttributeUtil {
@@ -16,26 +17,47 @@ public final class AttributeUtil {
     }
 
     public static void setMaxHealthBonus(Player player, NamespacedKey key, double amount) {
-        Attribute attribute = resolveMaxHealthAttribute();
+        setAttributeModifier(player, resolveAttribute("MAX_HEALTH", "GENERIC_MAX_HEALTH"), key,
+                amount, AttributeModifier.Operation.ADD_NUMBER);
+
+        AttributeInstance instance = getAttribute(player, "MAX_HEALTH", "GENERIC_MAX_HEALTH");
+        if (instance != null && amount > 0) {
+            player.setHealth(Math.min(instance.getValue(), player.getHealth() + amount));
+        }
+    }
+
+    public static void setAttackSpeedBonus(Player player, NamespacedKey key, double amount) {
+        setAttributeModifier(player, resolveAttribute("ATTACK_SPEED", "GENERIC_ATTACK_SPEED"), key,
+                amount, AttributeModifier.Operation.ADD_NUMBER);
+    }
+
+    private static void setAttributeModifier(Player player, Attribute attribute, NamespacedKey key,
+                                             double amount, AttributeModifier.Operation operation) {
         if (attribute == null) return;
 
         AttributeInstance instance = player.getAttribute(attribute);
         if (instance == null) return;
 
         removeModifier(instance, key);
+        if (amount == 0) return;
 
-        if (amount <= 0) return;
-
-        AttributeModifier modifier = createModifier(key, amount);
-        if (modifier == null) return;
-
-        instance.addModifier(modifier);
-        player.setHealth(Math.min(instance.getValue(), player.getHealth() + amount));
+        AttributeModifier modifier = createModifier(key, amount, operation);
+        if (modifier != null) {
+            instance.addModifier(modifier);
+        }
     }
 
-    private static Attribute resolveMaxHealthAttribute() {
-        Attribute modern = valueOf("MAX_HEALTH");
-        return modern != null ? modern : valueOf("GENERIC_MAX_HEALTH");
+    private static AttributeInstance getAttribute(Player player, String... names) {
+        Attribute attribute = resolveAttribute(names);
+        return attribute == null ? null : player.getAttribute(attribute);
+    }
+
+    private static Attribute resolveAttribute(String... names) {
+        for (String name : names) {
+            Attribute attribute = valueOf(name);
+            if (attribute != null) return attribute;
+        }
+        return null;
     }
 
     private static Attribute valueOf(String name) {
@@ -63,9 +85,8 @@ public final class AttributeUtil {
         }
     }
 
-    private static AttributeModifier createModifier(NamespacedKey key, double amount) {
-        AttributeModifier.Operation operation = AttributeModifier.Operation.ADD_NUMBER;
-
+    private static AttributeModifier createModifier(NamespacedKey key, double amount,
+                                                    AttributeModifier.Operation operation) {
         try {
             Constructor<AttributeModifier> modern = AttributeModifier.class.getConstructor(
                     NamespacedKey.class, double.class, AttributeModifier.Operation.class);
@@ -77,7 +98,8 @@ public final class AttributeUtil {
         try {
             Constructor<AttributeModifier> legacy = AttributeModifier.class.getConstructor(
                     UUID.class, String.class, double.class, AttributeModifier.Operation.class);
-            return legacy.newInstance(UUID.nameUUIDFromBytes(key.toString().getBytes()), key.getKey(), amount, operation);
+            return legacy.newInstance(UUID.nameUUIDFromBytes(key.toString().getBytes(StandardCharsets.UTF_8)),
+                    key.getKey(), amount, operation);
         } catch (ReflectiveOperationException ex) {
             return null;
         }

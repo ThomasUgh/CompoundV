@@ -82,7 +82,32 @@ public final class ItemUtil {
     }
 
     public static CompoundPotion getBottleType(ItemStack item) {
-        if (item == null || item.getType() != Material.POTION || !item.hasItemMeta()) {
+        if (item == null || item.getType() != Material.POTION) {
+            return null;
+        }
+        return readBottleType(item);
+    }
+
+    public static CompoundPotion getAnyBottleType(ItemStack item) {
+        if (item == null || !isPotionMaterial(item.getType())) {
+            return null;
+        }
+        return readBottleType(item);
+    }
+
+    public static boolean isCompoundVBottle(ItemStack item) {
+        return getBottleType(item) != null;
+    }
+
+    public static boolean isThrowableCompoundVBottle(ItemStack item) {
+        if (item == null) return false;
+        Material type = item.getType();
+        if (type != Material.SPLASH_POTION && type != Material.LINGERING_POTION) return false;
+        return getAnyBottleType(item) != null;
+    }
+
+    private static CompoundPotion readBottleType(ItemStack item) {
+        if (!item.hasItemMeta()) {
             return null;
         }
         String value = item.getItemMeta().getPersistentDataContainer()
@@ -97,7 +122,9 @@ public final class ItemUtil {
         }
     }
 
-    public static boolean isCompoundVBottle(ItemStack item) {
-        return getBottleType(item) != null;
+    private static boolean isPotionMaterial(Material material) {
+        return material == Material.POTION
+                || material == Material.SPLASH_POTION
+                || material == Material.LINGERING_POTION;
     }
 }
