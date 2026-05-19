@@ -111,6 +111,9 @@ public abstract class BaseHeatVisionAbility implements Ability {
             Material mat = b.getType();
             Block standOn = player.getLocation().getBlock().getRelative(org.bukkit.block.BlockFace.DOWN);
             if (b.equals(standOn) || b.equals(player.getLocation().getBlock())) return;
+            if (tryMeltSnowOrIce(b, w)) {
+                return;
+            }
             if (bGlass && mat.name().contains("GLASS")) {
                 w.playSound(b.getLocation().add(0.5,0.5,0.5), Sound.BLOCK_GLASS_BREAK, 1f, 1f);
                 b.setType(Material.AIR); return;
@@ -130,6 +133,30 @@ public abstract class BaseHeatVisionAbility implements Ability {
         }
     }
 
+
+
+    private boolean tryMeltSnowOrIce(Block block, World world) {
+        Material type = block.getType();
+        String name = type.name();
+        boolean meltToWater = name.equals("SNOW")
+                || name.equals("SNOW_BLOCK")
+                || name.equals("POWDER_SNOW")
+                || name.equals("ICE")
+                || name.equals("FROSTED_ICE")
+                || name.equals("PACKED_ICE")
+                || name.equals("BLUE_ICE");
+
+        if (!meltToWater) {
+            return false;
+        }
+
+        Location meltLoc = block.getLocation().add(0.5, 0.5, 0.5);
+        world.spawnParticle(Particle.CLOUD, meltLoc, 10, 0.2, 0.2, 0.2, 0.02);
+        world.spawnParticle(Particle.SMOKE, meltLoc, 6, 0.15, 0.15, 0.15, 0.01);
+        world.playSound(meltLoc, Sound.BLOCK_FIRE_EXTINGUISH, 0.55f, 1.6f);
+        block.setType(Material.WATER);
+        return true;
+    }
 
     private Sound hurtSoundFor(LivingEntity target) {
         String entityName = target.getType().name();
