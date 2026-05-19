@@ -130,8 +130,19 @@ public class TheDiverAbility implements Ability {
         player.setFallDistance(0f);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.diver_riptide"));
         player.playSound(player.getLocation(), Sound.ITEM_TRIDENT_RIPTIDE_3, 1.0f, 1.05f);
-        player.getWorld().spawnParticle(Particle.DRIPPING_WATER, player.getLocation().add(0, 1.0, 0), 55, 0.65, 0.55, 0.65, 0.14);
+        player.getWorld().spawnParticle(resolveParticle("SPLASH", "WATER_SPLASH", "CLOUD"), player.getLocation().add(0, 1.0, 0), 55, 0.65, 0.55, 0.65, 0.14);
         player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 0.8, 0), 18, 0.45, 0.35, 0.45, 0.06);
+    }
+
+    private Particle resolveParticle(String... names) {
+        for (String name : names) {
+            try {
+                return Particle.valueOf(name);
+            } catch (IllegalArgumentException ignored) {
+                continue;
+            }
+        }
+        return Particle.CLOUD;
     }
 
     private boolean canUseRiptide(Player player) {

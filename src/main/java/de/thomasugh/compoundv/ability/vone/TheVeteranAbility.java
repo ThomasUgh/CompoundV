@@ -34,7 +34,7 @@ public class TheVeteranAbility implements Ability {
     private final CompoundV plugin;
     private final NamespacedKey healthModKey;
     private final Set<UUID> activeBursts = new HashSet<>();
-    private final Map<UUID, Long> burstCooldown = new HashMap<>();
+    private final Map<UUID, Long> burstCooldownUntil = new HashMap<>();
     private final Map<UUID, TaskHandle> strengthRecoveryTasks = new HashMap<>();
 
     public TheVeteranAbility(CompoundV p) {
@@ -62,7 +62,7 @@ public class TheVeteranAbility implements Ability {
     public void remove(Player p) {
         UUID u = p.getUniqueId();
         activeBursts.remove(u);
-        burstCooldown.remove(u);
+        burstCooldownUntil.remove(u);
         TaskHandle recoveryTask = strengthRecoveryTasks.remove(u);
         if (recoveryTask != null) recoveryTask.cancel();
         p.removePotionEffect(PotionEffects.STRENGTH);
@@ -107,11 +107,11 @@ public class TheVeteranAbility implements Ability {
     public void startBurst(Player p) {
         UUID u = p.getUniqueId();
 
-        long cd  = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 300_000L);
+        long cd = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 300_000L);
         long now = System.currentTimeMillis();
-        long last = burstCooldown.getOrDefault(u, 0L);
-        if (now - last < cd) {
-            long secs = (cd - (now - last)) / 1000 + 1;
+        long cooldownUntil = burstCooldownUntil.getOrDefault(u, 0L);
+        if (now < cooldownUntil) {
+            long secs = ((cooldownUntil - now) / 1000L) + 1L;
             MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg(
                     "veteran.cooldown", "seconds", Long.toString(secs)));
             return;
@@ -126,7 +126,7 @@ public class TheVeteranAbility implements Ability {
     }
 
     private void holdThenCharge(Player shooter, UUID uuid) {
-        int holdTicks = plugin.getConfig().getInt("abilities.the_veteran.pre_charge_hold_ticks", 20);
+        int holdTicks = Math.max(40, plugin.getConfig().getInt("abilities.the_veteran.pre_charge_hold_ticks", 40));
         int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.charge_period_ticks", 5));
 
         final TaskHandle[] task = new TaskHandle[1];
@@ -146,8 +146,7 @@ public class TheVeteranAbility implements Ability {
                 }
 
                 if (age >= holdTicks) {
-                    MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.charge_start"));
-                    shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.1f, 0.5f);
+                    shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.75f, 0.5f);
                     chargeThenFire(shooter, uuid);
                     task[0].cancel();
                     return;
@@ -161,12 +160,14 @@ public class TheVeteranAbility implements Ability {
     }
 
     private void chargeThenFire(Player shooter, UUID uuid) {
-        int chargeTicks = plugin.getConfig().getInt("abilities.the_veteran.charge_duration_ticks", 100);
-        int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.charge_period_ticks", 5));
+        int chargeTicks = Math.max(100, plugin.getConfig().getInt("abilities.the_veteran.charge_duration_ticks", 100));
+        int timerUpdateTicks = 20;
+        long cooldownMs = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 300_000L);
 
         final TaskHandle[] task = new TaskHandle[1];
         task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
             int age = 0;
+            int lastShownSecond = -1;
 
             @Override public void run() {
                 if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
@@ -183,11 +184,11 @@ public class TheVeteranAbility implements Ability {
                 }
 
                 if (age >= chargeTicks) {
-                    burstCooldown.put(uuid, System.currentTimeMillis());
+                    burstCooldownUntil.put(uuid, System.currentTimeMillis() + cooldownMs);
                     MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.burst_start"));
-                    shooter.playSound(shooter.getLocation(), Sound.ITEM_TOTEM_USE,            0.8f, 0.65f);
-                    shooter.playSound(shooter.getLocation(), Sound.ENTITY_WITHER_SPAWN,       1.0f, 1.45f);
-                    shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1.2f, 0.65f);
+                    shooter.playSound(shooter.getLocation(), Sound.ITEM_TOTEM_USE,            0.6f, 0.65f);
+                    shooter.playSound(shooter.getLocation(), Sound.ENTITY_WITHER_SPAWN,       0.75f, 1.45f);
+                    shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.9f, 0.65f);
                     triggerGroundZeroExplosion(shooter);
                     applyTemporaryStrengthPenalty(shooter);
                     fireChestBeam(shooter, uuid);
@@ -196,15 +197,17 @@ public class TheVeteranAbility implements Ability {
                 }
 
                 animateCharge(shooter, age, chargeTicks);
-                if (age % 20 == 0) {
-                    long seconds = Math.max(1, (long) Math.ceil((chargeTicks - age) / 20.0));
+
+                int remainingSeconds = Math.max(1, (int) Math.ceil((chargeTicks - age) / 20.0));
+                if (age % timerUpdateTicks == 0 && remainingSeconds != lastShownSecond) {
+                    lastShownSecond = remainingSeconds;
                     MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg(
-                            "veteran.charge_progress", "seconds", Long.toString(seconds)));
+                            "veteran.charge_progress", "seconds", Integer.toString(remainingSeconds)));
                 }
 
-                age += periodTicks;
+                age += 1;
             }
-        }, 0L, periodTicks);
+        }, 0L, 1L);
     }
 
     private void animatePreChargeHold(Player shooter, int age, int holdTicks) {
@@ -212,16 +215,16 @@ public class TheVeteranAbility implements Ability {
         Location chest = shooter.getLocation().add(0, 1.25, 0);
         double progress = Math.min(1.0, Math.max(0.0, age / Math.max(1.0, (double) holdTicks)));
         double radius = 0.25 + progress * 0.55;
-        int particles = 8 + (int) Math.round(progress * 10.0);
+        int particles = 5 + (int) Math.round(progress * 7.0);
 
         Particle.DustOptions warm = new Particle.DustOptions(Color.fromRGB(255, 196, 70), 1.0f + (float) progress * 0.45f);
         Particle.DustOptions ember = new Particle.DustOptions(Color.fromRGB(255, 125, 30), 0.9f + (float) progress * 0.35f);
 
         w.spawnParticle(Particle.DUST, chest, particles, radius, radius * 0.4, radius, 0, warm);
         w.spawnParticle(Particle.DUST, chest, Math.max(4, particles / 2), radius * 0.6, radius * 0.3, radius * 0.6, 0, ember);
-        w.spawnParticle(Particle.SMOKE, chest, 3 + (int) (progress * 6), radius * 0.35, 0.18, radius * 0.35, 0.01 + progress * 0.015);
-        if (age % 10 == 0) {
-            w.playSound(chest, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.35f, (float) (0.7 + progress * 0.25));
+        w.spawnParticle(Particle.SMOKE, chest, 2 + (int) (progress * 4), radius * 0.35, 0.18, radius * 0.35, 0.01 + progress * 0.015);
+        if (age <= 40 && age % 20 == 0) {
+            w.playSound(chest, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.25f, (float) (0.7 + progress * 0.25));
         }
     }
 
@@ -230,16 +233,16 @@ public class TheVeteranAbility implements Ability {
         Location chest = shooter.getLocation().add(0, 1.25, 0);
         double progress = Math.min(1.0, Math.max(0.0, age / Math.max(1.0, (double) chargeTicks)));
         double radius = 0.35 + progress * 1.15;
-        int particles = 10 + (int) Math.round(progress * 20.0);
+        int particles = 7 + (int) Math.round(progress * 13.0);
 
         Particle.DustOptions yellow = new Particle.DustOptions(Color.fromRGB(255, 225, 40), 1.35f + (float) progress);
         Particle.DustOptions orange = new Particle.DustOptions(Color.fromRGB(255, 115, 10), 1.0f + (float) progress * 0.8f);
 
         w.spawnParticle(Particle.DUST, chest, particles, radius, radius * 0.6, radius, 0, yellow);
         w.spawnParticle(Particle.DUST, chest, Math.max(4, particles / 2), radius * 0.75, radius * 0.45, radius * 0.75, 0, orange);
-        w.spawnParticle(Particle.LARGE_SMOKE, chest, 5 + (int) (progress * 12), radius * 0.45, 0.25, radius * 0.45, 0.03 + progress * 0.04);
-        if (age % 10 == 0) {
-            w.playSound(chest, Sound.BLOCK_BEACON_AMBIENT, 0.45f, (float) (0.45 + progress * 0.45));
+        w.spawnParticle(Particle.LARGE_SMOKE, chest, 3 + (int) (progress * 8), radius * 0.45, 0.25, radius * 0.45, 0.03 + progress * 0.04);
+        if (age <= 60 && age % 20 == 0) {
+            w.playSound(chest, Sound.BLOCK_BEACON_AMBIENT, 0.28f, (float) (0.45 + progress * 0.45));
         }
     }
 
@@ -252,16 +255,19 @@ public class TheVeteranAbility implements Ability {
         double knockback = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_knockback", 7.5);
         boolean setFire = plugin.getConfig().getBoolean("abilities.the_veteran.ground_zero_set_fire", true);
 
-        w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 8.0f, 0.25f);
-        w.playSound(base, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 6.0f, 0.35f);
-        w.playSound(base, Sound.ENTITY_WITHER_BREAK_BLOCK, 4.0f, 0.35f);
-        w.playSound(base, Sound.ITEM_FIRECHARGE_USE, 5.0f, 0.35f);
-        w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 1.0, 0), 58, 6.2, 2.4, 6.2, 0.0);
-        w.spawnParticle(Particle.LARGE_SMOKE, base.clone().add(0, 1.1, 0), 420, 7.5, 2.1, 7.5, 0.17);
-        w.spawnParticle(Particle.CLOUD, base.clone().add(0, 0.35, 0), 280, 8.5, 0.28, 8.5, 0.65);
-        w.spawnParticle(Particle.FLAME, base.clone().add(0, 0.8, 0), 280, 6.8, 1.4, 6.8, 0.22);
-        w.spawnParticle(Particle.DUST, base.clone().add(0, 1.2, 0), 260, 6.2, 1.5, 6.2, 0,
-                new Particle.DustOptions(Color.fromRGB(255, 215, 35), 3.1f));
+        double particleMultiplier = Math.max(0.05, plugin.getConfig().getDouble(
+                "abilities.the_veteran.ground_zero_particle_multiplier", 0.75));
+
+        w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 5.0f, 0.25f);
+        w.playSound(base, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 3.5f, 0.35f);
+        w.playSound(base, Sound.ENTITY_WITHER_BREAK_BLOCK, 2.5f, 0.35f);
+        w.playSound(base, Sound.ITEM_FIRECHARGE_USE, 3.0f, 0.35f);
+        w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 1.0, 0), scaledParticles(58, particleMultiplier), 6.2, 2.4, 6.2, 0.0);
+        w.spawnParticle(Particle.LARGE_SMOKE, base.clone().add(0, 1.1, 0), scaledParticles(300, particleMultiplier), 7.0, 1.8, 7.0, 0.15);
+        w.spawnParticle(Particle.CLOUD, base.clone().add(0, 0.35, 0), scaledParticles(150, particleMultiplier), 6.8, 0.18, 6.8, 0.42);
+        w.spawnParticle(Particle.FLAME, base.clone().add(0, 0.8, 0), scaledParticles(170, particleMultiplier), 5.8, 1.1, 5.8, 0.18);
+        w.spawnParticle(Particle.DUST, base.clone().add(0, 1.2, 0), scaledParticles(260, particleMultiplier), 6.2, 1.5, 6.2, 0,
+                new Particle.DustOptions(Color.fromRGB(255, 215, 35), 2.4f));
 
         animateAtomicMushroom(base.clone());
 
@@ -289,9 +295,14 @@ public class TheVeteranAbility implements Ability {
         if (w == null) return;
 
         int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 2400);
-        int periodTicks = Math.max(2, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_period_ticks", 8));
+        int periodTicks = Math.max(2, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_period_ticks", 12));
         double maxHeight = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_height", 32.0);
         double maxRadius = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_radius", 15.5);
+        double particleMultiplier = Math.max(0.05, plugin.getConfig().getDouble(
+                "abilities.the_veteran.mushroom_cloud_particle_multiplier", 0.78));
+        int soundDurationTicks = Math.max(0, plugin.getConfig().getInt(
+                "abilities.the_veteran.mushroom_cloud_sound_duration_ticks", 80));
+        int soundIntervalTicks = Math.max(periodTicks, Math.max(1, Math.round(40.0f / periodTicks)) * periodTicks);
 
         final TaskHandle[] task = new TaskHandle[1];
         task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
@@ -308,6 +319,9 @@ public class TheVeteranAbility implements Ability {
                 double fade = progress < 0.84 ? 1.0 : Math.max(0.0, 1.0 - ((progress - 0.84) / 0.16));
                 double rise = Math.sin(build * Math.PI * 0.5);
                 double thickness = 0.85 + fade * 0.75;
+                double driftX = Math.sin(age * 0.031) * 0.75 * progress;
+                double driftZ = Math.cos(age * 0.027) * 0.75 * progress;
+                Location plumeBase = base.clone().add(driftX, 0, driftZ);
 
                 double stemHeight = 5.0 + rise * (maxHeight * 0.56);
                 double stemRadius = 1.8 + rise * 2.4;
@@ -315,53 +329,64 @@ public class TheVeteranAbility implements Ability {
                 double capRadius = 6.2 + rise * maxRadius;
                 double outerRingRadius = capRadius * 1.08;
 
-                int stemParticles = Math.max(18, (int) Math.round(70.0 * fade));
-                int capParticles = Math.max(34, (int) Math.round(122.0 * fade));
-                int ringParticles = Math.max(22, (int) Math.round(54.0 * fade));
-                int undersideParticles = Math.max(14, (int) Math.round(48.0 * fade));
+                int stemParticles = scaledParticles(12, 42.0 * fade, particleMultiplier);
+                int capParticles = scaledParticles(34, 122.0 * fade, particleMultiplier);
+                int ringParticles = scaledParticles(22, 54.0 * fade, particleMultiplier);
+                int undersideParticles = scaledParticles(14, 48.0 * fade, particleMultiplier);
 
-                Particle.DustOptions darkSmoke = new Particle.DustOptions(Color.fromRGB(44, 48, 46), 3.4f);
-                Particle.DustOptions ash = new Particle.DustOptions(Color.fromRGB(104, 112, 106), 3.0f);
-                Particle.DustOptions ember = new Particle.DustOptions(Color.fromRGB(255, 122, 28), 2.2f);
-                Particle.DustOptions hotCore = new Particle.DustOptions(Color.fromRGB(255, 224, 112), 1.6f);
-                Particle.DustOptions orangeUnderbelly = new Particle.DustOptions(Color.fromRGB(230, 82, 18), 2.6f);
+                Particle.DustOptions darkSmoke = new Particle.DustOptions(Color.fromRGB(44, 48, 46), 2.7f);
+                Particle.DustOptions ash = new Particle.DustOptions(Color.fromRGB(104, 112, 106), 2.4f);
+                Particle.DustOptions ember = new Particle.DustOptions(Color.fromRGB(255, 122, 28), 1.8f);
+                Particle.DustOptions hotCore = new Particle.DustOptions(Color.fromRGB(255, 224, 112), 1.3f);
+                Particle.DustOptions orangeUnderbelly = new Particle.DustOptions(Color.fromRGB(230, 82, 18), 2.0f);
 
-                Location lowerStem = base.clone().add(0, stemHeight * 0.30, 0);
-                Location midStem = base.clone().add(0, stemHeight * 0.70, 0);
-                Location upperStem = base.clone().add(0, stemHeight, 0);
-                Location cap = base.clone().add(0, capHeight, 0);
+                Location lowerStem = plumeBase.clone().add(0, stemHeight * 0.30, 0);
+                Location midStem = plumeBase.clone().add(0, stemHeight * 0.70, 0);
+                Location upperStem = plumeBase.clone().add(0, stemHeight, 0);
+                Location cap = plumeBase.clone().add(0, capHeight, 0);
                 Location capTop = cap.clone().add(0, 2.6 + rise * 1.4, 0);
                 Location capUnderside = cap.clone().subtract(0, 2.2, 0);
 
-                w.spawnParticle(Particle.LARGE_SMOKE, lowerStem, stemParticles, stemRadius, 3.2 * thickness, stemRadius, 0.045 + fade * 0.035);
-                w.spawnParticle(Particle.CLOUD, lowerStem, Math.max(18, stemParticles / 2), stemRadius * 1.1, 1.9 * thickness, stemRadius * 1.1, 0.08 + fade * 0.10);
-                w.spawnParticle(Particle.DUST, midStem, Math.max(16, stemParticles / 2), stemRadius * 0.9, 3.7 * thickness, stemRadius * 0.9, 0, darkSmoke);
-                w.spawnParticle(Particle.DUST, midStem, Math.max(10, stemParticles / 4), stemRadius * 0.5, 2.3 * thickness, stemRadius * 0.5, 0, ember);
-                w.spawnParticle(Particle.DUST, upperStem, Math.max(10, stemParticles / 5), stemRadius * 0.75, 1.8, stemRadius * 0.75, 0, hotCore);
+                w.spawnParticle(Particle.LARGE_SMOKE, lowerStem, stemParticles, stemRadius * 0.92, 2.4 * thickness, stemRadius * 0.92, 0.04 + fade * 0.02);
+                w.spawnParticle(Particle.CLOUD, lowerStem, Math.max(4, stemParticles / 3), stemRadius * 0.85, 1.15 * thickness, stemRadius * 0.85, 0.05 + fade * 0.04);
+                w.spawnParticle(Particle.DUST, midStem, Math.max(7, stemParticles / 2), stemRadius * 0.9, 3.7 * thickness, stemRadius * 0.9, 0, darkSmoke);
+                w.spawnParticle(Particle.DUST, midStem, Math.max(4, stemParticles / 4), stemRadius * 0.5, 2.3 * thickness, stemRadius * 0.5, 0, ember);
+                w.spawnParticle(Particle.DUST, upperStem, Math.max(4, stemParticles / 5), stemRadius * 0.75, 1.8, stemRadius * 0.75, 0, hotCore);
 
                 w.spawnParticle(Particle.LARGE_SMOKE, cap, capParticles, capRadius, 3.4 * thickness, capRadius, 0.035 + fade * 0.04);
-                w.spawnParticle(Particle.CLOUD, cap, Math.max(28, capParticles / 2), capRadius * 0.96, 1.9 * thickness, capRadius * 0.96, 0.06 + fade * 0.10);
-                w.spawnParticle(Particle.DUST, capTop, Math.max(18, capParticles / 3), capRadius * 0.82, 1.0, capRadius * 0.82, 0, ash);
-                w.spawnParticle(Particle.DUST, cap, Math.max(12, capParticles / 5), capRadius * 0.56, 0.9, capRadius * 0.56, 0, darkSmoke);
+                w.spawnParticle(Particle.CLOUD, cap, Math.max(12, capParticles / 2), capRadius * 0.96, 1.9 * thickness, capRadius * 0.96, 0.06 + fade * 0.10);
+                w.spawnParticle(Particle.DUST, capTop, Math.max(8, capParticles / 3), capRadius * 0.82, 1.0, capRadius * 0.82, 0, ash);
+                w.spawnParticle(Particle.DUST, cap, Math.max(5, capParticles / 5), capRadius * 0.56, 0.9, capRadius * 0.56, 0, darkSmoke);
                 w.spawnParticle(Particle.DUST, capUnderside, undersideParticles, capRadius * 0.82, 0.55, capRadius * 0.82, 0, orangeUnderbelly);
 
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 2; i++) {
                     double ringY = capHeight - 1.4 + i * 1.05;
                     Location ringCenter = base.clone().add(0, ringY, 0);
                     double ringRadius = outerRingRadius * (0.84 + i * 0.08);
                     w.spawnParticle(Particle.SMOKE, ringCenter, ringParticles, ringRadius, 0.48, ringRadius, 0.015 + fade * 0.025);
-                    w.spawnParticle(Particle.CLOUD, ringCenter, Math.max(10, ringParticles / 2), ringRadius * 0.94, 0.28, ringRadius * 0.94, 0.03 + fade * 0.04);
+                    w.spawnParticle(Particle.CLOUD, ringCenter, Math.max(5, ringParticles / 2), ringRadius * 0.94, 0.28, ringRadius * 0.94, 0.03 + fade * 0.04);
                 }
 
                 if (progress < 0.72) {
-                    w.spawnParticle(Particle.FLAME, base.clone().add(0, 2.0 + rise * 4.4, 0), 38, 5.8 + rise * 4.2, 2.2, 5.8 + rise * 4.2, 0.09);
-                    w.spawnParticle(Particle.DUST, capUnderside, 34, capRadius * 0.66, 0.85, capRadius * 0.66, 0, ember);
-                    w.spawnParticle(Particle.DUST, base.clone().add(0, 2.2 + rise * 2.1, 0), 20, 3.2 + rise * 1.7, 1.0, 3.2 + rise * 1.7, 0, hotCore);
+                    w.spawnParticle(Particle.FLAME, base.clone().add(0, 2.0 + rise * 4.4, 0), scaledParticles(18, particleMultiplier), 4.5 + rise * 3.0, 1.3, 4.5 + rise * 3.0, 0.06);
+                    w.spawnParticle(Particle.DUST, capUnderside, scaledParticles(34, particleMultiplier), capRadius * 0.66, 0.85, capRadius * 0.66, 0, ember);
+                    w.spawnParticle(Particle.DUST, base.clone().add(0, 2.2 + rise * 2.1, 0), scaledParticles(10, particleMultiplier), 2.5 + rise * 1.1, 0.75, 2.5 + rise * 1.1, 0, hotCore);
                 }
 
-                if (age % 32 == 0 && progress < 0.30) {
-                    w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 2.6 + rise * 3.3, 0), 10, 6.5 + rise * 5.8, 1.5, 6.5 + rise * 5.8, 0.0);
-                    w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 2.2f, 0.22f + (float) progress * 0.24f);
+                if (progress < 0.36) {
+                    double shockRadius = 7.0 + progress * maxRadius * 1.25;
+                    w.spawnParticle(Particle.CLOUD, base.clone().add(0, 0.35, 0), scaledParticles(12, particleMultiplier), shockRadius * 0.78, 0.12, shockRadius * 0.78, 0.08);
+                    w.spawnParticle(Particle.LARGE_SMOKE, base.clone().add(0, 0.75, 0), scaledParticles(8, particleMultiplier), shockRadius * 0.56, 0.22, shockRadius * 0.56, 0.02);
+                }
+
+                if (progress > 0.18 && age % (periodTicks * 2) == 0) {
+                    w.spawnParticle(Particle.SMOKE, cap.clone().subtract(0, 4.5, 0), scaledParticles(14, particleMultiplier), capRadius * 0.95, 2.2, capRadius * 0.95, 0.018);
+                    w.spawnParticle(Particle.DUST, cap.clone().subtract(0, 3.7, 0), scaledParticles(8, particleMultiplier), capRadius * 0.75, 1.8, capRadius * 0.75, 0, ash);
+                }
+
+                if (age <= soundDurationTicks && age % soundIntervalTicks == 0) {
+                    w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 2.6 + rise * 3.3, 0), scaledParticles(6, particleMultiplier), 6.5 + rise * 5.8, 1.5, 6.5 + rise * 5.8, 0.0);
+                    w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 1.45f, 0.22f + (float) progress * 0.24f);
                 }
 
                 age += periodTicks;
@@ -370,29 +395,34 @@ public class TheVeteranAbility implements Ability {
     }
 
     private void fireChestBeam(Player shooter, UUID uuid) {
-        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_duration_ticks", 80);
-        int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_period_ticks", 2));
-        double range = plugin.getConfig().getDouble("abilities.the_veteran.beam_range", 48.0);
-        double radius = plugin.getConfig().getDouble("abilities.the_veteran.beam_radius", 1.35);
+        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_duration_ticks", 100);
+        final int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_period_ticks", 2));
+        final double range = plugin.getConfig().getDouble("abilities.the_veteran.beam_range", 48.0);
+        final double radius = plugin.getConfig().getDouble("abilities.the_veteran.beam_radius", 1.35);
+        double particleStep = Math.max(0.35, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_step", 0.55));
+        double particleDensity = Math.max(0.25, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_density_multiplier", 1.15));
 
         double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 10.0);
         double damageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
-        double damage = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_amount", patriotDamage * damageMultiplier);
-        double fullDamageRange = plugin.getConfig().getDouble("abilities.the_veteran.beam_full_damage_range", 7.0);
-        double farDamageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_far_damage_multiplier", 0.5);
+        double configuredDamage = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_amount", patriotDamage * damageMultiplier);
+        final double damage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 0.95));
+        final double fullDamageRange = plugin.getConfig().getDouble("abilities.the_veteran.beam_full_damage_range", 7.0);
+        final double farDamageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_far_damage_multiplier", 0.5);
 
-        int damageEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_damage_interval_ticks", 2));
-        boolean breakBlocks = plugin.getConfig().getBoolean("abilities.the_veteran.beam_break_blocks", true);
-        boolean igniteBlocks = plugin.getConfig().getBoolean("abilities.the_veteran.beam_ignite_blocks", true);
-        int blockAffectEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_affect_interval_ticks", 4));
+        final int damageEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_damage_interval_ticks", 2));
+        final boolean breakBlocks = plugin.getConfig().getBoolean("abilities.the_veteran.beam_break_blocks", true);
+        final boolean igniteBlocks = plugin.getConfig().getBoolean("abilities.the_veteran.beam_ignite_blocks", true);
+        final int blockAffectEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_affect_interval_ticks", 4));
         int maxBlocksPerPulse = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_max_blocks_per_pulse", 5));
         int blockHitsToBreak = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_hits_to_break", 5));
+        double blockDamageMultiplier = Math.max(0.1, plugin.getConfig().getDouble("abilities.the_veteran.beam_block_damage_multiplier", 1.10));
         boolean surfaceOnly = plugin.getConfig().getBoolean("abilities.the_veteran.beam_surface_only", true);
 
         final TaskHandle[] task = new TaskHandle[1];
         task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
             int age = 0;
             final Map<Block, Integer> weakenedBlocks = new HashMap<>();
+            double blockBudgetCarry = 0.0;
 
             @Override public void run() {
                 if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
@@ -402,22 +432,32 @@ public class TheVeteranAbility implements Ability {
                 }
                 if (age >= durationTicks) {
                     activeBursts.remove(uuid);
-                    MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.burst_end"));
                     task[0].cancel();
                     return;
                 }
 
                 Location chest = shooter.getLocation().add(0, 1.25, 0);
                 Vector dir = shooter.getEyeLocation().getDirection().normalize();
-                renderAndApplyBeam(shooter, chest, dir, range, radius, damage, fullDamageRange, farDamageMultiplier,
+                boolean affectBlocksThisTick = age % blockAffectEveryTicks == 0;
+                int effectiveMaxBlocksPerPulse = maxBlocksPerPulse;
+                if (affectBlocksThisTick) {
+                    double scaledBudget = (maxBlocksPerPulse * blockDamageMultiplier) + blockBudgetCarry;
+                    effectiveMaxBlocksPerPulse = Math.max(1, (int) Math.floor(scaledBudget));
+                    blockBudgetCarry = scaledBudget - effectiveMaxBlocksPerPulse;
+                }
+
+                renderAndApplyBeam(shooter, chest, dir, range, radius, particleStep, particleDensity,
+                        damage, fullDamageRange, farDamageMultiplier,
                         age % damageEveryTicks == 0,
-                        age % blockAffectEveryTicks == 0,
-                        breakBlocks, igniteBlocks, maxBlocksPerPulse, blockHitsToBreak,
+                        affectBlocksThisTick,
+                        breakBlocks, igniteBlocks, effectiveMaxBlocksPerPulse, blockHitsToBreak,
                         surfaceOnly, weakenedBlocks);
 
-                if (age % 10 == 0) {
-                    shooter.getWorld().playSound(chest, Sound.ITEM_FIRECHARGE_USE, 1.4f, 0.7f);
-                    shooter.getWorld().playSound(chest, Sound.BLOCK_BEACON_AMBIENT, 0.6f, 0.55f);
+                int soundDurationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_sound_duration_ticks", 40);
+                int soundPeriodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_sound_period_ticks", 20));
+                if (age <= soundDurationTicks && age % soundPeriodTicks == 0) {
+                    shooter.getWorld().playSound(chest, Sound.ITEM_FIRECHARGE_USE, 0.8f, 0.7f);
+                    shooter.getWorld().playSound(chest, Sound.BLOCK_BEACON_AMBIENT, 0.35f, 0.55f);
                 }
 
                 age += periodTicks;
@@ -426,8 +466,8 @@ public class TheVeteranAbility implements Ability {
     }
 
     private void renderAndApplyBeam(Player shooter, Location origin, Vector dir,
-                                    double range, double radius, double damage,
-                                    double fullDamageRange, double farDamageMultiplier,
+                                    double range, double radius, double particleStep, double particleDensity,
+                                    double damage, double fullDamageRange, double farDamageMultiplier,
                                     boolean damageThisTick, boolean affectBlocksThisTick,
                                     boolean breakBlocks, boolean igniteBlocks,
                                     int maxBlocksPerPulse, int blockHitsToBreak,
@@ -450,14 +490,14 @@ public class TheVeteranAbility implements Ability {
 
         int[] blockBudget = new int[] { maxBlocksPerPulse };
 
-        for (double d = 0.4; d <= effectiveRange; d += 0.65) {
+        for (double d = 0.4; d <= effectiveRange; d += particleStep) {
             Location center = origin.clone().add(dir.clone().multiply(d));
-            w.spawnParticle(Particle.DUST, center, 4, 0.12, 0.12, 0.12, 0, yellow);
-            w.spawnParticle(Particle.FLAME, center, 3, 0.16, 0.16, 0.16, 0.01);
-            if (d % 1.95 < 0.65) {
-                w.spawnParticle(Particle.DUST, center.clone().add(right.clone().multiply(radius * 0.45)), 2, 0.08, 0.08, 0.08, 0, orange);
-                w.spawnParticle(Particle.DUST, center.clone().subtract(right.clone().multiply(radius * 0.45)), 2, 0.08, 0.08, 0.08, 0, orange);
-                w.spawnParticle(Particle.DUST, center.clone().add(up.clone().multiply(radius * 0.35)), 1, 0.06, 0.06, 0.06, 0, whiteHot);
+            w.spawnParticle(Particle.DUST, center, scaledParticles(5, particleDensity), 0.12, 0.12, 0.12, 0, yellow);
+            w.spawnParticle(Particle.FLAME, center, scaledParticles(3, particleDensity), 0.16, 0.16, 0.16, 0.01);
+            if (d % 1.65 < particleStep) {
+                w.spawnParticle(Particle.DUST, center.clone().add(right.clone().multiply(radius * 0.45)), scaledParticles(2, particleDensity), 0.08, 0.08, 0.08, 0, orange);
+                w.spawnParticle(Particle.DUST, center.clone().subtract(right.clone().multiply(radius * 0.45)), scaledParticles(2, particleDensity), 0.08, 0.08, 0.08, 0, orange);
+                w.spawnParticle(Particle.DUST, center.clone().add(up.clone().multiply(radius * 0.35)), scaledParticles(1, particleDensity), 0.06, 0.06, 0.06, 0, whiteHot);
             }
 
             if (affectBlocksThisTick && (breakBlocks || igniteBlocks) && blockBudget[0] > 0) {
@@ -566,6 +606,16 @@ public class TheVeteranAbility implements Ability {
                 && !name.equals("NETHER_PORTAL")
                 && !name.equals("VAULT")
                 && !name.equals("TRIAL_SPAWNER");
+    }
+
+    private int scaledParticles(int baseCount, double multiplier) {
+        return Math.max(1, (int) Math.round(baseCount * multiplier));
+    }
+
+    private int scaledParticles(int minimumCount, double baseCount, double multiplier) {
+        int scaledMinimum = Math.max(1, (int) Math.round(minimumCount * multiplier));
+        int scaledBase = Math.max(1, (int) Math.round(baseCount * multiplier));
+        return Math.max(scaledMinimum, scaledBase);
     }
 
     private void setMaxHealthBonus(Player p, double amount) {

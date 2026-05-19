@@ -203,7 +203,7 @@ public class PlayerActionListener implements Listener {
         }
 
         if (ab instanceof TheVeteranAbility veteran) {
-            if (canUseSneakLeftClick(p, a)) {
+            if (canUseSneakLeftClickAir(p, a)) {
                 cancelAbilityInteraction(e);
                 veteran.startBurst(p);
             }
@@ -236,7 +236,11 @@ public class PlayerActionListener implements Listener {
     }
 
     private boolean canUseSneakLeftClick(Player p, Action action) {
-        return p.isSneaking() && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
+        return p.isSneaking() && action == Action.LEFT_CLICK_AIR;
+    }
+
+    private boolean canUseSneakLeftClickAir(Player p, Action action) {
+        return canUseSneakLeftClick(p, action);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -93,8 +93,7 @@ public final class ConfigMigrationService {
 
         NumberMigration[] migrations = {
                 new NumberMigration("heat_vision.damage_amount", 8.0, 2.0),
-                new NumberMigration("abilities.the_veteran.beam_duration_ticks", 60.0, 80),
-                new NumberMigration("abilities.the_veteran.beam_duration_ticks", 100.0, 80),
+                new NumberMigration("abilities.the_veteran.beam_duration_ticks", 60.0, 100),
                 new NumberMigration("abilities.the_veteran.beam_damage_interval_ticks", 6.0, 2),
                 new NumberMigration("abilities.the_veteran.beam_block_affect_interval_ticks", 5.0, 4),
                 new NumberMigration("abilities.the_veteran.beam_block_affect_interval_ticks", 4.0, 4),
@@ -176,6 +175,7 @@ public final class ConfigMigrationService {
         boolean changed = false;
 
         changed |= replaceIfNumericEquals("abilities.the_veteran.burst_cooldown_ms", 60000.0, 300000);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_duration_ticks", 80.0, 100);
         changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_duration_ticks", 1200.0, 2400);
         changed |= setIfMissing("abilities.the_veteran.post_burst_strength_multiplier", 0.5);
         changed |= setIfMissing("abilities.the_veteran.post_burst_strength_reduction_ticks",
@@ -195,11 +195,17 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_height", 50.0, 40);
 
         changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_period_ticks", 8.0, 12);
-        changed |= setIfMissing("abilities.the_veteran.mushroom_cloud_particle_multiplier", 0.65);
-        changed |= setIfMissing("abilities.the_veteran.ground_zero_particle_multiplier", 0.65);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud_particle_multiplier", 0.65, 0.78);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.ground_zero_particle_multiplier", 0.65, 0.75);
+        changed |= setIfMissing("abilities.the_veteran.mushroom_cloud_particle_multiplier", 0.78);
+        changed |= setIfMissing("abilities.the_veteran.ground_zero_particle_multiplier", 0.75);
         changed |= setIfMissing("abilities.the_veteran.mushroom_cloud_sound_duration_ticks", 80);
         changed |= setIfMissing("abilities.the_veteran.beam_sound_duration_ticks", 40);
         changed |= setIfMissing("abilities.the_veteran.beam_sound_period_ticks", 20);
+        changed |= setIfMissing("abilities.the_veteran.beam_particle_step", 0.55);
+        changed |= setIfMissing("abilities.the_veteran.beam_particle_density_multiplier", 1.15);
+        changed |= setIfMissing("abilities.the_veteran.beam_entity_damage_multiplier", 0.95);
+        changed |= setIfMissing("abilities.the_veteran.beam_block_damage_multiplier", 1.10);
 
         changed |= setIfMissing("abilities.the_runner.speed_min_level", 9);
         changed |= setIfMissing("abilities.the_runner.speed_max_level", 12);

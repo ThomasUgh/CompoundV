@@ -1,4 +1,4 @@
-language_file_version: 10
+language_file_version: 11
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -33,14 +33,14 @@ ability:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
       - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle the strong red beam."
-      - "<prefix>&8• &bXRay&7: &dSneak + Left-Click&7 while looking at a block or while holding a normal item to reveal nearby entities."
+      - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7 and &cBonus Hearts&7."
   the_patriot_v_one:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically with stronger V One boosts."
       - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle a denser red beam with &e+33% damage&7 and &e+5 blocks range&7 compared to standard The Patriot."
-      - "<prefix>&8• &bXRay&7: &dSneak + Left-Click&7 while looking at a block or while holding a normal item to reveal nearby entities."
+      - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7, &6Fire Resistance&7 and &cBonus Hearts&7."
   heat_vision:
@@ -50,13 +50,13 @@ ability:
   the_diver:
     description:
       - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace IV&7 and &3Heart of the Sea / Conduit Power II&7 are active permanently."
-      - "<prefix>&8• &bSonar&7: &dSneak + Left-Click&7 while underwater to reveal nearby entities."
+      - "<prefix>&8• &bSonar&7: &dSneak + Left-Click Air&7 while underwater to reveal nearby entities."
       - "<prefix>&8• &bRiptide Dash&7: &dSneak + Right-Click&7 in water or rain, similar to Riptide IV without holding a trident."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
       - "<prefix>&8• &7While underwater, Strength and Resistance are increased by &a+1 level&7."
   vision:
     description:
-      - "<prefix>&8• &bXRay&7: &dSneak + Left-Click&7 to reveal nearby entities."
+      - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &7Default range: &e35 blocks&7."
   the_runner:
     description:
@@ -92,7 +92,7 @@ ability:
   the_veteran:
     description:
       - "<prefix>&8• &7Passive boosts: high &aStrength&7, &9Resistance&7 and &6Fire Resistance&7."
-      - "<prefix>&8• &eChest Beam&7: &dSneak + Left-Click&7 while looking at a block or while holding a normal item."
+      - "<prefix>&8• &eChest Beam&7: &dSneak + Left-Click Air&7."
       - "<prefix>&8• &7A short silent delay prevents accidental activation before the &e5 second charge&7 begins."
       - "<prefix>&8• &7The thick &eyellow fire beam&7 deals extreme damage and slowly burns through surface blocks."
       - "<prefix>&8• &7When released, it creates a &c20 TNT-style nuclear shockwave&7 with a large &c2-minute mushroom cloud&7 and &cno block damage&7 around the player."
@@ -123,7 +123,7 @@ teleporter:
 
 veteran:
   charge_start: "&eThe Veteran &7is charging the &eChest Beam&7..."
-  charge_progress: "&eCharging... &7release in &a{seconds}s"
+  charge_progress: "&eChest Blast... &7fires in &a{seconds}s"
   charge_cancelled: "&cChest Beam charge cancelled."
   burst_start: "&eThe Veteran &7released the &eChest Beam&7."
   burst_end: "&7Chest Beam finished."
