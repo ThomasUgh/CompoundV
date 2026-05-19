@@ -84,14 +84,17 @@ abilities:
     resistance_level: 4
     extra_hearts: 20
     burst_cooldown_ms: 300000
-    pre_charge_hold_ticks: 20
+    pre_charge_hold_ticks: 40
     charge_duration_ticks: 100
     charge_period_ticks: 5
-    beam_duration_ticks: 80
+    beam_duration_ticks: 100
     beam_period_ticks: 2
     beam_range: 48.0
     beam_radius: 1.35
+    beam_particle_step: 0.55
+    beam_particle_density_multiplier: 1.15
     beam_damage_amount: 50.0
+    beam_entity_damage_multiplier: 0.95
     beam_damage_multiplier: 5.0
     beam_full_damage_range: 7.0
     beam_far_damage_multiplier: 0.5
@@ -101,6 +104,7 @@ abilities:
     beam_block_affect_interval_ticks: 4
     beam_max_blocks_per_pulse: 5
     beam_block_hits_to_break: 5
+    beam_block_damage_multiplier: 1.10
     beam_surface_only: true
     beam_removes_player_abilities: true
     ground_zero_radius: 14.0
@@ -108,9 +112,14 @@ abilities:
     ground_zero_knockback: 7.5
     ground_zero_set_fire: true
     mushroom_cloud_duration_ticks: 2400
-    mushroom_cloud_period_ticks: 8
+    mushroom_cloud_period_ticks: 12
     mushroom_cloud_height: 32.0
     mushroom_cloud_radius: 15.5
+    mushroom_cloud_particle_multiplier: 0.78
+    ground_zero_particle_multiplier: 0.75
+    mushroom_cloud_sound_duration_ticks: 80
+    beam_sound_duration_ticks: 40
+    beam_sound_period_ticks: 20
     melee_knockback_horizontal: 1.35
     melee_knockback_vertical: 0.28
     beam_hit_knockback: 0.45
