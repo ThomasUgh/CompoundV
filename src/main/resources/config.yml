@@ -127,16 +127,20 @@ abilities:
     post_burst_strength_reduction_ticks: 2400
 
   the_runner:
-    speed_min_level: 9
-    speed_max_level: 12
-    default_speed_level: 9
+    speed_levels: [10, 11, 12, 15]
+    default_speed_level: 10
     resistance_level: 1
     strength_level: 2
     extra_hearts: 5
     attack_speed_bonus: 1024.0
-    water_walk: true
-    water_walk_radius: 2
-    water_walk_ice_ticks: 100
+    impact_min_speed_level: 10
+    impact_base_damage_hearts: 6.0
+    impact_damage_per_speed_level_hearts: 1.0
+    impact_radius: 1.15
+    impact_vertical_radius: 1.35
+    impact_min_move_delta: 0.08
+    impact_cooldown_ms: 750
+    impact_knockback: 1.15
 
   teleporter:
     range: 50.0

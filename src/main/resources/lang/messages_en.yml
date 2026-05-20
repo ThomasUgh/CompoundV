@@ -1,4 +1,4 @@
-language_file_version: 11
+language_file_version: 12
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -60,8 +60,8 @@ ability:
       - "<prefix>&8• &7Default range: &e35 blocks&7."
   the_runner:
     description:
-      - "<prefix>&8• &eRunner Speed&7: press &dF&7 to cycle Speed IX-XII and off."
-      - "<prefix>&8• &bWater Walk&7 freezes water below you like Frost Walker."
+      - "<prefix>&8• &eRunner Speed&7: press &dF&7 to cycle Speed X, XI, XII, XV and off."
+      - "<prefix>&8• &eImpact Run&7: running through entities at Speed X+ deals &c6 hearts&7, plus &c+1 heart&7 per extra speed level."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance I&7, &c5 extra hearts&7 and no melee cooldown."
   teleporter:
     description:

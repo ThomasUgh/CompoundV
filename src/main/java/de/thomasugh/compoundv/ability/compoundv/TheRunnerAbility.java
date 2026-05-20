@@ -2,23 +2,23 @@ package de.thomasugh.compoundv.ability.compoundv;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.AttributeUtil;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class TheRunnerAbility implements Ability {
@@ -27,7 +27,7 @@ public class TheRunnerAbility implements Ability {
     private final NamespacedKey healthModKey;
     private final NamespacedKey attackSpeedKey;
     private final Map<UUID, Integer> speedLevels = new HashMap<>();
-    private final Set<String> temporaryIce = new HashSet<>();
+    private final Map<UUID, Map<UUID, Long>> impactCooldowns = new HashMap<>();
 
     public TheRunnerAbility(CompoundV plugin) {
         this.plugin = plugin;
@@ -39,14 +39,16 @@ public class TheRunnerAbility implements Ability {
     @Override public String getDisplayName() { return "The Runner"; }
     @Override public int getColor() { return 0xFFE066; }
     @Override public boolean hasToggle() { return true; }
-    @Override public boolean needsTick() { return true; }
 
     @Override
     public void apply(Player player) {
         int resistance = plugin.getConfig().getInt("abilities.the_runner.resistance_level", 1);
         int strength = plugin.getConfig().getInt("abilities.the_runner.strength_level", 2);
-        int startSpeed = Math.max(minSpeedLevel(), Math.min(maxSpeedLevel(),
-                plugin.getConfig().getInt("abilities.the_runner.default_speed_level", minSpeedLevel())));
+        int startSpeed = configuredSpeedLevels().get(0);
+        int configuredDefault = plugin.getConfig().getInt("abilities.the_runner.default_speed_level", startSpeed);
+        if (configuredSpeedLevels().contains(configuredDefault)) {
+            startSpeed = configuredDefault;
+        }
 
         if (resistance > 0) {
             player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
@@ -68,7 +70,9 @@ public class TheRunnerAbility implements Ability {
 
     @Override
     public void remove(Player player) {
-        speedLevels.remove(player.getUniqueId());
+        UUID uuid = player.getUniqueId();
+        speedLevels.remove(uuid);
+        impactCooldowns.remove(uuid);
         player.removePotionEffect(PotionEffects.SPEED);
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.STRENGTH);
@@ -78,20 +82,21 @@ public class TheRunnerAbility implements Ability {
 
     @Override
     public void onToggle(Player player) {
-        int min = minSpeedLevel();
-        int max = maxSpeedLevel();
+        List<Integer> levels = configuredSpeedLevels();
         UUID uuid = player.getUniqueId();
         Integer current = speedLevels.get(uuid);
 
         if (current == null) {
-            speedLevels.put(uuid, min);
-            applySpeed(player, min);
+            int first = levels.get(0);
+            speedLevels.put(uuid, first);
+            applySpeed(player, first);
             MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.runner_speed_level",
-                    "level", Integer.toString(min)));
+                    "level", Integer.toString(first)));
             return;
         }
 
-        if (current >= max) {
+        int index = levels.indexOf(current);
+        if (index < 0 || index >= levels.size() - 1) {
             speedLevels.remove(uuid);
             player.removePotionEffect(PotionEffects.SPEED);
             MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.runner_speed_off"));
@@ -99,17 +104,45 @@ public class TheRunnerAbility implements Ability {
             return;
         }
 
-        int next = current + 1;
+        int next = levels.get(index + 1);
         speedLevels.put(uuid, next);
         applySpeed(player, next);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.runner_speed_level",
                 "level", Integer.toString(next)));
     }
 
-    @Override
-    public void onTick(Player player) {
-        if (plugin.getConfig().getBoolean("abilities.the_runner.water_walk", true)) {
-            freezeWaterAround(player);
+    public void handleMoveThroughEntities(Player player, Location from, Location to) {
+        if (to == null) return;
+
+        Integer level = speedLevels.get(player.getUniqueId());
+        int minImpactLevel = plugin.getConfig().getInt("abilities.the_runner.impact_min_speed_level", 10);
+        if (level == null || level < minImpactLevel) return;
+
+        double minMoveSquared = plugin.getConfig().getDouble("abilities.the_runner.impact_min_move_delta", 0.08);
+        minMoveSquared *= minMoveSquared;
+        double dx = to.getX() - from.getX();
+        double dz = to.getZ() - from.getZ();
+        if ((dx * dx + dz * dz) < minMoveSquared) return;
+
+        double radius = plugin.getConfig().getDouble("abilities.the_runner.impact_radius", 1.15);
+        double verticalRadius = plugin.getConfig().getDouble("abilities.the_runner.impact_vertical_radius", 1.35);
+        long cooldownMs = plugin.getConfig().getLong("abilities.the_runner.impact_cooldown_ms", 750L);
+        long now = System.currentTimeMillis();
+
+        Map<UUID, Long> playerCooldowns = impactCooldowns.computeIfAbsent(player.getUniqueId(), ignored -> new HashMap<>());
+        playerCooldowns.entrySet().removeIf(entry -> entry.getValue() <= now);
+
+        for (Entity entity : player.getWorld().getNearbyEntities(to, radius, verticalRadius, radius)) {
+            if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
+
+            UUID targetId = target.getUniqueId();
+            if (playerCooldowns.getOrDefault(targetId, 0L) > now) continue;
+
+            double damage = impactDamage(level);
+            target.damage(damage, player);
+            applyImpactKnockback(player, target);
+            playImpactEffects(player, target);
+            playerCooldowns.put(targetId, now + cooldownMs);
         }
     }
 
@@ -119,47 +152,49 @@ public class TheRunnerAbility implements Ability {
         player.playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.45f, 1.9f);
     }
 
-    private int minSpeedLevel() {
-        return Math.max(1, plugin.getConfig().getInt("abilities.the_runner.speed_min_level", 9));
-    }
-
-    private int maxSpeedLevel() {
-        return Math.max(minSpeedLevel(), plugin.getConfig().getInt("abilities.the_runner.speed_max_level", 12));
-    }
-
-    private void freezeWaterAround(Player player) {
-        Location base = player.getLocation().clone().subtract(0, 1, 0);
-        World world = base.getWorld();
-        if (world == null) return;
-
-        int radius = Math.max(1, plugin.getConfig().getInt("abilities.the_runner.water_walk_radius", 2));
-        int y = base.getBlockY();
-
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                if (x * x + z * z > radius * radius) continue;
-                Block block = world.getBlockAt(base.getBlockX() + x, y, base.getBlockZ() + z);
-                if (block.getType() != Material.WATER) continue;
-                freezeBlock(block);
-            }
+    private List<Integer> configuredSpeedLevels() {
+        List<Integer> configured = plugin.getConfig().getIntegerList("abilities.the_runner.speed_levels");
+        if (configured.isEmpty()) {
+            configured = List.of(10, 11, 12, 15);
         }
+
+        List<Integer> levels = new ArrayList<>();
+        for (Integer level : configured) {
+            if (level == null || level < 1 || levels.contains(level)) continue;
+            levels.add(level);
+        }
+        if (levels.isEmpty()) {
+            levels.add(10);
+            levels.add(11);
+            levels.add(12);
+            levels.add(15);
+        }
+        return levels;
     }
 
-    private void freezeBlock(Block block) {
-        String key = blockKey(block);
-        if (!temporaryIce.add(key)) return;
-
-        block.setType(Material.FROSTED_ICE, false);
-        int thawTicks = Math.max(20, plugin.getConfig().getInt("abilities.the_runner.water_walk_ice_ticks", 100));
-        SchedulerAdapter.runLater(plugin, () -> {
-            temporaryIce.remove(key);
-            if (block.getType() == Material.FROSTED_ICE) {
-                block.setType(Material.WATER, false);
-            }
-        }, thawTicks);
+    private double impactDamage(int speedLevel) {
+        double baseHearts = plugin.getConfig().getDouble("abilities.the_runner.impact_base_damage_hearts", 6.0);
+        double perLevelHearts = plugin.getConfig().getDouble("abilities.the_runner.impact_damage_per_speed_level_hearts", 1.0);
+        int minImpactLevel = plugin.getConfig().getInt("abilities.the_runner.impact_min_speed_level", 10);
+        double hearts = baseHearts + Math.max(0, speedLevel - minImpactLevel) * perLevelHearts;
+        return Math.max(0.0, hearts * 2.0);
     }
 
-    private String blockKey(Block block) {
-        return block.getWorld().getUID() + ":" + block.getX() + ":" + block.getY() + ":" + block.getZ();
+    private void applyImpactKnockback(Player player, LivingEntity target) {
+        double knockback = plugin.getConfig().getDouble("abilities.the_runner.impact_knockback", 1.15);
+        if (knockback <= 0) return;
+
+        Vector direction = target.getLocation().toVector().subtract(player.getLocation().toVector());
+        if (direction.lengthSquared() < 0.001) {
+            direction = player.getLocation().getDirection().clone();
+        }
+        direction.setY(0).normalize().multiply(knockback).setY(0.28);
+        target.setVelocity(target.getVelocity().add(direction));
+    }
+
+    private void playImpactEffects(Player player, LivingEntity target) {
+        target.getWorld().spawnParticle(Particle.CLOUD, target.getLocation().add(0, 1.0, 0), 12, 0.25, 0.25, 0.25, 0.08);
+        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_KNOCKBACK, 0.55f, 1.45f);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.35f, 1.7f);
     }
 }

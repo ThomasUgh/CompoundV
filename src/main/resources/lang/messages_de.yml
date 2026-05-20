@@ -1,4 +1,4 @@
-language_file_version: 11
+language_file_version: 12
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -60,8 +60,8 @@ ability:
       - "<prefix>&8• &7Standard-Reichweite: &e35 Blöcke&7."
   the_runner:
     description:
-      - "<prefix>&8• &eRunner Speed&7: Drücke &dF&7, um Speed IX-XII und aus durchzuschalten."
-      - "<prefix>&8• &bWasserlauf&7 friert Wasser unter dir ähnlich wie Frost Walker ein."
+      - "<prefix>&8• &eRunner Speed&7: Drücke &dF&7, um Speed X, XI, XII, XV und aus durchzuschalten."
+      - "<prefix>&8• &eImpact Run&7: Wenn du ab Speed X durch Entities rennst, verursachst du &c6 Herzen&7 Schaden, plus &c+1 Herz&7 pro weiterer Speed-Stufe."
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz I&7, &c5 Extra-Herzen&7 und kein Nahkampf-Cooldown."
   teleporter:
     description:
