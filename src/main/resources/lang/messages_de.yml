@@ -91,11 +91,10 @@ ability:
       - "<prefix>&8• &7Normales Rechtsklick-Feuerplatzieren mit &6Feuerzeug&7 oder &6Feuerkugel&7 wird blockiert, solange du diese Fähigkeit hast."
   the_veteran:
     description:
-      - "<prefix>&8• &7Passive Effekte: hohe &aStärke&7, &9Resistenz&7 und &6Feuerresistenz&7."
-      - "<prefix>&8• &eBruststrahl&7: &dSchleichen + Linksklick&7 startet direkt die &e5-Sekunden-Aufladung&7; währenddessen weiter schleichen."
-      - "<prefix>&8• &7Der dicke &egelbe Feuerstrahl&7 verursacht extremen Schaden und brennt sich langsam durch Oberflächenblöcke."
-      - "<prefix>&8• &7Beim Auslösen entsteht eine &c20-TNT-artige Atom-Druckwelle&7 mit größerem &c2-Minuten-Atompilz&7 und &ckeinem Blockschaden&7 um den Spieler."
-      - "<prefix>&8• &7Nach dem Blast wird The Veterans Stärke um &e50%&7 reduziert, bis der Atompilz verschwindet."
+      - "<prefix>&8• &7Hohe &aStärke&7, &9Resistenz&7 und &6Feuerresistenz&7."
+      - "<prefix>&8• &dSneak + Linksklick&7: &e5s Aufladung&7, dann Bruststrahl."
+      - "<prefix>&8• &7Beam: hoher Schaden, Block-Burn und Ability-Remove bei Spielern."
+      - "<prefix>&8• &7Startet mit starker Nahbereichs-Explosion und Atompilz."
 
 toggle:
   heat_vision_on: "&bHeat Vision &aaktiviert"
