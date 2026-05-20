@@ -113,7 +113,7 @@ public class TheRunnerAbility implements Ability {
     }
 
     public void handleMoveThroughEntities(Player player, Location from, Location to) {
-        if (to == null) return;
+        if (to == null || player.isSneaking()) return;
 
         Integer level = speedLevels.get(player.getUniqueId());
         int minImpactLevel = plugin.getConfig().getInt("abilities.the_runner.impact_min_speed_level", 10);
