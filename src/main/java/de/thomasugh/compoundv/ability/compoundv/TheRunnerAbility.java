@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -118,22 +119,29 @@ public class TheRunnerAbility implements Ability {
         int minImpactLevel = plugin.getConfig().getInt("abilities.the_runner.impact_min_speed_level", 10);
         if (level == null || level < minImpactLevel) return;
 
-        double minMoveSquared = plugin.getConfig().getDouble("abilities.the_runner.impact_min_move_delta", 0.08);
-        minMoveSquared *= minMoveSquared;
         double dx = to.getX() - from.getX();
         double dz = to.getZ() - from.getZ();
-        if ((dx * dx + dz * dz) < minMoveSquared) return;
+        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
 
-        double radius = plugin.getConfig().getDouble("abilities.the_runner.impact_radius", 1.15);
-        double verticalRadius = plugin.getConfig().getDouble("abilities.the_runner.impact_vertical_radius", 1.35);
+        double minMoveDelta = plugin.getConfig().getDouble("abilities.the_runner.impact_min_move_delta", 0.08);
+        double minHorizontalSpeed = plugin.getConfig().getDouble("abilities.the_runner.impact_min_horizontal_speed", 0.32);
+        if (horizontalDistance < Math.max(minMoveDelta, minHorizontalSpeed)) return;
+
+        double radius = plugin.getConfig().getDouble("abilities.the_runner.impact_radius", 0.65);
+        double verticalRadius = plugin.getConfig().getDouble("abilities.the_runner.impact_vertical_radius", 0.55);
+        double pathStep = Math.max(0.18, plugin.getConfig().getDouble("abilities.the_runner.impact_path_step", 0.28));
         long cooldownMs = plugin.getConfig().getLong("abilities.the_runner.impact_cooldown_ms", 750L);
         long now = System.currentTimeMillis();
 
         Map<UUID, Long> playerCooldowns = impactCooldowns.computeIfAbsent(player.getUniqueId(), ignored -> new HashMap<>());
         playerCooldowns.entrySet().removeIf(entry -> entry.getValue() <= now);
 
-        for (Entity entity : player.getWorld().getNearbyEntities(to, radius, verticalRadius, radius)) {
+        Location midpoint = from.clone().add(to.toVector().subtract(from.toVector()).multiply(0.5));
+        double searchRadius = Math.max(radius + 1.0, (from.distance(to) * 0.5) + radius + 1.0);
+
+        for (Entity entity : player.getWorld().getNearbyEntities(midpoint, searchRadius, 2.5 + verticalRadius, searchRadius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
+            if (!didHitEntityOnPath(from, to, target, radius, verticalRadius, pathStep)) continue;
 
             UUID targetId = target.getUniqueId();
             if (playerCooldowns.getOrDefault(targetId, 0L) > now) continue;
@@ -170,6 +178,33 @@ public class TheRunnerAbility implements Ability {
             levels.add(15);
         }
         return levels;
+    }
+
+
+    private boolean didHitEntityOnPath(Location from, Location to, LivingEntity target,
+                                      double radius, double verticalRadius, double pathStep) {
+        if (from.getWorld() == null || target.getWorld() == null || !from.getWorld().equals(target.getWorld())) {
+            return false;
+        }
+
+        Vector start = from.toVector();
+        Vector end = to.toVector();
+        Vector movement = end.clone().subtract(start);
+        double length = movement.length();
+        if (length < 0.001) return false;
+
+        BoundingBox hitBox = target.getBoundingBox().expand(radius, verticalRadius, radius);
+        int samples = Math.max(2, (int) Math.ceil(length / pathStep));
+        for (int i = 0; i <= samples; i++) {
+            double progress = i / (double) samples;
+            Vector base = start.clone().add(movement.clone().multiply(progress));
+            if (hitBox.contains(base.clone().add(new Vector(0, 0.25, 0)))
+                    || hitBox.contains(base.clone().add(new Vector(0, 0.95, 0)))
+                    || hitBox.contains(base.clone().add(new Vector(0, 1.55, 0)))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private double impactDamage(int speedLevel) {

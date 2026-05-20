@@ -136,9 +136,11 @@ abilities:
     impact_min_speed_level: 10
     impact_base_damage_hearts: 6.0
     impact_damage_per_speed_level_hearts: 1.0
-    impact_radius: 1.15
-    impact_vertical_radius: 1.35
+    impact_radius: 0.65
+    impact_vertical_radius: 0.55
     impact_min_move_delta: 0.08
+    impact_min_horizontal_speed: 0.32
+    impact_path_step: 0.28
     impact_cooldown_ms: 750
     impact_knockback: 1.15
 
