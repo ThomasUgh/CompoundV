@@ -203,8 +203,9 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.beam_sound_period_ticks", 20);
         changed |= setIfMissing("abilities.the_veteran.beam_particle_step", 0.55);
         changed |= setIfMissing("abilities.the_veteran.beam_particle_density_multiplier", 1.15);
-        changed |= setIfMissing("abilities.the_veteran.beam_entity_damage_multiplier", 0.95);
-        changed |= setIfMissing("abilities.the_veteran.beam_block_damage_multiplier", 1.10);
+        changed |= setIfMissing("abilities.the_veteran.beam_entity_damage_multiplier", 1.045);
+        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.76);
+        changed |= setIfMissing("abilities.the_veteran.beam_block_damage_multiplier", 1.21);
 
         changed |= setIfMissing("abilities.the_runner.resistance_level", 1);
         changed |= setIfMissing("abilities.the_runner.strength_level", 2);
@@ -237,6 +238,13 @@ public final class ConfigMigrationService {
             plugin.getConfig().set("abilities.the_veteran.pre_charge_hold_ticks", null);
             changed = true;
         }
+
+
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_entity_damage_multiplier", 0.95, 1.045);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_block_damage_multiplier", 1.10, 1.21);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.ground_zero_damage", 500.0, 525.0);
+        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.76);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.resistance_level", 4.0, 3);
 
         if (!plugin.getConfig().contains("abilities.the_runner.speed_levels")) {
             plugin.getConfig().set("abilities.the_runner.speed_levels", java.util.List.of(10, 11, 12, 15));

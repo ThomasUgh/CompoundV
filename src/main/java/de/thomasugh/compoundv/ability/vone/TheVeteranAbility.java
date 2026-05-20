@@ -239,7 +239,7 @@ public class TheVeteranAbility implements Ability {
         Location base = shooter.getLocation();
 
         double radius = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_radius", 14.0);
-        double maxDamage = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_damage", 500.0);
+        double maxDamage = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_damage", 525.0);
         double knockback = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_knockback", 7.5);
         boolean setFire = plugin.getConfig().getBoolean("abilities.the_veteran.ground_zero_set_fire", true);
 
@@ -393,7 +393,8 @@ public class TheVeteranAbility implements Ability {
         double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 10.0);
         double damageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
         double configuredDamage = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_amount", patriotDamage * damageMultiplier);
-        final double damage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 0.95));
+        final double entityDamage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 1.045));
+        final double playerDamage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_player_damage_multiplier", 0.76));
         final double fullDamageRange = plugin.getConfig().getDouble("abilities.the_veteran.beam_full_damage_range", 7.0);
         final double farDamageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_far_damage_multiplier", 0.5);
 
@@ -403,7 +404,7 @@ public class TheVeteranAbility implements Ability {
         final int blockAffectEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_affect_interval_ticks", 4));
         int maxBlocksPerPulse = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_max_blocks_per_pulse", 5));
         int blockHitsToBreak = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_hits_to_break", 5));
-        double blockDamageMultiplier = Math.max(0.1, plugin.getConfig().getDouble("abilities.the_veteran.beam_block_damage_multiplier", 1.10));
+        double blockDamageMultiplier = Math.max(0.1, plugin.getConfig().getDouble("abilities.the_veteran.beam_block_damage_multiplier", 1.21));
         boolean surfaceOnly = plugin.getConfig().getBoolean("abilities.the_veteran.beam_surface_only", true);
 
         final TaskHandle[] task = new TaskHandle[1];
@@ -437,7 +438,7 @@ public class TheVeteranAbility implements Ability {
                 }
 
                 renderAndApplyBeam(shooter, chest, dir, range, radius, particleStep, particleDensity,
-                        damage, fullDamageRange, farDamageMultiplier,
+                        entityDamage, playerDamage, fullDamageRange, farDamageMultiplier,
                         age % damageEveryTicks == 0,
                         affectBlocksThisTick,
                         breakBlocks, igniteBlocks, effectiveMaxBlocksPerPulse, blockHitsToBreak,
@@ -458,7 +459,7 @@ public class TheVeteranAbility implements Ability {
 
     private void renderAndApplyBeam(Player shooter, Location origin, Vector dir,
                                     double range, double radius, double particleStep, double particleDensity,
-                                    double damage, double fullDamageRange, double farDamageMultiplier,
+                                    double entityDamage, double playerDamage, double fullDamageRange, double farDamageMultiplier,
                                     boolean damageThisTick, boolean affectBlocksThisTick,
                                     boolean breakBlocks, boolean igniteBlocks,
                                     int maxBlocksPerPulse, int blockHitsToBreak,
@@ -502,7 +503,8 @@ public class TheVeteranAbility implements Ability {
             if (!(entity instanceof LivingEntity target) || entity.equals(shooter)) continue;
             if (!isNearBeam(origin, dir, effectiveRange, radius + 0.65, target.getEyeLocation())) continue;
             double along = distanceAlongBeam(origin, dir, target.getEyeLocation());
-            double targetDamage = along <= fullDamageRange ? damage : damage * farDamageMultiplier;
+            double baseDamage = target instanceof Player ? playerDamage : entityDamage;
+            double targetDamage = along <= fullDamageRange ? baseDamage : baseDamage * farDamageMultiplier;
             target.damage(targetDamage, shooter);
             target.setFireTicks(160);
             double hitKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_knockback", 0.45);

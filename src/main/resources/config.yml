@@ -93,7 +93,8 @@ abilities:
     beam_particle_step: 0.55
     beam_particle_density_multiplier: 1.15
     beam_damage_amount: 50.0
-    beam_entity_damage_multiplier: 0.95
+    beam_entity_damage_multiplier: 1.045
+    beam_player_damage_multiplier: 0.76
     beam_damage_multiplier: 5.0
     beam_full_damage_range: 7.0
     beam_far_damage_multiplier: 0.5
@@ -103,11 +104,11 @@ abilities:
     beam_block_affect_interval_ticks: 4
     beam_max_blocks_per_pulse: 5
     beam_block_hits_to_break: 5
-    beam_block_damage_multiplier: 1.10
+    beam_block_damage_multiplier: 1.21
     beam_surface_only: true
     beam_removes_player_abilities: true
     ground_zero_radius: 14.0
-    ground_zero_damage: 500.0
+    ground_zero_damage: 525.0
     ground_zero_knockback: 7.5
     ground_zero_set_fire: true
     mushroom_cloud_duration_ticks: 2400
