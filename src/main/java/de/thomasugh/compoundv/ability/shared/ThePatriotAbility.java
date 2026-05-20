@@ -85,7 +85,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         p.setAllowFlight(true);
 
         int str   = plugin.getConfig().getInt(t("strength_level"),   3);
-        int res   = plugin.getConfig().getInt(t("resistance_level"), isVOne() ? 4 : 2);
+        int res   = plugin.getConfig().getInt(t("resistance_level"), isVOne() ? 3 : 2);
         int regen = plugin.getConfig().getInt(t("regen_level"),      isVOne() ? 3 : 1);
         boolean fireRes = plugin.getConfig().getBoolean(t("fire_resistance"), true);
 
