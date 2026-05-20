@@ -70,7 +70,7 @@ abilities:
 
     v_one:
       strength_level: 4
-      resistance_level: 4
+      resistance_level: 3
       regen_level: 3
       fire_resistance: true
       launch_fly_speed: 0.400
