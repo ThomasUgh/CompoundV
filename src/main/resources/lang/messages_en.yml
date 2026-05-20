@@ -92,8 +92,7 @@ ability:
   the_veteran:
     description:
       - "<prefix>&8• &7Passive boosts: high &aStrength&7, &9Resistance&7 and &6Fire Resistance&7."
-      - "<prefix>&8• &eChest Beam&7: &dSneak + Left-Click Air&7."
-      - "<prefix>&8• &7A short silent delay prevents accidental activation before the &e5 second charge&7 begins."
+      - "<prefix>&8• &eChest Beam&7: &dSneak + Left-Click&7 directly starts the &e5 second charge&7; keep sneaking while charging."
       - "<prefix>&8• &7The thick &eyellow fire beam&7 deals extreme damage and slowly burns through surface blocks."
       - "<prefix>&8• &7When released, it creates a &c20 TNT-style nuclear shockwave&7 with a large &c2-minute mushroom cloud&7 and &cno block damage&7 around the player."
       - "<prefix>&8• &7After the blast, The Veteran's Strength is reduced by &e50%&7 until the cloud fades."

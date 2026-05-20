@@ -84,7 +84,6 @@ abilities:
     resistance_level: 4
     extra_hearts: 20
     burst_cooldown_ms: 300000
-    pre_charge_hold_ticks: 40
     charge_duration_ticks: 100
     charge_period_ticks: 5
     beam_duration_ticks: 100

@@ -24,17 +24,17 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class TheVeteranAbility implements Ability {
 
     private final CompoundV plugin;
     private final NamespacedKey healthModKey;
-    private final Set<UUID> activeBursts = new HashSet<>();
+    private final Map<UUID, UUID> activeBurstTokens = new HashMap<>();
     private final Map<UUID, Long> burstCooldownUntil = new HashMap<>();
+    private final Map<UUID, TaskHandle> chargeTasks = new HashMap<>();
+    private final Map<UUID, TaskHandle> beamTasks = new HashMap<>();
     private final Map<UUID, TaskHandle> strengthRecoveryTasks = new HashMap<>();
 
     public TheVeteranAbility(CompoundV p) {
@@ -48,6 +48,9 @@ public class TheVeteranAbility implements Ability {
 
     @Override
     public void apply(Player p) {
+        UUID u = p.getUniqueId();
+        resetBurstState(u, true);
+
         int res = plugin.getConfig().getInt("abilities.the_veteran.resistance_level", 4);
         double extraHp = plugin.getConfig().getDouble("abilities.the_veteran.extra_hearts", 20.0) * 2.0;
         applyStrength(p, plugin.getConfig().getInt("abilities.the_veteran.strength_level", 5));
@@ -61,8 +64,7 @@ public class TheVeteranAbility implements Ability {
     @Override
     public void remove(Player p) {
         UUID u = p.getUniqueId();
-        activeBursts.remove(u);
-        burstCooldownUntil.remove(u);
+        resetBurstState(u, true);
         TaskHandle recoveryTask = strengthRecoveryTasks.remove(u);
         if (recoveryTask != null) recoveryTask.cancel();
         p.removePotionEffect(PotionEffects.STRENGTH);
@@ -102,64 +104,67 @@ public class TheVeteranAbility implements Ability {
         strengthRecoveryTasks.put(uuid, handle);
     }
 
-    public boolean isBurstActive(Player p) { return activeBursts.contains(p.getUniqueId()); }
+    public boolean isBurstActive(Player p) {
+        return activeBurstTokens.containsKey(p.getUniqueId());
+    }
 
-    public void startBurst(Player p) {
-        UUID u = p.getUniqueId();
+    public void handleSneakLeftClick(Player player) {
+        UUID uuid = player.getUniqueId();
+        if (isBurstActive(player)) return;
+        startBurstCharge(player, uuid);
+    }
 
-        long cd = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 300_000L);
+    private void startBurstCharge(Player shooter, UUID uuid) {
+        if (isOnCooldown(shooter)) return;
+        if (activeBurstTokens.containsKey(uuid)) return;
+
+        UUID token = UUID.randomUUID();
+        activeBurstTokens.put(uuid, token);
+
+        MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.charge_start"));
+        shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.75f, 0.5f);
+        chargeThenFire(shooter, uuid, token);
+    }
+
+    private boolean isOnCooldown(Player player) {
+        UUID uuid = player.getUniqueId();
         long now = System.currentTimeMillis();
-        long cooldownUntil = burstCooldownUntil.getOrDefault(u, 0L);
-        if (now < cooldownUntil) {
-            long secs = ((cooldownUntil - now) / 1000L) + 1L;
-            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg(
-                    "veteran.cooldown", "seconds", Long.toString(secs)));
-            return;
+        long cooldownUntil = burstCooldownUntil.getOrDefault(uuid, 0L);
+        if (now >= cooldownUntil) return false;
+
+        long secs = ((cooldownUntil - now) / 1000L) + 1L;
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg(
+                "veteran.cooldown", "seconds", Long.toString(secs)));
+        return true;
+    }
+
+    private boolean isCurrentBurst(UUID uuid, UUID token) {
+        return token.equals(activeBurstTokens.get(uuid));
+    }
+
+    private void resetBurstState(UUID uuid, boolean clearCooldown) {
+        activeBurstTokens.remove(uuid);
+        TaskHandle chargeTask = chargeTasks.remove(uuid);
+        if (chargeTask != null) chargeTask.cancel();
+
+        TaskHandle beamTask = beamTasks.remove(uuid);
+        if (beamTask != null) beamTask.cancel();
+
+        if (clearCooldown) {
+            burstCooldownUntil.remove(uuid);
         }
-        if (activeBursts.contains(u)) return;
-
-        activeBursts.add(u);
-
-        p.playSound(p.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.55f, 0.55f);
-        p.playSound(p.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 0.45f, 0.6f);
-        holdThenCharge(p, u);
     }
 
-    private void holdThenCharge(Player shooter, UUID uuid) {
-        int holdTicks = Math.max(40, plugin.getConfig().getInt("abilities.the_veteran.pre_charge_hold_ticks", 40));
-        int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.charge_period_ticks", 5));
-
-        final TaskHandle[] task = new TaskHandle[1];
-        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
-            int age = 0;
-
-            @Override public void run() {
-                if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
-                    activeBursts.remove(uuid);
-                    task[0].cancel();
-                    return;
-                }
-                if (!shooter.isSneaking()) {
-                    activeBursts.remove(uuid);
-                    task[0].cancel();
-                    return;
-                }
-
-                if (age >= holdTicks) {
-                    shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.75f, 0.5f);
-                    chargeThenFire(shooter, uuid);
-                    task[0].cancel();
-                    return;
-                }
-
-                animatePreChargeHold(shooter, age, holdTicks);
-
-                age += periodTicks;
-            }
-        }, 0L, periodTicks);
+    private void cancelActiveBurst(UUID uuid, UUID token) {
+        if (!isCurrentBurst(uuid, token)) return;
+        activeBurstTokens.remove(uuid);
+        TaskHandle chargeTask = chargeTasks.remove(uuid);
+        if (chargeTask != null) chargeTask.cancel();
+        TaskHandle beamTask = beamTasks.remove(uuid);
+        if (beamTask != null) beamTask.cancel();
     }
 
-    private void chargeThenFire(Player shooter, UUID uuid) {
+    private void chargeThenFire(Player shooter, UUID uuid, UUID token) {
         int chargeTicks = Math.max(100, plugin.getConfig().getInt("abilities.the_veteran.charge_duration_ticks", 100));
         int timerUpdateTicks = 20;
         long cooldownMs = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 300_000L);
@@ -170,20 +175,20 @@ public class TheVeteranAbility implements Ability {
             int lastShownSecond = -1;
 
             @Override public void run() {
-                if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
-                    activeBursts.remove(uuid);
-                    task[0].cancel();
+                if (!shooter.isOnline() || !isCurrentBurst(uuid, token)) {
+                    if (task[0] != null) task[0].cancel();
                     return;
                 }
                 if (!shooter.isSneaking()) {
-                    activeBursts.remove(uuid);
+                    cancelActiveBurst(uuid, token);
                     MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.charge_cancelled"));
                     shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.9f, 0.65f);
-                    task[0].cancel();
+                    if (task[0] != null) task[0].cancel();
                     return;
                 }
 
                 if (age >= chargeTicks) {
+                    chargeTasks.remove(uuid);
                     burstCooldownUntil.put(uuid, System.currentTimeMillis() + cooldownMs);
                     MessageUtil.sendActionBar(shooter, plugin.getLocaleManager().msg("veteran.burst_start"));
                     shooter.playSound(shooter.getLocation(), Sound.ITEM_TOTEM_USE,            0.6f, 0.65f);
@@ -191,8 +196,8 @@ public class TheVeteranAbility implements Ability {
                     shooter.playSound(shooter.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.9f, 0.65f);
                     triggerGroundZeroExplosion(shooter);
                     applyTemporaryStrengthPenalty(shooter);
-                    fireChestBeam(shooter, uuid);
-                    task[0].cancel();
+                    fireChestBeam(shooter, uuid, token);
+                    if (task[0] != null) task[0].cancel();
                     return;
                 }
 
@@ -208,24 +213,7 @@ public class TheVeteranAbility implements Ability {
                 age += 1;
             }
         }, 0L, 1L);
-    }
-
-    private void animatePreChargeHold(Player shooter, int age, int holdTicks) {
-        World w = shooter.getWorld();
-        Location chest = shooter.getLocation().add(0, 1.25, 0);
-        double progress = Math.min(1.0, Math.max(0.0, age / Math.max(1.0, (double) holdTicks)));
-        double radius = 0.25 + progress * 0.55;
-        int particles = 5 + (int) Math.round(progress * 7.0);
-
-        Particle.DustOptions warm = new Particle.DustOptions(Color.fromRGB(255, 196, 70), 1.0f + (float) progress * 0.45f);
-        Particle.DustOptions ember = new Particle.DustOptions(Color.fromRGB(255, 125, 30), 0.9f + (float) progress * 0.35f);
-
-        w.spawnParticle(Particle.DUST, chest, particles, radius, radius * 0.4, radius, 0, warm);
-        w.spawnParticle(Particle.DUST, chest, Math.max(4, particles / 2), radius * 0.6, radius * 0.3, radius * 0.6, 0, ember);
-        w.spawnParticle(Particle.SMOKE, chest, 2 + (int) (progress * 4), radius * 0.35, 0.18, radius * 0.35, 0.01 + progress * 0.015);
-        if (age <= 40 && age % 20 == 0) {
-            w.playSound(chest, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.25f, (float) (0.7 + progress * 0.25));
-        }
+        chargeTasks.put(uuid, task[0]);
     }
 
     private void animateCharge(Player shooter, int age, int chargeTicks) {
@@ -394,7 +382,7 @@ public class TheVeteranAbility implements Ability {
         }, 0L, periodTicks);
     }
 
-    private void fireChestBeam(Player shooter, UUID uuid) {
+    private void fireChestBeam(Player shooter, UUID uuid, UUID token) {
         int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_duration_ticks", 100);
         final int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_period_ticks", 2));
         final double range = plugin.getConfig().getDouble("abilities.the_veteran.beam_range", 48.0);
@@ -425,14 +413,16 @@ public class TheVeteranAbility implements Ability {
             double blockBudgetCarry = 0.0;
 
             @Override public void run() {
-                if (!shooter.isOnline() || !activeBursts.contains(uuid)) {
-                    activeBursts.remove(uuid);
-                    task[0].cancel();
+                if (!shooter.isOnline() || !isCurrentBurst(uuid, token)) {
+                    if (task[0] != null) task[0].cancel();
                     return;
                 }
                 if (age >= durationTicks) {
-                    activeBursts.remove(uuid);
-                    task[0].cancel();
+                    if (isCurrentBurst(uuid, token)) {
+                        activeBurstTokens.remove(uuid);
+                    }
+                    beamTasks.remove(uuid);
+                    if (task[0] != null) task[0].cancel();
                     return;
                 }
 
@@ -463,6 +453,7 @@ public class TheVeteranAbility implements Ability {
                 age += periodTicks;
             }
         }, 0L, periodTicks);
+        beamTasks.put(uuid, task[0]);
     }
 
     private void renderAndApplyBeam(Player shooter, Location origin, Vector dir,

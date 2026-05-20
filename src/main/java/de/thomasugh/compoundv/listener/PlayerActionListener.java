@@ -4,6 +4,7 @@ import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
@@ -26,6 +27,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -202,11 +204,9 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
-        if (ab instanceof TheVeteranAbility veteran) {
-            if (canUseSneakLeftClickAir(p, a)) {
-                cancelAbilityInteraction(e);
-                veteran.startBurst(p);
-            }
+        if (ab instanceof TheVeteranAbility veteran && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            veteran.handleSneakLeftClick(p);
         }
     }
 
@@ -239,15 +239,29 @@ public class PlayerActionListener implements Listener {
         return p.isSneaking() && action == Action.LEFT_CLICK_AIR;
     }
 
-    private boolean canUseSneakLeftClickAir(Player p, Action action) {
-        return canUseSneakLeftClick(p, action);
+    private boolean canUseSneakLeftClickAny(Player p, Action action) {
+        return p.isSneaking() && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
+    }
+
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onArmSwing(PlayerAnimationEvent e) {
+        Player player = e.getPlayer();
+        if (!player.isSneaking()) return;
+        if (manager.getAbility(player) instanceof TheVeteranAbility veteran && !veteran.isBurstActive(player)) {
+            veteran.handleSneakLeftClick(player);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent e) {
         if (!hasChangedPosition(e)) return;
         Player p = e.getPlayer();
-        if (!(manager.getAbility(p) instanceof ThePatriotAbility ha)) return;
+        Ability ability = manager.getAbility(p);
+        if (ability instanceof TheRunnerAbility runner) {
+            runner.handleMoveThroughEntities(p, e.getFrom(), e.getTo());
+        }
+        if (!(ability instanceof ThePatriotAbility ha)) return;
 
         UUID u = p.getUniqueId();
         boolean prevGround = wasOnGround.getOrDefault(u, true);

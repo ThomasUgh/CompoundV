@@ -27,6 +27,7 @@ public final class ConfigMigrationService {
         changed |= migrateVeteranBalance();
         changed |= migrateVersion102Defaults();
         changed |= migrateVersion103Defaults();
+        changed |= migrateVersion104HotfixDefaults();
 
         if (changed) {
             plugin.saveConfig();
@@ -106,15 +107,13 @@ public final class ConfigMigrationService {
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_duration_ticks", 900.0, 1200),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_period_ticks", 10.0, 12),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_height", 26.0, 32.0),
-                new NumberMigration("abilities.the_veteran.mushroom_cloud_radius", 13.0, 15.5),
-                new NumberMigration("abilities.the_veteran.pre_charge_hold_ticks", 40.0, 20)
+                new NumberMigration("abilities.the_veteran.mushroom_cloud_radius", 13.0, 15.5)
         };
 
         for (NumberMigration migration : migrations) {
             changed |= replaceIfNumericEquals(migration.path(), migration.oldValue(), migration.newValue());
         }
 
-        changed |= setIfMissing("abilities.the_veteran.pre_charge_hold_ticks", 20);
         changed |= setIfMissing("abilities.the_veteran.charge_duration_ticks", 100);
         changed |= setIfMissing("abilities.the_veteran.charge_period_ticks", 5);
         changed |= setIfMissing("abilities.the_veteran.melee_knockback_horizontal", 1.35);
@@ -207,20 +206,70 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.beam_entity_damage_multiplier", 0.95);
         changed |= setIfMissing("abilities.the_veteran.beam_block_damage_multiplier", 1.10);
 
-        changed |= setIfMissing("abilities.the_runner.speed_min_level", 9);
-        changed |= setIfMissing("abilities.the_runner.speed_max_level", 12);
-        changed |= setIfMissing("abilities.the_runner.default_speed_level", 9);
         changed |= setIfMissing("abilities.the_runner.resistance_level", 1);
         changed |= setIfMissing("abilities.the_runner.strength_level", 2);
         changed |= setIfMissing("abilities.the_runner.extra_hearts", 5);
         changed |= setIfMissing("abilities.the_runner.attack_speed_bonus", 1024.0);
-        changed |= setIfMissing("abilities.the_runner.water_walk", true);
-        changed |= setIfMissing("abilities.the_runner.water_walk_radius", 2);
-        changed |= setIfMissing("abilities.the_runner.water_walk_ice_ticks", 100);
 
         changed |= setIfMissing("abilities.teleporter.range", 50.0);
         changed |= setIfMissing("abilities.teleporter.cooldown_ms", 2000);
         changed |= setIfMissing("abilities.teleporter.resistance_level", 2);
+
+        return changed;
+    }
+
+    private boolean migrateVersion104HotfixDefaults() {
+        boolean changed = false;
+
+        if (plugin.getConfig().contains("abilities.the_veteran.activation_double_click_ms")) {
+            plugin.getConfig().set("abilities.the_veteran.activation_double_click_ms", null);
+            changed = true;
+        }
+        if (plugin.getConfig().contains("abilities.the_veteran.armed_window_ticks")) {
+            plugin.getConfig().set("abilities.the_veteran.armed_window_ticks", null);
+            changed = true;
+        }
+        if (plugin.getConfig().contains("abilities.the_veteran.left_click_hold_grace_ms")) {
+            plugin.getConfig().set("abilities.the_veteran.left_click_hold_grace_ms", null);
+            changed = true;
+        }
+        if (plugin.getConfig().contains("abilities.the_veteran.pre_charge_hold_ticks")) {
+            plugin.getConfig().set("abilities.the_veteran.pre_charge_hold_ticks", null);
+            changed = true;
+        }
+
+        if (!plugin.getConfig().contains("abilities.the_runner.speed_levels")) {
+            plugin.getConfig().set("abilities.the_runner.speed_levels", java.util.List.of(10, 11, 12, 15));
+            changed = true;
+        }
+        if (plugin.getConfig().getInt("abilities.the_runner.default_speed_level", 9) < 10) {
+            plugin.getConfig().set("abilities.the_runner.default_speed_level", 10);
+            changed = true;
+        }
+        changed |= setIfMissing("abilities.the_runner.impact_min_speed_level", 10);
+        changed |= setIfMissing("abilities.the_runner.impact_base_damage_hearts", 6.0);
+        changed |= setIfMissing("abilities.the_runner.impact_damage_per_speed_level_hearts", 1.0);
+        changed |= replaceIfNumericEquals("abilities.the_runner.impact_radius", 1.15, 0.65);
+        changed |= replaceIfNumericEquals("abilities.the_runner.impact_vertical_radius", 1.35, 0.55);
+        changed |= setIfMissing("abilities.the_runner.impact_radius", 0.65);
+        changed |= setIfMissing("abilities.the_runner.impact_vertical_radius", 0.55);
+        changed |= setIfMissing("abilities.the_runner.impact_min_move_delta", 0.08);
+        changed |= setIfMissing("abilities.the_runner.impact_min_horizontal_speed", 0.32);
+        changed |= setIfMissing("abilities.the_runner.impact_path_step", 0.28);
+        changed |= setIfMissing("abilities.the_runner.impact_cooldown_ms", 750);
+        changed |= setIfMissing("abilities.the_runner.impact_knockback", 1.15);
+        if (plugin.getConfig().contains("abilities.the_runner.water_walk")) {
+            plugin.getConfig().set("abilities.the_runner.water_walk", null);
+            changed = true;
+        }
+        if (plugin.getConfig().contains("abilities.the_runner.water_walk_radius")) {
+            plugin.getConfig().set("abilities.the_runner.water_walk_radius", null);
+            changed = true;
+        }
+        if (plugin.getConfig().contains("abilities.the_runner.water_walk_ice_ticks")) {
+            plugin.getConfig().set("abilities.the_runner.water_walk_ice_ticks", null);
+            changed = true;
+        }
 
         return changed;
     }
