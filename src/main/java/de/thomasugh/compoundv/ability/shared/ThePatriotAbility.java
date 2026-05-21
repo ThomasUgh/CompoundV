@@ -110,7 +110,11 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     public void remove(Player p) {
         super.remove(p);
         UUID u = p.getUniqueId();
-        p.setAllowFlight(false); p.setFlying(false); p.setFlySpeed(0.1f);
+        if (p.getGameMode() != org.bukkit.GameMode.CREATIVE && p.getGameMode() != org.bukkit.GameMode.SPECTATOR) {
+            p.setAllowFlight(false);
+            p.setFlying(false);
+        }
+        p.setFlySpeed(0.1f);
         List.of(PotionEffects.STRENGTH, PotionEffects.RESISTANCE,
                 PotionEffects.FIRE_RESISTANCE, PotionEffects.REGENERATION,
                 PotionEffects.NIGHT_VISION).forEach(p::removePotionEffect);

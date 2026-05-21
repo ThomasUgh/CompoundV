@@ -210,6 +210,23 @@ public class PlayerActionListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onGameModeChange(PlayerGameModeChangeEvent event) {
+        Player player = event.getPlayer();
+        Ability ability = manager.getAbility(player);
+        if (ability == null) return;
+
+        boolean flightAbility = "fly".equalsIgnoreCase(ability.getId()) || ability instanceof ThePatriotAbility;
+        if (!flightAbility) return;
+
+        SchedulerAdapter.runLater(plugin, () -> {
+            Ability current = manager.getAbility(player);
+            if (!player.isOnline() || current == null) return;
+            if (!current.getId().equalsIgnoreCase(ability.getId())) return;
+            player.setAllowFlight(true);
+        }, 1L);
+    }
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockIgnite(BlockIgniteEvent e) {
         Player p = e.getPlayer();
