@@ -355,6 +355,14 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.sonic_boom.fall_impact_entity_radius", 9.0);
         changed |= setIfMissing("abilities.sonic_boom.fall_impact_entity_damage_hearts", 16.0);
         changed |= setIfMissing("abilities.sonic_boom.fall_impact_knockback", 2.4);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_beam_cooldown_ms", 5000);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_beam_range", 15.0);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_beam_radius", 1.45);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_beam_damage_hearts", 5.0);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_beam_knockback", 1.85);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_beam_vertical_knockback", 0.35);
+        changed |= setIfMissing("abilities.sonic_boom.melee_explosion_damage_multiplier", 1.15);
+        changed |= setIfMissing("abilities.sonic_boom.melee_critical_damage_multiplier", 1.20);
 
         changed |= setIfMissing("abilities.size_changer.strength_level", 2);
         changed |= setIfMissing("abilities.size_changer.resistance_level", 2);

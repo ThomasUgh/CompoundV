@@ -212,6 +212,12 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
+        if (ab instanceof SonicBoomAbility sonic && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            sonic.fireSonicBeam(p);
+            return;
+        }
+
         if (ab instanceof SizeChangerAbility sizeChanger && canUseSneakLeftClickAny(p, a)) {
             cancelAbilityInteraction(e);
             sizeChanger.handleSneakLeftClick(p);
@@ -412,6 +418,14 @@ public class PlayerActionListener implements Listener {
         if (!sizeChanger.isBig(attacker)) return;
         double multiplier = plugin.getConfig().getDouble("abilities.size_changer.big_damage_multiplier", 2.0);
         e.setDamage(e.getDamage() * Math.max(0.0, multiplier));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onSonicBoomMeleeHit(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player attacker)) return;
+        if (!(manager.getAbility(attacker) instanceof SonicBoomAbility sonic)) return;
+        if (!(e.getEntity() instanceof org.bukkit.entity.LivingEntity target)) return;
+        sonic.handleMeleeHit(attacker, target, e.getDamage(), e::setDamage);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

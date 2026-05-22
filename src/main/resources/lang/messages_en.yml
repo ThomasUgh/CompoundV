@@ -47,6 +47,8 @@ ability:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump. Stronger than Flight, slightly weaker than Patriot."
+      - "<prefix>&8• &3Sonic Beam&7: &dSneak + Left-Click&7 to fire a Warden-like sonic beam. Cooldown: &e5s&7."
+      - "<prefix>&8• &cExplosive Melee&7: every 2nd hit adds a small blast; crits hit harder."
       - "<prefix>&8• &cExplosive Landing&7: &dSneak&7 when landing after a high fall. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength IV&7 and &9Resistance IV&7."
   size_changer:
@@ -151,6 +153,9 @@ veteran:
 fall_impact: "&cImpact"
 fall_impact_cooldown: "&cExplosive Landing ready in {seconds}s"
 launch_cooldown: "&cJump Start ready in {seconds}s"
+
+sonic_boom:
+  beam_cooldown: "&3Sonic Beam &cready in {seconds}s"
 
 size_changer:
   big_on: "&5SizeChanger &abig form enabled"

@@ -47,6 +47,8 @@ ability:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
       - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen. Stärker als Flight, etwas schwächer als Patriot."
+      - "<prefix>&8• &3Sonic Beam&7: &dSneak + Linksklick&7 feuert einen Warden-ähnlichen Schallstrahl. Cooldown: &e5s&7."
+      - "<prefix>&8• &cExplosive Melee&7: Jeder 2. Treffer bekommt einen kleinen Explo-Bonus; Crits stärker."
       - "<prefix>&8• &cExplo-Aufschlag&7: &dSchleichen&7 beim Landen nach hohem Fall. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive Effekte: &aStärke IV&7 und &9Resistenz IV&7."
   size_changer:
@@ -151,6 +153,9 @@ veteran:
 fall_impact: "&cImpact"
 fall_impact_cooldown: "&cExplo-Aufschlag bereit in {seconds}s"
 launch_cooldown: "&cJump Start bereit in {seconds}s"
+
+sonic_boom:
+  beam_cooldown: "&3Sonic Beam &cbereit in {seconds}s"
 
 size_changer:
   big_on: "&5SizeChanger &aGroßform aktiviert"

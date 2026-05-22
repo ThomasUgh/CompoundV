@@ -84,6 +84,14 @@ abilities:
     fall_impact_entity_radius: 9.0
     fall_impact_entity_damage_hearts: 16.0
     fall_impact_knockback: 2.4
+    sonic_beam_cooldown_ms: 5000
+    sonic_beam_range: 15.0
+    sonic_beam_radius: 1.45
+    sonic_beam_damage_hearts: 5.0
+    sonic_beam_knockback: 1.85
+    sonic_beam_vertical_knockback: 0.35
+    melee_explosion_damage_multiplier: 1.15
+    melee_critical_damage_multiplier: 1.20
 
   size_changer:
     strength_level: 2
