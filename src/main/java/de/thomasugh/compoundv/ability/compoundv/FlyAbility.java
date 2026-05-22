@@ -4,7 +4,6 @@ import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.MessageUtil;
-import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -77,9 +76,6 @@ public class FlyAbility implements Ability {
         world.playSound(location, Sound.ITEM_FIRECHARGE_USE, 0.38f, 1.1f);
         world.spawnParticle(Particle.CLOUD, location.clone().add(0, 0.18, 0), 12, 0.55, 0.08, 0.55, 0.08);
         world.spawnParticle(Particle.POOF, location.clone().add(0, 0.35, 0), 6, 0.35, 0.05, 0.35, 0.01);
-        world.spawnParticle(Particle.DUST, location.clone().add(0, 0.65, 0), 6, 0.45, 0.16, 0.45, 0,
-                new Particle.DustOptions(Color.fromRGB(80, 210, 255), 0.75f));
-
         player.setFlying(false);
         player.setAllowFlight(false);
 
@@ -88,7 +84,7 @@ public class FlyAbility implements Ability {
         player.setVelocity(new Vector(look.getX() * 0.15, velocity, look.getZ() * 0.15));
 
         int peakTicks = plugin.getConfig().getInt("abilities.fly.launch_peak_ticks", 14);
-        double flySpeed = plugin.getConfig().getDouble("abilities.fly.launch_fly_speed", 0.2);
+        double flySpeed = plugin.getConfig().getDouble("abilities.fly.launch_fly_speed", 0.15);
         SchedulerAdapter.runLater(plugin, () -> {
             launching.remove(uuid);
             if (player.isOnline()) {
