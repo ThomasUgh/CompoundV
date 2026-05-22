@@ -3,7 +3,6 @@ package de.thomasugh.compoundv.ability.compoundv;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.util.MessageUtil;
-import de.thomasugh.compoundv.util.PrivateGlowUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -198,14 +197,14 @@ public class TheDiverAbility implements Ability {
 
     private void refreshSonar(Player player) {
         double radius = plugin.getConfig().getDouble("abilities.the_diver.sonar_radius", 45.0);
-        Particle.DustOptions blue = new Particle.DustOptions(Color.fromRGB(30, 167, 255), 1.1f);
+        Team team = sonarTeam();
         Set<UUID> currentTargets = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (!(entity instanceof LivingEntity living) || entity.equals(player)) continue;
             currentTargets.add(living.getUniqueId());
-            if (!PrivateGlowUtil.showGlowing(player, living, ChatColor.BLUE, "cv_sonar_glow")) {
-                renderPrivateSonarOutline(player, living, blue);
-            }
+            living.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
+                    45, 0, false, false, false));
+            team.addEntry(entity.getUniqueId().toString());
         }
         clearStaleSonarGlow(player, currentTargets);
         visibleTargets.put(player.getUniqueId(), currentTargets);
@@ -214,23 +213,27 @@ public class TheDiverAbility implements Ability {
     private void clearSonar(Player player) {
         Set<UUID> oldTargets = visibleTargets.remove(player.getUniqueId());
         if (oldTargets == null) return;
+        Team team = sonarTeam();
         for (UUID targetId : oldTargets) {
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                PrivateGlowUtil.clearGlowing(player, living);
+                living.removePotionEffect(PotionEffects.GLOWING);
             }
+            team.removeEntry(targetId.toString());
         }
     }
 
     private void clearStaleSonarGlow(Player player, Set<UUID> currentTargets) {
         Set<UUID> oldTargets = visibleTargets.get(player.getUniqueId());
         if (oldTargets == null) return;
+        Team team = sonarTeam();
         for (UUID targetId : oldTargets) {
             if (currentTargets.contains(targetId)) continue;
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                PrivateGlowUtil.clearGlowing(player, living);
+                living.removePotionEffect(PotionEffects.GLOWING);
             }
+            team.removeEntry(targetId.toString());
         }
     }
 

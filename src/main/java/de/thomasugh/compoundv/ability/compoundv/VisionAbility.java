@@ -3,7 +3,6 @@ package de.thomasugh.compoundv.ability.compoundv;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.util.MessageUtil;
-import de.thomasugh.compoundv.util.PrivateGlowUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -73,14 +72,14 @@ public class VisionAbility implements Ability {
 
     private void refreshXray(Player player) {
         double radius = plugin.getConfig().getDouble("abilities.vision.xray_radius", 35.0);
-        Particle.DustOptions aqua = new Particle.DustOptions(Color.fromRGB(125, 220, 255), 1.05f);
+        Team team = visionTeam();
         Set<UUID> currentTargets = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (!(entity instanceof LivingEntity living) || entity.equals(player)) continue;
             currentTargets.add(living.getUniqueId());
-            if (!PrivateGlowUtil.showGlowing(player, living, ChatColor.AQUA, "cv_vision_glow")) {
-                renderPrivateOutline(player, living, aqua);
-            }
+            living.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
+                    45, 0, false, false, false));
+            team.addEntry(entity.getUniqueId().toString());
         }
         clearStaleGlow(player, currentTargets);
         visibleTargets.put(player.getUniqueId(), currentTargets);
@@ -89,23 +88,27 @@ public class VisionAbility implements Ability {
     private void clearXray(Player player) {
         Set<UUID> oldTargets = visibleTargets.remove(player.getUniqueId());
         if (oldTargets == null) return;
+        Team team = visionTeam();
         for (UUID targetId : oldTargets) {
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                PrivateGlowUtil.clearGlowing(player, living);
+                living.removePotionEffect(PotionEffects.GLOWING);
             }
+            team.removeEntry(targetId.toString());
         }
     }
 
     private void clearStaleGlow(Player player, Set<UUID> currentTargets) {
         Set<UUID> oldTargets = visibleTargets.get(player.getUniqueId());
         if (oldTargets == null) return;
+        Team team = visionTeam();
         for (UUID targetId : oldTargets) {
             if (currentTargets.contains(targetId)) continue;
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                PrivateGlowUtil.clearGlowing(player, living);
+                living.removePotionEffect(PotionEffects.GLOWING);
             }
+            team.removeEntry(targetId.toString());
         }
     }
 
