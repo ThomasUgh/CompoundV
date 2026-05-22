@@ -6,6 +6,7 @@ import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -29,6 +30,8 @@ public class SonicBoomAbility implements Ability {
     private final Set<UUID> launching = new HashSet<>();
     private final Map<UUID, Long> launchCooldown = new HashMap<>();
     private final Map<UUID, Long> fallImpactCooldown = new HashMap<>();
+    private final Map<UUID, Long> sonicBeamCooldown = new HashMap<>();
+    private final Map<UUID, Integer> meleeHitCounter = new HashMap<>();
 
     public SonicBoomAbility(CompoundV plugin) {
         this.plugin = plugin;
@@ -55,6 +58,8 @@ public class SonicBoomAbility implements Ability {
         launching.remove(player.getUniqueId());
         launchCooldown.remove(player.getUniqueId());
         fallImpactCooldown.remove(player.getUniqueId());
+        sonicBeamCooldown.remove(player.getUniqueId());
+        meleeHitCounter.remove(player.getUniqueId());
         player.setFlySpeed(0.1f);
         if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
             player.setFlying(false);
@@ -189,4 +194,105 @@ public class SonicBoomAbility implements Ability {
         world.spawnParticle(Particle.LARGE_SMOKE, location.clone().add(0, .25, 0), 10, .6, .05, .6, .02);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("fall_impact"));
     }
+
+    public void fireSonicBeam(Player player) {
+        UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        long readyAt = sonicBeamCooldown.getOrDefault(uuid, 0L);
+        if (readyAt > now) {
+            long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg(
+                    "sonic_boom.beam_cooldown", "seconds", Long.toString(seconds)));
+            return;
+        }
+
+        long cooldownMs = plugin.getConfig().getLong("abilities.sonic_boom.sonic_beam_cooldown_ms", 5000L);
+        sonicBeamCooldown.put(uuid, now + Math.max(0L, cooldownMs));
+
+        double range = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_range", 15.0);
+        double radius = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_radius", 1.45);
+        double damage = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_damage_hearts", 5.0) * 2.0;
+        double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_knockback", 1.85);
+        double verticalKnockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_vertical_knockback", 0.35);
+
+        Location eye = player.getEyeLocation();
+        Vector dir = eye.getDirection().normalize();
+        World world = player.getWorld();
+
+        world.playSound(player.getLocation(), Sound.ENTITY_WARDEN_SONIC_BOOM, 1.6f, 1.0f);
+        world.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.65f, 1.65f);
+        Particle.DustOptions sonicBlue = new Particle.DustOptions(Color.fromRGB(92, 225, 255), 1.3f);
+        Particle.DustOptions paleBlue = new Particle.DustOptions(Color.fromRGB(185, 250, 255), 0.95f);
+
+        for (double d = 0.7; d <= range; d += 0.55) {
+            Location point = eye.clone().add(dir.clone().multiply(d));
+            world.spawnParticle(Particle.DUST, point, 7, 0.18, 0.18, 0.18, 0, sonicBlue);
+            if (d % 1.65 < 0.55) {
+                world.spawnParticle(Particle.DUST, point, 4, 0.32, 0.32, 0.32, 0, paleBlue);
+                world.spawnParticle(Particle.SONIC_BOOM, point, 1, 0.04, 0.04, 0.04, 0);
+            }
+        }
+
+        Location center = eye.clone().add(dir.clone().multiply(range * 0.5));
+        boolean hitAny = false;
+        for (Entity entity : world.getNearbyEntities(center, range * 0.5 + radius, range * 0.5 + radius, range * 0.5 + radius)) {
+            if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
+            if (!isNearBeam(eye, dir, range, radius, target.getEyeLocation())) continue;
+
+            target.damage(damage, player);
+            Vector push = target.getLocation().toVector().subtract(player.getLocation().toVector());
+            if (push.lengthSquared() < 0.0001) push = dir.clone();
+            push.normalize().multiply(knockback).setY(verticalKnockback);
+            target.setVelocity(target.getVelocity().add(push));
+            world.spawnParticle(Particle.SONIC_BOOM, target.getLocation().add(0, 1, 0), 1, 0.15, 0.15, 0.15, 0);
+            hitAny = true;
+        }
+
+        if (hitAny) {
+            MessageUtil.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', "&3Sonic Boom &ahit"));
+        } else {
+            MessageUtil.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', "&3Sonic Boom &7released"));
+        }
+    }
+
+    public void handleMeleeHit(Player attacker, LivingEntity target, double currentDamage, java.util.function.DoubleConsumer damageSetter) {
+        int hitCount = meleeHitCounter.merge(attacker.getUniqueId(), 1, Integer::sum);
+        if (hitCount % 2 != 0) return;
+
+        boolean critical = isCriticalHit(attacker);
+        double multiplier = critical
+                ? plugin.getConfig().getDouble("abilities.sonic_boom.melee_critical_damage_multiplier", 1.20)
+                : plugin.getConfig().getDouble("abilities.sonic_boom.melee_explosion_damage_multiplier", 1.15);
+        damageSetter.accept(currentDamage * Math.max(0.0, multiplier));
+
+        Location hitLocation = target.getLocation().add(0, Math.min(1.2, Math.max(0.4, target.getEyeHeight() * 0.65)), 0);
+        float volume = critical ? 1.05f : 0.48f;
+        float pitch = critical ? 0.85f : 1.45f;
+        target.getWorld().playSound(hitLocation, Sound.ENTITY_GENERIC_EXPLODE, volume, pitch);
+        target.getWorld().spawnParticle(Particle.EXPLOSION, hitLocation, critical ? 2 : 1, 0.12, 0.12, 0.12, 0);
+        target.getWorld().spawnParticle(Particle.CLOUD, hitLocation, critical ? 14 : 7, 0.22, 0.22, 0.22, 0.035);
+        target.getWorld().spawnParticle(Particle.DUST, hitLocation, critical ? 18 : 9, 0.24, 0.24, 0.24, 0,
+                new Particle.DustOptions(Color.fromRGB(92, 225, 255), critical ? 1.05f : 0.75f));
+    }
+
+    private boolean isCriticalHit(Player attacker) {
+        return attacker.getFallDistance() > 0.0f
+                && !attacker.isOnGround()
+                && !attacker.isInsideVehicle()
+                && !attacker.isSprinting()
+                && !attacker.hasPotionEffect(PotionEffects.BLINDNESS);
+    }
+
+    private boolean isNearBeam(Location origin, Vector dir, double range, double radius, Location target) {
+        double along = distanceAlongBeam(origin, dir, target);
+        if (along < 0 || along > range) return false;
+        Vector closest = origin.toVector().add(dir.clone().multiply(along));
+        return closest.distanceSquared(target.toVector()) <= radius * radius;
+    }
+
+    private double distanceAlongBeam(Location origin, Vector dir, Location target) {
+        Vector rel = target.toVector().subtract(origin.toVector());
+        return rel.dot(dir);
+    }
+
 }
