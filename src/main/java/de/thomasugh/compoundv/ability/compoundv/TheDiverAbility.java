@@ -39,6 +39,7 @@ public class TheDiverAbility implements Ability {
     @Override
     public void apply(Player player) {
         applyStaticEffects(player);
+        applyWaterAwareMovementEffects(player);
         applyWaterAwareCombatEffects(player);
     }
 
@@ -51,6 +52,7 @@ public class TheDiverAbility implements Ability {
         player.removePotionEffect(PotionEffects.WATER_BREATHING);
         player.removePotionEffect(PotionEffects.DOLPHINS_GRACE);
         player.removePotionEffect(PotionEffects.CONDUIT_POWER);
+        player.removePotionEffect(PotionEffects.SPEED);
         player.removePotionEffect(PotionEffects.STRENGTH);
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.NIGHT_VISION);
@@ -61,6 +63,7 @@ public class TheDiverAbility implements Ability {
         int tick = ticker.merge(player.getUniqueId(), 1, Integer::sum);
         if (tick % 20 == 0) {
             applyStaticEffects(player);
+            applyWaterAwareMovementEffects(player);
             applyWaterAwareCombatEffects(player);
         }
 
@@ -165,6 +168,17 @@ public class TheDiverAbility implements Ability {
                 Integer.MAX_VALUE, Math.max(0, dolphinsGrace - 1), false, false, true));
         player.addPotionEffect(new PotionEffect(PotionEffects.CONDUIT_POWER,
                 Integer.MAX_VALUE, Math.max(0, conduit - 1), false, false, true));
+    }
+
+
+    private void applyWaterAwareMovementEffects(Player player) {
+        int waterSpeed = plugin.getConfig().getInt("abilities.the_diver.water_speed_level", 2);
+        if (player.isInWater() && waterSpeed > 0) {
+            player.addPotionEffect(new PotionEffect(PotionEffects.SPEED,
+                    45, Math.max(0, waterSpeed - 1), false, false, true));
+        } else {
+            player.removePotionEffect(PotionEffects.SPEED);
+        }
     }
 
     private void applyWaterAwareCombatEffects(Player player) {
