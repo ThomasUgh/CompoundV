@@ -468,7 +468,10 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onProjectile(EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player p)) return;
-        if (manager.isThePatriot(p) && e.getDamager() instanceof Projectile) e.setCancelled(true);
+        if ((manager.isThePatriot(p) || manager.getAbility(p) instanceof SonicBoomAbility)
+                && e.getDamager() instanceof Projectile) {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler

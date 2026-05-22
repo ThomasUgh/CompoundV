@@ -218,21 +218,34 @@ public class TheVeteranAbility implements Ability {
 
     private void animateCharge(Player shooter, int age, int chargeTicks) {
         World w = shooter.getWorld();
-        Location chest = shooter.getLocation().add(0, 1.25, 0);
+        Location base = shooter.getLocation();
         double progress = Math.min(1.0, Math.max(0.0, age / Math.max(1.0, (double) chargeTicks)));
-        double radius = 0.35 + progress * 1.15;
-        int particles = 7 + (int) Math.round(progress * 13.0);
 
-        Particle.DustOptions yellow = new Particle.DustOptions(Color.fromRGB(255, 225, 40), 1.35f + (float) progress);
-        Particle.DustOptions orange = new Particle.DustOptions(Color.fromRGB(255, 115, 10), 1.0f + (float) progress * 0.8f);
+        double outerRadius = 2.8 - progress * 1.15;
+        double innerRadius = 0.7 + progress * 0.45;
+        int streamPoints = 3 + (int) Math.round(progress * 3.0);
 
-        w.spawnParticle(Particle.DUST, chest, particles, radius, radius * 0.6, radius, 0, yellow);
-        w.spawnParticle(Particle.DUST, chest, Math.max(4, particles / 2), radius * 0.75, radius * 0.45, radius * 0.75, 0, orange);
-        w.spawnParticle(Particle.LARGE_SMOKE, chest, 3 + (int) (progress * 8), radius * 0.45, 0.25, radius * 0.45, 0.03 + progress * 0.04);
+        Particle.DustOptions yellow = new Particle.DustOptions(Color.fromRGB(255, 225, 40), 0.95f + (float) progress * 0.45f);
+        Particle.DustOptions orange = new Particle.DustOptions(Color.fromRGB(255, 115, 10), 0.75f + (float) progress * 0.35f);
+
+        for (int i = 0; i < streamPoints; i++) {
+            double angle = age * 0.18 + (Math.PI * 2.0 / streamPoints) * i;
+            double radius = outerRadius - ((age % 16) / 16.0) * (outerRadius - innerRadius);
+            Location point = base.clone().add(Math.cos(angle) * radius, 0.10 + progress * 0.35, Math.sin(angle) * radius);
+            w.spawnParticle(Particle.DUST, point, 2, 0.04, 0.04, 0.04, 0, i % 2 == 0 ? yellow : orange);
+        }
+
+        Location feet = base.clone().add(0, 0.12, 0);
+        w.spawnParticle(Particle.CLOUD, feet, 3 + (int) (progress * 5), 0.75 + progress * 0.45, 0.03, 0.75 + progress * 0.45, 0.035 + progress * 0.02);
+        if (age % 5 == 0) {
+            Location core = base.clone().add(0, 0.85 + progress * 0.35, 0);
+            w.spawnParticle(Particle.DUST, core, 2, 0.16, 0.12, 0.16, 0, yellow);
+        }
         if (age <= 60 && age % 20 == 0) {
-            w.playSound(chest, Sound.BLOCK_BEACON_AMBIENT, 0.28f, (float) (0.45 + progress * 0.45));
+            w.playSound(base, Sound.BLOCK_BEACON_AMBIENT, 0.22f, (float) (0.45 + progress * 0.45));
         }
     }
+
 
     private void triggerGroundZeroExplosion(Player shooter) {
         World w = shooter.getWorld();
@@ -257,8 +270,6 @@ public class TheVeteranAbility implements Ability {
         w.spawnParticle(Particle.FLAME, base.clone().add(0, 0.8, 0), scaledParticles(170, particleMultiplier), 5.8, 1.1, 5.8, 0.18);
         w.spawnParticle(Particle.DUST, base.clone().add(0, 1.2, 0), scaledParticles(260, particleMultiplier), 6.2, 1.5, 6.2, 0,
                 new Particle.DustOptions(Color.fromRGB(255, 215, 35), 2.4f));
-
-        animateAtomicMushroom(base.clone());
 
         for (Entity entity : w.getNearbyEntities(base, radius, radius, radius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(shooter)) continue;
@@ -391,8 +402,9 @@ public class TheVeteranAbility implements Ability {
         final int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_period_ticks", 2));
         final double range = plugin.getConfig().getDouble("abilities.the_veteran.beam_range", 48.0);
         final double radius = plugin.getConfig().getDouble("abilities.the_veteran.beam_radius", 1.35);
-        double particleStep = Math.max(0.35, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_step", 0.55));
-        double particleDensity = Math.max(0.25, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_density_multiplier", 1.15));
+        double particleStep = Math.max(0.35, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_step", 0.65));
+        double particleDensity = Math.max(0.25, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_density_multiplier", 0.70));
+        double particleStartDistance = Math.max(0.4, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_start_distance", 1.8));
 
         double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25) * 2.0;
         double damageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
@@ -430,11 +442,14 @@ public class TheVeteranAbility implements Ability {
                         activeBurstTokens.remove(uuid);
                     }
                     beamTasks.remove(uuid);
+                    int cloudDelayTicks = Math.max(20, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_delay_after_beam_ticks", 30));
+                    Location cloudBase = shooter.getLocation().clone();
+                    SchedulerAdapter.runLater(plugin, () -> animateAtomicMushroom(cloudBase), cloudDelayTicks);
                     if (task[0] != null) task[0].cancel();
                     return;
                 }
 
-                Location chest = shooter.getLocation().add(0, 1.25, 0);
+                Location chest = shooter.getLocation().add(0, 0.95, 0);
                 Vector dir = shooter.getEyeLocation().getDirection().normalize();
                 boolean affectBlocksThisTick = age % blockAffectEveryTicks == 0;
                 int effectiveMaxBlocksPerPulse = maxBlocksPerPulse;
@@ -444,7 +459,7 @@ public class TheVeteranAbility implements Ability {
                     blockBudgetCarry = scaledBudget - effectiveMaxBlocksPerPulse;
                 }
 
-                renderAndApplyBeam(shooter, chest, dir, range, radius, particleStep, particleDensity,
+                renderAndApplyBeam(shooter, chest, dir, range, radius, particleStep, particleDensity, particleStartDistance,
                         entityDamage, playerDamage, fullDamageRange, farDamageMultiplier,
                         age % damageEveryTicks == 0,
                         affectBlocksThisTick,
@@ -465,7 +480,7 @@ public class TheVeteranAbility implements Ability {
     }
 
     private void renderAndApplyBeam(Player shooter, Location origin, Vector dir,
-                                    double range, double radius, double particleStep, double particleDensity,
+                                    double range, double radius, double particleStep, double particleDensity, double particleStartDistance,
                                     double entityDamage, double playerDamage, double fullDamageRange, double farDamageMultiplier,
                                     boolean damageThisTick, boolean affectBlocksThisTick,
                                     boolean breakBlocks, boolean igniteBlocks,
@@ -489,14 +504,14 @@ public class TheVeteranAbility implements Ability {
 
         int[] blockBudget = new int[] { maxBlocksPerPulse };
 
-        for (double d = 0.4; d <= effectiveRange; d += particleStep) {
+        for (double d = particleStartDistance; d <= effectiveRange; d += particleStep) {
             Location center = origin.clone().add(dir.clone().multiply(d));
-            w.spawnParticle(Particle.DUST, center, scaledParticles(5, particleDensity), 0.12, 0.12, 0.12, 0, yellow);
-            w.spawnParticle(Particle.FLAME, center, scaledParticles(3, particleDensity), 0.16, 0.16, 0.16, 0.01);
-            if (d % 1.65 < particleStep) {
-                w.spawnParticle(Particle.DUST, center.clone().add(right.clone().multiply(radius * 0.45)), scaledParticles(2, particleDensity), 0.08, 0.08, 0.08, 0, orange);
-                w.spawnParticle(Particle.DUST, center.clone().subtract(right.clone().multiply(radius * 0.45)), scaledParticles(2, particleDensity), 0.08, 0.08, 0.08, 0, orange);
-                w.spawnParticle(Particle.DUST, center.clone().add(up.clone().multiply(radius * 0.35)), scaledParticles(1, particleDensity), 0.06, 0.06, 0.06, 0, whiteHot);
+            w.spawnParticle(Particle.DUST, center, scaledParticles(3, particleDensity), 0.09, 0.09, 0.09, 0, yellow);
+            w.spawnParticle(Particle.FLAME, center, scaledParticles(1, particleDensity), 0.10, 0.10, 0.10, 0.006);
+            if (d % 1.95 < particleStep) {
+                w.spawnParticle(Particle.DUST, center.clone().add(right.clone().multiply(radius * 0.38)), scaledParticles(1, particleDensity), 0.06, 0.06, 0.06, 0, orange);
+                w.spawnParticle(Particle.DUST, center.clone().subtract(right.clone().multiply(radius * 0.38)), scaledParticles(1, particleDensity), 0.06, 0.06, 0.06, 0, orange);
+                w.spawnParticle(Particle.DUST, center.clone().subtract(up.clone().multiply(radius * 0.22)), scaledParticles(1, particleDensity), 0.05, 0.05, 0.05, 0, whiteHot);
             }
 
             if (affectBlocksThisTick && (breakBlocks || igniteBlocks) && blockBudget[0] > 0) {

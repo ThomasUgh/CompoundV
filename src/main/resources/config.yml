@@ -167,8 +167,9 @@ abilities:
     beam_period_ticks: 2
     beam_range: 53.0
     beam_radius: 1.35
-    beam_particle_step: 0.55
-    beam_particle_density_multiplier: 1.15
+    beam_particle_step: 0.65
+    beam_particle_density_multiplier: 0.70
+    beam_particle_start_distance: 1.8
     beam_damage_amount: 50.0
     beam_entity_damage_multiplier: 1.045
     beam_player_damage_multiplier: 0.76
@@ -196,6 +197,7 @@ abilities:
     mushroom_cloud_particle_multiplier: 0.78
     ground_zero_particle_multiplier: 0.75
     mushroom_cloud_sound_duration_ticks: 80
+    mushroom_cloud_delay_after_beam_ticks: 30
     beam_sound_duration_ticks: 40
     beam_sound_period_ticks: 20
     melee_knockback_horizontal: 1.35

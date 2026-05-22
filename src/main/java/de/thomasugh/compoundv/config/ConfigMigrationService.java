@@ -319,6 +319,10 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_range", 48.0, 53.0);
         changed |= setIfMissing("abilities.the_veteran.beam_range", 53.0);
         changed |= setIfMissing("abilities.the_veteran.pve_damage_multiplier", 1.2);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_particle_step", 0.55, 0.65);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_particle_density_multiplier", 1.15, 0.70);
+        changed |= setIfMissing("abilities.the_veteran.beam_particle_start_distance", 1.8);
+        changed |= setIfMissing("abilities.the_veteran.mushroom_cloud_delay_after_beam_ticks", 30);
 
         changed |= setIfMissing("abilities.invisibility.resistance_level", 2);
         changed |= setIfMissing("abilities.invisibility.strength_level", 1);
