@@ -390,7 +390,7 @@ public class TheVeteranAbility implements Ability {
         double particleStep = Math.max(0.35, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_step", 0.55));
         double particleDensity = Math.max(0.25, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_density_multiplier", 1.15));
 
-        double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 10.0);
+        double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25) * 2.0;
         double damageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
         double configuredDamage = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_amount", patriotDamage * damageMultiplier);
         final double entityDamage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 1.045));

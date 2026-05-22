@@ -1,4 +1,4 @@
-language_file_version: 12
+language_file_version: 13
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -45,8 +45,9 @@ ability:
       - "<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7, &6Feuerresistenz&7 und &cExtra-Herzen&7."
   heat_vision:
     description:
-      - "<prefix>&8• &bHeat Vision&7: Drücke &dF&7 zum Umschalten des leichteren cyan-blauen Strahls."
-      - "<prefix>&8• &7Diese Version ist &eschwächer&7 als die &cThe Patriot&7 Heat Vision, kann aber weiterhin Entities verletzen und konfigurierte Blöcke beeinflussen."
+      - "<prefix>&8• &bHeat Vision&7: Drücke &dF&7 zum Umschalten des Strahls."
+      - "<prefix>&8• &7Stufen: &bI&7 = 1,5 Herzen / 30 Blöcke, &aII&7 = 2,5 Herzen / 35 Blöcke, &cIII&7 = 3 Herzen / 40 Blöcke."
+      - "<prefix>&8• &7Kann Eis, Schneeblöcke und flache Schneeschichten schmelzen."
   the_diver:
     description:
       - "<prefix>&8• &bWasseratmung&7, &bDolphin's Grace IV&7 und &3Herz des Meeres / Conduit Power II&7 sind dauerhaft aktiv."

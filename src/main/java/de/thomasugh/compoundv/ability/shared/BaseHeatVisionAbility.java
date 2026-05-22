@@ -91,6 +91,8 @@ public abstract class BaseHeatVisionAbility implements Ability {
         Particle.DustOptions glow = new Particle.DustOptions(glowColor(), glowSize());
         strand(w, lEye, dir, dL, core, glow, fireParticles());
         strand(w, rEye, dir, dR, core, glow, fireParticles());
+        meltPassableSnowAlongBeam(player, lEye, dir, dL, w);
+        meltPassableSnowAlongBeam(player, rEye, dir, dR, w);
 
         int cnt = damageCounter.merge(player.getUniqueId(), 1, Integer::sum);
         if (cnt % ivl != 0 || hit == null) return;
@@ -135,18 +137,32 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
 
 
+    private void meltPassableSnowAlongBeam(Player player, Location origin, Vector dir, double range, World world) {
+        Block standOn = player.getLocation().getBlock().getRelative(org.bukkit.block.BlockFace.DOWN);
+        Block playerBlock = player.getLocation().getBlock();
+
+        for (double d = 0.5; d <= range; d += 0.35) {
+            Block block = origin.clone().add(dir.clone().multiply(d)).getBlock();
+            if (block.equals(standOn) || block.equals(playerBlock)) continue;
+            if (block.getType() == Material.SNOW) {
+                tryMeltSnowOrIce(block, world);
+                return;
+            }
+        }
+    }
+
     private boolean tryMeltSnowOrIce(Block block, World world) {
         Material type = block.getType();
         String name = type.name();
-        boolean meltToWater = name.equals("SNOW")
-                || name.equals("SNOW_BLOCK")
+        boolean flatSnow = type == Material.SNOW;
+        boolean meltToWater = name.equals("SNOW_BLOCK")
                 || name.equals("POWDER_SNOW")
                 || name.equals("ICE")
                 || name.equals("FROSTED_ICE")
                 || name.equals("PACKED_ICE")
                 || name.equals("BLUE_ICE");
 
-        if (!meltToWater) {
+        if (!flatSnow && !meltToWater) {
             return false;
         }
 
@@ -154,7 +170,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         world.spawnParticle(Particle.CLOUD, meltLoc, 10, 0.2, 0.2, 0.2, 0.02);
         world.spawnParticle(Particle.SMOKE, meltLoc, 6, 0.15, 0.15, 0.15, 0.01);
         world.playSound(meltLoc, Sound.BLOCK_FIRE_EXTINGUISH, 0.55f, 1.6f);
-        block.setType(Material.WATER);
+        block.setType(flatSnow ? Material.AIR : Material.WATER);
         return true;
     }
 

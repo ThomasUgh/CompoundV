@@ -28,6 +28,7 @@ public final class ConfigMigrationService {
         changed |= migrateVersion102Defaults();
         changed |= migrateVersion103Defaults();
         changed |= migrateVersion104HotfixDefaults();
+        changed |= migrateVersion110Defaults();
 
         if (changed) {
             plugin.saveConfig();
@@ -64,6 +65,8 @@ public final class ConfigMigrationService {
                 "the_patriot", 1,
                 "fly", 15,
                 "heat_vision", 8,
+                "heat_vision_2", 4,
+                "heat_vision_3", 2,
                 "speedster", 10,
                 "strength", 18,
                 "invisibility", 7,
@@ -76,6 +79,8 @@ public final class ConfigMigrationService {
         changed |= ensureChanceSection("temp_v.chances", orderedMap(
                 "fly", 10,
                 "heat_vision", 5,
+                "heat_vision_2", 3,
+                "heat_vision_3", 1,
                 "speedster", 20,
                 "strength", 25,
                 "invisibility", 15,
@@ -93,7 +98,6 @@ public final class ConfigMigrationService {
         boolean changed = false;
 
         NumberMigration[] migrations = {
-                new NumberMigration("heat_vision.damage_amount", 8.0, 2.0),
                 new NumberMigration("abilities.the_veteran.beam_duration_ticks", 60.0, 100),
                 new NumberMigration("abilities.the_veteran.beam_damage_interval_ticks", 6.0, 2),
                 new NumberMigration("abilities.the_veteran.beam_block_affect_interval_ticks", 5.0, 4),
@@ -119,8 +123,8 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.melee_knockback_horizontal", 1.35);
         changed |= setIfMissing("abilities.the_veteran.melee_knockback_vertical", 0.28);
         changed |= setIfMissing("abilities.the_veteran.beam_hit_knockback", 0.45);
-        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_amount", 5.2);
-        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.2);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 5.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25);
 
         changed |= migrateLegacyVeteranBeamDamage();
 
@@ -130,8 +134,7 @@ public final class ConfigMigrationService {
     private boolean migrateVersion102Defaults() {
         boolean changed = false;
 
-        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.0, 5.2);
-        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.0, 1.33);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25);
 
         if (!plugin.getConfig().contains("abilities.the_patriot.compound_v.heat_vision_range")) {
             plugin.getConfig().set("abilities.the_patriot.compound_v.heat_vision_range",
@@ -282,6 +285,42 @@ public final class ConfigMigrationService {
         return changed;
     }
 
+    private boolean migrateVersion110Defaults() {
+        boolean changed = false;
+
+        changed |= setIfMissing("heat_vision.stages.stage_1.damage_hearts", 1.5);
+        changed |= setIfMissing("heat_vision.stages.stage_1.range", 30.0);
+        changed |= setIfMissing("heat_vision.stages.stage_2.damage_hearts", 2.5);
+        changed |= setIfMissing("heat_vision.stages.stage_2.range", 35.0);
+        changed |= setIfMissing("heat_vision.stages.stage_3.damage_hearts", 3.0);
+        changed |= setIfMissing("heat_vision.stages.stage_3.range", 40.0);
+
+        changed |= replaceIfNumericEquals("abilities.the_patriot.compound_v.heat_vision_range", 43.0, 44.0);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_range", 48.0, 50.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_range", 44.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_range", 50.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 5.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.33, 1.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_multiplier", 1.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.0);
+
+        changed |= setIfMissing("abilities.invisibility.resistance_level", 2);
+        changed |= setIfMissing("abilities.invisibility.strength_level", 1);
+        changed |= setIfMissing("abilities.invisibility.hide_from_mobs", true);
+
+        changed |= ensureChanceSection("compound_v.chances", orderedMap(
+                "heat_vision_2", 4,
+                "heat_vision_3", 2
+        ));
+        changed |= ensureChanceSection("temp_v.chances", orderedMap(
+                "heat_vision_2", 3,
+                "heat_vision_3", 1
+        ));
+
+        return changed;
+    }
+
     private boolean migrateLegacyVeteranBeamDamage() {
         if (!plugin.getConfig().contains("abilities.the_veteran.beam_damage")) {
             return setIfMissingVeteranBeamAmount();
@@ -289,7 +328,7 @@ public final class ConfigMigrationService {
 
         double oldDamage = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage", 12.0);
         double patriotDamage = Math.max(0.1,
-                plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.2));
+                plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25) * 2.0);
         double multiplier = Math.abs(oldDamage - 12.0) < 0.0001 ? 5.0 : Math.max(0.1, oldDamage / patriotDamage);
 
         plugin.getConfig().set("abilities.the_veteran.beam_damage_multiplier", multiplier);
@@ -304,7 +343,7 @@ public final class ConfigMigrationService {
         }
 
         double patriotDamage = Math.max(0.1,
-                plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_amount", 5.2));
+                plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25) * 2.0);
         double multiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
         plugin.getConfig().set("abilities.the_veteran.beam_damage_amount", patriotDamage * multiplier);
         return true;

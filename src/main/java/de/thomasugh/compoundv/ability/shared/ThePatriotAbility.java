@@ -49,8 +49,8 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected float  size()           { return isVOne() ? 0.82f : 0.72f; }
     @Override protected float  glowSize()       { return isVOne() ? 0.55f : 0.45f; }
     @Override protected double step()           { return isVOne() ? 0.18 : 0.24;  }
-    @Override protected int    coreParticles()  { return isVOne() ? 5 : 3; }
-    @Override protected int    glowParticles()  { return isVOne() ? 3 : 2; }
+    @Override protected int    coreParticles()  { return isVOne() ? 6 : 3; }
+    @Override protected int    glowParticles()  { return isVOne() ? 4 : 2; }
     @Override protected int    impactParticles(){ return isVOne() ? 28 : 18; }
     @Override protected int    entityFireTicks(){ return isVOne() ? 100 : 80; }
     @Override protected Color  coreColor()      { return Color.fromRGB(255, 20, 8); }
@@ -60,17 +60,14 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
 
     @Override
     protected double range() {
-        double global = plugin.getConfig().getDouble("heat_vision.range", 43);
-        double standard = plugin.getConfig().getDouble("abilities.the_patriot.compound_v.heat_vision_range", global);
-        return plugin.getConfig().getDouble(t("heat_vision_range"), isVOne() ? standard + 5.0 : standard);
+        return plugin.getConfig().getDouble(t("heat_vision_range"), isVOne() ? 50.0 : 44.0);
     }
 
     @Override
     protected double damageAmount() {
-        double standard = plugin.getConfig().getDouble("abilities.the_patriot.compound_v.heat_vision_damage_amount", 5.2);
-        double base = plugin.getConfig().getDouble(t("heat_vision_damage_amount"), standard);
-        double defaultMultiplier = isVOne() ? 1.33 : 1.0;
-        return base * plugin.getConfig().getDouble(t("heat_vision_damage_multiplier"), defaultMultiplier);
+        double hearts = plugin.getConfig().getDouble(t("heat_vision_damage_hearts"), isVOne() ? 5.25 : 5.0);
+        double multiplier = plugin.getConfig().getDouble(t("heat_vision_damage_multiplier"), 1.0);
+        return Math.max(0.0, hearts) * 2.0 * Math.max(0.0, multiplier);
     }
 
     private boolean isVOne() { return "v_one".equalsIgnoreCase(tierKey); }

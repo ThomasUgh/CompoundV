@@ -1,4 +1,4 @@
-language_file_version: 12
+language_file_version: 13
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -45,8 +45,9 @@ ability:
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7, &6Fire Resistance&7 and &cBonus Hearts&7."
   heat_vision:
     description:
-      - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the lighter cyan beam."
-      - "<prefix>&8• &7This version is &eweaker&7 than &cThe Patriot&7 Heat Vision but can still damage entities and affect configured blocks."
+      - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the beam."
+      - "<prefix>&8• &7Stages: &bI&7 = 1.5 hearts / 30 blocks, &aII&7 = 2.5 hearts / 35 blocks, &cIII&7 = 3 hearts / 40 blocks."
+      - "<prefix>&8• &7Can melt ice, snow blocks and flat snow layers."
   the_diver:
     description:
       - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace IV&7 and &3Heart of the Sea / Conduit Power II&7 are active permanently."
