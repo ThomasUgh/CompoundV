@@ -178,7 +178,7 @@ abilities:
     beam_particle_start_distance: 1.8
     beam_damage_amount: 50.0
     beam_entity_damage_multiplier: 1.045
-    beam_player_damage_multiplier: 0.10
+    beam_player_damage_multiplier: 0.0
     beam_player_damage_cap_fraction: 0.20
     pve_damage_multiplier: 0.9
     beam_damage_multiplier: 5.0
@@ -195,10 +195,12 @@ abilities:
     beam_removes_player_abilities: true
     ground_zero_radius: 14.0
     ground_zero_damage: 525.0
-    ground_zero_player_damage_multiplier: 0.25
+    ground_zero_player_damage_multiplier: 0.0
     ground_zero_player_damage_cap_fraction: 0.25
-    ground_zero_knockback: 0.75
-    ground_zero_vertical_knockback: 0.22
+    ground_zero_knockback: 0.12
+    ground_zero_vertical_knockback: 0.03
+    ground_zero_max_horizontal_velocity: 0.18
+    ground_zero_max_vertical_velocity: 0.04
     ground_zero_set_fire: true
     mushroom_cloud_duration_ticks: 2400
     mushroom_cloud_period_ticks: 12
@@ -212,8 +214,10 @@ abilities:
     beam_sound_period_ticks: 20
     melee_knockback_horizontal: 1.35
     melee_knockback_vertical: 0.28
-    beam_hit_knockback: 0.08
-    beam_hit_vertical_knockback: 0.04
+    beam_hit_knockback: 0.025
+    beam_hit_vertical_knockback: 0.0
+    beam_hit_max_horizontal_velocity: 0.16
+    beam_hit_max_vertical_velocity: 0.02
     post_burst_strength_multiplier: 0.5
     post_burst_strength_reduction_ticks: 2400
 

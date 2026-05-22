@@ -258,8 +258,10 @@ public class TheVeteranAbility implements Ability {
         double playerDamageMultiplier = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_player_damage_multiplier", 0.25));
         double playerDamageCapFraction = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_player_damage_cap_fraction", 0.25));
         double pveDamageMultiplier = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.pve_damage_multiplier", 0.9));
-        double knockback = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_knockback", 0.75);
-        double verticalKnockback = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_vertical_knockback", 0.22);
+        double knockback = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_knockback", 0.12);
+        double verticalKnockback = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_vertical_knockback", 0.03);
+        double maxHorizontalVelocity = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_max_horizontal_velocity", 0.18);
+        double maxVerticalVelocity = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_max_vertical_velocity", 0.04);
         boolean setFire = plugin.getConfig().getBoolean("abilities.the_veteran.ground_zero_set_fire", true);
 
         double particleMultiplier = Math.max(0.05, plugin.getConfig().getDouble(
@@ -284,9 +286,8 @@ public class TheVeteranAbility implements Ability {
 
             double factor = 1.0 - (distance / radius);
             double damage = Math.max(18.0, maxDamage * Math.max(0.25, factor));
-            if (target instanceof Player playerTarget) {
-                damage *= playerDamageMultiplier;
-                damage = capPlayerDamage(playerTarget, damage, playerDamageCapFraction);
+            if (target instanceof Player) {
+                damage = 0.0;
             } else {
                 damage *= pveDamageMultiplier;
             }
@@ -297,8 +298,8 @@ public class TheVeteranAbility implements Ability {
 
             Vector push = target.getLocation().toVector().subtract(base.toVector());
             if (push.lengthSquared() > 0.001) {
-                push.normalize().multiply(knockback * Math.max(0.35, factor)).setY(verticalKnockback * Math.max(0.7, factor));
-                target.setVelocity(push);
+                push.normalize().multiply(knockback * Math.max(0.25, factor)).setY(verticalKnockback * Math.max(0.35, factor));
+                target.setVelocity(limitVeteranKnockback(push, maxHorizontalVelocity, maxVerticalVelocity));
             }
         }
     }
@@ -423,7 +424,7 @@ public class TheVeteranAbility implements Ability {
         final double entityDamage = configuredDamage
                 * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 1.045))
                 * pveDamageMultiplier;
-        final double playerDamage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_player_damage_multiplier", 0.10));
+        final double playerDamage = 0.0;
         final double fullDamageRange = plugin.getConfig().getDouble("abilities.the_veteran.beam_full_damage_range", 7.0);
         final double farDamageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_far_damage_multiplier", 0.5);
 
@@ -547,12 +548,14 @@ public class TheVeteranAbility implements Ability {
                 target.damage(targetDamage, shooter);
             }
             if (!(target instanceof Player)) target.setFireTicks(160);
-            double hitKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_knockback", 0.08);
-            double hitVerticalKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_vertical_knockback", 0.04);
+            double hitKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_knockback", 0.025);
+            double hitVerticalKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_vertical_knockback", 0.0);
+            double maxHitHorizontalVelocity = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_max_horizontal_velocity", 0.16);
+            double maxHitVerticalVelocity = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_max_vertical_velocity", 0.02);
             if (hitKnockback > 0 || hitVerticalKnockback > 0) {
                 Vector push = dir.clone().normalize().multiply(Math.max(0.0, hitKnockback));
                 push.setY(Math.max(0.0, hitVerticalKnockback));
-                target.setVelocity(target.getVelocity().add(push));
+                target.setVelocity(limitVeteranKnockback(target.getVelocity().add(push), maxHitHorizontalVelocity, maxHitVerticalVelocity));
             }
             w.spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), 22, 0.4, 0.5, 0.4, 0.06);
 
@@ -566,6 +569,27 @@ public class TheVeteranAbility implements Ability {
         }
     }
 
+
+
+    private Vector limitVeteranKnockback(Vector velocity, double maxHorizontal, double maxUpward) {
+        Vector limited = velocity.clone();
+        double horizontalLength = Math.sqrt(limited.getX() * limited.getX() + limited.getZ() * limited.getZ());
+        double horizontalCap = Math.max(0.0, maxHorizontal);
+        if (horizontalCap == 0.0) {
+            limited.setX(0.0);
+            limited.setZ(0.0);
+        } else if (horizontalLength > horizontalCap) {
+            double scale = horizontalCap / horizontalLength;
+            limited.setX(limited.getX() * scale);
+            limited.setZ(limited.getZ() * scale);
+        }
+
+        double upwardCap = Math.max(0.0, maxUpward);
+        if (limited.getY() > upwardCap) {
+            limited.setY(upwardCap);
+        }
+        return limited;
+    }
 
     private double capPlayerDamage(Player target, double requestedDamage, double capFraction) {
         if (requestedDamage <= 0.0 || capFraction <= 0.0) return 0.0;

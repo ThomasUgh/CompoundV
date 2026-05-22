@@ -111,8 +111,9 @@ public final class ConfigMigrationService {
                 new NumberMigration("abilities.the_veteran.beam_block_hits_to_break", 3.0, 5),
                 new NumberMigration("abilities.the_veteran.ground_zero_radius", 8.0, 14.0),
                 new NumberMigration("abilities.the_veteran.ground_zero_damage", 240.0, 500.0),
-                new NumberMigration("abilities.the_veteran.ground_zero_knockback", 4.0, 0.75),
-                new NumberMigration("abilities.the_veteran.ground_zero_knockback", 7.5, 0.75),
+                new NumberMigration("abilities.the_veteran.ground_zero_knockback", 4.0, 0.12),
+                new NumberMigration("abilities.the_veteran.ground_zero_knockback", 7.5, 0.12),
+                new NumberMigration("abilities.the_veteran.ground_zero_knockback", 0.75, 0.12),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_duration_ticks", 900.0, 1200),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_period_ticks", 10.0, 12),
                 new NumberMigration("abilities.the_veteran.mushroom_cloud_height", 26.0, 32.0),
@@ -127,10 +128,17 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.charge_period_ticks", 5);
         changed |= setIfMissing("abilities.the_veteran.melee_knockback_horizontal", 1.35);
         changed |= setIfMissing("abilities.the_veteran.melee_knockback_vertical", 0.28);
-        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_hit_knockback", 0.45, 0.08);
-        changed |= setIfMissing("abilities.the_veteran.ground_zero_vertical_knockback", 0.22);
-        changed |= setIfMissing("abilities.the_veteran.beam_hit_knockback", 0.08);
-        changed |= setIfMissing("abilities.the_veteran.beam_hit_vertical_knockback", 0.04);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_hit_knockback", 0.45, 0.025);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_hit_knockback", 0.08, 0.025);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_hit_vertical_knockback", 0.04, 0.0);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.ground_zero_vertical_knockback", 0.22, 0.03);
+        changed |= setIfMissing("abilities.the_veteran.ground_zero_vertical_knockback", 0.03);
+        changed |= setIfMissing("abilities.the_veteran.ground_zero_max_horizontal_velocity", 0.18);
+        changed |= setIfMissing("abilities.the_veteran.ground_zero_max_vertical_velocity", 0.04);
+        changed |= setIfMissing("abilities.the_veteran.beam_hit_knockback", 0.025);
+        changed |= setIfMissing("abilities.the_veteran.beam_hit_vertical_knockback", 0.0);
+        changed |= setIfMissing("abilities.the_veteran.beam_hit_max_horizontal_velocity", 0.16);
+        changed |= setIfMissing("abilities.the_veteran.beam_hit_max_vertical_velocity", 0.02);
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 4.5);
         changed |= replaceIfNumericEquals("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 5.0, 4.5);
         changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_hearts", 4.725);
@@ -217,7 +225,7 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.beam_particle_step", 0.55);
         changed |= setIfMissing("abilities.the_veteran.beam_particle_density_multiplier", 1.15);
         changed |= setIfMissing("abilities.the_veteran.beam_entity_damage_multiplier", 1.045);
-        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.10);
+        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.0);
         changed |= setIfMissing("abilities.the_veteran.beam_block_damage_multiplier", 1.21);
 
         changed |= setIfMissing("abilities.the_runner.resistance_level", 1);
@@ -256,7 +264,7 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_entity_damage_multiplier", 0.95, 1.045);
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_block_damage_multiplier", 1.10, 1.21);
         changed |= replaceIfNumericEquals("abilities.the_veteran.ground_zero_damage", 500.0, 525.0);
-        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.10);
+        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.0);
         changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.resistance_level", 4.0, 3);
 
         if (!plugin.getConfig().contains("abilities.the_runner.speed_levels")) {
@@ -333,7 +341,7 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.beam_range", 53.0);
         changed |= replaceIfNumericEquals("abilities.the_veteran.pve_damage_multiplier", 1.2, 0.9);
         changed |= setIfMissing("abilities.the_veteran.pve_damage_multiplier", 0.9);
-        changed |= setIfMissing("abilities.the_veteran.ground_zero_player_damage_multiplier", 0.25);
+        changed |= setIfMissing("abilities.the_veteran.ground_zero_player_damage_multiplier", 0.0);
         changed |= setIfMissing("abilities.the_veteran.ground_zero_player_damage_cap_fraction", 0.25);
         changed |= setIfMissing("abilities.the_veteran.beam_player_damage_cap_fraction", 0.20);
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_particle_step", 0.55, 0.65);
@@ -391,9 +399,9 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_damage_hearts", 14.0, 11.2);
         changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_knockback", 3.35, 2.68);
         changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.75, 0.60);
-        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_player_damage_multiplier", 0.76, 0.10);
-        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_player_damage_multiplier", 0.38, 0.10);
-        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.10);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_player_damage_multiplier", 0.76, 0.0);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_player_damage_multiplier", 0.38, 0.0);
+        changed |= setIfMissing("abilities.the_veteran.beam_player_damage_multiplier", 0.0);
         changed |= setIfMissing("abilities.the_veteran.beam_player_damage_cap_fraction", 0.20);
         changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_beam_range", 15.0, 30.0);
         changed |= setIfMissing("abilities.sonic_boom.sonic_beam_range", 30.0);
