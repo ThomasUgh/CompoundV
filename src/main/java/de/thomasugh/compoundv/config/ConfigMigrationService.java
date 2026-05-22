@@ -64,9 +64,9 @@ public final class ConfigMigrationService {
         changed |= ensureChanceSection("compound_v.chances", orderedMap(
                 "the_patriot", 1,
                 "fly", 15,
-                "heat_vision", 8,
-                "heat_vision_2", 4,
-                "heat_vision_3", 2,
+                "heat_vision", 9,
+                "heat_vision_2", 7,
+                "heat_vision_3", 5,
                 "speedster", 10,
                 "strength", 18,
                 "invisibility", 7,
@@ -78,9 +78,9 @@ public final class ConfigMigrationService {
         ));
         changed |= ensureChanceSection("temp_v.chances", orderedMap(
                 "fly", 10,
-                "heat_vision", 5,
-                "heat_vision_2", 3,
-                "heat_vision_3", 1,
+                "heat_vision", 9,
+                "heat_vision_2", 7,
+                "heat_vision_3", 5,
                 "speedster", 20,
                 "strength", 25,
                 "invisibility", 15,
@@ -294,6 +294,8 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("heat_vision.stages.stage_2.range", 35.0);
         changed |= setIfMissing("heat_vision.stages.stage_3.damage_hearts", 3.0);
         changed |= setIfMissing("heat_vision.stages.stage_3.range", 40.0);
+        changed |= setIfMissing("heat_vision.max_continuous_ticks", 400);
+        changed |= setIfMissing("heat_vision.overheat_cooldown_ms", 5000);
 
         changed |= replaceIfNumericEquals("abilities.the_patriot.compound_v.heat_vision_range", 43.0, 44.0);
         changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_range", 48.0, 50.0);
@@ -310,12 +312,15 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.invisibility.hide_from_mobs", true);
 
         changed |= ensureChanceSection("compound_v.chances", orderedMap(
-                "heat_vision_2", 4,
-                "heat_vision_3", 2
+                "heat_vision", 9,
+                "heat_vision_2", 7,
+                "heat_vision_3", 5
         ));
         changed |= ensureChanceSection("temp_v.chances", orderedMap(
-                "heat_vision_2", 3,
-                "heat_vision_3", 1
+                "heat_vision", 9,
+                "heat_vision_2", 7,
+                "heat_vision_3", 5
+        ));
         ));
 
         return changed;

@@ -27,6 +27,8 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     protected final Map<UUID, Boolean> beamActive    = new HashMap<>();
     protected final Map<UUID, Integer> damageCounter = new HashMap<>();
+    protected final Map<UUID, Integer> activeTicks   = new HashMap<>();
+    protected final Map<UUID, Long>    cooldownUntil = new HashMap<>();
 
     protected BaseHeatVisionAbility(CompoundV plugin) { this.plugin = plugin; }
 
@@ -39,24 +41,70 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     @Override
     public void onToggle(Player p) {
-        boolean next = !beamActive.getOrDefault(p.getUniqueId(), false);
-        beamActive.put(p.getUniqueId(), next);
-        if (!next) damageCounter.remove(p.getUniqueId());
-        MessageUtil.sendActionBar(p, next
-                ? plugin.getLocaleManager().msg("toggle.heat_vision_on")
-                : plugin.getLocaleManager().msg("toggle.heat_vision_off"));
-        if (next) p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.6f);
+        UUID uuid = p.getUniqueId();
+        boolean current = beamActive.getOrDefault(uuid, false);
+
+        if (!current) {
+            long now = System.currentTimeMillis();
+            long readyAt = cooldownUntil.getOrDefault(uuid, 0L);
+            if (readyAt > now) {
+                long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+                MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg(
+                        "toggle.heat_vision_cooldown", "seconds", Long.toString(seconds)));
+                return;
+            }
+
+            beamActive.put(uuid, true);
+            activeTicks.put(uuid, 0);
+            damageCounter.remove(uuid);
+            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.heat_vision_on"));
+            p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.6f);
+            return;
+        }
+
+        beamActive.put(uuid, false);
+        activeTicks.remove(uuid);
+        damageCounter.remove(uuid);
+        MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.heat_vision_off"));
     }
 
     @Override
     public void onTick(Player p) {
-        if (beamActive.getOrDefault(p.getUniqueId(), false)) beam(p);
+        UUID uuid = p.getUniqueId();
+        if (!beamActive.getOrDefault(uuid, false)) return;
+
+        int maxTicks = plugin.getConfig().getInt("heat_vision.max_continuous_ticks", 400);
+        if (maxTicks > 0) {
+            int ticks = activeTicks.merge(uuid, 1, Integer::sum);
+            if (ticks >= maxTicks) {
+                triggerOverheatCooldown(p);
+                return;
+            }
+        }
+
+        beam(p);
     }
 
     @Override
     public void remove(Player p) {
-        beamActive.remove(p.getUniqueId());
-        damageCounter.remove(p.getUniqueId());
+        UUID uuid = p.getUniqueId();
+        beamActive.remove(uuid);
+        damageCounter.remove(uuid);
+        activeTicks.remove(uuid);
+        cooldownUntil.remove(uuid);
+    }
+
+    private void triggerOverheatCooldown(Player player) {
+        UUID uuid = player.getUniqueId();
+        long cooldownMs = plugin.getConfig().getLong("heat_vision.overheat_cooldown_ms", 5000L);
+        beamActive.put(uuid, false);
+        activeTicks.remove(uuid);
+        damageCounter.remove(uuid);
+        cooldownUntil.put(uuid, System.currentTimeMillis() + Math.max(0L, cooldownMs));
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg(
+                "toggle.heat_vision_overheated",
+                "seconds", Long.toString(Math.max(1L, (long) Math.ceil(cooldownMs / 1000.0)))));
+        player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.45f, 1.4f);
     }
 
     private void beam(Player player) {
@@ -99,10 +147,15 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
         if (hit.getHitEntity() instanceof LivingEntity le) {
             double finalDamage = adjustedDamageForTarget(le, damage);
+            Location imp = le.getLocation().add(0, 1, 0);
+            if (finalDamage <= 0.0) {
+                w.spawnParticle(Particle.SMOKE, imp, 7, 0.16, 0.22, 0.16, 0.02);
+                w.playSound(imp, Sound.BLOCK_ANVIL_LAND, 0.18f, 1.8f);
+                return;
+            }
             if (cooksMeatDrops()) markCookedByHeatVision(le);
             le.damage(finalDamage, player);
             if (igniteE) le.setFireTicks(entityFireTicks());
-            Location imp = le.getLocation().add(0, 1, 0);
             w.spawnParticle(Particle.DUST,  imp, impactParticles(), 0.3, 0.4, 0.3, 0, core);
             w.spawnParticle(Particle.SMOKE, imp,  5, 0.1, 0.2, 0.1, 0.02);
             w.playSound(imp, hurtSoundFor(le), 0.8f, 1.0f);
@@ -223,6 +276,9 @@ public abstract class BaseHeatVisionAbility implements Ability {
     protected double adjustedDamageForTarget(LivingEntity target, double damage) {
         if (target instanceof Player targetPlayer) {
             var ability = plugin.getAbilityManager().getAbility(targetPlayer);
+            if (ability != null && "invisibility".equalsIgnoreCase(ability.getId())) {
+                return 0.0;
+            }
             if (ability != null && "the_patriot_v_one".equalsIgnoreCase(ability.getId())) {
                 return damage * plugin.getConfig().getDouble("heat_vision.v_one_received_damage_multiplier", 0.5);
             }

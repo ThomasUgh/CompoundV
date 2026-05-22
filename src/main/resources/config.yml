@@ -4,9 +4,9 @@ compound_v:
   chances:
     the_patriot: 1
     fly: 15
-    heat_vision: 8
-    heat_vision_2: 4
-    heat_vision_3: 2
+    heat_vision: 9
+    heat_vision_2: 7
+    heat_vision_3: 5
     speedster: 10
     strength: 18
     invisibility: 7
@@ -19,9 +19,9 @@ compound_v:
 temp_v:
   chances:
     fly: 10
-    heat_vision: 5
-    heat_vision_2: 3
-    heat_vision_3: 1
+    heat_vision: 9
+    heat_vision_2: 7
+    heat_vision_3: 5
     speedster: 20
     strength: 25
     invisibility: 15
@@ -55,6 +55,8 @@ heat_vision:
   break_glass: true
   break_leaves: true
   fire_particles: false
+  max_continuous_ticks: 400
+  overheat_cooldown_ms: 5000
 
 abilities:
   the_patriot:
