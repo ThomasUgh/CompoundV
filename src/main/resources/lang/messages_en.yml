@@ -1,4 +1,4 @@
-language_file_version: 14
+language_file_version: 15
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -128,6 +128,7 @@ toggle:
   runner_speed_off: "&7Runner Speed disabled"
   ghost_on: "&5Ghost Mode &aenabled"
   ghost_off: "&7Ghost Mode disabled"
+  ghost_cooldown: "&5Ghost Mode &cready in {seconds}s"
 
 teleporter:
   used: "&5Blink &acompleted"

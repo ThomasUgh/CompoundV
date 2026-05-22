@@ -22,6 +22,7 @@ public class InvisibilityAbility implements Ability {
     private final CompoundV plugin;
     private final Set<UUID> invisible = new HashSet<>();
     private final Map<UUID, Integer> targetClearTicker = new HashMap<>();
+    private final Map<UUID, Long> toggleCooldown = new HashMap<>();
 
     public InvisibilityAbility(CompoundV plugin) {
         this.plugin = plugin;
@@ -58,6 +59,7 @@ public class InvisibilityAbility implements Ability {
         UUID uuid = player.getUniqueId();
         invisible.remove(uuid);
         targetClearTicker.remove(uuid);
+        toggleCooldown.remove(uuid);
         player.removePotionEffect(PotionEffects.INVISIBILITY);
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.STRENGTH);
@@ -89,7 +91,18 @@ public class InvisibilityAbility implements Ability {
 
     public void toggleGhostMode(Player player) {
         UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        long readyAt = toggleCooldown.getOrDefault(uuid, 0L);
+        if (readyAt > now) {
+            long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.ghost_cooldown",
+                    "seconds", Long.toString(seconds)));
+            return;
+        }
+
         boolean next = !invisible.contains(uuid);
+        long cooldownMs = plugin.getConfig().getLong("abilities.invisibility.toggle_cooldown_ms", 5000L);
+        toggleCooldown.put(uuid, now + Math.max(0L, cooldownMs));
         if (next) {
             invisible.add(uuid);
             targetClearTicker.put(uuid, 0);
@@ -103,6 +116,7 @@ public class InvisibilityAbility implements Ability {
         } else {
             invisible.remove(uuid);
             targetClearTicker.remove(uuid);
+        toggleCooldown.remove(uuid);
             player.removePotionEffect(PotionEffects.INVISIBILITY);
             player.getWorld().spawnParticle(Particle.POOF, player.getLocation().add(0, 1, 0),
                     25, 0.35, 0.55, 0.35, 0.03);
