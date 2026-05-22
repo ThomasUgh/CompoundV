@@ -156,6 +156,7 @@ fall_impact_cooldown: "&cExplosive Landing ready in {seconds}s"
 launch_cooldown: "&cJump Start ready in {seconds}s"
 
 sonic_boom:
+  ring_cooldown: "&3Sonic Ring &cready in {seconds}s"
   beam_cooldown: "&3Sonic Beam &cready in {seconds}s"
 
 size_changer:

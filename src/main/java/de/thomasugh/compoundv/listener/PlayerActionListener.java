@@ -150,6 +150,11 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onSwapHands(PlayerSwapHandItemsEvent e) {
         Ability ab = manager.getAbility(e.getPlayer());
+        if (ab instanceof SonicBoomAbility sonic) {
+            e.setCancelled(true);
+            sonic.triggerSonicRing(e.getPlayer());
+            return;
+        }
         if (ab == null || !ab.hasToggle()) return;
         e.setCancelled(true);
         ab.onToggle(e.getPlayer());
