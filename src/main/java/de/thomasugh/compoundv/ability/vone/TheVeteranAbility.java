@@ -240,6 +240,7 @@ public class TheVeteranAbility implements Ability {
 
         double radius = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_radius", 14.0);
         double maxDamage = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_damage", 525.0);
+        double pveDamageMultiplier = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.pve_damage_multiplier", 1.2));
         double knockback = plugin.getConfig().getDouble("abilities.the_veteran.ground_zero_knockback", 7.5);
         boolean setFire = plugin.getConfig().getBoolean("abilities.the_veteran.ground_zero_set_fire", true);
 
@@ -267,6 +268,9 @@ public class TheVeteranAbility implements Ability {
 
             double factor = 1.0 - (distance / radius);
             double damage = Math.max(18.0, maxDamage * Math.max(0.25, factor));
+            if (!(target instanceof Player)) {
+                damage *= pveDamageMultiplier;
+            }
             target.damage(damage, shooter);
             if (setFire) target.setFireTicks(220);
 
@@ -393,7 +397,10 @@ public class TheVeteranAbility implements Ability {
         double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_hearts", 5.25) * 2.0;
         double damageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
         double configuredDamage = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_amount", patriotDamage * damageMultiplier);
-        final double entityDamage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 1.045));
+        double pveDamageMultiplier = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.pve_damage_multiplier", 1.2));
+        final double entityDamage = configuredDamage
+                * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 1.045))
+                * pveDamageMultiplier;
         final double playerDamage = configuredDamage * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_player_damage_multiplier", 0.76));
         final double fullDamageRange = plugin.getConfig().getDouble("abilities.the_veteran.beam_full_damage_range", 7.0);
         final double farDamageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_far_damage_multiplier", 0.5);
