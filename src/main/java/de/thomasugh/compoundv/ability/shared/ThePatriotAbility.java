@@ -36,6 +36,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     private final Map<UUID, Integer> glowTicker     = new HashMap<>();
     private final Set<UUID>          launching      = new HashSet<>();
     private final Map<UUID, Long>    launchCooldown = new HashMap<>();
+    private final Map<UUID, Long>    fallImpactCooldown = new HashMap<>();
 
     public ThePatriotAbility(CompoundV plugin, String id, String tierKey, int color) {
         super(plugin);
@@ -122,7 +123,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
                 PotionEffects.NIGHT_VISION).forEach(p::removePotionEffect);
         if (glowActive.getOrDefault(u, false)) clearGlow(p);
         glowActive.remove(u); glowTicker.remove(u);
-        launching.remove(u); launchCooldown.remove(u);
+        launching.remove(u); launchCooldown.remove(u); fallImpactCooldown.remove(u);
         setMaxHealthBonus(p, 0);
     }
 
@@ -238,6 +239,11 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             return;
         }
 
+        if (isFallImpactCoolingDown(p)) {
+            return;
+        }
+        startFallImpactCooldown(p);
+
         float power = (float) plugin.getConfig().getDouble(s("fall_impact_power"), 4.0);
         boolean blockDamage = plugin.getConfig().getBoolean(s("fall_impact_block_damage"), true);
         w.createExplosion(loc, power, false, blockDamage, p);
@@ -249,6 +255,21 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         w.spawnParticle(Particle.DUST, loc.clone().add(0, .6, 0), 30, 1.3, .3, 1.3, 0,
                 new Particle.DustOptions(Color.fromRGB(200, 10, 0), 1.1f));
         MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("fall_impact"));
+    }
+
+    private boolean isFallImpactCoolingDown(Player player) {
+        long now = System.currentTimeMillis();
+        long readyAt = fallImpactCooldown.getOrDefault(player.getUniqueId(), 0L);
+        if (readyAt <= now) return false;
+        long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("fall_impact_cooldown",
+                "seconds", Long.toString(seconds)));
+        return true;
+    }
+
+    private void startFallImpactCooldown(Player player) {
+        long cooldownMs = plugin.getConfig().getLong(s("fall_impact_cooldown_ms"), 60000L);
+        fallImpactCooldown.put(player.getUniqueId(), System.currentTimeMillis() + Math.max(0L, cooldownMs));
     }
 
     private void triggerSoftFallImpact(Player p, Location loc, World w) {

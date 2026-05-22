@@ -146,7 +146,16 @@ veteran:
   hit_by: "<prefix>&c{source}&7 hat deine Fähigkeit entfernt."
 
 fall_impact: "&cImpact"
+fall_impact_cooldown: "&cExplo-Aufschlag bereit in {seconds}s"
 launch_cooldown: "&cJump Start bereit in {seconds}s"
+
+size_changer:
+  big_on: "&5SizeChanger &aGroßform aktiviert"
+  small_on: "&5SizeChanger &aKleinform aktiviert"
+  normal: "&7SizeChanger zurück auf normale Größe"
+  cooldown: "&5SizeChanger &cbereit in {seconds}s"
+  already_active: "&5SizeChanger &7ist bereits aktiv"
+  look_up_down: "&5SizeChanger &7Schaue nach oben für groß oder nach unten für klein"
 
 command:
   header: "<prefix>&8━━━━━━━━ &aCompoundV Hilfe &8━━━━━━━━"

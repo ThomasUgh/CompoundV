@@ -307,7 +307,7 @@ public class PlayerActionListener implements Listener {
                 double trackedDistance = fallPeakY.remove(u) - y;
                 double dist = Math.max(trackedDistance, p.getFallDistance());
                 double particleMin = plugin.getConfig().getDouble(
-                        "abilities.the_patriot.shared.fall_impact_particle_height", 15);
+                        "abilities.the_patriot.shared.fall_impact_particle_height", 10);
                 double blockMin = plugin.getConfig().getDouble(
                         "abilities.the_patriot.shared.fall_impact_block_height",
                         plugin.getConfig().getDouble("abilities.the_patriot.shared.fall_impact_height", 40));
@@ -316,7 +316,22 @@ public class PlayerActionListener implements Listener {
             }
         }
 
-        if (!prevGround && currGround && p.getFlySpeed() > 0.15f) {
+        if (ability instanceof SonicBoomAbility sonic) {
+            double y = p.getLocation().getY();
+            if (!currGround && !p.isFlying()) fallPeakY.merge(u, y, Math::max);
+
+            if (!prevGround && currGround && fallPeakY.containsKey(u)) {
+                double trackedDistance = fallPeakY.remove(u) - y;
+                double dist = Math.max(trackedDistance, p.getFallDistance());
+                double particleMin = plugin.getConfig().getDouble(
+                        "abilities.sonic_boom.fall_impact_particle_height", 10);
+                double blockMin = plugin.getConfig().getDouble("abilities.sonic_boom.fall_impact_block_height", 35);
+                double min = Math.min(particleMin, blockMin);
+                if (p.isSneaking() && dist >= min) sonic.triggerFallImpact(p, dist);
+            }
+        }
+
+        if (!prevGround && currGround && p.getFlySpeed() > 0.1001f) {
             p.setFlySpeed(0.1f);
         }
 
@@ -380,7 +395,16 @@ public class PlayerActionListener implements Listener {
     public void onFall(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player p)) return;
         if (e.getCause() == EntityDamageEvent.DamageCause.FALL
-                && manager.isThePatriot(p)) e.setCancelled(true);
+                && (manager.isThePatriot(p) || manager.getAbility(p) instanceof SonicBoomAbility)) e.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onSizeChangerMeleeHit(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player attacker)) return;
+        if (!(manager.getAbility(attacker) instanceof SizeChangerAbility sizeChanger)) return;
+        if (!sizeChanger.isBig(attacker)) return;
+        double multiplier = plugin.getConfig().getDouble("abilities.size_changer.big_damage_multiplier", 2.0);
+        e.setDamage(e.getDamage() * Math.max(0.0, multiplier));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
