@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.listener;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
+import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
@@ -11,9 +12,11 @@ import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.manager.AbilityManager;
 import de.thomasugh.compoundv.manager.PotionRollManager;
+import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
@@ -26,8 +29,10 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -344,6 +349,14 @@ public class PlayerActionListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onMobTargetInvisiblePlayer(EntityTargetLivingEntityEvent event) {
+        if (!(event.getTarget() instanceof Player player)) return;
+        if (!(manager.getAbility(player) instanceof InvisibilityAbility ghost)) return;
+        if (!ghost.hidesFromMobs() || !ghost.isInvisible(player)) return;
+        if (event.getEntity() instanceof Mob) event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onFall(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player p)) return;
         if (e.getCause() == EntityDamageEvent.DamageCause.FALL
@@ -365,6 +378,21 @@ public class PlayerActionListener implements Listener {
         if (dir.lengthSquared() < 0.0001) dir = attacker.getLocation().getDirection().clone();
         dir.setY(0).normalize().multiply(horizontal).setY(vertical);
         target.setVelocity(target.getVelocity().add(dir));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onMobDamageInvisiblePlayer(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!(manager.getAbility(player) instanceof InvisibilityAbility ghost)) return;
+        if (!ghost.hidesFromMobs() || !ghost.isInvisible(player)) return;
+
+        if (event.getDamager() instanceof Mob) {
+            event.setCancelled(true);
+            return;
+        }
+        if (event.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Mob) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

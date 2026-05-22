@@ -173,6 +173,11 @@ abilities:
   fire:
     radius: 3.5
 
+  invisibility:
+    resistance_level: 2
+    strength_level: 1
+    hide_from_mobs: true
+
   the_diver:
     water_breathing_level: 1
     dolphins_grace_level: 4

@@ -82,9 +82,9 @@ ability:
       - "<prefix>&8• &7Includes a small &9Resistance&7 bonus."
   invisibility:
     description:
-      - "<prefix>&8• &5Ghost Mode&7: press &dF&7 to toggle invisibility, using the same key as Heat Vision."
-      - "<prefix>&8• &7When enabled you receive &5Invisibility II&7."
-      - "<prefix>&8• &7Includes a &9Resistance&7 bonus."
+      - "<prefix>&8• &5Ghost Mode&7: press &dF&7 to toggle invisibility."
+      - "<prefix>&8• &7When enabled you receive &5Invisibility II&7 and mobs will not target you."
+      - "<prefix>&8• &7Passive boosts: &9Resistance II&7 and &aStrength I&7."
   fire:
     description:
       - "<prefix>&8• &cFire Aura&7 ignites nearby enemies automatically."

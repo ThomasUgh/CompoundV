@@ -82,9 +82,9 @@ ability:
       - "<prefix>&8• &7Enthält einen kleinen &9Resistenz&7-Bonus."
   invisibility:
     description:
-      - "<prefix>&8• &5Ghost Mode&7: Drücke &dF&7 zum Ein-/Ausschalten, genau wie bei Heat Vision."
-      - "<prefix>&8• &7Aktiviert gibt dir &5Unsichtbarkeit II&7."
-      - "<prefix>&8• &7Enthält einen &9Resistenz&7-Bonus."
+      - "<prefix>&8• &5Ghost Mode&7: Drücke &dF&7 zum Ein-/Ausschalten."
+      - "<prefix>&8• &7Aktiviert gibt dir &5Unsichtbarkeit II&7 und Mobs targeten dich nicht."
+      - "<prefix>&8• &7Passive Effekte: &9Resistenz II&7 und &aStärke I&7."
   fire:
     description:
       - "<prefix>&8• &cFeuer-Aura&7 entzündet Gegner in deiner Nähe automatisch."
