@@ -34,7 +34,17 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
 
     @Override
     protected String actionBarLabel() {
-        return displayName;
+        return "Heatvision";
+    }
+
+    @Override
+    protected String coloredActionBarLabel() {
+        String suffix = switch (stage) {
+            case 2 -> " &7II";
+            case 3 -> " &7III";
+            default -> " &7I";
+        };
+        return actionBarColorCode() + actionBarLabel() + "&r" + suffix;
     }
     @Override public String getDescriptionKey() { return "ability.heat_vision.description"; }
 

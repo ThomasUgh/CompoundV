@@ -59,7 +59,11 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected boolean fireParticles() { return false; }
     @Override protected String actionBarColorCode() { return isVOne() ? "&4" : "&c"; }
     @Override protected boolean boldActionBarLabel() { return isVOne(); }
-    @Override protected String actionBarLabel() { return isVOne() ? "The Patriot V One Heat Vision" : "The Patriot Heat Vision"; }
+    @Override protected String actionBarLabel() { return "Heatvision"; }
+    @Override protected String coloredActionBarLabel() {
+        String prefix = isVOne() ? "&7The Patriot V One " : "&7The Patriot ";
+        return prefix + actionBarColorCode() + (boldActionBarLabel() ? "&l" : "") + actionBarLabel() + "&r";
+    }
     @Override protected int maxContinuousTicks() { return plugin.getConfig().getInt(t("heat_vision_max_continuous_ticks"), isVOne() ? 600 : 500); }
     @Override protected long overheatCooldownMs() { return plugin.getConfig().getLong(t("heat_vision_overheat_cooldown_ms"), 5000L); }
     @Override protected boolean cooksMeatDrops() { return plugin.getConfig().getBoolean(t("heat_vision_cooks_meat"), true); }

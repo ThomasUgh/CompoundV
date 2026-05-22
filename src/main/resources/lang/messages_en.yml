@@ -1,4 +1,4 @@
-language_file_version: 15
+language_file_version: 16
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -113,10 +113,10 @@ ability:
       - "<prefix>&8• &7Starts with a strong point-blank blast and mushroom cloud."
 
 toggle:
-  heat_vision_on: "{color}{label} &aenabled"
-  heat_vision_off: "&7{label} disabled"
-  heat_vision_overheated: "{color}{label} &ccooling down for {seconds}s"
-  heat_vision_cooldown: "{color}{label} &cready in {seconds}s"
+  heat_vision_on: "{label} &aenabled"
+  heat_vision_off: "{label} &7disabled"
+  heat_vision_overheated: "{label} &ccooling down for {seconds}s"
+  heat_vision_cooldown: "{label} &cready in {seconds}s"
   xray_on: "&bXRay &aenabled"
   xray_off: "&7XRay disabled"
   sonar_on: "&bSonar &aenabled"

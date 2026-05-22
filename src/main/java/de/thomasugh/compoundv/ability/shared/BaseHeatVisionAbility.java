@@ -292,10 +292,17 @@ public abstract class BaseHeatVisionAbility implements Ability {
         return getDisplayName();
     }
 
+    protected String coloredActionBarLabel() {
+        return actionBarColorCode()
+                + (boldActionBarLabel() ? "&l" : "")
+                + actionBarLabel()
+                + "&r";
+    }
+
     private String heatVisionActionMessage(String key, String... placeholders) {
         Map<String, String> values = new LinkedHashMap<>();
         values.put("color", actionBarColorCode() + (boldActionBarLabel() ? "&l" : ""));
-        values.put("label", actionBarLabel());
+        values.put("label", coloredActionBarLabel());
         for (int i = 0; i + 1 < placeholders.length; i += 2) {
             values.put(placeholders[i], placeholders[i + 1]);
         }

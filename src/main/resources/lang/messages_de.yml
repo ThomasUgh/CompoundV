@@ -1,4 +1,4 @@
-language_file_version: 15
+language_file_version: 16
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -113,10 +113,10 @@ ability:
       - "<prefix>&8• &7Startet mit starker Nahbereichs-Explosion und Atompilz."
 
 toggle:
-  heat_vision_on: "{color}{label} &aaktiviert"
-  heat_vision_off: "&7{label} deaktiviert"
-  heat_vision_overheated: "{color}{label} &ckühlt für {seconds}s ab"
-  heat_vision_cooldown: "{color}{label} &cbereit in {seconds}s"
+  heat_vision_on: "{label} &aaktiviert"
+  heat_vision_off: "{label} &7deaktiviert"
+  heat_vision_overheated: "{label} &ckühlt für {seconds}s ab"
+  heat_vision_cooldown: "{label} &cbereit in {seconds}s"
   xray_on: "&bXRay &aaktiviert"
   xray_off: "&7XRay deaktiviert"
   sonar_on: "&bSonar &aaktiviert"
