@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.LinkedHashMap;
 
 public abstract class BaseHeatVisionAbility implements Ability {
 
@@ -49,15 +51,15 @@ public abstract class BaseHeatVisionAbility implements Ability {
             long readyAt = cooldownUntil.getOrDefault(uuid, 0L);
             if (readyAt > now) {
                 long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
-                MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg(
-                        "toggle.heat_vision_cooldown", "seconds", Long.toString(seconds)));
+                MessageUtil.sendActionBar(p, heatVisionActionMessage("toggle.heat_vision_cooldown",
+                        "seconds", Long.toString(seconds)));
                 return;
             }
 
             beamActive.put(uuid, true);
             activeTicks.put(uuid, 0);
             damageCounter.remove(uuid);
-            MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.heat_vision_on"));
+            MessageUtil.sendActionBar(p, heatVisionActionMessage("toggle.heat_vision_on"));
             p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.6f);
             return;
         }
@@ -65,7 +67,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         beamActive.put(uuid, false);
         activeTicks.remove(uuid);
         damageCounter.remove(uuid);
-        MessageUtil.sendActionBar(p, plugin.getLocaleManager().msg("toggle.heat_vision_off"));
+        MessageUtil.sendActionBar(p, heatVisionActionMessage("toggle.heat_vision_off"));
     }
 
     @Override
@@ -73,7 +75,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         UUID uuid = p.getUniqueId();
         if (!beamActive.getOrDefault(uuid, false)) return;
 
-        int maxTicks = plugin.getConfig().getInt("heat_vision.max_continuous_ticks", 400);
+        int maxTicks = maxContinuousTicks();
         if (maxTicks > 0) {
             int ticks = activeTicks.merge(uuid, 1, Integer::sum);
             if (ticks >= maxTicks) {
@@ -96,12 +98,12 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     private void triggerOverheatCooldown(Player player) {
         UUID uuid = player.getUniqueId();
-        long cooldownMs = plugin.getConfig().getLong("heat_vision.overheat_cooldown_ms", 5000L);
+        long cooldownMs = overheatCooldownMs();
         beamActive.put(uuid, false);
         activeTicks.remove(uuid);
         damageCounter.remove(uuid);
         cooldownUntil.put(uuid, System.currentTimeMillis() + Math.max(0L, cooldownMs));
-        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg(
+        MessageUtil.sendActionBar(player, heatVisionActionMessage(
                 "toggle.heat_vision_overheated",
                 "seconds", Long.toString(Math.max(1L, (long) Math.ceil(cooldownMs / 1000.0)))));
         player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.45f, 1.4f);
@@ -267,6 +269,37 @@ public abstract class BaseHeatVisionAbility implements Ability {
             if (fireParticles && d % 1.4 < step())
                 w.spawnParticle(Particle.FLAME, pos, 1, 0.02, 0.02, 0.02, 0.0);
         }
+    }
+
+
+    protected int maxContinuousTicks() {
+        return plugin.getConfig().getInt("heat_vision.max_continuous_ticks", 400);
+    }
+
+    protected long overheatCooldownMs() {
+        return plugin.getConfig().getLong("heat_vision.overheat_cooldown_ms", 10000L);
+    }
+
+    protected String actionBarColorCode() {
+        return "&b";
+    }
+
+    protected boolean boldActionBarLabel() {
+        return false;
+    }
+
+    protected String actionBarLabel() {
+        return getDisplayName();
+    }
+
+    private String heatVisionActionMessage(String key, String... placeholders) {
+        Map<String, String> values = new LinkedHashMap<>();
+        values.put("color", actionBarColorCode() + (boldActionBarLabel() ? "&l" : ""));
+        values.put("label", actionBarLabel());
+        for (int i = 0; i + 1 < placeholders.length; i += 2) {
+            values.put(placeholders[i], placeholders[i + 1]);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.getLocaleManager().msg(key, values));
     }
 
     protected double range()        { return plugin.getConfig().getDouble("heat_vision.range", 43); }

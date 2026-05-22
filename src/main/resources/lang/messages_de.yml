@@ -110,10 +110,10 @@ ability:
       - "<prefix>&8• &7Startet mit starker Nahbereichs-Explosion und Atompilz."
 
 toggle:
-  heat_vision_on: "&bHeat Vision &aaktiviert"
-  heat_vision_off: "&7Heat Vision deaktiviert"
-  heat_vision_overheated: "&cHeat Vision kühlt für {seconds}s ab"
-  heat_vision_cooldown: "&cHeat Vision bereit in {seconds}s"
+  heat_vision_on: "{color}{label} &aaktiviert"
+  heat_vision_off: "&7{label} deaktiviert"
+  heat_vision_overheated: "{color}{label} &ckühlt für {seconds}s ab"
+  heat_vision_cooldown: "{color}{label} &cbereit in {seconds}s"
   xray_on: "&bXRay &aaktiviert"
   xray_off: "&7XRay deaktiviert"
   sonar_on: "&bSonar &aaktiviert"

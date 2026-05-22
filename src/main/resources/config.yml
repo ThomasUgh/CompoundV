@@ -102,6 +102,8 @@ abilities:
       heat_vision_damage_hearts: 5.0
       heat_vision_damage_multiplier: 1.0
       heat_vision_cooks_meat: true
+      heat_vision_max_continuous_ticks: 500
+      heat_vision_overheat_cooldown_ms: 5000
 
     v_one:
       strength_level: 4
@@ -113,6 +115,8 @@ abilities:
       heat_vision_damage_hearts: 5.25
       heat_vision_damage_multiplier: 1.0
       heat_vision_cooks_meat: true
+      heat_vision_max_continuous_ticks: 600
+      heat_vision_overheat_cooldown_ms: 5000
 
   the_veteran:
     strength_level: 5

@@ -22,6 +22,20 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
     @Override public String getId() { return id; }
     @Override public String getDisplayName() { return displayName; }
     @Override public int getColor() { return color; }
+
+    @Override
+    protected String actionBarColorCode() {
+        return switch (stage) {
+            case 2 -> "&a";
+            case 3 -> "&c";
+            default -> "&b";
+        };
+    }
+
+    @Override
+    protected String actionBarLabel() {
+        return displayName;
+    }
     @Override public String getDescriptionKey() { return "ability.heat_vision.description"; }
 
     @Override

@@ -110,10 +110,10 @@ ability:
       - "<prefix>&8• &7Starts with a strong point-blank blast and mushroom cloud."
 
 toggle:
-  heat_vision_on: "&bHeat Vision &aenabled"
-  heat_vision_off: "&7Heat Vision disabled"
-  heat_vision_overheated: "&cHeat Vision cooling down for {seconds}s"
-  heat_vision_cooldown: "&cHeat Vision ready in {seconds}s"
+  heat_vision_on: "{color}{label} &aenabled"
+  heat_vision_off: "&7{label} disabled"
+  heat_vision_overheated: "{color}{label} &ccooling down for {seconds}s"
+  heat_vision_cooldown: "{color}{label} &cready in {seconds}s"
   xray_on: "&bXRay &aenabled"
   xray_off: "&7XRay disabled"
   sonar_on: "&bSonar &aenabled"
