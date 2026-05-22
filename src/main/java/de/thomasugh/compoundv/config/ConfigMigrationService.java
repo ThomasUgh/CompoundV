@@ -290,12 +290,15 @@ public final class ConfigMigrationService {
     private boolean migrateVersion110Defaults() {
         boolean changed = false;
 
-        changed |= setIfMissing("heat_vision.stages.stage_1.damage_hearts", 1.5);
+        changed |= setIfMissing("heat_vision.stages.stage_1.damage_hearts", 1.35);
         changed |= setIfMissing("heat_vision.stages.stage_1.range", 30.0);
-        changed |= setIfMissing("heat_vision.stages.stage_2.damage_hearts", 2.5);
+        changed |= setIfMissing("heat_vision.stages.stage_2.damage_hearts", 2.25);
         changed |= setIfMissing("heat_vision.stages.stage_2.range", 35.0);
-        changed |= setIfMissing("heat_vision.stages.stage_3.damage_hearts", 3.0);
+        changed |= setIfMissing("heat_vision.stages.stage_3.damage_hearts", 2.7);
         changed |= setIfMissing("heat_vision.stages.stage_3.range", 40.0);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_1.damage_hearts", 1.5, 1.35);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_2.damage_hearts", 2.5, 2.25);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_3.damage_hearts", 3.0, 2.7);
         changed |= setIfMissing("heat_vision.max_continuous_ticks", 400);
         changed |= replaceIfNumericEquals("heat_vision.overheat_cooldown_ms", 5000.0, 10000);
         changed |= setIfMissing("heat_vision.overheat_cooldown_ms", 10000);

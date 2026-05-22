@@ -61,8 +61,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected boolean boldActionBarLabel() { return isVOne(); }
     @Override protected String actionBarLabel() { return "Heatvision"; }
     @Override protected String coloredActionBarLabel() {
-        String prefix = isVOne() ? "&7The Patriot V One " : "&7The Patriot ";
-        return prefix + actionBarColorCode() + (boldActionBarLabel() ? "&l" : "") + actionBarLabel() + "&r";
+        return actionBarColorCode() + (boldActionBarLabel() ? "&l" : "") + actionBarLabel() + "&r";
     }
     @Override protected int maxContinuousTicks() { return plugin.getConfig().getInt(t("heat_vision_max_continuous_ticks"), isVOne() ? 600 : 500); }
     @Override protected long overheatCooldownMs() { return plugin.getConfig().getLong(t("heat_vision_overheat_cooldown_ms"), 5000L); }
@@ -75,7 +74,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
 
     @Override
     protected double damageAmount() {
-        double hearts = plugin.getConfig().getDouble(t("heat_vision_damage_hearts"), isVOne() ? 5.25 : 5.0);
+        double hearts = plugin.getConfig().getDouble(t("heat_vision_damage_hearts"), isVOne() ? 4.725 : 4.5);
         double multiplier = plugin.getConfig().getDouble(t("heat_vision_damage_multiplier"), 1.0);
         return Math.max(0.0, hearts) * 2.0 * Math.max(0.0, multiplier);
     }

@@ -60,9 +60,9 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
     @Override
     protected double damageAmount() {
         double hearts = plugin.getConfig().getDouble(stagePath("damage_hearts"), switch (stage) {
-            case 2 -> 2.5;
-            case 3 -> 3.0;
-            default -> 1.5;
+            case 2 -> 2.25;
+            case 3 -> 2.7;
+            default -> 1.35;
         });
         return Math.max(0.0, hearts) * 2.0;
     }
