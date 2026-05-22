@@ -21,13 +21,22 @@ public final class AttributeUtil {
                 amount, AttributeModifier.Operation.ADD_NUMBER);
 
         AttributeInstance instance = getAttribute(player, "MAX_HEALTH", "GENERIC_MAX_HEALTH");
-        if (instance != null && amount > 0) {
-            player.setHealth(Math.min(instance.getValue(), player.getHealth() + amount));
+        if (instance != null) {
+            if (amount > 0) {
+                player.setHealth(Math.min(instance.getValue(), player.getHealth() + amount));
+            } else if (player.getHealth() > instance.getValue()) {
+                player.setHealth(Math.max(1.0, instance.getValue()));
+            }
         }
     }
 
     public static void setAttackSpeedBonus(Player player, NamespacedKey key, double amount) {
         setAttributeModifier(player, resolveAttribute("ATTACK_SPEED", "GENERIC_ATTACK_SPEED"), key,
+                amount, AttributeModifier.Operation.ADD_NUMBER);
+    }
+
+    public static void setScaleBonus(Player player, NamespacedKey key, double amount) {
+        setAttributeModifier(player, resolveAttribute("SCALE", "GENERIC_SCALE"), key,
                 amount, AttributeModifier.Operation.ADD_NUMBER);
     }
 

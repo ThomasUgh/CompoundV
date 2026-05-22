@@ -10,6 +10,7 @@ import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
 import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
+import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.manager.AbilityManager;
@@ -208,6 +209,12 @@ public class PlayerActionListener implements Listener {
                 cancelAbilityInteraction(e);
                 vision.toggleXray(p);
             }
+            return;
+        }
+
+        if (ab instanceof SizeChangerAbility sizeChanger && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            sizeChanger.handleSneakLeftClick(p);
             return;
         }
 

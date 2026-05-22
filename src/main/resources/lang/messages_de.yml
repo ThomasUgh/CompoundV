@@ -51,7 +51,9 @@ ability:
   size_changer:
     description:
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7 und &9Resistenz II&7."
-      - "<prefix>&8• &7Größenwechsel-Steuerung kommt später."
+      - "<prefix>&8• &dSneak + Linksklick + hochschauen&7: &52x groß&7, doppelter Schaden und &c+10 Herzen&7 für max. &e1min&7."
+      - "<prefix>&8• &dSneak + Linksklick + runterschauen&7: &52x klein&7 für max. &e2min&7."
+      - "<prefix>&8• &7Beide Formen haben &e60s Cooldown&7."
   heat_vision:
     description:
       - "<prefix>&8• &bHeat Vision&7: Drücke &dF&7 zum Umschalten des Strahls."
