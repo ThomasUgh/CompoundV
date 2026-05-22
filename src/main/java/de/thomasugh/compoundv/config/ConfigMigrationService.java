@@ -297,7 +297,8 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("heat_vision.stages.stage_3.damage_hearts", 3.0);
         changed |= setIfMissing("heat_vision.stages.stage_3.range", 40.0);
         changed |= setIfMissing("heat_vision.max_continuous_ticks", 400);
-        changed |= setIfMissing("heat_vision.overheat_cooldown_ms", 5000);
+        changed |= replaceIfNumericEquals("heat_vision.overheat_cooldown_ms", 5000.0, 10000);
+        changed |= setIfMissing("heat_vision.overheat_cooldown_ms", 10000);
 
         changed |= replaceIfNumericEquals("abilities.the_patriot.compound_v.heat_vision_range", 43.0, 44.0);
         changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_range", 48.0, 50.0);
@@ -308,6 +309,13 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.33, 1.0);
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_multiplier", 1.0);
         changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_max_continuous_ticks", 500);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_overheat_cooldown_ms", 5000);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_max_continuous_ticks", 600);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_overheat_cooldown_ms", 5000);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_particle_height", 15.0, 10);
+        changed |= setIfMissing("abilities.the_patriot.shared.fall_impact_particle_height", 10);
+        changed |= setIfMissing("abilities.the_patriot.shared.fall_impact_cooldown_ms", 60000);
 
         changed |= setIfMissing("abilities.invisibility.resistance_level", 2);
         changed |= setIfMissing("abilities.invisibility.strength_level", 1);
@@ -315,24 +323,48 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.invisibility.hide_from_mobs", true);
         changed |= setIfMissing("abilities.invisibility.mob_target_clear_radius", 48.0);
         changed |= setIfMissing("abilities.invisibility.mob_target_clear_period_ticks", 10);
+        changed |= setIfMissing("abilities.invisibility.toggle_cooldown_ms", 5000);
 
-        changed |= replaceIfNumericEquals("abilities.the_diver.dolphins_grace_level", 4.0, 12);
-        changed |= setIfMissing("abilities.the_diver.dolphins_grace_level", 12);
+        changed |= replaceIfNumericEquals("abilities.the_diver.dolphins_grace_level", 4.0, 8);
+        changed |= replaceIfNumericEquals("abilities.the_diver.dolphins_grace_level", 12.0, 8);
+        changed |= setIfMissing("abilities.the_diver.dolphins_grace_level", 8);
+        changed |= setIfMissing("abilities.the_diver.water_speed_level", 2);
 
         changed |= setIfMissing("abilities.fly.launch_velocity", 1.75);
         changed |= setIfMissing("abilities.fly.launch_peak_ticks", 14);
         changed |= setIfMissing("abilities.fly.launch_cooldown_ms", 10000);
-        changed |= setIfMissing("abilities.fly.launch_fly_speed", 0.2);
+        changed |= replaceIfNumericEquals("abilities.fly.launch_fly_speed", 0.2, 0.15);
+        changed |= setIfMissing("abilities.fly.launch_fly_speed", 0.15);
 
         changed |= setIfMissing("abilities.sonic_boom.strength_level", 4);
         changed |= setIfMissing("abilities.sonic_boom.resistance_level", 4);
-        changed |= setIfMissing("abilities.sonic_boom.launch_velocity", 3.5);
-        changed |= setIfMissing("abilities.sonic_boom.launch_peak_ticks", 28);
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.launch_velocity", 3.5, 3.05);
+        changed |= setIfMissing("abilities.sonic_boom.launch_velocity", 3.05);
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.launch_peak_ticks", 28.0, 24);
+        changed |= setIfMissing("abilities.sonic_boom.launch_peak_ticks", 24);
         changed |= setIfMissing("abilities.sonic_boom.launch_cooldown_ms", 10000);
-        changed |= setIfMissing("abilities.sonic_boom.launch_fly_speed", 0.375);
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.launch_fly_speed", 0.375, 0.3);
+        changed |= setIfMissing("abilities.sonic_boom.launch_fly_speed", 0.3);
+        changed |= setIfMissing("abilities.sonic_boom.launch_block_damage", true);
+        changed |= setIfMissing("abilities.sonic_boom.launch_block_damage_power", 1.15);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_particle_height", 10);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_block_height", 35);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_cooldown_ms", 60000);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_power", 10.0);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_block_damage", true);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_entity_radius", 9.0);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_entity_damage_hearts", 16.0);
+        changed |= setIfMissing("abilities.sonic_boom.fall_impact_knockback", 2.4);
 
         changed |= setIfMissing("abilities.size_changer.strength_level", 2);
         changed |= setIfMissing("abilities.size_changer.resistance_level", 2);
+        changed |= setIfMissing("abilities.size_changer.cooldown_ms", 60000);
+        changed |= setIfMissing("abilities.size_changer.big_duration_ticks", 1200);
+        changed |= setIfMissing("abilities.size_changer.small_duration_ticks", 2400);
+        changed |= setIfMissing("abilities.size_changer.big_scale_bonus", 1.0);
+        changed |= setIfMissing("abilities.size_changer.small_scale_bonus", -0.5);
+        changed |= setIfMissing("abilities.size_changer.big_extra_hearts", 10.0);
+        changed |= setIfMissing("abilities.size_changer.big_damage_multiplier", 2.0);
 
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision", 8.0, 9);
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_2", 4.0, 7);

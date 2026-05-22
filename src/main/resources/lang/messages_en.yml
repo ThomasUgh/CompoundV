@@ -46,7 +46,8 @@ ability:
   sonic_boom:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
-      - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
+      - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump. Stronger than Flight, slightly weaker than Patriot."
+      - "<prefix>&8• &cExplosive Landing&7: &dSneak&7 when landing after a high fall. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength IV&7 and &9Resistance IV&7."
   size_changer:
     description:
@@ -61,7 +62,7 @@ ability:
       - "<prefix>&8• &7Can melt ice, snow blocks and flat snow layers."
   the_diver:
     description:
-      - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace XII&7 and &3Heart of the Sea / Conduit Power II&7 are active permanently."
+      - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace VIII&7, &eSpeed while underwater&7 and &3Conduit Power II&7 are active permanently."
       - "<prefix>&8• &bSonar&7: &dSneak + Left-Click Air&7 while underwater to reveal nearby entities."
       - "<prefix>&8• &bRiptide Dash&7: &dSneak + Right-Click&7 in water or rain, similar to Riptide IV without holding a trident."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
@@ -83,7 +84,7 @@ ability:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
       - "<prefix>&8• &6Light Jump Start&7: &dSneak&7, look up and jump for a weaker launch."
-      - "<prefix>&8• &7Launch flight speed is around &e2x&7 normal flight."
+      - "<prefix>&8• &7Launch flight speed is around &e1.5x&7 normal flight."
   speedster:
     description:
       - "<prefix>&8• &eSuper Speed&7: press &dF&7 to toggle it on/off."

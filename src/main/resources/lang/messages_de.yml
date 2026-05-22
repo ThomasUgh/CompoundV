@@ -46,7 +46,8 @@ ability:
   sonic_boom:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
-      - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen."
+      - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen. Stärker als Flight, etwas schwächer als Patriot."
+      - "<prefix>&8• &cExplo-Aufschlag&7: &dSchleichen&7 beim Landen nach hohem Fall. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive Effekte: &aStärke IV&7 und &9Resistenz IV&7."
   size_changer:
     description:
@@ -61,7 +62,7 @@ ability:
       - "<prefix>&8• &7Kann Eis, Schneeblöcke und flache Schneeschichten schmelzen."
   the_diver:
     description:
-      - "<prefix>&8• &bWasseratmung&7, &bDolphin's Grace XII&7 und &3Herz des Meeres / Conduit Power II&7 sind dauerhaft aktiv."
+      - "<prefix>&8• &bWasseratmung&7, &bDolphin's Grace VIII&7, &eSpeed im Wasser&7 und &3Conduit Power II&7 sind dauerhaft aktiv."
       - "<prefix>&8• &bSonar&7: &dSchleichen + Linksklick in die Luft&7 unter Wasser, um nahe Entities sichtbar zu machen."
       - "<prefix>&8• &bSog-Dash&7: &dSchleichen + Rechtsklick&7 in Wasser oder Regen, ähnlich wie ein Sog-IV-Dreizack ohne Item."
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7 und &9Resistenz I&7."
@@ -83,7 +84,7 @@ ability:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
       - "<prefix>&8• &6Leichter Jump Start&7: &dSchleichen&7, hochschauen und springen."
-      - "<prefix>&8• &7Nach dem Launch fliegst du ca. &e2x&7 so schnell."
+      - "<prefix>&8• &7Nach dem Launch fliegst du ca. &e1,5x&7 so schnell."
   speedster:
     description:
       - "<prefix>&8• &eSuper Speed&7: Drücke &dF&7 zum Ein-/Ausschalten."

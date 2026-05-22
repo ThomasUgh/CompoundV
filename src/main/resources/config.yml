@@ -58,22 +58,32 @@ heat_vision:
   break_leaves: true
   fire_particles: false
   max_continuous_ticks: 400
-  overheat_cooldown_ms: 5000
+  overheat_cooldown_ms: 10000
 
 abilities:
   fly:
     launch_velocity: 1.75
     launch_peak_ticks: 14
     launch_cooldown_ms: 10000
-    launch_fly_speed: 0.2
+    launch_fly_speed: 0.15
 
   sonic_boom:
     strength_level: 4
     resistance_level: 4
-    launch_velocity: 3.5
-    launch_peak_ticks: 28
+    launch_velocity: 3.05
+    launch_peak_ticks: 24
     launch_cooldown_ms: 10000
-    launch_fly_speed: 0.375
+    launch_fly_speed: 0.3
+    launch_block_damage: true
+    launch_block_damage_power: 1.15
+    fall_impact_particle_height: 10
+    fall_impact_block_height: 35
+    fall_impact_cooldown_ms: 60000
+    fall_impact_power: 10.0
+    fall_impact_block_damage: true
+    fall_impact_entity_radius: 9.0
+    fall_impact_entity_damage_hearts: 16.0
+    fall_impact_knockback: 2.4
 
   size_changer:
     strength_level: 2
@@ -93,8 +103,9 @@ abilities:
       launch_cooldown_ms: 10000
       launch_fly_speed: 0.375
       glow_radius: 50
-      fall_impact_particle_height: 15
+      fall_impact_particle_height: 10
       fall_impact_block_height: 40
+      fall_impact_cooldown_ms: 60000
       fall_impact_power: 4.0
       fall_impact_block_damage: true
       extra_hearts: 10
@@ -213,10 +224,12 @@ abilities:
     hide_from_mobs: true
     mob_target_clear_radius: 48.0
     mob_target_clear_period_ticks: 10
+    toggle_cooldown_ms: 5000
 
   the_diver:
     water_breathing_level: 1
-    dolphins_grace_level: 12
+    dolphins_grace_level: 8
+    water_speed_level: 2
     conduit_power_level: 2
     strength_level: 2
     resistance_level: 1
