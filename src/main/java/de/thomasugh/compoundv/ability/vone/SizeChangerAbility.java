@@ -30,6 +30,7 @@ public class SizeChangerAbility implements Ability {
     private final NamespacedKey healthKey;
     private final Map<UUID, Mode> activeMode = new HashMap<>();
     private final Map<UUID, Long> cooldownUntil = new HashMap<>();
+    private final Map<UUID, Long> lastHandledAt = new HashMap<>();
     private final Map<UUID, TaskHandle> revertTasks = new HashMap<>();
 
     public SizeChangerAbility(CompoundV plugin) {
@@ -58,12 +59,17 @@ public class SizeChangerAbility implements Ability {
     public void remove(Player player) {
         revertToNormal(player, false);
         cooldownUntil.remove(player.getUniqueId());
+        lastHandledAt.remove(player.getUniqueId());
         player.removePotionEffect(PotionEffects.STRENGTH);
         player.removePotionEffect(PotionEffects.RESISTANCE);
     }
 
     public void handleSneakLeftClick(Player player) {
         UUID uuid = player.getUniqueId();
+        long handledNow = System.currentTimeMillis();
+        long lastHandled = lastHandledAt.getOrDefault(uuid, 0L);
+        if (handledNow - lastHandled < 250L) return;
+        lastHandledAt.put(uuid, handledNow);
         float pitch = player.getLocation().getPitch();
         Mode mode = getMode(player);
 

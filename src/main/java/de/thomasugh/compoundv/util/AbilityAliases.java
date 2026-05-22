@@ -32,6 +32,7 @@ public final class AbilityAliases {
             Map.entry("sonicboom", "sonic_boom"),
             Map.entry("sonic_boom", "sonic_boom"),
             Map.entry("sonic-boom", "sonic_boom"),
+            Map.entry("bombsight", "sonic_boom"),
 
             Map.entry("sizechanger", "size_changer"),
             Map.entry("size_changer", "size_changer"),

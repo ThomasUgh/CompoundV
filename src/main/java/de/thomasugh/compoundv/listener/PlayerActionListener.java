@@ -293,7 +293,12 @@ public class PlayerActionListener implements Listener {
     public void onArmSwing(PlayerAnimationEvent e) {
         Player player = e.getPlayer();
         if (!player.isSneaking()) return;
-        if (manager.getAbility(player) instanceof TheVeteranAbility veteran && !veteran.isBurstActive(player)) {
+        Ability ability = manager.getAbility(player);
+        if (ability instanceof SizeChangerAbility sizeChanger) {
+            sizeChanger.handleSneakLeftClick(player);
+            return;
+        }
+        if (ability instanceof TheVeteranAbility veteran && !veteran.isBurstActive(player)) {
             veteran.handleSneakLeftClick(player);
         }
     }
@@ -413,8 +418,14 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onFall(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player p)) return;
-        if (e.getCause() == EntityDamageEvent.DamageCause.FALL
-                && (manager.isThePatriot(p) || manager.getAbility(p) instanceof SonicBoomAbility)) e.setCancelled(true);
+        if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            Ability ability = manager.getAbility(p);
+            if (manager.isThePatriot(p)
+                    || ability instanceof SonicBoomAbility
+                    || (ability instanceof JumperAbility jumper && jumper.preventsFallDamage(p))) {
+                e.setCancelled(true);
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -449,6 +460,20 @@ public class PlayerActionListener implements Listener {
         if (dir.lengthSquared() < 0.0001) dir = attacker.getLocation().getDirection().clone();
         dir.setY(0).normalize().multiply(horizontal).setY(vertical);
         target.setVelocity(target.getVelocity().add(dir));
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onSonicBoomFallExplosionPlayerDamage(EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        if (!(e.getDamager() instanceof Player attacker)) return;
+        if (!(manager.getAbility(attacker) instanceof SonicBoomAbility sonic)) return;
+        if (e.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+                && e.getCause() != EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) return;
+        if (!sonic.shouldReduceFallExplosionPlayerDamage(attacker)) return;
+
+        double multiplier = plugin.getConfig().getDouble("abilities.sonic_boom.fall_impact_player_damage_multiplier", 0.8);
+        e.setDamage(e.getDamage() * Math.max(0.0, multiplier));
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

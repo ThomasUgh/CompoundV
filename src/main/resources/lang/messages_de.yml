@@ -31,6 +31,7 @@ ability:
 
   the_patriot:
     description:
+      - "<prefix>&8• &7Style: like &cHomelander&7."
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
       - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten. Standard: &e5 Herzen&7, &e44 Blöcke&7."
       - "<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen."
@@ -38,6 +39,7 @@ ability:
       - "<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7 und &cExtra-Herzen&7."
   the_patriot_v_one:
     description:
+      - "<prefix>&8• &7Style: like &cHomelander&7."
       - "<prefix>&8• &aFliegen&7 ist automatisch mit stärkeren V-One-Effekten aktiviert."
       - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten. Standard: &e5,25 Herzen&7, &e50 Blöcke&7."
       - "<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen."
@@ -45,6 +47,7 @@ ability:
       - "<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7, &6Feuerresistenz&7 und &cExtra-Herzen&7."
   sonic_boom:
     description:
+      - "<prefix>&8• &7Style: like &3Bombsight&7."
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
       - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen. Stärker als Flight, etwas schwächer als Patriot."
       - "<prefix>&8• &3Sonic Beam&7: &dSneak + Linksklick&7 feuert einen Warden-ähnlichen Schallstrahl. Cooldown: &e5s&7."
@@ -56,7 +59,7 @@ ability:
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7 und &9Resistenz II&7."
       - "<prefix>&8• &dSneak + Linksklick + hochschauen&7: &52x groß&7, doppelter Schaden, &aJump Boost II&7 und &c+10 Herzen&7 für max. &e1min&7."
       - "<prefix>&8• &dSneak + Linksklick + runterschauen&7: &53,5x klein&7 für max. &e2min&7."
-      - "<prefix>&8• &7Während du groß bist, macht &dSneak + Linksklick + runterschauen&7 dich sofort normal."
+      - "<prefix>&8• &7Während du verwandelt bist, macht &dSneak + Linksklick + hoch/runterschauen&7 dich sofort normal."
       - "<prefix>&8• &7Cooldown startet nach Rückkehr zur normalen Größe."
   heat_vision:
     description:
@@ -65,6 +68,7 @@ ability:
       - "<prefix>&8• &7Kann Eis, Schneeblöcke und flache Schneeschichten schmelzen."
   the_diver:
     description:
+      - "<prefix>&8• &7Style: like &bThe Deep&7."
       - "<prefix>&8• &bWasseratmung&7, &bDolphin's Grace VIII&7, &eSpeed im Wasser&7 und &3Conduit Power II&7 sind dauerhaft aktiv."
       - "<prefix>&8• &bSonar&7: &dSchleichen + Linksklick in die Luft&7 unter Wasser, um nahe Entities sichtbar zu machen."
       - "<prefix>&8• &bSog-Dash&7: &dSchleichen + Rechtsklick&7 in Wasser oder Regen, ähnlich wie ein Sog-IV-Dreizack ohne Item."
@@ -86,6 +90,7 @@ ability:
       - "<prefix>&8• &7Standard-Reichweite: &e35 Blöcke&7."
   the_runner:
     description:
+      - "<prefix>&8• &7Style: like &eA-Train&7."
       - "<prefix>&8• &eRunner Speed&7: Drücke &dF&7, um Speed X, XI, XII, XV und aus durchzuschalten."
       - "<prefix>&8• &eImpact Run&7: Wenn du ab Speed X durch Entities rennst, verursachst du &c6 Herzen&7 Schaden, plus &c+1 Herz&7 pro weiterer Speed-Stufe."
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz I&7, &c5 Extra-Herzen&7 und kein Nahkampf-Cooldown."
@@ -120,6 +125,7 @@ ability:
       - "<prefix>&8• &7Normales Rechtsklick-Feuerplatzieren mit &6Feuerzeug&7 oder &6Feuerkugel&7 wird blockiert, solange du diese Fähigkeit hast."
   the_veteran:
     description:
+      - "<prefix>&8• &7Style: like &eSoldier Boy&7."
       - "<prefix>&8• &7Hohe &aStärke&7, &9Resistenz&7 und &6Feuerresistenz&7."
       - "<prefix>&8• &dSneak + Linksklick&7: &e5s Aufladung&7, dann Bruststrahl."
       - "<prefix>&8• &7Beam: hoher Schaden, Block-Burn und Ability-Remove bei Spielern."

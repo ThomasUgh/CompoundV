@@ -2,6 +2,7 @@ package de.thomasugh.compoundv.ability.shared;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.PrivateGlowUtil;
 import org.bukkit.Bukkit;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import org.bukkit.ChatColor;
@@ -34,6 +35,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     private final NamespacedKey healthModKey;
     private final Map<UUID, Boolean> glowActive     = new HashMap<>();
     private final Map<UUID, Integer> glowTicker     = new HashMap<>();
+    private final Map<UUID, Set<UUID>> visibleTargets = new HashMap<>();
     private final Set<UUID>          launching      = new HashSet<>();
     private final Map<UUID, Long>    launchCooldown = new HashMap<>();
     private final Map<UUID, Long>    fallImpactCooldown = new HashMap<>();
@@ -159,22 +161,47 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
 
     private void refreshGlow(Player p) {
         double r = plugin.getConfig().getDouble(s("glow_radius"), 50);
-        Team   t = redTeam();
+        Particle.DustOptions red = new Particle.DustOptions(Color.fromRGB(255, 35, 25), 1.1f);
+        Set<UUID> currentTargets = new HashSet<>();
         for (Entity e : p.getNearbyEntities(r, r, r)) {
             if (!(e instanceof LivingEntity le) || e == p) continue;
-            le.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
-                    40, 0, false, false, false));
-            t.addEntry(e.getUniqueId().toString());
+            currentTargets.add(le.getUniqueId());
+            if (!PrivateGlowUtil.showGlowing(p, le, ChatColor.RED, "cv_red_glow")) {
+                renderPrivateGlowOutline(p, le, red);
+            }
         }
+        clearStaleGlow(p, currentTargets);
+        visibleTargets.put(p.getUniqueId(), currentTargets);
     }
 
     private void clearGlow(Player p) {
-        double r = plugin.getConfig().getDouble(s("glow_radius"), 50) + 20;
-        Team   t = redTeam();
-        for (Entity e : p.getNearbyEntities(r, r, r)) {
-            if (e instanceof LivingEntity le) le.removePotionEffect(PotionEffects.GLOWING);
-            t.removeEntry(e.getUniqueId().toString());
+        Set<UUID> oldTargets = visibleTargets.remove(p.getUniqueId());
+        if (oldTargets == null) return;
+        for (UUID targetId : oldTargets) {
+            Entity entity = Bukkit.getEntity(targetId);
+            if (entity instanceof LivingEntity living) {
+                PrivateGlowUtil.clearGlowing(p, living);
+            }
         }
+    }
+
+    private void clearStaleGlow(Player player, Set<UUID> currentTargets) {
+        Set<UUID> oldTargets = visibleTargets.get(player.getUniqueId());
+        if (oldTargets == null) return;
+        for (UUID targetId : oldTargets) {
+            if (currentTargets.contains(targetId)) continue;
+            Entity entity = Bukkit.getEntity(targetId);
+            if (entity instanceof LivingEntity living) {
+                PrivateGlowUtil.clearGlowing(player, living);
+            }
+        }
+    }
+
+    private void renderPrivateGlowOutline(Player viewer, LivingEntity target, Particle.DustOptions dust) {
+        double eyeHeight = Math.max(0.8, target.getEyeHeight());
+        org.bukkit.Location base = target.getLocation().add(0, Math.min(1.15, eyeHeight * 0.55), 0);
+        viewer.spawnParticle(Particle.DUST, base, 10, 0.30, Math.min(0.75, eyeHeight * 0.38), 0.30, 0, dust);
+        viewer.spawnParticle(Particle.FLAME, base, 2, 0.18, 0.26, 0.18, 0.01);
     }
 
     @SuppressWarnings("deprecation")

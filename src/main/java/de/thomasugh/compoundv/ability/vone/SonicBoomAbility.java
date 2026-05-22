@@ -36,6 +36,7 @@ public class SonicBoomAbility implements Ability {
     private final Map<UUID, Long> fallImpactCooldown = new HashMap<>();
     private final Map<UUID, Long> sonicBeamCooldown = new HashMap<>();
     private final Map<UUID, Long> sonicRingCooldown = new HashMap<>();
+    private final Map<UUID, Long> fallExplosionReductionUntil = new HashMap<>();
     private final Map<UUID, Integer> meleeHitCounter = new HashMap<>();
     private final NamespacedKey healthKey;
 
@@ -69,6 +70,7 @@ public class SonicBoomAbility implements Ability {
         fallImpactCooldown.remove(player.getUniqueId());
         sonicBeamCooldown.remove(player.getUniqueId());
         sonicRingCooldown.remove(player.getUniqueId());
+        fallExplosionReductionUntil.remove(player.getUniqueId());
         meleeHitCounter.remove(player.getUniqueId());
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0);
         player.setFlySpeed(0.1f);
@@ -118,6 +120,7 @@ public class SonicBoomAbility implements Ability {
             float power = (float) plugin.getConfig().getDouble("abilities.sonic_boom.launch_block_damage_power", 1.15);
             world.createExplosion(location, power, false, true, player);
         }
+        damageLaunchEntities(player, location);
 
         player.setFlying(false);
         player.setAllowFlight(false);
@@ -127,7 +130,7 @@ public class SonicBoomAbility implements Ability {
         player.setVelocity(new Vector(look.getX() * 0.25, velocity, look.getZ() * 0.25));
 
         int peakTicks = plugin.getConfig().getInt("abilities.sonic_boom.launch_peak_ticks", 24);
-        double flySpeed = plugin.getConfig().getDouble("abilities.sonic_boom.launch_fly_speed", 0.325);
+        double flySpeed = plugin.getConfig().getDouble("abilities.sonic_boom.launch_fly_speed", 0.30);
         SchedulerAdapter.runLater(plugin, () -> {
             launching.remove(uuid);
             if (player.isOnline()) {
@@ -136,6 +139,23 @@ public class SonicBoomAbility implements Ability {
                 player.setFlySpeed((float) flySpeed);
             }
         }, peakTicks);
+    }
+
+
+    private void damageLaunchEntities(Player player, Location center) {
+        double radius = plugin.getConfig().getDouble("abilities.sonic_boom.launch_entity_radius", 3.5);
+        double maxDamage = plugin.getConfig().getDouble("abilities.sonic_boom.launch_entity_damage_hearts", 4.0) * 2.0;
+        double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.launch_entity_knockback", 1.4);
+        for (Entity entity : center.getWorld().getNearbyEntities(center, radius, radius, radius)) {
+            if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
+            double distance = Math.max(0.25, target.getLocation().distance(center));
+            if (distance > radius) continue;
+            double factor = Math.max(0.35, 1.0 - (distance / radius));
+            target.damage(maxDamage * factor, player);
+            Vector direction = target.getLocation().toVector().subtract(center.toVector());
+            if (direction.lengthSquared() < 0.0001) direction = player.getLocation().getDirection().clone();
+            target.setVelocity(target.getVelocity().add(direction.normalize().multiply(knockback * factor).setY(0.45 + factor * 0.25)));
+        }
     }
 
     public void triggerFallImpact(Player player, double fallenBlocks) {
@@ -153,6 +173,7 @@ public class SonicBoomAbility implements Ability {
 
         float power = (float) plugin.getConfig().getDouble("abilities.sonic_boom.fall_impact_power", 10.0);
         boolean blockDamage = plugin.getConfig().getBoolean("abilities.sonic_boom.fall_impact_block_damage", true);
+        fallExplosionReductionUntil.put(player.getUniqueId(), System.currentTimeMillis() + 1200L);
         world.createExplosion(location, power, false, blockDamage, player);
         damageNearbyEntities(player, location);
 
@@ -167,15 +188,26 @@ public class SonicBoomAbility implements Ability {
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("fall_impact"));
     }
 
+
+    public boolean shouldReduceFallExplosionPlayerDamage(Player player) {
+        long until = fallExplosionReductionUntil.getOrDefault(player.getUniqueId(), 0L);
+        return until >= System.currentTimeMillis();
+    }
+
     private void damageNearbyEntities(Player player, Location center) {
         double radius = plugin.getConfig().getDouble("abilities.sonic_boom.fall_impact_entity_radius", 9.0);
         double maxDamage = plugin.getConfig().getDouble("abilities.sonic_boom.fall_impact_entity_damage_hearts", 16.0) * 2.0;
+        double playerDamageMultiplier = Math.max(0.0, plugin.getConfig().getDouble("abilities.sonic_boom.fall_impact_player_damage_multiplier", 0.8));
         double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.fall_impact_knockback", 2.4);
         for (Entity entity : center.getWorld().getNearbyEntities(center, radius, radius, radius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
             double distance = Math.max(0.1, target.getLocation().distance(center));
             double factor = Math.max(0.15, 1.0 - (distance / radius));
-            target.damage(maxDamage * factor, player);
+            double targetDamage = maxDamage * factor;
+            if (target instanceof Player) {
+                targetDamage *= playerDamageMultiplier;
+            }
+            target.damage(targetDamage, player);
             Vector direction = target.getLocation().toVector().subtract(center.toVector());
             if (direction.lengthSquared() < 0.0001) direction = new Vector(0, 1, 0);
             target.setVelocity(target.getVelocity().add(direction.normalize().multiply(knockback * factor).setY(0.45 + factor * 0.35)));
@@ -220,9 +252,9 @@ public class SonicBoomAbility implements Ability {
         long cooldownMs = plugin.getConfig().getLong("abilities.sonic_boom.sonic_beam_cooldown_ms", 5000L);
         sonicBeamCooldown.put(uuid, now + Math.max(0L, cooldownMs));
 
-        double range = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_range", 37.5);
+        double range = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_range", 30.0);
         double radius = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_radius", 1.85);
-        double damage = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_damage_hearts", 7.5) * 2.0;
+        double damage = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_damage_hearts", 5.0) * 2.0;
         double pveMultiplier = Math.max(0.0, plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_pve_damage_multiplier", 2.0));
         double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_knockback", 1.85);
         double verticalKnockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_vertical_knockback", 0.35);
@@ -283,7 +315,7 @@ public class SonicBoomAbility implements Ability {
         World world = impact.getWorld();
         if (world == null) return;
 
-        float power = (float) plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_impact_power", 1.35);
+        float power = (float) plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_impact_power", 0.65);
         boolean blockDamage = plugin.getConfig().getBoolean("abilities.sonic_boom.sonic_beam_impact_block_damage", true);
         if (power > 0) {
             world.createExplosion(impact, power, false, blockDamage, player);
@@ -322,9 +354,9 @@ public class SonicBoomAbility implements Ability {
         Location center = player.getLocation();
         World world = player.getWorld();
         double radius = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_radius", 5.0);
-        double maxDamage = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_damage_hearts", 14.0) * 2.0;
-        double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_knockback", 3.35);
-        double vertical = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.75);
+        double maxDamage = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_damage_hearts", 11.2) * 2.0;
+        double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_knockback", 2.68);
+        double vertical = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.60);
 
         world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 2.35f, 0.75f);
         world.playSound(center, Sound.ENTITY_WARDEN_SONIC_BOOM, 1.15f, 1.25f);
