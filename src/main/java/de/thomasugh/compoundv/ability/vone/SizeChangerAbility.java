@@ -67,13 +67,12 @@ public class SizeChangerAbility implements Ability {
         float pitch = player.getLocation().getPitch();
         Mode mode = getMode(player);
 
-        if (mode == Mode.BIG && pitch >= 35f) {
-            revertToNormal(player, true, true);
-            return;
-        }
-
         if (mode != Mode.NORMAL) {
-            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("size_changer.already_active"));
+            if (pitch <= -35f || pitch >= 35f) {
+                revertToNormal(player, true, true);
+                return;
+            }
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("size_changer.look_up_down"));
             return;
         }
 
