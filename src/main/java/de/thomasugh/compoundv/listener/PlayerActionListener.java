@@ -5,6 +5,7 @@ import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FlyAbility;
 import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
+import de.thomasugh.compoundv.ability.compoundv.JumperAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;

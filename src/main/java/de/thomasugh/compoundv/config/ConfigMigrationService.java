@@ -401,6 +401,23 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.size_changer.big_damage_multiplier", 2.0);
         changed |= setIfMissing("abilities.size_changer.big_jump_boost_level", 2);
 
+        changed |= setIfMissing("abilities.jumper.strength_level", 1);
+        changed |= setIfMissing("abilities.jumper.jump_boost_level", 5);
+        changed |= setIfMissing("abilities.jumper.active_ticks", 200);
+        changed |= setIfMissing("abilities.jumper.cooldown_ms", 15000);
+
+        changed |= setIfMissing("abilities.shockwave.strength_level", 2);
+        changed |= setIfMissing("abilities.shockwave.resistance_level", 1);
+        changed |= setIfMissing("abilities.shockwave.cooldown_ms", 120000);
+        changed |= setIfMissing("abilities.shockwave.radius", 10.0);
+        changed |= setIfMissing("abilities.shockwave.damage_hearts", 3.0);
+        changed |= setIfMissing("abilities.shockwave.pve_damage_hearts", 6.0);
+        changed |= setIfMissing("abilities.shockwave.knockback", 3.25);
+        changed |= setIfMissing("abilities.shockwave.vertical_knockback", 0.75);
+        changed |= setIfMissing("abilities.shockwave.hit_band", 1.65);
+        changed |= setIfMissing("abilities.shockwave.animation_step", 1.0);
+        changed |= setIfMissing("abilities.shockwave.animation_period_ticks", 2);
+
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision", 8.0, 9);
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_2", 4.0, 7);
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_3", 2.0, 5);
@@ -411,7 +428,9 @@ public final class ConfigMigrationService {
         changed |= ensureChanceSection("compound_v.chances", orderedMap(
                 "heat_vision", 9,
                 "heat_vision_2", 7,
-                "heat_vision_3", 5
+                "heat_vision_3", 5,
+                "jumper", 17,
+                "shockwave", 9
         ));
         changed |= ensureChanceSection("temp_v.chances", orderedMap(
                 "heat_vision", 9,

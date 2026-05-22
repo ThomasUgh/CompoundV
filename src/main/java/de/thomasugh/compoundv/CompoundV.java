@@ -4,6 +4,8 @@ import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FlyAbility;
 import de.thomasugh.compoundv.ability.compoundv.HeatVisionAbility;
+import de.thomasugh.compoundv.ability.compoundv.JumperAbility;
+import de.thomasugh.compoundv.ability.compoundv.ShockwaveAbility;
 import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
 import de.thomasugh.compoundv.ability.compoundv.SpeedsterAbility;
 import de.thomasugh.compoundv.ability.compoundv.StrengthAbility;
@@ -97,6 +99,8 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new FireAbility(this));
         registry.register(new TheDiverAbility(this));
         registry.register(new TheRunnerAbility(this));
+        registry.register(new JumperAbility(this));
+        registry.register(new ShockwaveAbility(this));
         registry.register(new VisionAbility(this));
         registry.register(new TeleporterAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one", 0xFF5252));

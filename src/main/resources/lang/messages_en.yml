@@ -1,4 +1,4 @@
-language_file_version: 16
+language_file_version: 17
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -70,6 +70,16 @@ ability:
       - "<prefix>&8• &bRiptide Dash&7: &dSneak + Right-Click&7 in water or rain, similar to Riptide IV without holding a trident."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
       - "<prefix>&8• &7While underwater, Strength and Resistance are increased by &a+1 level&7."
+  jumper:
+    description:
+      - "<prefix>&8• &aStrength I&7 is active permanently."
+      - "<prefix>&8• &aJump Burst&7: press &dF&7 for &aJump Boost V&7 and no fall damage while active."
+      - "<prefix>&8• &7Default active time: &e10s&7. Cooldown: &e15s&7."
+  shockwave:
+    description:
+      - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
+      - "<prefix>&8• &eShockwave&7: press &dF&7 to release a 10-block knockback wave."
+      - "<prefix>&8• &7Damage: &c3 hearts&7 to players, &c6 hearts&7 to mobs. Cooldown: &e2min&7."
   vision:
     description:
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
@@ -158,6 +168,15 @@ launch_cooldown: "&cJump Start ready in {seconds}s"
 sonic_boom:
   ring_cooldown: "&3Sonic Ring &cready in {seconds}s"
   beam_cooldown: "&3Sonic Beam &cready in {seconds}s"
+
+jumper:
+  activated: "&aJump Burst &aactivated"
+  active: "&aJump Burst &7active for {seconds}s"
+  cooldown: "&aJump Burst &cready in {seconds}s"
+
+shockwave:
+  released: "&eShockwave &7released"
+  cooldown: "&eShockwave &cready in {seconds}s"
 
 size_changer:
   big_on: "&5SizeChanger &abig form enabled"

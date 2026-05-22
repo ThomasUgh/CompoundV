@@ -1,4 +1,4 @@
-language_file_version: 16
+language_file_version: 17
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -70,6 +70,16 @@ ability:
       - "<prefix>&8• &bSog-Dash&7: &dSchleichen + Rechtsklick&7 in Wasser oder Regen, ähnlich wie ein Sog-IV-Dreizack ohne Item."
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7 und &9Resistenz I&7."
       - "<prefix>&8• &7Unter Wasser werden Stärke und Resistenz um &a+1 Stufe&7 erhöht."
+  jumper:
+    description:
+      - "<prefix>&8• &aStärke I&7 ist dauerhaft aktiv."
+      - "<prefix>&8• &aJump Burst&7: Drücke &dF&7 für &aJump Boost V&7 und keinen Fallschaden während aktiv."
+      - "<prefix>&8• &7Standard-Aktivzeit: &e10s&7. Cooldown: &e15s&7."
+  shockwave:
+    description:
+      - "<prefix>&8• &7Passive Effekte: &aStärke II&7 und &9Resistenz I&7."
+      - "<prefix>&8• &eShockwave&7: Drücke &dF&7 für eine 10-Block-Rückstoßwelle."
+      - "<prefix>&8• &7Schaden: &c3 Herzen&7 gegen Spieler, &c6 Herzen&7 gegen Mobs. Cooldown: &e2min&7."
   vision:
     description:
       - "<prefix>&8• &bRöntgenblick&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities sichtbar zu machen."
@@ -158,6 +168,15 @@ launch_cooldown: "&cJump Start bereit in {seconds}s"
 sonic_boom:
   ring_cooldown: "&3Sonic Ring &cbereit in {seconds}s"
   beam_cooldown: "&3Sonic Beam &cbereit in {seconds}s"
+
+jumper:
+  activated: "&aJump Burst &aaktiviert"
+  active: "&aJump Burst &7noch {seconds}s aktiv"
+  cooldown: "&aJump Burst &cbereit in {seconds}s"
+
+shockwave:
+  released: "&eShockwave &7ausgelöst"
+  cooldown: "&eShockwave &cbereit in {seconds}s"
 
 size_changer:
   big_on: "&5SizeChanger &aGroßform aktiviert"

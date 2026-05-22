@@ -79,7 +79,15 @@ public final class AbilityAliases {
             Map.entry("strength_men", "strength"),
             Map.entry("strengthmen", "strength"),
             Map.entry("fire_control", "fire"),
-            Map.entry("firecontrol", "fire")
+            Map.entry("firecontrol", "fire"),
+
+            Map.entry("jump", "jumper"),
+            Map.entry("jumper", "jumper"),
+
+            Map.entry("shock", "shockwave"),
+            Map.entry("shock_wave", "shockwave"),
+            Map.entry("shockwave", "shockwave"),
+            Map.entry("shock-wave", "shockwave")
     );
 
     private AbilityAliases() {}

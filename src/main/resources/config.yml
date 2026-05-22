@@ -224,6 +224,25 @@ abilities:
     impact_cooldown_ms: 750
     impact_knockback: 1.15
 
+  jumper:
+    strength_level: 1
+    jump_boost_level: 5
+    active_ticks: 200
+    cooldown_ms: 15000
+
+  shockwave:
+    strength_level: 2
+    resistance_level: 1
+    cooldown_ms: 120000
+    radius: 10.0
+    damage_hearts: 3.0
+    pve_damage_hearts: 6.0
+    knockback: 3.25
+    vertical_knockback: 0.75
+    hit_band: 1.65
+    animation_step: 1.0
+    animation_period_ticks: 2
+
   teleporter:
     range: 50.0
     cooldown_ms: 2000
