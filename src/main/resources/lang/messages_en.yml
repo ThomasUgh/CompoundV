@@ -1,4 +1,4 @@
-language_file_version: 13
+language_file_version: 14
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -32,17 +32,26 @@ ability:
   the_patriot:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
-      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle the strong red beam."
+      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle. Default: &e5 hearts&7, &e44 blocks&7."
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7 and &cBonus Hearts&7."
   the_patriot_v_one:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically with stronger V One boosts."
-      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle a denser red beam with &e+33% damage&7 and &e+5 blocks range&7 compared to standard The Patriot."
+      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle. Default: &e5.25 hearts&7, &e50 blocks&7."
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7, &6Fire Resistance&7 and &cBonus Hearts&7."
+  sonic_boom:
+    description:
+      - "<prefix>&8• &aFlight&7 is enabled automatically."
+      - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
+      - "<prefix>&8• &7Passive boosts: &aStrength IV&7 and &9Resistance IV&7."
+  size_changer:
+    description:
+      - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance II&7."
+      - "<prefix>&8• &7Size changing controls will be added later."
   heat_vision:
     description:
       - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the beam."
@@ -50,7 +59,7 @@ ability:
       - "<prefix>&8• &7Can melt ice, snow blocks and flat snow layers."
   the_diver:
     description:
-      - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace IV&7 and &3Heart of the Sea / Conduit Power II&7 are active permanently."
+      - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace XII&7 and &3Heart of the Sea / Conduit Power II&7 are active permanently."
       - "<prefix>&8• &bSonar&7: &dSneak + Left-Click Air&7 while underwater to reveal nearby entities."
       - "<prefix>&8• &bRiptide Dash&7: &dSneak + Right-Click&7 in water or rain, similar to Riptide IV without holding a trident."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
@@ -71,7 +80,8 @@ ability:
   fly:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
-      - "<prefix>&8• &7Use normal Minecraft flight controls to move."
+      - "<prefix>&8• &6Light Jump Start&7: &dSneak&7, look up and jump for a weaker launch."
+      - "<prefix>&8• &7Launch flight speed is around &e2x&7 normal flight."
   speedster:
     description:
       - "<prefix>&8• &eSuper Speed&7: press &dF&7 to toggle it on/off."
@@ -84,7 +94,9 @@ ability:
     description:
       - "<prefix>&8• &5Ghost Mode&7: press &dF&7 to toggle invisibility."
       - "<prefix>&8• &7When enabled you receive &5Invisibility II&7 and mobs will not target you."
-      - "<prefix>&8• &7Passive boosts: &9Resistance II&7 and &aStrength I&7."
+      - "<prefix>&8• &7Existing mob targets are cleared while Ghost Mode is active."
+      - "<prefix>&8• &7Passive boosts: &9Resistance II&7, &aStrength I&7 and &6Fire Resistance&7."
+      - "<prefix>&8• &7Heat Vision deals no damage to The Ghost."
   fire:
     description:
       - "<prefix>&8• &cFire Aura&7 ignites nearby enemies automatically."
@@ -100,6 +112,8 @@ ability:
 toggle:
   heat_vision_on: "&bHeat Vision &aenabled"
   heat_vision_off: "&7Heat Vision disabled"
+  heat_vision_overheated: "&cHeat Vision cooling down for {seconds}s"
+  heat_vision_cooldown: "&cHeat Vision ready in {seconds}s"
   xray_on: "&bXRay &aenabled"
   xray_off: "&7XRay disabled"
   sonar_on: "&bSonar &aenabled"

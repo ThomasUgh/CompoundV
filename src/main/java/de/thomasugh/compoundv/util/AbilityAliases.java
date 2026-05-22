@@ -28,6 +28,16 @@ public final class AbilityAliases {
             Map.entry("the-veteran", "the_veteran"),
             Map.entry("the_veteran", "the_veteran"),
 
+            Map.entry("sonic", "sonic_boom"),
+            Map.entry("sonicboom", "sonic_boom"),
+            Map.entry("sonic_boom", "sonic_boom"),
+            Map.entry("sonic-boom", "sonic_boom"),
+
+            Map.entry("sizechanger", "size_changer"),
+            Map.entry("size_changer", "size_changer"),
+            Map.entry("size-changer", "size_changer"),
+            Map.entry("size", "size_changer"),
+
             Map.entry("diver", "the_diver"),
             Map.entry("thediver", "the_diver"),
             Map.entry("the-diver", "the_diver"),

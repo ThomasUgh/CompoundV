@@ -89,6 +89,8 @@ public final class ConfigMigrationService {
         changed |= ensureChanceSection("v_one.chances", orderedMap(
                 "the_patriot_v_one", 1,
                 "the_veteran", 3,
+                "sonic_boom", 3,
+                "size_changer", 6,
                 "teleporter", 5
         ));
         return changed;
@@ -309,7 +311,35 @@ public final class ConfigMigrationService {
 
         changed |= setIfMissing("abilities.invisibility.resistance_level", 2);
         changed |= setIfMissing("abilities.invisibility.strength_level", 1);
+        changed |= setIfMissing("abilities.invisibility.fire_resistance", true);
         changed |= setIfMissing("abilities.invisibility.hide_from_mobs", true);
+        changed |= setIfMissing("abilities.invisibility.mob_target_clear_radius", 48.0);
+        changed |= setIfMissing("abilities.invisibility.mob_target_clear_period_ticks", 10);
+
+        changed |= replaceIfNumericEquals("abilities.the_diver.dolphins_grace_level", 4.0, 12);
+        changed |= setIfMissing("abilities.the_diver.dolphins_grace_level", 12);
+
+        changed |= setIfMissing("abilities.fly.launch_velocity", 1.75);
+        changed |= setIfMissing("abilities.fly.launch_peak_ticks", 14);
+        changed |= setIfMissing("abilities.fly.launch_cooldown_ms", 10000);
+        changed |= setIfMissing("abilities.fly.launch_fly_speed", 0.2);
+
+        changed |= setIfMissing("abilities.sonic_boom.strength_level", 4);
+        changed |= setIfMissing("abilities.sonic_boom.resistance_level", 4);
+        changed |= setIfMissing("abilities.sonic_boom.launch_velocity", 3.5);
+        changed |= setIfMissing("abilities.sonic_boom.launch_peak_ticks", 28);
+        changed |= setIfMissing("abilities.sonic_boom.launch_cooldown_ms", 10000);
+        changed |= setIfMissing("abilities.sonic_boom.launch_fly_speed", 0.375);
+
+        changed |= setIfMissing("abilities.size_changer.strength_level", 2);
+        changed |= setIfMissing("abilities.size_changer.resistance_level", 2);
+
+        changed |= replaceIfNumericEquals("compound_v.chances.heat_vision", 8.0, 9);
+        changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_2", 4.0, 7);
+        changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_3", 2.0, 5);
+        changed |= replaceIfNumericEquals("temp_v.chances.heat_vision", 5.0, 9);
+        changed |= replaceIfNumericEquals("temp_v.chances.heat_vision_2", 3.0, 7);
+        changed |= replaceIfNumericEquals("temp_v.chances.heat_vision_3", 1.0, 5);
 
         changed |= ensureChanceSection("compound_v.chances", orderedMap(
                 "heat_vision", 9,
@@ -321,6 +351,9 @@ public final class ConfigMigrationService {
                 "heat_vision_2", 7,
                 "heat_vision_3", 5
         ));
+        changed |= ensureChanceSection("v_one.chances", orderedMap(
+                "sonic_boom", 3,
+                "size_changer", 6
         ));
 
         return changed;

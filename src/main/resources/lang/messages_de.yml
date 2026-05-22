@@ -1,4 +1,4 @@
-language_file_version: 13
+language_file_version: 14
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -32,17 +32,26 @@ ability:
   the_patriot:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
-      - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten des starken roten Strahls."
+      - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten. Standard: &e5 Herzen&7, &e44 Blöcke&7."
       - "<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen."
       - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen."
       - "<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7 und &cExtra-Herzen&7."
   the_patriot_v_one:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch mit stärkeren V-One-Effekten aktiviert."
-      - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten eines dichteren roten Strahls mit &e+33% Schaden&7 und &e+5 Blöcken Reichweite&7 gegenüber dem normalen The Patriot."
+      - "<prefix>&8• &cHeat Vision&7: Drücke &dF&7 zum Umschalten. Standard: &e5,25 Herzen&7, &e50 Blöcke&7."
       - "<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen."
       - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen."
       - "<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7, &6Feuerresistenz&7 und &cExtra-Herzen&7."
+  sonic_boom:
+    description:
+      - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
+      - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen."
+      - "<prefix>&8• &7Passive Effekte: &aStärke IV&7 und &9Resistenz IV&7."
+  size_changer:
+    description:
+      - "<prefix>&8• &7Passive Effekte: &aStärke II&7 und &9Resistenz II&7."
+      - "<prefix>&8• &7Größenwechsel-Steuerung kommt später."
   heat_vision:
     description:
       - "<prefix>&8• &bHeat Vision&7: Drücke &dF&7 zum Umschalten des Strahls."
@@ -50,7 +59,7 @@ ability:
       - "<prefix>&8• &7Kann Eis, Schneeblöcke und flache Schneeschichten schmelzen."
   the_diver:
     description:
-      - "<prefix>&8• &bWasseratmung&7, &bDolphin's Grace IV&7 und &3Herz des Meeres / Conduit Power II&7 sind dauerhaft aktiv."
+      - "<prefix>&8• &bWasseratmung&7, &bDolphin's Grace XII&7 und &3Herz des Meeres / Conduit Power II&7 sind dauerhaft aktiv."
       - "<prefix>&8• &bSonar&7: &dSchleichen + Linksklick in die Luft&7 unter Wasser, um nahe Entities sichtbar zu machen."
       - "<prefix>&8• &bSog-Dash&7: &dSchleichen + Rechtsklick&7 in Wasser oder Regen, ähnlich wie ein Sog-IV-Dreizack ohne Item."
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7 und &9Resistenz I&7."
@@ -71,7 +80,8 @@ ability:
   fly:
     description:
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
-      - "<prefix>&8• &7Nutze die normalen Minecraft-Flugsteuerungen."
+      - "<prefix>&8• &6Leichter Jump Start&7: &dSchleichen&7, hochschauen und springen."
+      - "<prefix>&8• &7Nach dem Launch fliegst du ca. &e2x&7 so schnell."
   speedster:
     description:
       - "<prefix>&8• &eSuper Speed&7: Drücke &dF&7 zum Ein-/Ausschalten."
@@ -84,7 +94,9 @@ ability:
     description:
       - "<prefix>&8• &5Ghost Mode&7: Drücke &dF&7 zum Ein-/Ausschalten."
       - "<prefix>&8• &7Aktiviert gibt dir &5Unsichtbarkeit II&7 und Mobs targeten dich nicht."
-      - "<prefix>&8• &7Passive Effekte: &9Resistenz II&7 und &aStärke I&7."
+      - "<prefix>&8• &7Bestehende Mob-Targets werden während Ghost Mode aktiv entfernt."
+      - "<prefix>&8• &7Passive Effekte: &9Resistenz II&7, &aStärke I&7 und &6Feuerresistenz&7."
+      - "<prefix>&8• &7Heat Vision verursacht bei The Ghost keinen Schaden."
   fire:
     description:
       - "<prefix>&8• &cFeuer-Aura&7 entzündet Gegner in deiner Nähe automatisch."
@@ -100,6 +112,8 @@ ability:
 toggle:
   heat_vision_on: "&bHeat Vision &aaktiviert"
   heat_vision_off: "&7Heat Vision deaktiviert"
+  heat_vision_overheated: "&cHeat Vision kühlt für {seconds}s ab"
+  heat_vision_cooldown: "&cHeat Vision bereit in {seconds}s"
   xray_on: "&bXRay &aaktiviert"
   xray_off: "&7XRay deaktiviert"
   sonar_on: "&bSonar &aaktiviert"

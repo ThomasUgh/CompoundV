@@ -12,6 +12,8 @@ import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
+import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
+import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.command.CompoundVCommand;
 import de.thomasugh.compoundv.config.ConfigMigrationService;
@@ -85,7 +87,7 @@ public final class CompoundV extends JavaPlugin {
 
     private void registerAbilities() {
         registry.register(new ThePatriotAbility(this, "the_patriot", "compound_v", 0xE53935));
-        registry.register(new FlyAbility());
+        registry.register(new FlyAbility(this));
         registry.register(new HeatVisionAbility(this, "heat_vision", "Heat Vision I", 1, 0x2DD2FF));
         registry.register(new HeatVisionAbility(this, "heat_vision_2", "Heat Vision II", 2, 0x2DFF69));
         registry.register(new HeatVisionAbility(this, "heat_vision_3", "Heat Vision III", 3, 0xFF2A1A));
@@ -99,6 +101,8 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new TeleporterAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one", 0xFF5252));
         registry.register(new TheVeteranAbility(this));
+        registry.register(new SonicBoomAbility(this));
+        registry.register(new SizeChangerAbility(this));
     }
 
     private void registerListeners() {

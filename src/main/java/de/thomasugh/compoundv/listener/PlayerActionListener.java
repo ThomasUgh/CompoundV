@@ -3,11 +3,13 @@ package de.thomasugh.compoundv.listener;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
+import de.thomasugh.compoundv.ability.compoundv.FlyAbility;
 import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
+import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.manager.AbilityManager;
@@ -221,7 +223,9 @@ public class PlayerActionListener implements Listener {
         Ability ability = manager.getAbility(player);
         if (ability == null) return;
 
-        boolean flightAbility = "fly".equalsIgnoreCase(ability.getId()) || ability instanceof ThePatriotAbility;
+        boolean flightAbility = "fly".equalsIgnoreCase(ability.getId())
+                || ability instanceof ThePatriotAbility
+                || ability instanceof SonicBoomAbility;
         if (!flightAbility) return;
 
         SchedulerAdapter.runLater(plugin, () -> {
@@ -283,18 +287,23 @@ public class PlayerActionListener implements Listener {
         if (ability instanceof TheRunnerAbility runner) {
             runner.handleMoveThroughEntities(p, e.getFrom(), e.getTo());
         }
-        if (!(ability instanceof ThePatriotAbility ha)) return;
+
+        if (!(ability instanceof ThePatriotAbility)
+                && !(ability instanceof FlyAbility)
+                && !(ability instanceof SonicBoomAbility)) {
+            return;
+        }
 
         UUID u = p.getUniqueId();
         boolean prevGround = wasOnGround.getOrDefault(u, true);
         boolean currGround = p.isOnGround();
         wasOnGround.put(u, currGround);
 
-        double y = p.getLocation().getY();
-        if (!currGround && !p.isFlying()) fallPeakY.merge(u, y, Math::max);
+        if (ability instanceof ThePatriotAbility patriot) {
+            double y = p.getLocation().getY();
+            if (!currGround && !p.isFlying()) fallPeakY.merge(u, y, Math::max);
 
-        if (!prevGround && currGround) {
-            if (fallPeakY.containsKey(u)) {
+            if (!prevGround && currGround && fallPeakY.containsKey(u)) {
                 double trackedDistance = fallPeakY.remove(u) - y;
                 double dist = Math.max(trackedDistance, p.getFallDistance());
                 double particleMin = plugin.getConfig().getDouble(
@@ -303,16 +312,27 @@ public class PlayerActionListener implements Listener {
                         "abilities.the_patriot.shared.fall_impact_block_height",
                         plugin.getConfig().getDouble("abilities.the_patriot.shared.fall_impact_height", 40));
                 double min = Math.min(particleMin, blockMin);
-                if (p.isSneaking() && dist >= min) ha.triggerFallImpact(p, dist);
+                if (p.isSneaking() && dist >= min) patriot.triggerFallImpact(p, dist);
             }
-            if (p.getFlySpeed() > 0.15f) p.setFlySpeed(0.1f);
         }
 
-        if (!ha.isLaunching(p) && prevGround && !currGround
-                && p.getVelocity().getY() > 0.15
-                && p.isSneaking()
-                && p.getLocation().getPitch() < -40f) {
-            ha.tryLaunch(p);
+        if (!prevGround && currGround && p.getFlySpeed() > 0.15f) {
+            p.setFlySpeed(0.1f);
+        }
+
+        if (!prevGround || currGround
+                || p.getVelocity().getY() <= 0.15
+                || !p.isSneaking()
+                || p.getLocation().getPitch() >= -40f) {
+            return;
+        }
+
+        if (ability instanceof ThePatriotAbility patriot && !patriot.isLaunching(p)) {
+            patriot.tryLaunch(p);
+        } else if (ability instanceof FlyAbility fly && !fly.isLaunching(p)) {
+            fly.tryLaunch(p);
+        } else if (ability instanceof SonicBoomAbility sonic && !sonic.isLaunching(p)) {
+            sonic.tryLaunch(p);
         }
     }
 
