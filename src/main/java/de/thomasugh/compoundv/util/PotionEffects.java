@@ -24,6 +24,7 @@ public final class PotionEffects {
     public static final PotionEffectType WATER_BREATHING = resolve("WATER_BREATHING");
     public static final PotionEffectType DOLPHINS_GRACE = resolve("DOLPHINS_GRACE");
     public static final PotionEffectType CONDUIT_POWER = resolve("CONDUIT_POWER");
+    public static final PotionEffectType JUMP_BOOST = resolve("JUMP", "JUMP_BOOST");
 
     private PotionEffects() {
     }

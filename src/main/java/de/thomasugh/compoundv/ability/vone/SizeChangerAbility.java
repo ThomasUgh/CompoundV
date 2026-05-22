@@ -64,7 +64,15 @@ public class SizeChangerAbility implements Ability {
 
     public void handleSneakLeftClick(Player player) {
         UUID uuid = player.getUniqueId();
-        if (getMode(player) != Mode.NORMAL) {
+        float pitch = player.getLocation().getPitch();
+        Mode mode = getMode(player);
+
+        if (mode == Mode.BIG && pitch >= 35f) {
+            revertToNormal(player, true, true);
+            return;
+        }
+
+        if (mode != Mode.NORMAL) {
             MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("size_changer.already_active"));
             return;
         }
@@ -78,7 +86,6 @@ public class SizeChangerAbility implements Ability {
             return;
         }
 
-        float pitch = player.getLocation().getPitch();
         if (pitch <= -35f) {
             activateBig(player);
         } else if (pitch >= 35f) {
@@ -99,7 +106,6 @@ public class SizeChangerAbility implements Ability {
     private void activateBig(Player player) {
         UUID uuid = player.getUniqueId();
         activeMode.put(uuid, Mode.BIG);
-        startCooldown(player);
         cancelRevertTask(uuid);
 
         double scaleBonus = plugin.getConfig().getDouble("abilities.size_changer.big_scale_bonus", 1.0);
@@ -108,9 +114,15 @@ public class SizeChangerAbility implements Ability {
         AttributeUtil.setMaxHealthBonus(player, healthKey, extraHearts * 2.0);
 
         long durationTicks = plugin.getConfig().getLong("abilities.size_changer.big_duration_ticks", 1200L);
+        int jumpBoostLevel = plugin.getConfig().getInt("abilities.size_changer.big_jump_boost_level", 2);
+        if (jumpBoostLevel > 0) {
+            player.addPotionEffect(new PotionEffect(PotionEffects.JUMP_BOOST,
+                    (int) Math.min(Integer.MAX_VALUE, durationTicks + 20L),
+                    Math.max(0, jumpBoostLevel - 1), false, false, true));
+        }
         revertTasks.put(uuid, SchedulerAdapter.runLater(plugin, () -> {
             if (player.isOnline() && getMode(player) == Mode.BIG) {
-                revertToNormal(player, true);
+                revertToNormal(player, true, true);
             }
         }, durationTicks));
 
@@ -124,17 +136,16 @@ public class SizeChangerAbility implements Ability {
     private void activateSmall(Player player) {
         UUID uuid = player.getUniqueId();
         activeMode.put(uuid, Mode.SMALL);
-        startCooldown(player);
         cancelRevertTask(uuid);
 
-        double scaleBonus = plugin.getConfig().getDouble("abilities.size_changer.small_scale_bonus", -0.5);
+        double scaleBonus = plugin.getConfig().getDouble("abilities.size_changer.small_scale_bonus", -0.7142857143);
         AttributeUtil.setScaleBonus(player, scaleKey, scaleBonus);
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0);
 
         long durationTicks = plugin.getConfig().getLong("abilities.size_changer.small_duration_ticks", 2400L);
         revertTasks.put(uuid, SchedulerAdapter.runLater(plugin, () -> {
             if (player.isOnline() && getMode(player) == Mode.SMALL) {
-                revertToNormal(player, true);
+                revertToNormal(player, true, true);
             }
         }, durationTicks));
 
@@ -144,11 +155,19 @@ public class SizeChangerAbility implements Ability {
     }
 
     private void revertToNormal(Player player, boolean notify) {
+        revertToNormal(player, notify, false);
+    }
+
+    private void revertToNormal(Player player, boolean notify, boolean beginCooldown) {
         UUID uuid = player.getUniqueId();
         cancelRevertTask(uuid);
         activeMode.put(uuid, Mode.NORMAL);
         AttributeUtil.setScaleBonus(player, scaleKey, 0);
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0);
+        player.removePotionEffect(PotionEffects.JUMP_BOOST);
+        if (beginCooldown) {
+            startCooldown(player);
+        }
         if (notify) {
             player.getWorld().spawnParticle(Particle.POOF, player.getLocation().add(0, 0.9, 0), 25, 0.35, 0.5, 0.35, 0.03);
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.45f, 1.3f);

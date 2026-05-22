@@ -316,6 +316,9 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_patriot.shared.fall_impact_particle_height", 15.0, 10);
         changed |= setIfMissing("abilities.the_patriot.shared.fall_impact_particle_height", 10);
         changed |= setIfMissing("abilities.the_patriot.shared.fall_impact_cooldown_ms", 60000);
+        changed |= replaceIfNumericEquals("abilities.the_veteran.beam_range", 48.0, 53.0);
+        changed |= setIfMissing("abilities.the_veteran.beam_range", 53.0);
+        changed |= setIfMissing("abilities.the_veteran.pve_damage_multiplier", 1.2);
 
         changed |= setIfMissing("abilities.invisibility.resistance_level", 2);
         changed |= setIfMissing("abilities.invisibility.strength_level", 1);
@@ -370,9 +373,11 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.size_changer.big_duration_ticks", 1200);
         changed |= setIfMissing("abilities.size_changer.small_duration_ticks", 2400);
         changed |= setIfMissing("abilities.size_changer.big_scale_bonus", 1.0);
-        changed |= setIfMissing("abilities.size_changer.small_scale_bonus", -0.5);
+        changed |= replaceIfNumericEquals("abilities.size_changer.small_scale_bonus", -0.5, -0.7142857143);
+        changed |= setIfMissing("abilities.size_changer.small_scale_bonus", -0.7142857143);
         changed |= setIfMissing("abilities.size_changer.big_extra_hearts", 10.0);
         changed |= setIfMissing("abilities.size_changer.big_damage_multiplier", 2.0);
+        changed |= setIfMissing("abilities.size_changer.big_jump_boost_level", 2);
 
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision", 8.0, 9);
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_2", 4.0, 7);

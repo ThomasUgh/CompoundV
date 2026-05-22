@@ -54,9 +54,10 @@ ability:
   size_changer:
     description:
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance II&7."
-      - "<prefix>&8• &dSneak + Left-Click + look up&7: become &52x bigger&7, double damage and &c+10 hearts&7 for max &e1min&7."
-      - "<prefix>&8• &dSneak + Left-Click + look down&7: become &52x smaller&7 for max &e2min&7."
-      - "<prefix>&8• &7Both forms have a &e60s cooldown&7."
+      - "<prefix>&8• &dSneak + Left-Click + look up&7: become &52x bigger&7, double damage, &aJump Boost II&7 and &c+10 hearts&7 for max &e1min&7."
+      - "<prefix>&8• &dSneak + Left-Click + look down&7: become &53.5x smaller&7 for max &e2min&7."
+      - "<prefix>&8• &7While big, &dSneak + Left-Click + look down&7 returns you to normal instantly."
+      - "<prefix>&8• &7Cooldown starts after returning to normal."
   heat_vision:
     description:
       - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the beam."

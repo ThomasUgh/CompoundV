@@ -100,9 +100,10 @@ abilities:
     big_duration_ticks: 1200
     small_duration_ticks: 2400
     big_scale_bonus: 1.0
-    small_scale_bonus: -0.5
+    small_scale_bonus: -0.7142857143
     big_extra_hearts: 10.0
     big_damage_multiplier: 2.0
+    big_jump_boost_level: 2
 
   the_patriot:
     shared:
