@@ -6,7 +6,8 @@ compound_v:
     fly: 15
     heat_vision: 9
     heat_vision_2: 7
-    heat_vision_3: 5
+    heat_vision_3: 6
+    heat_vision_4: 5
     speedster: 10
     strength: 18
     invisibility: 7
@@ -23,7 +24,8 @@ temp_v:
     fly: 10
     heat_vision: 9
     heat_vision_2: 7
-    heat_vision_3: 5
+    heat_vision_3: 6
+    heat_vision_4: 5
     speedster: 20
     strength: 25
     invisibility: 15

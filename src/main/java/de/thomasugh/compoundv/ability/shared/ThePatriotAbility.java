@@ -48,12 +48,12 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override public String    getId()          { return id; }
     @Override public String    getDisplayName() { return "The Patriot"; }
     @Override public int getColor()       { return color; }
-    @Override protected float  size()           { return isVOne() ? 0.82f : 0.72f; }
-    @Override protected float  glowSize()       { return isVOne() ? 0.55f : 0.45f; }
-    @Override protected double step()           { return isVOne() ? 0.18 : 0.24;  }
-    @Override protected int    coreParticles()  { return isVOne() ? 6 : 3; }
-    @Override protected int    glowParticles()  { return isVOne() ? 4 : 2; }
-    @Override protected int    impactParticles(){ return isVOne() ? 28 : 18; }
+    @Override protected float  size()           { return isVOne() ? 0.67f : 0.65f; }
+    @Override protected float  glowSize()       { return isVOne() ? 0.44f : 0.43f; }
+    @Override protected double step()           { return isVOne() ? 0.304 : 0.314;  }
+    @Override protected int    coreParticles()  { return 2; }
+    @Override protected int    glowParticles()  { return 1; }
+    @Override protected int    impactParticles(){ return isVOne() ? 19 : 17; }
     @Override protected int    entityFireTicks(){ return isVOne() ? 100 : 80; }
     @Override protected Color  coreColor()      { return Color.fromRGB(255, 20, 8); }
     @Override protected Color  glowColor()      { return Color.fromRGB(255, 65, 35); }

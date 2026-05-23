@@ -143,6 +143,8 @@ public abstract class BaseHeatVisionAbility implements Ability {
         strand(w, rEye, dir, dR, core, glow, fireParticles());
         meltPassableSnowAlongBeam(player, lEye, dir, dL, w);
         meltPassableSnowAlongBeam(player, rEye, dir, dR, w);
+        clearPassableVegetationAlongBeam(player, lEye, dir, dL, w);
+        clearPassableVegetationAlongBeam(player, rEye, dir, dR, w);
 
         int cnt = damageCounter.merge(player.getUniqueId(), 1, Integer::sum);
         if (cnt % ivl != 0 || hit == null) return;
@@ -183,6 +185,10 @@ public abstract class BaseHeatVisionAbility implements Ability {
                 }
                 return;
             }
+            if (isHeatVisionClearableVegetation(mat)) {
+                clearVegetationBlock(b, w);
+                return;
+            }
             if (ignite && hit.getHitBlockFace() != null) {
                 Block t = b.getRelative(hit.getHitBlockFace());
                 if (t.getType() == Material.AIR) t.setType(Material.FIRE);
@@ -191,6 +197,53 @@ public abstract class BaseHeatVisionAbility implements Ability {
     }
 
 
+
+
+    private void clearPassableVegetationAlongBeam(Player player, Location origin, Vector dir, double range, World world) {
+        Block standOn = player.getLocation().getBlock().getRelative(org.bukkit.block.BlockFace.DOWN);
+        Block playerBlock = player.getLocation().getBlock();
+
+        for (double d = 0.5; d <= range; d += 0.32) {
+            Block block = origin.clone().add(dir.clone().multiply(d)).getBlock();
+            if (block.equals(standOn) || block.equals(playerBlock)) continue;
+            if (isHeatVisionClearableVegetation(block.getType())) {
+                clearVegetationBlock(block, world);
+            }
+        }
+    }
+
+    private void clearVegetationBlock(Block block, World world) {
+        Location loc = block.getLocation().add(0.5, 0.45, 0.5);
+        world.spawnParticle(Particle.SMOKE, loc, 4, 0.12, 0.12, 0.12, 0.01);
+        world.spawnParticle(Particle.FLAME, loc, 1, 0.08, 0.08, 0.08, 0.0);
+        block.setType(Material.AIR);
+    }
+
+    private boolean isHeatVisionClearableVegetation(Material material) {
+        String name = material.name();
+        return name.equals("GRASS")
+                || name.equals("SHORT_GRASS")
+                || name.equals("TALL_GRASS")
+                || name.equals("FERN")
+                || name.equals("LARGE_FERN")
+                || name.equals("DEAD_BUSH")
+                || name.equals("SWEET_BERRY_BUSH")
+                || name.equals("FIREFLY_BUSH")
+                || name.equals("PINK_PETALS")
+                || name.equals("WILDFLOWERS")
+                || name.equals("LEAF_LITTER")
+                || name.equals("MOSS_CARPET")
+                || name.equals("PALE_MOSS_CARPET")
+                || name.equals("TORCHFLOWER")
+                || name.equals("PITCHER_PLANT")
+                || name.equals("SEAGRASS")
+                || name.equals("TALL_SEAGRASS")
+                || name.equals("KELP")
+                || name.equals("KELP_PLANT")
+                || name.contains("VINES")
+                || name.endsWith("_VINE")
+                || name.endsWith("_BUSH");
+    }
 
     private void meltPassableSnowAlongBeam(Player player, Location origin, Vector dir, double range, World world) {
         Block standOn = player.getLocation().getBlock().getRelative(org.bukkit.block.BlockFace.DOWN);
@@ -327,7 +380,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
     }
 
     private static void markCookedByHeatVision(LivingEntity entity) {
-        COOKED_BY_HEAT_VISION.put(entity.getUniqueId(), System.currentTimeMillis() + 5000L);
+        COOKED_BY_HEAT_VISION.put(entity.getUniqueId(), System.currentTimeMillis() + 15000L);
     }
 
     public static boolean shouldCookDrops(LivingEntity entity) {
