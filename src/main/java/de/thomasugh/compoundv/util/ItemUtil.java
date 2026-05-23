@@ -133,7 +133,7 @@ public final class ItemUtil {
         meta.setAuthor(ChatColor.stripColor(loc.msg("tutorial_book.author")));
 
         List<String> pages = new ArrayList<>();
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= 20; i++) {
             List<String> lines = loc.msgList("tutorial_book.page_" + i);
             if (!lines.isEmpty()) {
                 pages.add(String.join("\n", lines));
