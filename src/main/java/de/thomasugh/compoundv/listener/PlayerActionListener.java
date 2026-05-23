@@ -14,12 +14,16 @@ import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.data.CompoundPotion;
+import de.thomasugh.compoundv.data.PlayerAbilityData;
 import de.thomasugh.compoundv.manager.AbilityManager;
 import de.thomasugh.compoundv.manager.PotionRollManager;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.ItemUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -35,6 +39,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -89,6 +95,92 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
+        if (type == CompoundPotion.V_NULL) {
+            p.sendMessage(plugin.getLocaleManager().msg("potion.drink_v_null"));
+            plugin.getSideEffectManager().applyVNull(p);
+            return;
+        }
+
+        PlayerAbilityData current = manager.getData(p);
+        if (current != null && current.isExpired()) {
+            manager.removeAndForget(p);
+            current = null;
+        }
+
+        if (current != null) {
+            if (handlePotionStackingRules(p, type, current)) {
+                return;
+            }
+        }
+
+        playDrinkPreparation(p, type);
+        if (roller.roll(p, type)) {
+            plugin.getSideEffectManager().afterSuccessfulRoll(p, type);
+        }
+    }
+
+    private boolean handlePotionStackingRules(Player p, CompoundPotion type, PlayerAbilityData current) {
+        CompoundPotion activeType = current.potionType();
+
+        if (activeType == CompoundPotion.V_ONE && (type == CompoundPotion.COMPOUND_V || type == CompoundPotion.TEMP_V || type == CompoundPotion.V_ONE)) {
+            p.sendMessage(plugin.getLocaleManager().msg("potion.no_effect_v_one_active"));
+            return true;
+        }
+
+        if (activeType == CompoundPotion.TEMP_V) {
+            if (type == CompoundPotion.TEMP_V) {
+                if (roller.extendTemporaryAbility(p, CompoundPotion.TEMP_V)) {
+                    plugin.getSideEffectManager().afterSuccessfulRoll(p, CompoundPotion.TEMP_V);
+                    p.sendMessage(plugin.getLocaleManager().msg("potion.temp_v_extended"));
+                } else if (roller.roll(p, CompoundPotion.TEMP_V)) {
+                    plugin.getSideEffectManager().afterSuccessfulRoll(p, CompoundPotion.TEMP_V);
+                }
+                return true;
+            }
+
+            if (type == CompoundPotion.COMPOUND_V) {
+                scheduleCompoundVAfterTemp(p, current);
+                plugin.getSideEffectManager().afterSuccessfulRoll(p, CompoundPotion.COMPOUND_V);
+                p.sendMessage(plugin.getLocaleManager().msg("potion.compound_v_after_temp"));
+                return true;
+            }
+        }
+
+        if (activeType == CompoundPotion.COMPOUND_V) {
+            if (type == CompoundPotion.COMPOUND_V) {
+                p.sendMessage(plugin.getLocaleManager().msg("potion.no_effect_compound_active"));
+                return true;
+            }
+
+            if (type == CompoundPotion.TEMP_V) {
+                plugin.getSideEffectManager().applyMinorCompatibility(p);
+                p.sendMessage(plugin.getLocaleManager().msg("potion.temp_v_blocked_by_compound"));
+                return true;
+            }
+
+            if (type == CompoundPotion.V_ONE) {
+                String upgrade = vOneUpgradeFor(current.abilityId());
+                if (upgrade == null) {
+                    p.sendMessage(plugin.getLocaleManager().msg("potion.v_one_no_upgrade"));
+                    return true;
+                }
+                playDrinkPreparation(p, CompoundPotion.V_ONE);
+                manager.giveAbility(p, upgrade, CompoundPotion.V_ONE, 0L);
+                plugin.getSideEffectManager().afterSuccessfulRoll(p, CompoundPotion.V_ONE);
+                p.sendMessage(plugin.getLocaleManager().msg("potion.v_one_upgrade"));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private String vOneUpgradeFor(String abilityId) {
+        if ("the_patriot".equalsIgnoreCase(abilityId)) return "the_patriot_v_one";
+        return null;
+    }
+
+    private void playDrinkPreparation(Player p, CompoundPotion type) {
         if (type == CompoundPotion.V_ONE) {
             int ticks = plugin.getConfig().getInt("v_one.drink_effect_seconds", 5) * 20;
             p.addPotionEffect(new PotionEffect(PotionEffects.BLINDNESS, ticks, 0, false, true));
@@ -101,8 +193,31 @@ public class PlayerActionListener implements Listener {
         } else {
             p.sendMessage(plugin.getLocaleManager().msg("potion.drinking"));
         }
+    }
 
-        roller.roll(p, type);
+    private void scheduleCompoundVAfterTemp(Player player, PlayerAbilityData tempData) {
+        long delayTicks = Math.max(2L, tempData.remainingSec() * 20L + 2L);
+        UUID uuid = player.getUniqueId();
+        String tempAbilityId = tempData.abilityId();
+        long tempExpiresAt = tempData.expiresAt();
+
+        SchedulerAdapter.runLater(plugin, () -> {
+            Player p = Bukkit.getPlayer(uuid);
+            if (p == null || !p.isOnline()) return;
+
+            PlayerAbilityData now = manager.getData(p);
+            if (now != null && now.potionType() == CompoundPotion.TEMP_V
+                    && now.abilityId().equalsIgnoreCase(tempAbilityId)
+                    && now.expiresAt() == tempExpiresAt) {
+                manager.removeAndForget(p);
+            }
+
+            if (!manager.hasAbility(p)) {
+                if (roller.roll(p, CompoundPotion.COMPOUND_V)) {
+                    p.sendMessage(plugin.getLocaleManager().msg("potion.compound_v_delayed_granted"));
+                }
+            }
+        }, delayTicks);
     }
 
     private void consumeBottle(Player p, ItemStack consumed) {
@@ -140,11 +255,41 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPotionLaunch(ProjectileLaunchEvent e) {
         if (!(e.getEntity() instanceof ThrownPotion potion)) return;
-        if (!ItemUtil.isThrowableCompoundVBottle(potion.getItem())) return;
+        CompoundPotion type = ItemUtil.getAnyBottleType(potion.getItem());
+        if (type == null) return;
+        if (type == CompoundPotion.V_NULL) return;
 
         e.setCancelled(true);
         if (potion.getShooter() instanceof Player player) {
             player.sendMessage(plugin.getLocaleManager().msg("potion.only_drinkable"));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPotionSplash(PotionSplashEvent event) {
+        ThrownPotion potion = event.getPotion();
+        if (ItemUtil.getAnyBottleType(potion.getItem()) != CompoundPotion.V_NULL) return;
+
+        event.setCancelled(true);
+        potion.getWorld().playSound(potion.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.9f, 0.65f);
+        for (LivingEntity entity : event.getAffectedEntities()) {
+            plugin.getSideEffectManager().applyVNull(entity);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onLingeringPotionSplash(LingeringPotionSplashEvent event) {
+        ThrownPotion potion = event.getEntity();
+        if (ItemUtil.getAnyBottleType(potion.getItem()) != CompoundPotion.V_NULL) return;
+
+        event.setCancelled(true);
+        AreaEffectCloud cloud = event.getAreaEffectCloud();
+        double radius = cloud != null ? Math.max(3.0, cloud.getRadius()) : 4.0;
+        potion.getWorld().playSound(potion.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.9f, 0.55f);
+        for (org.bukkit.entity.Entity nearby : potion.getWorld().getNearbyEntities(potion.getLocation(), radius, radius, radius)) {
+            if (nearby instanceof LivingEntity entity) {
+                plugin.getSideEffectManager().applyVNull(entity);
+            }
         }
     }
 
@@ -170,7 +315,8 @@ public class PlayerActionListener implements Listener {
         if (a != Action.RIGHT_CLICK_AIR && a != Action.RIGHT_CLICK_BLOCK
                 && a != Action.LEFT_CLICK_AIR && a != Action.LEFT_CLICK_BLOCK) return;
 
-        if (ItemUtil.isThrowableCompoundVBottle(e.getItem())) {
+        CompoundPotion throwableType = ItemUtil.getAnyBottleType(e.getItem());
+        if (ItemUtil.isThrowableCompoundVBottle(e.getItem()) && throwableType != CompoundPotion.V_NULL) {
             cancelAbilityInteraction(e);
             p.sendMessage(plugin.getLocaleManager().msg("potion.only_drinkable"));
             return;

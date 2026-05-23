@@ -20,12 +20,14 @@ import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.command.CompoundVCommand;
 import de.thomasugh.compoundv.config.ConfigMigrationService;
 import de.thomasugh.compoundv.listener.DeathRespawnListener;
+import de.thomasugh.compoundv.listener.WorkbenchRecipeListener;
 import de.thomasugh.compoundv.listener.PlayerActionListener;
 import de.thomasugh.compoundv.locale.LanguageResourceInstaller;
 import de.thomasugh.compoundv.locale.LocaleManager;
 import de.thomasugh.compoundv.manager.AbilityManager;
 import de.thomasugh.compoundv.manager.PersistenceManager;
 import de.thomasugh.compoundv.manager.PotionRollManager;
+import de.thomasugh.compoundv.manager.SideEffectManager;
 import de.thomasugh.compoundv.server.ServerCompatibility;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
@@ -37,11 +39,13 @@ public final class CompoundV extends JavaPlugin {
     private static CompoundV instance;
 
     public static NamespacedKey BOTTLE_KEY;
+    public static NamespacedKey SERUM_KEY;
     public static NamespacedKey ACTIVATOR_KEY;
 
     private AbilityRegistry registry;
     private AbilityManager abilityManager;
     private PotionRollManager rollManager;
+    private SideEffectManager sideEffectManager;
     private PersistenceManager persistence;
     private LocaleManager localeManager;
     private ServerCompatibility compatibility;
@@ -75,6 +79,7 @@ public final class CompoundV extends JavaPlugin {
 
     private void initializeKeys() {
         BOTTLE_KEY = new NamespacedKey(this, "compound_v_bottle");
+        SERUM_KEY = new NamespacedKey(this, "compound_v_serum");
         ACTIVATOR_KEY = new NamespacedKey(this, "cv_activator");
     }
 
@@ -83,6 +88,7 @@ public final class CompoundV extends JavaPlugin {
         localeManager = new LocaleManager(this);
         registry = new AbilityRegistry();
         persistence = new PersistenceManager(this);
+        sideEffectManager = new SideEffectManager(this);
         abilityManager = new AbilityManager(this, registry, persistence);
         rollManager = new PotionRollManager(this, abilityManager);
     }
@@ -113,6 +119,7 @@ public final class CompoundV extends JavaPlugin {
     private void registerListeners() {
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new PlayerActionListener(this, abilityManager, rollManager), this);
+        pluginManager.registerEvents(new WorkbenchRecipeListener(this), this);
         pluginManager.registerEvents(new DeathRespawnListener(this, abilityManager), this);
     }
 
@@ -150,6 +157,10 @@ public final class CompoundV extends JavaPlugin {
 
     public PotionRollManager getRollManager() {
         return rollManager;
+    }
+
+    public SideEffectManager getSideEffectManager() {
+        return sideEffectManager;
     }
 
     public LocaleManager getLocaleManager() {

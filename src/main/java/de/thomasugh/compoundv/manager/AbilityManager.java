@@ -123,6 +123,14 @@ public class AbilityManager {
         });
     }
 
+
+    public void updateData(Player player, PlayerAbilityData data) {
+        if (data == null) return;
+        UUID uuid = player.getUniqueId();
+        playerData.put(uuid, data);
+        persistence.save(uuid, data);
+    }
+
     public Ability           getAbility(Player p)   { return activeAbility.get(p.getUniqueId()); }
     public PlayerAbilityData getData(Player p)      { return playerData.get(p.getUniqueId()); }
     public boolean           hasAbility(Player p)   { return activeAbility.containsKey(p.getUniqueId()); }
@@ -158,6 +166,8 @@ public class AbilityManager {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
 
+            PlayerAbilityData data = playerData.get(uuid);
+            plugin.getSideEffectManager().handleAbilityExpired(player, data);
             removeAndForget(player);
             player.sendMessage(plugin.getLocaleManager().msg("ability.expired"));
         }

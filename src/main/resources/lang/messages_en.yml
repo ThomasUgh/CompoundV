@@ -6,6 +6,7 @@ general:
   player_not_found: "<prefix>&cPlayer not found."
   reloaded: "<prefix>&aCompoundV has been reloaded."
   not_a_player: "<prefix>&cThis command can only be used by players."
+  only_players: "<prefix>&cThis command can only be used by players."
 
 potion:
   drinking: "<prefix>&7The &bserum&7 is activating..."
@@ -15,7 +16,18 @@ potion:
   no_ability: "<prefix>&7You do not have an active ability."
   no_chances: "<prefix>&cThis potion has no valid abilities configured. Please contact an admin."
   roll_failed: "<prefix>&cThe serum could not be processed. Please contact an admin."
-  only_drinkable: "<prefix>&cCompound V serums can only be used as normal drinkable potions."
+
+  drink_v_null: "<prefix>&2V-Null Virus&7 is spreading..."
+  temp_v_extended: "<prefix>&aTemp V&7 was extended. Same ability, longer duration."
+  compound_v_after_temp: "<prefix>&bCompound V&7 bonded with your temporary ability. A permanent Compound V ability will activate after Temp V expires."
+  compound_v_delayed_granted: "<prefix>&bCompound V&7 has now permanently activated."
+  temp_v_blocked_by_compound: "<prefix>&aTemp V&7 cannot override permanent Compound V. Only minor side effects occurred."
+  no_effect_compound_active: "<prefix>&7Compound V has no effect while you already have a permanent ability. Use &cAnti V&7 first."
+  no_effect_v_one_active: "<prefix>&7Your V One system rejects more V. Nothing happens."
+  v_one_upgrade: "<prefix>&3V One&7 upgraded your current power."
+  v_one_no_upgrade: "<prefix>&7V One did not react with this ability yet."
+
+  only_drinkable: "<prefix>&cCompound V serums can only be used as normal drinkable potions. V-Null Virus is throwable."
 
 ability:
   granted_header: "<prefix>&8━━━━━━━━ &aAbility Unlocked &8━━━━━━━━"
@@ -195,10 +207,11 @@ size_changer:
 
 command:
   header: "<prefix>&8━━━━━━━━ &aCompoundV Help &8━━━━━━━━"
-  give_bottle: "<prefix>&8• &7/cv give &a<player>&7 bottle &d[compoundv|tempv|vone|antiv]"
+  give_bottle: "<prefix>&8• &7/cv give &a<player>&7 bottle &d[compoundv|tempv|vone|antiv|vnull]"
   give_ability: "<prefix>&8• &7/cv give &a<player>&7 &c<ability>&7 &d[potionType]"
   remove: "<prefix>&8• &7/cv remove &a<player>"
   info_self: "<prefix>&8• &7/cv info &d[player]"
+  tutorial: "<prefix>&8• &7/cv tutorial &8- &7gives you the Compound V handbook"
   reload: "<prefix>&8• &7/cv reload"
   abilities_list: "<prefix>&8• &7Abilities: &a{list}"
   footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -209,6 +222,7 @@ command:
   remove_ok: "<prefix>&7Removed the ability from &a{player}&7."
   usage_give: "<prefix>&cUsage: &7/cv give <player> <bottle|ability> [potionType]"
   usage_remove: "<prefix>&cUsage: &7/cv remove <player>"
+  tutorial_given: "<prefix>&aYou received the Compound V handbook."
 
 info:
   plugin_header: "<prefix>&8━━━━━━━━ &aCompoundV Info &8━━━━━━━━"
@@ -246,3 +260,185 @@ bottle:
     name: "&c&lAnti V"
     lore_1: "&7Removes your active ability."
     lore_2: "&8Drink to reset your power."
+
+
+  v_null:
+    name: "&2&lV-Null Virus"
+    lore_1: "&7Airborne anti-super pathogen."
+    lore_2: "&8Throwable forms are allowed."
+    lore_3: "&4Dangerous against V-powered players."
+
+serum:
+  default_lore_1: "&7Intermediate brewing serum."
+  default_lore_2: "&8Continue the brewing chain."
+  crystalline_serum:
+    name: "&bCrystalline Serum"
+    lore_1: "&7Amethyst-stabilized base serum."
+    lore_2: "&8Next: Echo Shard."
+  resonant_v_serum:
+    name: "&9Resonant V Serum"
+    lore_1: "&7Echo-infused V base."
+    lore_2: "&8Next: Glowstone Dust."
+  activated_v_serum:
+    name: "&b&lActivated V Serum"
+    lore_1: "&7Ready to branch into Temp V or Compound V."
+    lore_2: "&8Sugar -> Temp V, Diamond -> Compound V."
+  unstable_temp_v:
+    name: "&aUnstable Temp V"
+    lore_1: "&7Temporary V serum still unstable."
+    lore_2: "&8Next: Redstone Dust."
+  unstable_v_serum:
+    name: "&bUnstable V Serum"
+    lore_1: "&7Permanent V serum still unstable."
+    lore_2: "&8Next: Netherite Scrap."
+  draconic_serum:
+    name: "&5Draconic Serum"
+    lore_1: "&7Dragon-breath V-One base."
+    lore_2: "&8Next: Echo Shard."
+  echo_charged_serum:
+    name: "&3Echo-Charged Serum"
+    lore_1: "&7Resonating V-One intermediate."
+    lore_2: "&8Next: Netherite Scrap."
+  reinforced_serum:
+    name: "&8Reinforced Serum"
+    lore_1: "&7Netherite-reinforced V-One serum."
+    lore_2: "&8Next: Fermented Spider Eye."
+  unstable_v_one_serum:
+    name: "&1Unstable V-One Serum"
+    lore_1: "&7Powerful but unstable V-One serum."
+    lore_2: "&8Next: Totem of Undying."
+  cleansing_serum:
+    name: "&fCleansing Serum"
+    lore_1: "&7Milk-based neutralizer base."
+    lore_2: "&8Next: Ghast Tear."
+  restorative_serum:
+    name: "&cRestorative Serum"
+    lore_1: "&7Restorative Anti V intermediate."
+    lore_2: "&8Next: Fermented Spider Eye."
+  decay_serum:
+    name: "&2Decay Serum"
+    lore_1: "&7Wither Rose pathogen base."
+    lore_2: "&8Next: Fermented Spider Eye."
+  corrupted_serum:
+    name: "&5Corrupted Serum"
+    lore_1: "&7Corrupted anti-super pathogen."
+    lore_2: "&8Next: Echo Shard."
+  resonant_pathogen:
+    name: "&2Resonant Pathogen"
+    lore_1: "&7Echo-reactive pathogen."
+    lore_2: "&8Next: Dragon's Breath."
+  airborne_v_pathogen:
+    name: "&aAirborne V-Pathogen"
+    lore_1: "&7Airborne pathogen carrier."
+    lore_2: "&8Next: Netherite Scrap."
+  stabilized_v_null_pathogen:
+    name: "&2Stabilized V-Null Pathogen"
+    lore_1: "&7Stabilized V-Null core."
+    lore_2: "&8Next: Totem of Undying."
+
+side_effect:
+  temp_v_lethal: "<prefix>&4Temp V Overdose&7. Your body collapses."
+
+  adrenaline_crash: "<prefix>&eSide effect: &6Adrenaline Crash&7. Your body is exhausted."
+  overload_sickness: "<prefix>&eSide effect: &aOverload Sickness&7."
+  muscle_failure: "<prefix>&eSide effect: &7Muscle Failure&7. Movement is impaired."
+  internal_damage: "<prefix>&eSide effect: &cInternal Damage&7."
+  severe_collapse: "<prefix>&eSide effect: &4Severe Collapse&7."
+  failed_transformation: "<prefix>&cFailed Transformation&7. Your body rejects part of the serum."
+  heat_spike: "<prefix>&cSide effect: &6Heat Spike&7."
+  body_rejection: "<prefix>&cSide effect: &4Body Rejection&7."
+  critical_instability: "<prefix>&4Critical Instability&7. V One destabilizes your body for a short time."
+  no_power: "<prefix>&7No Power&7. V One is unstable, but the ability remains active."
+
+v_null:
+  hit_powered: "<prefix>&2V-Null Virus&7 infected your V system. Survive 15 minutes or die."
+  hit_v_one: "<prefix>&2V-Null Virus&7 hit you, but V One partially resists it."
+  no_effect: "<prefix>&2V-Null Virus&7 found no V-system. No effect."
+
+  hit_unpowered: "<prefix>&2V-Null Virus&7 weakly affected you."
+
+
+tutorial_book:
+  title: "Compound V Guide"
+  author: "Vought Lab"
+  page_1:
+    - "&1&lCompound V Guide"
+    - ""
+    - "&0All serums are crafted ONLY in the crafting grid."
+    - "&0Always place exactly two items:"
+    - "&8Source + Ingredient = Result"
+    - "&8No specific shape required."
+    - ""
+    - "&0Brewing stand recipes are disabled/legacy."
+  page_2:
+    - "&b&lTemp V / Compound V Base"
+    - ""
+    - "1) Water Bottle + Nether Wart"
+    - "= Awkward Potion"
+    - "2) Awkward + Amethyst Shard"
+    - "= Crystalline Serum"
+    - "Crystalline + Echo Shard"
+    - "= Resonant V Serum"
+    - "Resonant + Glowstone Dust"
+    - "= Activated V Serum"
+  page_3:
+    - "&a&lTemp V"
+    - ""
+    - "Activated V Serum + Sugar"
+    - "= Unstable Temp V"
+    - "Unstable Temp V + Redstone"
+    - "= Temp V"
+    - ""
+    - "Temp V extends active Temp-V powers."
+    - "5 doses in one life are lethal."
+  page_4:
+    - "&b&lCompound V"
+    - ""
+    - "Activated V Serum + Diamond"
+    - "= Unstable V Serum"
+    - "Unstable V Serum + Netherite Scrap"
+    - "= Compound V"
+    - ""
+    - "Compound V is permanent until Anti V is used."
+  page_5:
+    - "&3&lV One"
+    - ""
+    - "Awkward + Dragon's Breath"
+    - "= Draconic Serum"
+    - "Draconic + Echo Shard"
+    - "= Echo-Charged Serum"
+    - "Echo-Charged + Netherite Scrap"
+    - "= Reinforced Serum"
+    - "Reinforced + Fermented Eye"
+    - "= Unstable V-One Serum"
+    - "Unstable V-One + Totem"
+    - "= V One"
+  page_6:
+    - "&c&lAnti V / V-Null"
+    - ""
+    - "Anti V:"
+    - "Awkward + Milk Bucket = Cleansing"
+    - "Cleansing + Ghast Tear = Restorative"
+    - "Restorative + Fermented Eye = Anti V"
+    - ""
+    - "V-Null:"
+    - "Awkward + Wither Rose -> Decay"
+    - "Decay -> Corrupted -> Resonant -> Airborne -> Stabilized -> V-Null"
+  page_7:
+    - "&6&lAbilities"
+    - ""
+    - "The Patriot: like Homelander"
+    - "The Diver: like The Deep"
+    - "The Runner: like A-Train"
+    - "The Veteran: like Soldier Boy"
+    - "Sonic Boom: like Bombsight"
+    - ""
+    - "Use /cv info for your active ability controls."
+  page_8:
+    - "&4&lSide Effects"
+    - ""
+    - "Temp V: Crash, Sickness, Muscle Failure, Internal Damage or Collapse."
+    - "Compound V: rare minor side effects."
+    - "V One: Heat Spike, Body Rejection, Instability."
+    - ""
+    - "Side effects can occur in addition to powers."

@@ -66,7 +66,8 @@ public final class ConfigMigrationService {
                 "fly", 15,
                 "heat_vision", 9,
                 "heat_vision_2", 7,
-                "heat_vision_3", 5,
+                "heat_vision_3", 6,
+                "heat_vision_4", 5,
                 "speedster", 10,
                 "strength", 18,
                 "invisibility", 7,
@@ -82,7 +83,8 @@ public final class ConfigMigrationService {
                 "fly", 10,
                 "heat_vision", 9,
                 "heat_vision_2", 7,
-                "heat_vision_3", 5,
+                "heat_vision_3", 6,
+                "heat_vision_4", 5,
                 "speedster", 20,
                 "strength", 25,
                 "invisibility", 15,
@@ -308,13 +310,18 @@ public final class ConfigMigrationService {
 
         changed |= setIfMissing("heat_vision.stages.stage_1.damage_hearts", 1.35);
         changed |= setIfMissing("heat_vision.stages.stage_1.range", 30.0);
-        changed |= setIfMissing("heat_vision.stages.stage_2.damage_hearts", 2.25);
+        changed |= setIfMissing("heat_vision.stages.stage_2.damage_hearts", 2.0);
         changed |= setIfMissing("heat_vision.stages.stage_2.range", 35.0);
-        changed |= setIfMissing("heat_vision.stages.stage_3.damage_hearts", 2.7);
-        changed |= setIfMissing("heat_vision.stages.stage_3.range", 40.0);
+        changed |= setIfMissing("heat_vision.stages.stage_3.damage_hearts", 2.25);
+        changed |= setIfMissing("heat_vision.stages.stage_3.range", 37.0);
+        changed |= setIfMissing("heat_vision.stages.stage_4.damage_hearts", 2.7);
+        changed |= setIfMissing("heat_vision.stages.stage_4.range", 40.0);
         changed |= replaceIfNumericEquals("heat_vision.stages.stage_1.damage_hearts", 1.5, 1.35);
-        changed |= replaceIfNumericEquals("heat_vision.stages.stage_2.damage_hearts", 2.5, 2.25);
-        changed |= replaceIfNumericEquals("heat_vision.stages.stage_3.damage_hearts", 3.0, 2.7);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_2.damage_hearts", 2.5, 2.0);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_2.damage_hearts", 2.25, 2.0);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_3.damage_hearts", 3.0, 2.25);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_3.damage_hearts", 2.7, 2.25);
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_3.range", 40.0, 37.0);
         changed |= setIfMissing("heat_vision.max_continuous_ticks", 400);
         changed |= replaceIfNumericEquals("heat_vision.overheat_cooldown_ms", 5000.0, 10000);
         changed |= setIfMissing("heat_vision.overheat_cooldown_ms", 10000);
@@ -457,27 +464,39 @@ public final class ConfigMigrationService {
 
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision", 8.0, 9);
         changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_2", 4.0, 7);
-        changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_3", 2.0, 5);
+        changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_3", 2.0, 6);
+        changed |= replaceIfNumericEquals("compound_v.chances.heat_vision_3", 5.0, 6);
+        changed |= setIfMissing("compound_v.chances.heat_vision_4", 5);
         changed |= replaceIfNumericEquals("temp_v.chances.heat_vision", 5.0, 9);
         changed |= replaceIfNumericEquals("temp_v.chances.heat_vision_2", 3.0, 7);
-        changed |= replaceIfNumericEquals("temp_v.chances.heat_vision_3", 1.0, 5);
+        changed |= replaceIfNumericEquals("temp_v.chances.heat_vision_3", 1.0, 6);
+        changed |= replaceIfNumericEquals("temp_v.chances.heat_vision_3", 5.0, 6);
+        changed |= setIfMissing("temp_v.chances.heat_vision_4", 5);
 
         changed |= ensureChanceSection("compound_v.chances", orderedMap(
                 "heat_vision", 9,
                 "heat_vision_2", 7,
-                "heat_vision_3", 5,
+                "heat_vision_3", 6,
+                "heat_vision_4", 5,
                 "jumper", 17,
                 "shockwave", 9
         ));
         changed |= ensureChanceSection("temp_v.chances", orderedMap(
                 "heat_vision", 9,
                 "heat_vision_2", 7,
-                "heat_vision_3", 5
+                "heat_vision_3", 6,
+                "heat_vision_4", 5
         ));
         changed |= ensureChanceSection("v_one.chances", orderedMap(
                 "sonic_boom", 3,
                 "size_changer", 6
         ));
+
+        changed |= setIfMissing("side_effects.temp_v.lethal_use_count", 5);
+        changed |= replaceIfNumericEquals("v_null.unpowered.effect_seconds", 30.0, 0);
+        changed |= replaceIfNumericEquals("v_null.mobs.effect_seconds", 120.0, 0);
+        changed |= setIfMissing("v_null.unpowered.effect_seconds", 0);
+        changed |= setIfMissing("v_null.mobs.effect_seconds", 0);
 
         return changed;
     }

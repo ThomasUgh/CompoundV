@@ -47,6 +47,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             case "give"   -> handleGive(sender, args);
             case "remove" -> handleRemove(sender, args);
             case "info"   -> handleInfo(sender, args);
+            case "tutorial", "guide", "book" -> handleTutorial(sender);
             case "reload" -> handleReload(sender);
             case "help"   -> help(sender);
             default       -> help(sender);
@@ -197,6 +198,15 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(loc().msg("info.plugin_footer"));
     }
 
+    private void handleTutorial(CommandSender sender) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(loc().msg("general.only_players"));
+            return;
+        }
+        player.getInventory().addItem(ItemUtil.createTutorialBook(plugin));
+        player.sendMessage(loc().msg("command.tutorial_given"));
+    }
+
     private void handleReload(CommandSender sender) {
         if (!sender.hasPermission("compoundv.admin")) {
             sender.sendMessage(loc().msg("general.no_permission"));
@@ -213,6 +223,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
         s.sendMessage(loc().msg("command.give_ability"));
         s.sendMessage(loc().msg("command.remove"));
         s.sendMessage(loc().msg("command.info_self"));
+        s.sendMessage(loc().msg("command.tutorial"));
         s.sendMessage(loc().msg("command.reload"));
         s.sendMessage(loc().msg("command.abilities_list",
                 "list", String.join(", ", registry.ids())));
@@ -225,6 +236,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             case "tempv","temp_v","tv"         -> CompoundPotion.TEMP_V;
             case "vone","v_one","v1"           -> CompoundPotion.V_ONE;
             case "antiv","anti_v","av"         -> CompoundPotion.ANTI_V;
+            case "vnull","v_null","vn","virus"  -> CompoundPotion.V_NULL;
             default                            -> null;
         };
     }
@@ -233,7 +245,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender s, Command c, String a, String[] args) {
         List<String> out = new ArrayList<>();
         if (args.length == 1) {
-            out.addAll(List.of("give", "remove", "info", "reload", "help"));
+            out.addAll(List.of("give", "remove", "info", "tutorial", "reload", "help"));
         } else if (args.length == 2) {
             Bukkit.getOnlinePlayers().stream().map(Player::getName).forEach(out::add);
         } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
@@ -241,7 +253,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             out.addAll(registry.ids());
             out.addAll(List.of("the_patriot", "the_patriot_v_one", "the_veteran"));
         } else if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
-            out.addAll(List.of("compoundv", "tempv", "vone", "antiv"));
+            out.addAll(List.of("compoundv", "tempv", "vone", "antiv", "vnull"));
         }
         String prefix = args[args.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(x -> !x.toLowerCase(Locale.ROOT).startsWith(prefix));

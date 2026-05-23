@@ -23,7 +23,9 @@ public final class DeathRespawnListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event) {
-        manager.handleDeath(event.getEntity());
+        Player player = event.getEntity();
+        plugin.getSideEffectManager().resetTempVLifeCycle(player);
+        manager.handleDeath(player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

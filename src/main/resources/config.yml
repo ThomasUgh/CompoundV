@@ -49,9 +49,12 @@ heat_vision:
       damage_hearts: 1.35
       range: 30.0
     stage_2:
-      damage_hearts: 2.25
+      damage_hearts: 2.0
       range: 35.0
     stage_3:
+      damage_hearts: 2.25
+      range: 37.0
+    stage_4:
       damage_hearts: 2.7
       range: 40.0
   v_one_received_damage_multiplier: 0.5
@@ -301,3 +304,84 @@ abilities:
 
   vision:
     xray_radius: 35.0
+
+brewing:
+  # Legacy fallback: custom brewing is still simulated for compatible ingredients.
+  # Main production recipes are also available in the workbench because several items cannot be inserted into vanilla brewing stands.
+  require_blaze_powder: false
+  custom_brew_time_ticks: 400
+
+side_effects:
+  enabled: true
+  temp_v:
+    reuse_window_minutes: 30
+    lethal_use_count: 5
+    max_total_chance: 95.0
+    reuse_bonus:
+      use_1: 0.0
+      use_2: 10.0
+      use_3: 25.0
+      use_4_plus: 50.0
+    adrenaline_crash:
+      chance: 35.0
+      min_seconds: 120
+      max_seconds: 240
+    overload_sickness:
+      chance: 25.0
+      min_seconds: 30
+      max_seconds: 60
+    muscle_failure:
+      chance: 15.0
+      seconds: 30
+      amplifier: 1
+    internal_damage:
+      chance: 8.0
+      min_hearts: 1.0
+      max_hearts: 3.0
+    severe_collapse:
+      chance: 5.0
+      seconds: 120
+  compound_v:
+    failed_transformation:
+      chance: 4.0
+      seconds: 300
+    overload_sickness:
+      chance: 2.0
+      min_seconds: 30
+      max_seconds: 60
+    muscle_failure:
+      chance: 1.0
+      seconds: 30
+      amplifier: 1
+  v_one:
+    heat_spike:
+      chance: 20.0
+      damage_hearts_min: 1.0
+      damage_hearts_max: 2.0
+    body_rejection:
+      chance: 15.0
+      min_seconds: 60
+      max_seconds: 600
+    critical_instability:
+      chance: 5.0
+      min_seconds: 60
+      max_seconds: 180
+    no_power:
+      chance: 10.0
+    muscle_failure:
+      chance: 2.0
+      seconds: 300
+      amplifier: 1
+
+v_null:
+  standard:
+    effect_seconds: 900
+  v_one:
+    min_seconds: 60
+    max_seconds: 120
+    slowness_seconds: 30
+  # Unpowered players, mobs and animals are immune to V-Null.
+  unpowered:
+    effect_seconds: 0
+  mobs:
+    effect_seconds: 0
