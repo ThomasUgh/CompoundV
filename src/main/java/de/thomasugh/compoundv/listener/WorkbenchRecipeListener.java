@@ -15,9 +15,6 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapelessRecipe;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -58,30 +55,20 @@ public class WorkbenchRecipeListener implements Listener {
                 CustomRecipe.bottle("v_null_splash", CompoundPotion.V_NULL, Material.POTION, Material.GUNPOWDER, CompoundPotion.V_NULL, Material.SPLASH_POTION),
                 CustomRecipe.bottle("v_null_lingering", CompoundPotion.V_NULL, Material.SPLASH_POTION, Material.DRAGON_BREATH, CompoundPotion.V_NULL, Material.LINGERING_POTION)
         );
-        registerWorkbenchRecipes();
+        cleanupNativeWorkbenchRecipes();
     }
 
-    private void registerWorkbenchRecipes() {
+    private void cleanupNativeWorkbenchRecipes() {
+        // The actual crafting logic is handled in PrepareItemCraftEvent/CraftItemEvent.
+        // Native shapeless recipes with generic Potion choices are intentionally not
+        // registered because they can shadow vanilla recipes and allow invalid potion
+        // combinations on some Bukkit/Paper versions.
         for (CustomRecipe custom : recipes) {
             NamespacedKey key = new NamespacedKey(plugin, "workbench_" + custom.id());
             try {
                 plugin.getServer().removeRecipe(key);
             } catch (Throwable ignored) {
                 // Older Bukkit builds may not expose removeRecipe(NamespacedKey).
-            }
-
-            try {
-                ShapelessRecipe recipe = new ShapelessRecipe(key, custom.createResult(plugin));
-                recipe.addIngredient(custom.sourceChoice(plugin));
-                recipe.addIngredient(custom.ingredient());
-                plugin.getServer().addRecipe(recipe);
-            } catch (Throwable ex) {
-                // Native recipe registration can be unstable across Spigot/Paper versions for
-                // exact custom potion choices. The listener below still provides the real
-                // crafting logic, so never abort plugin startup because of recipe-book support.
-                plugin.getLogger().warning("Could not register recipe-book entry '" + custom.id()
-                        + "'. Custom crafting listener remains active. Reason: "
-                        + ex.getClass().getSimpleName() + ": " + ex.getMessage());
             }
         }
     }
@@ -90,7 +77,9 @@ public class WorkbenchRecipeListener implements Listener {
     public void onPrepareCraft(PrepareItemCraftEvent event) {
         CraftingInventory inventory = event.getInventory();
         Match match = findMatch(inventory.getMatrix());
-        inventory.setResult(match == null ? null : match.recipe().createResult(plugin));
+        if (match != null) {
+            inventory.setResult(match.recipe().createResult(plugin));
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -224,14 +213,6 @@ public class WorkbenchRecipeListener implements Listener {
                 case AWKWARD -> ItemUtil.isAwkwardPotion(item);
                 case SERUM -> Objects.equals(ItemUtil.getSerumType(item), sourceSerum);
                 case BOTTLE -> Objects.equals(ItemUtil.getAnyBottleType(item), sourceBottle);
-            };
-        }
-
-        RecipeChoice sourceChoice(CompoundV plugin) {
-            return switch (sourceKind) {
-                case WATER, AWKWARD -> new RecipeChoice.MaterialChoice(Material.POTION);
-                case SERUM -> new RecipeChoice.ExactChoice(ItemUtil.createSerum(plugin, sourceSerum));
-                case BOTTLE -> new RecipeChoice.ExactChoice(ItemUtil.createBottle(plugin, sourceBottle, sourceMaterial));
             };
         }
 
