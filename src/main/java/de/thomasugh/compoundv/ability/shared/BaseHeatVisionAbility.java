@@ -221,28 +221,63 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     private boolean isHeatVisionClearableVegetation(Material material) {
         String name = material.name();
+        if (isProtectedFlowerLikeBlock(name)) {
+            return false;
+        }
+
         return name.equals("GRASS")
                 || name.equals("SHORT_GRASS")
                 || name.equals("TALL_GRASS")
+                || name.equals("DRY_GRASS")
+                || name.equals("SHORT_DRY_GRASS")
+                || name.equals("TALL_DRY_GRASS")
                 || name.equals("FERN")
                 || name.equals("LARGE_FERN")
+                || name.equals("BUSH")
                 || name.equals("DEAD_BUSH")
                 || name.equals("SWEET_BERRY_BUSH")
                 || name.equals("FIREFLY_BUSH")
-                || name.equals("PINK_PETALS")
-                || name.equals("WILDFLOWERS")
                 || name.equals("LEAF_LITTER")
                 || name.equals("MOSS_CARPET")
                 || name.equals("PALE_MOSS_CARPET")
-                || name.equals("TORCHFLOWER")
-                || name.equals("PITCHER_PLANT")
+                || name.equals("PALE_HANGING_MOSS")
                 || name.equals("SEAGRASS")
                 || name.equals("TALL_SEAGRASS")
                 || name.equals("KELP")
                 || name.equals("KELP_PLANT")
-                || name.contains("VINES")
-                || name.endsWith("_VINE")
+                || name.equals("VINE")
+                || name.equals("SMALL_DRIPLEAF")
+                || name.equals("BIG_DRIPLEAF")
+                || name.equals("BIG_DRIPLEAF_STEM")
+                || name.equals("HANGING_ROOTS")
+                || name.equals("NETHER_SPROUTS")
+                || name.endsWith("_ROOTS")
+                || name.endsWith("_SPROUTS")
+                || name.contains("VINE")
                 || name.endsWith("_BUSH");
+    }
+
+    private boolean isProtectedFlowerLikeBlock(String name) {
+        return name.contains("FLOWER")
+                || name.contains("TULIP")
+                || name.contains("ORCHID")
+                || name.equals("POPPY")
+                || name.equals("DANDELION")
+                || name.equals("ALLIUM")
+                || name.equals("AZURE_BLUET")
+                || name.equals("OXEYE_DAISY")
+                || name.equals("CORNFLOWER")
+                || name.equals("LILY_OF_THE_VALLEY")
+                || name.equals("LILAC")
+                || name.equals("PEONY")
+                || name.equals("SUNFLOWER")
+                || name.equals("ROSE_BUSH")
+                || name.equals("PINK_PETALS")
+                || name.equals("WILDFLOWERS")
+                || name.equals("TORCHFLOWER")
+                || name.equals("PITCHER_PLANT")
+                || name.equals("SPORE_BLOSSOM")
+                || name.endsWith("_PETALS");
     }
 
     private void meltPassableSnowAlongBeam(Player player, Location origin, Vector dir, double range, World world) {
