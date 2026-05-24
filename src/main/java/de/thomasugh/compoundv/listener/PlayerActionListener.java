@@ -582,6 +582,18 @@ public class PlayerActionListener implements Listener {
             }
         }
 
+        if (ability instanceof StormstrikeAbility stormstrike) {
+            double y = p.getLocation().getY();
+            if (!currGround && !p.isFlying()) fallPeakY.merge(u, y, Math::max);
+
+            if (!prevGround && currGround && fallPeakY.containsKey(u)) {
+                double trackedDistance = fallPeakY.remove(u) - y;
+                double dist = Math.max(trackedDistance, p.getFallDistance());
+                double min = plugin.getConfig().getDouble("abilities.stormstrike.fall_impact_min_blocks", 10.0);
+                if (p.isSneaking() && dist >= min) stormstrike.triggerFallImpact(p, dist);
+            }
+        }
+
         if (!prevGround && currGround && p.getFlySpeed() > 0.1001f) {
             p.setFlySpeed(0.1f);
         }
@@ -661,7 +673,11 @@ public class PlayerActionListener implements Listener {
             Ability ability = manager.getAbility(p);
             if (ability instanceof TheWarriorAbility warrior) {
                 e.setCancelled(true);
-                warrior.triggerFallImpact(p, p.getFallDistance());
+                if (p.isSneaking()) warrior.triggerFallImpact(p, p.getFallDistance());
+                return;
+            }
+            if (ability instanceof SpiderWeaverAbility || ability instanceof StormstrikeAbility) {
+                e.setCancelled(true);
                 return;
             }
             if (manager.isThePatriot(p)
@@ -681,6 +697,12 @@ public class PlayerActionListener implements Listener {
             fireSonic.handleMeleeHit(attacker, target);
         } else if (ability instanceof TheCountessAbility countess) {
             countess.handleMeleeHit(attacker, target);
+        }
+        if (ability instanceof ToxicCloudAbility toxicCloud) {
+            toxicCloud.handleMeleeHit(attacker, target);
+        }
+        if (ability instanceof StormstrikeAbility stormstrike) {
+            stormstrike.handleMeleeHit(attacker, target);
         }
     }
 

@@ -114,6 +114,14 @@ public class ToxicCloudAbility implements Ability {
         }
     }
 
+
+    public void handleMeleeHit(Player attacker, LivingEntity target) {
+        int poisonTicks = plugin.getConfig().getInt("abilities.toxic_cloud.melee_poison_ticks", 40);
+        int amplifier = plugin.getConfig().getInt("abilities.toxic_cloud.melee_poison_amplifier", 0);
+        target.addPotionEffect(new PotionEffect(PotionEffects.POISON, Math.max(20, poisonTicks), Math.max(0, amplifier), false, true, true));
+        target.getWorld().spawnParticle(Particle.SNEEZE, target.getLocation().add(0, 1, 0), 8, 0.22, 0.28, 0.22, 0.02);
+    }
+
     private void releaseCloud(Player player) {
         Location eye = player.getEyeLocation();
         Vector dir = eye.getDirection().normalize();

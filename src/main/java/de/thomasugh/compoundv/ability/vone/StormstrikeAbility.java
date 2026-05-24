@@ -34,11 +34,13 @@ public class StormstrikeAbility implements Ability {
     private final Set<UUID> launching = new HashSet<>();
     private final Map<UUID, Long> launchCooldown = new HashMap<>();
     private final Map<UUID, Long> lightningCooldown = new HashMap<>();
+    private final Map<UUID, Long> fallImpactCooldown = new HashMap<>();
     private final Map<UUID, Long> lastHandledAt = new HashMap<>();
     private final Map<UUID, Boolean> beamActive = new HashMap<>();
     private final Map<UUID, Integer> beamTicks = new HashMap<>();
     private final Map<UUID, Integer> beamDamageCounter = new HashMap<>();
     private final Map<UUID, Long> beamCooldownUntil = new HashMap<>();
+    private final Map<UUID, Integer> meleeCounter = new HashMap<>();
     private final NamespacedKey healthKey;
 
     public StormstrikeAbility(CompoundV plugin) {
@@ -72,11 +74,13 @@ public class StormstrikeAbility implements Ability {
         launching.remove(uuid);
         launchCooldown.remove(uuid);
         lightningCooldown.remove(uuid);
+        fallImpactCooldown.remove(uuid);
         lastHandledAt.remove(uuid);
         beamActive.remove(uuid);
         beamTicks.remove(uuid);
         beamDamageCounter.remove(uuid);
         beamCooldownUntil.remove(uuid);
+        meleeCounter.remove(uuid);
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0.0);
         player.setFlySpeed(0.1f);
         player.removePotionEffect(PotionEffects.STRENGTH);
@@ -108,8 +112,8 @@ public class StormstrikeAbility implements Ability {
         beamActive.put(uuid, true);
         beamTicks.put(uuid, 0);
         beamDamageCounter.remove(uuid);
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.55f, 1.75f);
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.55f, 1.65f);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.45f, 1.85f);
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.45f, 1.7f);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.beam_on"));
     }
 
@@ -118,7 +122,7 @@ public class StormstrikeAbility implements Ability {
         if (!beamActive.getOrDefault(player.getUniqueId(), false)) return;
 
         int ticks = beamTicks.merge(player.getUniqueId(), 1, Integer::sum);
-        int maxTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_max_ticks", 100);
+        int maxTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_max_ticks", 120);
         if (maxTicks > 0 && ticks >= maxTicks) {
             stopBeam(player, true);
             return;
@@ -132,17 +136,21 @@ public class StormstrikeAbility implements Ability {
         beamActive.put(uuid, false);
         beamTicks.remove(uuid);
         beamDamageCounter.remove(uuid);
-        long cooldownMs = plugin.getConfig().getLong("abilities.stormstrike.beam_cooldown_ms", 5000L);
-        beamCooldownUntil.put(uuid, System.currentTimeMillis() + Math.max(0L, cooldownMs));
+        if (overheated) {
+            long cooldownMs = plugin.getConfig().getLong("abilities.stormstrike.beam_cooldown_ms", 5000L);
+            beamCooldownUntil.put(uuid, System.currentTimeMillis() + Math.max(0L, cooldownMs));
+        }
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg(overheated ? "stormstrike.beam_overheated" : "stormstrike.beam_off"));
-        player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.4f, 1.75f);
+        player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.35f, 1.85f);
     }
 
     private void fireStormBeam(Player player) {
         double range = plugin.getConfig().getDouble("abilities.stormstrike.beam_range", 35.0);
         double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 3.0) * 2.0;
         int damageIntervalTicks = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.beam_damage_interval_ticks", 10));
-        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 0.55);
+        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 0.7);
+        int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_ticks", 60);
+        int slownessAmplifier = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_amplifier", 1);
 
         Location eye = player.getEyeLocation();
         Vector dir = eye.getDirection().normalize();
@@ -165,38 +173,64 @@ public class StormstrikeAbility implements Ability {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
             if (!isNearBeam(eye, dir, effectiveRange, hitRadius, target.getEyeLocation())) continue;
             target.damage(Math.max(0.0, damage), player);
-            world.spawnParticle(Particle.ELECTRIC_SPARK, target.getLocation().add(0, 1, 0), 16, 0.22, 0.35, 0.22, 0.08);
-            world.playSound(target.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.35f, 1.65f);
+            target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS,
+                    Math.max(20, slownessTicks), Math.max(0, slownessAmplifier), false, true, true));
+            world.spawnParticle(Particle.ELECTRIC_SPARK, target.getLocation().add(0, 1, 0), 24, 0.28, 0.40, 0.28, 0.10);
+            world.playSound(target.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.35f, 1.75f);
         }
     }
 
     private void renderStormBeam(World world, Location origin, Vector direction, double distance) {
-        Particle.DustOptions white = new Particle.DustOptions(Color.fromRGB(255, 255, 245), 0.85f);
-        Particle.DustOptions paleYellow = new Particle.DustOptions(Color.fromRGB(255, 245, 165), 0.75f);
+        Particle.DustOptions whiteCore = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 0.92f);
+        Particle.DustOptions paleGlow = new Particle.DustOptions(Color.fromRGB(255, 248, 178), 0.72f);
         Vector side = direction.clone().crossProduct(new Vector(0, 1, 0));
         if (side.lengthSquared() < 0.001) side = new Vector(1, 0, 0);
         side.normalize();
         Vector up = side.clone().crossProduct(direction).normalize();
 
-        double step = plugin.getConfig().getDouble("abilities.stormstrike.beam_particle_step", 0.32);
-        double jitter = plugin.getConfig().getDouble("abilities.stormstrike.beam_zigzag_strength", 0.28);
-        for (double d = 0.6; d <= distance; d += step) {
-            double phase = d * 5.8 + (System.currentTimeMillis() % 700L) / 45.0;
-            double sideOffset = Math.sin(phase) * jitter + ThreadLocalRandom.current().nextDouble(-0.06, 0.06);
-            double upOffset = Math.cos(phase * 0.74) * jitter * 0.55 + ThreadLocalRandom.current().nextDouble(-0.04, 0.04);
-            Location point = origin.clone()
-                    .add(direction.clone().multiply(d))
-                    .add(side.clone().multiply(sideOffset))
-                    .add(up.clone().multiply(upOffset));
+        double segment = plugin.getConfig().getDouble("abilities.stormstrike.beam_segment_length", 0.75);
+        double jitter = plugin.getConfig().getDouble("abilities.stormstrike.beam_zigzag_strength", 0.46);
+        ThreadLocalRandom random = ThreadLocalRandom.current();
 
-            world.spawnParticle(Particle.DUST, point, 2, 0.018, 0.018, 0.018, 0, white);
-            if (((int) (d * 10)) % 5 == 0) {
-                world.spawnParticle(Particle.DUST, point, 1, 0.025, 0.025, 0.025, 0, paleYellow);
-                world.spawnParticle(Particle.ELECTRIC_SPARK, point, 1, 0.035, 0.035, 0.035, 0.02);
+        Location previous = origin.clone().add(direction.clone().multiply(0.45));
+        Vector previousOffset = new Vector(0, 0, 0);
+        for (double d = 0.85; d <= distance; d += segment) {
+            double fade = Math.min(1.0, d / Math.max(1.0, distance));
+            Vector offset = side.clone().multiply(random.nextDouble(-jitter, jitter) * (0.65 + fade))
+                    .add(up.clone().multiply(random.nextDouble(-jitter, jitter) * 0.75));
+            Vector smoothed = previousOffset.multiply(0.25).add(offset.multiply(0.75));
+            Location current = origin.clone().add(direction.clone().multiply(d)).add(smoothed);
+            drawLightningSegment(world, previous, current, whiteCore, paleGlow);
+
+            if (random.nextDouble() < 0.22) {
+                double branchLength = random.nextDouble(0.55, 1.45);
+                Vector branchDir = side.clone().multiply(random.nextBoolean() ? 1 : -1)
+                        .add(up.clone().multiply(random.nextDouble(-0.45, 0.95)))
+                        .add(direction.clone().multiply(random.nextDouble(0.05, 0.35)))
+                        .normalize();
+                Location branchEnd = current.clone().add(branchDir.multiply(branchLength));
+                drawLightningSegment(world, current, branchEnd, whiteCore, paleGlow);
             }
-            if (((int) (d * 10)) % 8 == 0) {
-                world.spawnParticle(Particle.END_ROD, point, 1, 0.02, 0.02, 0.02, 0.01);
-            }
+
+            previous = current;
+            previousOffset = smoothed;
+        }
+    }
+
+    private void drawLightningSegment(World world, Location from, Location to,
+                                      Particle.DustOptions core, Particle.DustOptions glow) {
+        Vector delta = to.toVector().subtract(from.toVector());
+        double length = delta.length();
+        if (length <= 0.001) return;
+        Vector step = delta.normalize().multiply(0.16);
+        int steps = Math.max(1, (int) Math.ceil(length / 0.16));
+        Location point = from.clone();
+        for (int i = 0; i <= steps; i++) {
+            world.spawnParticle(Particle.DUST, point, 1, 0.012, 0.012, 0.012, 0, core);
+            if (i % 2 == 0) world.spawnParticle(Particle.DUST, point, 1, 0.02, 0.02, 0.02, 0, glow);
+            if (i % 3 == 0) world.spawnParticle(Particle.ELECTRIC_SPARK, point, 1, 0.018, 0.018, 0.018, 0.012);
+            if (i % 5 == 0) world.spawnParticle(Particle.END_ROD, point, 1, 0.012, 0.012, 0.012, 0.004);
+            point.add(step);
         }
     }
 
@@ -231,18 +265,12 @@ public class StormstrikeAbility implements Ability {
 
         Location location = player.getLocation();
         World world = player.getWorld();
-        world.playSound(location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.9f, 1.65f);
-        world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.75f, 1.35f);
-        world.spawnParticle(Particle.ELECTRIC_SPARK, location.clone().add(0, 0.4, 0), 68, 0.95, 0.35, 0.95, 0.24);
-        world.spawnParticle(Particle.CLOUD, location.clone().add(0, 0.25, 0), 30, 0.9, 0.12, 0.9, 0.16);
-        world.spawnParticle(Particle.END_ROD, location.clone().add(0, 0.7, 0), 34, 0.75, 0.55, 0.75, 0.05);
-        for (int i = 0; i < 3; i++) {
-            Location spark = location.clone().add(
-                    ThreadLocalRandom.current().nextDouble(-1.2, 1.2),
-                    0.0,
-                    ThreadLocalRandom.current().nextDouble(-1.2, 1.2));
-            world.strikeLightningEffect(spark);
-        }
+        world.playSound(location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.55f, 1.85f);
+        world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 0.65f, 1.45f);
+        world.spawnParticle(Particle.ELECTRIC_SPARK, location.clone().add(0, 0.45, 0), 82, 0.95, 0.35, 0.95, 0.28);
+        world.spawnParticle(Particle.CLOUD, location.clone().add(0, 0.18, 0), 18, 0.85, 0.08, 0.85, 0.10);
+        world.spawnParticle(Particle.END_ROD, location.clone().add(0, 0.7, 0), 38, 0.75, 0.55, 0.75, 0.05);
+        renderLaunchElectricArcs(world, location.clone().add(0, 0.55, 0));
 
         player.setFlying(false);
         player.setAllowFlight(false);
@@ -260,6 +288,18 @@ public class StormstrikeAbility implements Ability {
                 player.setFlySpeed((float) flySpeed());
             }
         }, peakTicks);
+    }
+
+    private void renderLaunchElectricArcs(World world, Location center) {
+        Particle.DustOptions white = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 0.82f);
+        Particle.DustOptions yellow = new Particle.DustOptions(Color.fromRGB(255, 246, 170), 0.65f);
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        for (int i = 0; i < 8; i++) {
+            double angle = (Math.PI * 2.0 / 8.0) * i + random.nextDouble(-0.18, 0.18);
+            Location from = center.clone().add(Math.cos(angle) * 0.35, random.nextDouble(0.0, 0.75), Math.sin(angle) * 0.35);
+            Location to = center.clone().add(Math.cos(angle) * random.nextDouble(1.0, 1.75), random.nextDouble(0.15, 1.45), Math.sin(angle) * random.nextDouble(1.0, 1.75));
+            drawLightningSegment(world, from, to, white, yellow);
+        }
     }
 
     public void strikeLightning(Player player) {
@@ -303,6 +343,73 @@ public class StormstrikeAbility implements Ability {
             player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, bolt.clone().add(0, 1, 0), 28, 0.35, 0.55, 0.35, 0.12);
         }
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.released"));
+    }
+
+    public void handleMeleeHit(Player attacker, LivingEntity target) {
+        World world = target.getWorld();
+        Location hit = target.getLocation().add(0, Math.min(1.4, Math.max(0.8, target.getEyeHeight())), 0);
+        world.spawnParticle(Particle.ELECTRIC_SPARK, hit, 16, 0.25, 0.32, 0.25, 0.08);
+        world.spawnParticle(Particle.END_ROD, hit, 5, 0.18, 0.22, 0.18, 0.02);
+        world.playSound(hit, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.18f, 1.9f);
+
+        int hitCount = meleeCounter.merge(attacker.getUniqueId(), 1, Integer::sum);
+        int interval = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.melee_lightning_every_hits", 5));
+        if (hitCount % interval != 0) return;
+
+        int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.melee_lightning_slowness_ticks", 80);
+        target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS, Math.max(20, slownessTicks), 1, false, true, true));
+        world.strikeLightning(target.getLocation());
+    }
+
+    public void triggerFallImpact(Player player, double fallenBlocks) {
+        double minFall = plugin.getConfig().getDouble("abilities.stormstrike.fall_impact_min_blocks", 10.0);
+        if (fallenBlocks < minFall) return;
+
+        UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        long readyAt = fallImpactCooldown.getOrDefault(uuid, 0L);
+        if (readyAt > now) {
+            long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.fall_cooldown", "seconds", Long.toString(seconds)));
+            return;
+        }
+        fallImpactCooldown.put(uuid, now + plugin.getConfig().getLong("abilities.stormstrike.fall_impact_cooldown_ms", 100000L));
+
+        Location center = player.getLocation();
+        World world = player.getWorld();
+        double radius = plugin.getConfig().getDouble("abilities.stormstrike.fall_impact_radius", 10.0);
+        int bolts = plugin.getConfig().getInt("abilities.stormstrike.fall_impact_bolts", 6);
+        float power = (float) plugin.getConfig().getDouble("abilities.stormstrike.fall_impact_power", 1.1);
+        boolean blockDamage = plugin.getConfig().getBoolean("abilities.stormstrike.fall_impact_block_damage", true);
+        double damage = plugin.getConfig().getDouble("abilities.stormstrike.fall_impact_damage_hearts", 3.0) * 2.0;
+        double knockback = plugin.getConfig().getDouble("abilities.stormstrike.fall_impact_knockback", 1.65);
+
+        if (power > 0) world.createExplosion(center, power, false, blockDamage, player);
+        world.spawnParticle(Particle.EXPLOSION, center.clone().add(0, 0.18, 0), 1, 0.12, 0.04, 0.12, 0);
+        world.spawnParticle(Particle.ELECTRIC_SPARK, center.clone().add(0, 0.7, 0), 120, radius * 0.35, 0.7, radius * 0.35, 0.18);
+        world.playSound(center, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.85f, 1.35f);
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        for (int i = 0; i < bolts; i++) {
+            double angle = Math.PI * 2.0 * i / Math.max(1, bolts) + random.nextDouble(-0.22, 0.22);
+            double dist = random.nextDouble(radius * 0.35, radius);
+            Location bolt = center.clone().add(Math.cos(angle) * dist, 0, Math.sin(angle) * dist);
+            world.strikeLightning(bolt);
+        }
+
+        for (Entity entity : world.getNearbyEntities(center, radius, radius, radius)) {
+            if (!(entity instanceof LivingEntity target) || target.equals(player)) continue;
+            double distance = Math.max(0.35, target.getLocation().distance(center));
+            if (distance > radius) continue;
+            double factor = Math.max(0.2, 1.0 - (distance / radius));
+            target.damage(damage * factor, player);
+            target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS, 80, 1, false, true, true));
+            Vector push = target.getLocation().toVector().subtract(center.toVector());
+            if (push.lengthSquared() < 0.0001) push = player.getLocation().getDirection().clone();
+            target.setVelocity(target.getVelocity().add(push.normalize().multiply(knockback * factor).setY(0.35 + factor * 0.35)));
+        }
+
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.fall_impact"));
     }
 
     private Location findStrikeTarget(Player player) {

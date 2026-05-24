@@ -627,11 +627,26 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.stormstrike.beam_range", 35.0);
         changed |= setIfMissing("abilities.stormstrike.beam_damage_hearts", 3.0);
         changed |= setIfMissing("abilities.stormstrike.beam_damage_interval_ticks", 10);
-        changed |= setIfMissing("abilities.stormstrike.beam_hit_radius", 0.55);
-        changed |= setIfMissing("abilities.stormstrike.beam_max_ticks", 100);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 0.55, 0.7);
+        changed |= setIfMissing("abilities.stormstrike.beam_hit_radius", 0.7);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_max_ticks", 100.0, 120);
+        changed |= setIfMissing("abilities.stormstrike.beam_max_ticks", 120);
         changed |= setIfMissing("abilities.stormstrike.beam_cooldown_ms", 5000);
-        changed |= setIfMissing("abilities.stormstrike.beam_particle_step", 0.32);
-        changed |= setIfMissing("abilities.stormstrike.beam_zigzag_strength", 0.28);
+        changed |= setIfMissing("abilities.stormstrike.beam_segment_length", 0.75);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_zigzag_strength", 0.28, 0.46);
+        changed |= setIfMissing("abilities.stormstrike.beam_zigzag_strength", 0.46);
+        changed |= setIfMissing("abilities.stormstrike.beam_slowness_ticks", 60);
+        changed |= setIfMissing("abilities.stormstrike.beam_slowness_amplifier", 1);
+        changed |= setIfMissing("abilities.stormstrike.melee_lightning_every_hits", 5);
+        changed |= setIfMissing("abilities.stormstrike.melee_lightning_slowness_ticks", 80);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_min_blocks", 10.0);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_cooldown_ms", 100000);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_radius", 10.0);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_bolts", 6);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_power", 1.1);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_block_damage", true);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_damage_hearts", 3.0);
+        changed |= setIfMissing("abilities.stormstrike.fall_impact_knockback", 1.65);
 
         changed |= setIfMissing("abilities.fire_sonic.strength_level", 1);
         changed |= setIfMissing("abilities.fire_sonic.resistance_level", 1);
@@ -640,7 +655,8 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.fire_sonic.beam_range", 24.0);
         changed |= setIfMissing("abilities.fire_sonic.beam_damage_hearts", 1.0);
         changed |= setIfMissing("abilities.fire_sonic.beam_fire_ticks", 140);
-        changed |= setIfMissing("abilities.fire_sonic.beam_damage_interval_ticks", 5);
+        changed |= replaceIfNumericEquals("abilities.fire_sonic.beam_damage_interval_ticks", 5.0, 4);
+        changed |= setIfMissing("abilities.fire_sonic.beam_damage_interval_ticks", 4);
         changed |= setIfMissing("abilities.fire_sonic.beam_hit_radius", 0.35);
         changed |= setIfMissing("abilities.fire_sonic.beam_max_ticks", 40);
         changed |= setIfMissing("abilities.fire_sonic.beam_cooldown_ms", 5000);
@@ -656,6 +672,8 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.toxic_cloud.vomit_damage_hearts", 1.5);
         changed |= setIfMissing("abilities.toxic_cloud.vomit_poison_ticks", 80);
         changed |= setIfMissing("abilities.toxic_cloud.vomit_cooldown_ms", 10000);
+        changed |= setIfMissing("abilities.toxic_cloud.melee_poison_ticks", 40);
+        changed |= setIfMissing("abilities.toxic_cloud.melee_poison_amplifier", 0);
 
         changed |= setIfMissing("abilities.the_countess.strength_level", 2);
         changed |= setIfMissing("abilities.the_countess.resistance_level", 1);
@@ -689,16 +707,23 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 12.5);
         changed |= setIfMissing("abilities.the_headpopper.mob_damage_multiplier", 2.5);
         changed |= setIfMissing("abilities.the_headpopper.slowness_amplifier", 2);
-        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 30000);
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 30000.0, 20000);
+        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 20000);
+        changed |= setIfMissing("abilities.the_headpopper.area_radius", 10.0);
+        changed |= setIfMissing("abilities.the_headpopper.area_damage_health_percent", 0.25);
+        changed |= setIfMissing("abilities.the_headpopper.area_cooldown_ms", 120000);
 
         changed |= setIfMissing("abilities.spider_weaver.strength_level", 1);
         changed |= setIfMissing("abilities.spider_weaver.resistance_level", 1);
         changed |= setIfMissing("abilities.spider_weaver.regeneration_level", 1);
         changed |= setIfMissing("abilities.spider_weaver.web_range", 24.0);
-        changed |= setIfMissing("abilities.spider_weaver.web_cooldown_ms", 15000);
+        changed |= replaceIfNumericEquals("abilities.spider_weaver.web_cooldown_ms", 15000.0, 5000);
+        changed |= setIfMissing("abilities.spider_weaver.web_cooldown_ms", 5000);
+        changed |= setIfMissing("abilities.spider_weaver.web_damage_hearts", 1.5);
         changed |= setIfMissing("abilities.spider_weaver.web_slowness_ticks", 120);
         changed |= setIfMissing("abilities.spider_weaver.web_slowness_amplifier", 5);
-        changed |= setIfMissing("abilities.spider_weaver.web_duration_ticks", 120);
+        changed |= replaceIfNumericEquals("abilities.spider_weaver.web_duration_ticks", 120.0, 1200);
+        changed |= setIfMissing("abilities.spider_weaver.web_duration_ticks", 1200);
         changed |= setIfMissing("abilities.spider_weaver.wall_climb_enabled", true);
         changed |= setIfMissing("abilities.spider_weaver.wall_climb_velocity", 0.19);
 

@@ -98,7 +98,7 @@ public class SpiderWeaverAbility implements Ability {
             MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("spider_weaver.cooldown", "seconds", Long.toString(seconds)));
             return;
         }
-        webCooldown.put(uuid, now + plugin.getConfig().getLong("abilities.spider_weaver.web_cooldown_ms", 15000L));
+        webCooldown.put(uuid, now + plugin.getConfig().getLong("abilities.spider_weaver.web_cooldown_ms", 5000L));
 
         double range = plugin.getConfig().getDouble("abilities.spider_weaver.web_range", 24.0);
         Location eye = player.getEyeLocation();
@@ -119,10 +119,12 @@ public class SpiderWeaverAbility implements Ability {
     private void trapTarget(Player player, LivingEntity target) {
         int slownessTicks = plugin.getConfig().getInt("abilities.spider_weaver.web_slowness_ticks", 120);
         int amplifier = plugin.getConfig().getInt("abilities.spider_weaver.web_slowness_amplifier", 5);
+        double damage = plugin.getConfig().getDouble("abilities.spider_weaver.web_damage_hearts", 1.5) * 2.0;
+        if (damage > 0) target.damage(damage, player);
         target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS, slownessTicks, Math.max(0, amplifier), false, true, true));
         target.addPotionEffect(new PotionEffect(PotionEffects.WEAKNESS, slownessTicks, 0, false, true, true));
-        placeTemporaryWebs(target.getLocation(), plugin.getConfig().getInt("abilities.spider_weaver.web_duration_ticks", 120));
-        target.getWorld().spawnParticle(Particle.WHITE_ASH, target.getLocation().add(0, 1, 0), 32, 0.45, 0.55, 0.45, 0.02);
+        placeTemporaryWebs(target.getLocation(), plugin.getConfig().getInt("abilities.spider_weaver.web_duration_ticks", 1200));
+        target.getWorld().spawnParticle(Particle.WHITE_ASH, target.getLocation().add(0, 1, 0), 52, 0.68, 0.65, 0.68, 0.025);
         target.getWorld().playSound(target.getLocation(), Sound.BLOCK_WOOL_PLACE, 0.75f, 1.25f);
     }
 
@@ -135,7 +137,15 @@ public class SpiderWeaverAbility implements Ability {
                 base.getRelative(BlockFace.SOUTH),
                 base.getRelative(BlockFace.EAST),
                 base.getRelative(BlockFace.WEST),
-                base.getRelative(BlockFace.UP)
+                base.getRelative(BlockFace.NORTH).getRelative(BlockFace.EAST),
+                base.getRelative(BlockFace.NORTH).getRelative(BlockFace.WEST),
+                base.getRelative(BlockFace.SOUTH).getRelative(BlockFace.EAST),
+                base.getRelative(BlockFace.SOUTH).getRelative(BlockFace.WEST),
+                base.getRelative(BlockFace.UP),
+                base.getRelative(BlockFace.UP).getRelative(BlockFace.NORTH),
+                base.getRelative(BlockFace.UP).getRelative(BlockFace.SOUTH),
+                base.getRelative(BlockFace.UP).getRelative(BlockFace.EAST),
+                base.getRelative(BlockFace.UP).getRelative(BlockFace.WEST)
         };
         for (Block block : candidates) {
             if (block.getType() != Material.AIR && !block.isPassable()) continue;

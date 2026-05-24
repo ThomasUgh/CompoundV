@@ -11,9 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.RayTraceResult;
@@ -26,6 +25,7 @@ public class TheHeadpopperAbility implements Ability {
 
     private final CompoundV plugin;
     private final Map<UUID, Long> cooldownUntil = new HashMap<>();
+    private final Map<UUID, Long> areaCooldownUntil = new HashMap<>();
     private final Map<UUID, Long> lastHandledAt = new HashMap<>();
 
     public TheHeadpopperAbility(CompoundV plugin) {
@@ -35,6 +35,12 @@ public class TheHeadpopperAbility implements Ability {
     @Override public String getId() { return "the_headpopper"; }
     @Override public String getDisplayName() { return "The Headpopper"; }
     @Override public int getColor() { return 0xB00020; }
+    @Override public boolean hasToggle() { return true; }
+
+    @Override
+    public void onToggle(Player player) {
+        releaseAreaPulse(player);
+    }
 
     @Override
     public void apply(Player player) {
@@ -49,6 +55,7 @@ public class TheHeadpopperAbility implements Ability {
     @Override
     public void remove(Player player) {
         cooldownUntil.remove(player.getUniqueId());
+        areaCooldownUntil.remove(player.getUniqueId());
         lastHandledAt.remove(player.getUniqueId());
         player.removePotionEffect(PotionEffects.STRENGTH);
         player.removePotionEffect(PotionEffects.RESISTANCE);
@@ -79,8 +86,49 @@ public class TheHeadpopperAbility implements Ability {
             return;
         }
 
-        cooldownUntil.put(uuid, now + plugin.getConfig().getLong("abilities.the_headpopper.cooldown_ms", 30000L));
+        cooldownUntil.put(uuid, now + plugin.getConfig().getLong("abilities.the_headpopper.cooldown_ms", 20000L));
         startCountdown(player, target);
+    }
+
+    private void releaseAreaPulse(Player player) {
+        UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        long readyAt = areaCooldownUntil.getOrDefault(uuid, 0L);
+        if (readyAt > now) {
+            long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_headpopper.area_cooldown", "seconds", Long.toString(seconds)));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.45f, 0.55f);
+            return;
+        }
+
+        long cooldownMs = plugin.getConfig().getLong("abilities.the_headpopper.area_cooldown_ms", 120000L);
+        areaCooldownUntil.put(uuid, now + Math.max(0L, cooldownMs));
+
+        double radius = plugin.getConfig().getDouble("abilities.the_headpopper.area_radius", 10.0);
+        double ratio = plugin.getConfig().getDouble("abilities.the_headpopper.area_damage_health_percent", 0.25);
+        Location center = player.getLocation();
+        World world = player.getWorld();
+        int affected = 0;
+
+        world.playSound(center, Sound.ENTITY_WITHER_AMBIENT, 0.75f, 0.45f);
+        world.playSound(center, Sound.ENTITY_WARDEN_HEARTBEAT, 0.85f, 0.72f);
+        world.spawnParticle(Particle.DUST, center.clone().add(0, 1.15, 0), 90, radius * 0.34, 0.65, radius * 0.34, 0,
+                new Particle.DustOptions(Color.fromRGB(145, 0, 24), 1.25f));
+        world.spawnParticle(Particle.DAMAGE_INDICATOR, center.clone().add(0, 1.0, 0), 42, radius * 0.24, 0.45, radius * 0.24, 0.08);
+
+        for (Entity entity : world.getNearbyEntities(center, radius, radius, radius)) {
+            if (!(entity instanceof LivingEntity target) || target.equals(player)) continue;
+            if (target.getLocation().distanceSquared(center) > radius * radius) continue;
+            double damage = Math.max(0.0, target.getHealth() * Math.max(0.0, ratio));
+            Location loc = target.getLocation().add(0, Math.min(1.4, Math.max(0.8, target.getEyeHeight())), 0);
+            target.damage(damage, player);
+            world.spawnParticle(Particle.DUST, loc, 22, 0.25, 0.28, 0.25, 0,
+                    new Particle.DustOptions(Color.fromRGB(190, 0, 32), 1.05f));
+            world.spawnParticle(Particle.DAMAGE_INDICATOR, loc, 8, 0.18, 0.20, 0.18, 0.08);
+            affected++;
+        }
+
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_headpopper.area_released", "targets", Integer.toString(affected)));
     }
 
     private void startCountdown(Player player, LivingEntity target) {
@@ -89,7 +137,8 @@ public class TheHeadpopperAbility implements Ability {
         int totalTicks = Math.max(1, seconds * 20 + 10);
         target.addPotionEffect(new PotionEffect(PotionEffects.GLOWING, totalTicks, 0, false, false, false));
         target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS, totalTicks, Math.max(0, slownessAmplifier), false, true, true));
-        player.getWorld().playSound(target.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 0.55f, 0.65f);
+        player.getWorld().playSound(target.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 0.46f, 0.48f);
+        player.getWorld().playSound(target.getLocation(), Sound.ENTITY_WARDEN_HEARTBEAT, 0.65f, 0.65f);
 
         for (int i = 0; i < seconds; i++) {
             final int remaining = seconds - i;
@@ -132,6 +181,6 @@ public class TheHeadpopperAbility implements Ability {
         target.getWorld().spawnParticle(Particle.DUST, loc, 26, 0.28, 0.32, 0.28, 0,
                 new Particle.DustOptions(Color.fromRGB(255, 20, 35), 1.0f));
         target.getWorld().spawnParticle(Particle.CRIT, loc, 8, 0.22, 0.22, 0.22, 0.04);
-        target.getWorld().playSound(loc, Sound.BLOCK_NOTE_BLOCK_PLING, 0.45f, 0.6f);
+        target.getWorld().playSound(loc, Sound.ENTITY_WARDEN_HEARTBEAT, 0.45f, 0.55f);
     }
 }

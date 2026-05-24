@@ -112,8 +112,10 @@ public class FireSonicAbility implements Ability {
         beamActive.put(uuid, false);
         activeTicks.remove(uuid);
         damageCounter.remove(uuid);
-        long cooldownMs = plugin.getConfig().getLong("abilities.fire_sonic.beam_cooldown_ms", 5000L);
-        cooldownUntil.put(uuid, System.currentTimeMillis() + Math.max(0L, cooldownMs));
+        if (overheated) {
+            long cooldownMs = plugin.getConfig().getLong("abilities.fire_sonic.beam_cooldown_ms", 5000L);
+            cooldownUntil.put(uuid, System.currentTimeMillis() + Math.max(0L, cooldownMs));
+        }
         player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 1.3f);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg(overheated ? "fire_sonic.beam_overheated" : "fire_sonic.beam_off"));
     }
@@ -122,7 +124,7 @@ public class FireSonicAbility implements Ability {
         double range = plugin.getConfig().getDouble("abilities.fire_sonic.beam_range", 24.0);
         double damage = plugin.getConfig().getDouble("abilities.fire_sonic.beam_damage_hearts", 1.0) * 2.0;
         int fireTicks = plugin.getConfig().getInt("abilities.fire_sonic.beam_fire_ticks", 140);
-        int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.fire_sonic.beam_damage_interval_ticks", 5));
+        int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.fire_sonic.beam_damage_interval_ticks", 4));
         double radius = plugin.getConfig().getDouble("abilities.fire_sonic.beam_hit_radius", 0.35);
 
         Location eye = player.getEyeLocation();
