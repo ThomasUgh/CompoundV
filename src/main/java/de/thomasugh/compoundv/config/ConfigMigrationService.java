@@ -655,9 +655,11 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.fire_sonic.beam_range", 24.0);
         changed |= setIfMissing("abilities.fire_sonic.beam_damage_hearts", 1.0);
         changed |= setIfMissing("abilities.fire_sonic.beam_fire_ticks", 140);
-        changed |= replaceIfNumericEquals("abilities.fire_sonic.beam_damage_interval_ticks", 5.0, 4);
-        changed |= setIfMissing("abilities.fire_sonic.beam_damage_interval_ticks", 4);
-        changed |= setIfMissing("abilities.fire_sonic.beam_hit_radius", 0.35);
+        changed |= replaceIfNumericEquals("abilities.fire_sonic.beam_damage_interval_ticks", 5.0, 2);
+        changed |= replaceIfNumericEquals("abilities.fire_sonic.beam_damage_interval_ticks", 4.0, 2);
+        changed |= setIfMissing("abilities.fire_sonic.beam_damage_interval_ticks", 2);
+        changed |= replaceIfNumericEquals("abilities.fire_sonic.beam_hit_radius", 0.35, 0.80);
+        changed |= setIfMissing("abilities.fire_sonic.beam_hit_radius", 0.80);
         changed |= setIfMissing("abilities.fire_sonic.beam_max_ticks", 40);
         changed |= setIfMissing("abilities.fire_sonic.beam_cooldown_ms", 5000);
 

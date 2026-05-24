@@ -124,8 +124,8 @@ public class FireSonicAbility implements Ability {
         double range = plugin.getConfig().getDouble("abilities.fire_sonic.beam_range", 24.0);
         double damage = plugin.getConfig().getDouble("abilities.fire_sonic.beam_damage_hearts", 1.0) * 2.0;
         int fireTicks = plugin.getConfig().getInt("abilities.fire_sonic.beam_fire_ticks", 140);
-        int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.fire_sonic.beam_damage_interval_ticks", 4));
-        double radius = plugin.getConfig().getDouble("abilities.fire_sonic.beam_hit_radius", 0.35);
+        int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.fire_sonic.beam_damage_interval_ticks", 2));
+        double radius = plugin.getConfig().getDouble("abilities.fire_sonic.beam_hit_radius", 0.80);
 
         Location eye = player.getEyeLocation();
         Vector dir = eye.getDirection().normalize();
@@ -143,7 +143,7 @@ public class FireSonicAbility implements Ability {
         for (Entity entity : world.getNearbyEntities(center,
                 effectiveRange * 0.5 + radius, effectiveRange * 0.5 + radius, effectiveRange * 0.5 + radius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
-            if (!isNearBeam(eye, dir, effectiveRange, radius, target.getEyeLocation())) continue;
+            if (!isNearBeamTarget(eye, dir, effectiveRange, radius, target)) continue;
             target.damage(Math.max(0.0, damage), player);
             target.setFireTicks(Math.max(target.getFireTicks(), fireTicks));
             world.spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), 18, 0.20, 0.30, 0.20, 0.04);
@@ -159,6 +159,14 @@ public class FireSonicAbility implements Ability {
                 world.spawnParticle(Particle.FLAME, point, 1, 0.025, 0.025, 0.025, 0.012);
             }
         }
+    }
+
+    private boolean isNearBeamTarget(Location origin, Vector dir, double range, double radius, LivingEntity target) {
+        Location feet = target.getLocation();
+        Location middle = feet.clone().add(0, Math.max(0.35, target.getEyeHeight() * 0.52), 0);
+        return isNearBeam(origin, dir, range, radius, target.getEyeLocation())
+                || isNearBeam(origin, dir, range, radius, middle)
+                || isNearBeam(origin, dir, range, radius * 0.85, feet.clone().add(0, 0.25, 0));
     }
 
     private boolean isNearBeam(Location origin, Vector dir, double range, double radius, Location target) {
