@@ -103,11 +103,23 @@ abilities:
     beam_range: 35.0
     beam_damage_hearts: 3.0
     beam_damage_interval_ticks: 10
-    beam_hit_radius: 0.55
-    beam_max_ticks: 100
+    beam_hit_radius: 0.7
+    beam_max_ticks: 120
     beam_cooldown_ms: 5000
-    beam_particle_step: 0.32
-    beam_zigzag_strength: 0.28
+    beam_segment_length: 0.75
+    beam_zigzag_strength: 0.46
+    beam_slowness_ticks: 60
+    beam_slowness_amplifier: 1
+    melee_lightning_every_hits: 5
+    melee_lightning_slowness_ticks: 80
+    fall_impact_min_blocks: 10.0
+    fall_impact_cooldown_ms: 100000
+    fall_impact_radius: 10.0
+    fall_impact_bolts: 6
+    fall_impact_power: 1.1
+    fall_impact_block_damage: true
+    fall_impact_damage_hearts: 3.0
+    fall_impact_knockback: 1.65
 
   sonic_boom:
     strength_level: 4
@@ -397,7 +409,7 @@ abilities:
     beam_range: 24.0
     beam_damage_hearts: 1.0
     beam_fire_ticks: 140
-    beam_damage_interval_ticks: 5
+    beam_damage_interval_ticks: 4
     beam_hit_radius: 0.35
     beam_max_ticks: 40
     beam_cooldown_ms: 5000
@@ -414,6 +426,8 @@ abilities:
     vomit_damage_hearts: 1.5
     vomit_poison_ticks: 80
     vomit_cooldown_ms: 10000
+    melee_poison_ticks: 40
+    melee_poison_amplifier: 0
 
   the_countess:
     strength_level: 2
@@ -450,17 +464,21 @@ abilities:
     damage_hearts: 12.5
     mob_damage_multiplier: 2.5
     slowness_amplifier: 2
-    cooldown_ms: 30000
+    cooldown_ms: 20000
+    area_radius: 10.0
+    area_damage_health_percent: 0.25
+    area_cooldown_ms: 120000
 
   spider_weaver:
     strength_level: 1
     resistance_level: 1
     regeneration_level: 1
     web_range: 24.0
-    web_cooldown_ms: 15000
+    web_cooldown_ms: 5000
+    web_damage_hearts: 1.5
     web_slowness_ticks: 120
     web_slowness_amplifier: 5
-    web_duration_ticks: 120
+    web_duration_ticks: 1200
     wall_climb_enabled: true
     wall_climb_velocity: 0.19
 
