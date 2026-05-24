@@ -627,8 +627,9 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.stormstrike.beam_range", 35.0);
         changed |= setIfMissing("abilities.stormstrike.beam_damage_hearts", 3.0);
         changed |= setIfMissing("abilities.stormstrike.beam_damage_interval_ticks", 10);
-        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 0.55, 0.7);
-        changed |= setIfMissing("abilities.stormstrike.beam_hit_radius", 0.7);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 0.55, 1.35);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 0.7, 1.35);
+        changed |= setIfMissing("abilities.stormstrike.beam_hit_radius", 1.35);
         changed |= replaceIfNumericEquals("abilities.stormstrike.beam_max_ticks", 100.0, 120);
         changed |= setIfMissing("abilities.stormstrike.beam_max_ticks", 120);
         changed |= setIfMissing("abilities.stormstrike.beam_cooldown_ms", 5000);

@@ -148,7 +148,7 @@ public class StormstrikeAbility implements Ability {
         double range = plugin.getConfig().getDouble("abilities.stormstrike.beam_range", 35.0);
         double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 3.0) * 2.0;
         int damageIntervalTicks = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.beam_damage_interval_ticks", 10));
-        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 0.7);
+        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 1.35);
         int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_ticks", 60);
         int slownessAmplifier = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_amplifier", 1);
 
@@ -171,7 +171,7 @@ public class StormstrikeAbility implements Ability {
         for (Entity entity : world.getNearbyEntities(center,
                 effectiveRange * 0.5 + hitRadius, effectiveRange * 0.5 + hitRadius, effectiveRange * 0.5 + hitRadius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
-            if (!isNearBeam(eye, dir, effectiveRange, hitRadius, target.getEyeLocation())) continue;
+            if (!isNearBeamTarget(eye, dir, effectiveRange, hitRadius, target)) continue;
             target.damage(Math.max(0.0, damage), player);
             target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS,
                     Math.max(20, slownessTicks), Math.max(0, slownessAmplifier), false, true, true));
@@ -181,8 +181,8 @@ public class StormstrikeAbility implements Ability {
     }
 
     private void renderStormBeam(World world, Location origin, Vector direction, double distance) {
-        Particle.DustOptions whiteCore = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 0.92f);
-        Particle.DustOptions paleGlow = new Particle.DustOptions(Color.fromRGB(255, 248, 178), 0.72f);
+        Particle.DustOptions whiteCore = new Particle.DustOptions(Color.fromRGB(252, 252, 255), 0.42f);
+        Particle.DustOptions purpleGlow = new Particle.DustOptions(Color.fromRGB(184, 155, 255), 0.34f);
         Vector side = direction.clone().crossProduct(new Vector(0, 1, 0));
         if (side.lengthSquared() < 0.001) side = new Vector(1, 0, 0);
         side.normalize();
@@ -200,7 +200,7 @@ public class StormstrikeAbility implements Ability {
                     .add(up.clone().multiply(random.nextDouble(-jitter, jitter) * 0.75));
             Vector smoothed = previousOffset.multiply(0.25).add(offset.multiply(0.75));
             Location current = origin.clone().add(direction.clone().multiply(d)).add(smoothed);
-            drawLightningSegment(world, previous, current, whiteCore, paleGlow);
+            drawLightningSegment(world, previous, current, whiteCore, purpleGlow);
 
             if (random.nextDouble() < 0.22) {
                 double branchLength = random.nextDouble(0.55, 1.45);
@@ -209,7 +209,7 @@ public class StormstrikeAbility implements Ability {
                         .add(direction.clone().multiply(random.nextDouble(0.05, 0.35)))
                         .normalize();
                 Location branchEnd = current.clone().add(branchDir.multiply(branchLength));
-                drawLightningSegment(world, current, branchEnd, whiteCore, paleGlow);
+                drawLightningSegment(world, current, branchEnd, whiteCore, purpleGlow);
             }
 
             previous = current;
@@ -227,11 +227,19 @@ public class StormstrikeAbility implements Ability {
         Location point = from.clone();
         for (int i = 0; i <= steps; i++) {
             world.spawnParticle(Particle.DUST, point, 1, 0.012, 0.012, 0.012, 0, core);
-            if (i % 2 == 0) world.spawnParticle(Particle.DUST, point, 1, 0.02, 0.02, 0.02, 0, glow);
-            if (i % 3 == 0) world.spawnParticle(Particle.ELECTRIC_SPARK, point, 1, 0.018, 0.018, 0.018, 0.012);
-            if (i % 5 == 0) world.spawnParticle(Particle.END_ROD, point, 1, 0.012, 0.012, 0.012, 0.004);
+            if (i % 2 == 0) world.spawnParticle(Particle.DUST, point, 1, 0.012, 0.012, 0.012, 0, glow);
+            if (i % 4 == 0) world.spawnParticle(Particle.ELECTRIC_SPARK, point, 1, 0.010, 0.010, 0.010, 0.008);
+            if (i % 7 == 0) world.spawnParticle(Particle.END_ROD, point, 1, 0.006, 0.006, 0.006, 0.002);
             point.add(step);
         }
+    }
+
+    private boolean isNearBeamTarget(Location origin, Vector dir, double range, double radius, LivingEntity target) {
+        Location feet = target.getLocation();
+        Location middle = feet.clone().add(0, Math.max(0.35, target.getEyeHeight() * 0.52), 0);
+        return isNearBeam(origin, dir, range, radius, target.getEyeLocation())
+                || isNearBeam(origin, dir, range, radius, middle)
+                || isNearBeam(origin, dir, range, radius * 0.85, feet.clone().add(0, 0.25, 0));
     }
 
     private boolean isNearBeam(Location origin, Vector dir, double range, double radius, Location target) {
