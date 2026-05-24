@@ -161,18 +161,19 @@ ability:
   stormstrike:
     description:
       - "<prefix>&8• &7Style: like &eStormfront&7. &3V One only&7 with electric jump start and &e2.75x&7 fly speed."
-      - "<prefix>&8• &dF&7 fires a jagged 35-block lightning beam for max &e5s&7. Damage: &c3 hearts&7. Cooldown: &e5s&7."
-      - "<prefix>&8• &dSneak + Left-Click&7 summons &e2-3 lightning strikes&7. Cooldown: &e3s&7."
+      - "<prefix>&8• &dF&7 fires a jagged 35-block lightning beam for max &e6s&7. Damage: &c3 hearts&7 and Slowness. Only overheats after full use."
+      - "<prefix>&8• &dSneak + Left-Click&7 summons &e2-3 lightning strikes&7. Every 5th melee hit calls a lightning strike."
+      - "<prefix>&8• &7Sneak fall impact: 6 lightning strikes in a 10-block radius. Cooldown: &e100s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength III&7, &9Resistance III&7 and &c10 extra hearts&7."
   fire_sonic:
     description:
       - "<prefix>&8• &cFlame Aura&7: every melee hit applies heavy burn."
-      - "<prefix>&8• &dF&7 fires a thin flame beam for max &e2s&7. Damage: &c1 heart&7 and strong burn. Cooldown: &e5s&7."
+      - "<prefix>&8• &dF&7 fires a thin flame beam for max &e2s&7. Damage ticks are slower than Heat Vision and only overheat after full use."
   toxic_cloud:
     description:
       - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7. Immune to poison."
       - "<prefix>&8• &dF&7 releases poison gas in front of you, applying &2Poison IV&7. Cooldown: &e2min&7."
-      - "<prefix>&8• &dSneak + Left-Click&7 shoots short poison vomit for &c1.5 hearts&7 and &2Poison IV&7. Cooldown: &e10s&7."
+      - "<prefix>&8• &dSneak + Left-Click&7 shoots short poison vomit for &c1.5 hearts&7 and &2Poison IV&7. Melee hits apply short Poison I."
   the_countess:
     description:
       - "<prefix>&8• &7Style: like &cCrimson Countess&7."
@@ -183,19 +184,20 @@ ability:
     description:
       - "<prefix>&8• &7Style: like &eQueen Maeve&7."
       - "<prefix>&8• &7Passive boosts: &aStrength III&7, &9Resistance II&7, &dRegeneration I&7 and &c10 extra hearts&7."
-      - "<prefix>&8• &7High fall protection, strong double-jump and small explosive landing from &e6+ blocks&7."
+      - "<prefix>&8• &7High fall protection, strong double-jump and small explosive landing from &e6+ blocks&7 only while sneaking."
   the_headpopper:
     description:
       - "<prefix>&8• &7Style: like &cVictoria Neuman&7."
       - "<prefix>&8• &dSneak + Left-Click&7 marks a target up to &e30 blocks&7 for a &c3s&7 countdown."
-      - "<prefix>&8• &7Damage: &c12.5 hearts&7, mobs/animals take &cx2.5&7. Cooldown: &e30s&7."
+      - "<prefix>&8• &7Damage: &c12.5 hearts&7, mobs/animals take &cx2.5&7. Cooldown: &e20s&7."
+      - "<prefix>&8• &dF&7 damages all nearby living targets for &c25% current health&7. Cooldown: &e2min&7."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance II&7, &dRegeneration I&7 and Heat Vision immunity."
   spider_weaver:
     description:
       - "<prefix>&8• &7Style: like &fWebweaver&7."
-      - "<prefix>&8• &dF&7 or &dSneak + Left-Click&7 shoots a web projectile. Cooldown: &e15s&7."
-      - "<prefix>&8• &7Targets are slowed/fixed and temporary cobwebs appear around them."
-      - "<prefix>&8• &7Can climb walls. Passive: &aStrength I&7, &9Resistance I&7 and &dRegeneration I&7."
+      - "<prefix>&8• &dF&7 or &dSneak + Left-Click&7 shoots a web projectile. Cooldown: &e5s&7."
+      - "<prefix>&8• &7Targets take damage, are slowed/fixed and larger cobweb clusters can stay up to &e1min&7."
+      - "<prefix>&8• &7Can climb walls and takes no fall damage. Passive: &aStrength I&7, &9Resistance I&7 and &dRegeneration I&7."
   the_veteran:
     description:
       - "<prefix>&8• &7Style: like &eSoldier Boy&7."
@@ -257,6 +259,8 @@ stormstrike:
   beam_off: "&7Storm Beam disabled"
   beam_overheated: "&fStorm Beam &7cooling down"
   beam_cooldown: "&fStorm Beam &cready in {seconds}s"
+  fall_impact: "&fStormfall &7released"
+  fall_cooldown: "&fStormfall &cready in {seconds}s"
 
 flash_light:
   flash_released: "&eFlash Light &7released &8({targets} targets)"
@@ -290,6 +294,8 @@ the_headpopper:
   cooldown: "&cHeadpop ready in {seconds}s"
   countdown: "&cHeadpop &7in &e{seconds}s"
   released: "&cHeadpop &7released"
+  area_cooldown: "&cBlood Pulse ready in {seconds}s"
+  area_released: "&cBlood Pulse &7released &8({targets} targets)"
 
 spider_weaver:
   cooldown: "&fWeb Shot &cready in {seconds}s"
