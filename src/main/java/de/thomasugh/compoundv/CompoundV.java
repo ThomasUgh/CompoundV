@@ -4,6 +4,7 @@ import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FlyAbility;
 import de.thomasugh.compoundv.ability.compoundv.HeatVisionAbility;
+import de.thomasugh.compoundv.ability.compoundv.FlashLightAbility;
 import de.thomasugh.compoundv.ability.compoundv.JumperAbility;
 import de.thomasugh.compoundv.ability.compoundv.ShockwaveAbility;
 import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
@@ -12,11 +13,13 @@ import de.thomasugh.compoundv.ability.compoundv.StrengthAbility;
 import de.thomasugh.compoundv.ability.compoundv.TeleporterAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheWormAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
 import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
 import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
 import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
+import de.thomasugh.compoundv.ability.vone.StormstrikeAbility;
 import de.thomasugh.compoundv.command.CompoundVCommand;
 import de.thomasugh.compoundv.config.ConfigMigrationService;
 import de.thomasugh.compoundv.listener.DeathRespawnListener;
@@ -110,10 +113,15 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new ShockwaveAbility(this));
         registry.register(new VisionAbility(this));
         registry.register(new TeleporterAbility(this));
+        registry.register(new TheWormAbility(this));
+        registry.register(new FlashLightAbility(this));
+        registry.register(new SizeChangerAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one", 0xFF5252));
+        registry.register(new TeleporterAbility(this, "teleporter_v_one", "Teleporter V One", "abilities.teleporter_v_one", 0xCE6BFF));
+        registry.register(new SizeChangerAbility(this, "size_changer_v_one", "SizeChanger V One", "abilities.size_changer_v_one", 0xC091FF));
         registry.register(new TheVeteranAbility(this));
         registry.register(new SonicBoomAbility(this));
-        registry.register(new SizeChangerAbility(this));
+        registry.register(new StormstrikeAbility(this));
     }
 
     private void registerListeners() {

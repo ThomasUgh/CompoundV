@@ -29,6 +29,7 @@ public final class ConfigMigrationService {
         changed |= migrateVersion103Defaults();
         changed |= migrateVersion104HotfixDefaults();
         changed |= migrateVersion110Defaults();
+        changed |= migrateVersion110Step19Defaults();
 
         if (changed) {
             plugin.saveConfig();
@@ -91,11 +92,9 @@ public final class ConfigMigrationService {
                 "fire", 10
         ));
         changed |= ensureChanceSection("v_one.chances", orderedMap(
-                "the_patriot_v_one", 1,
                 "the_veteran", 3,
                 "sonic_boom", 3,
-                "size_changer", 6,
-                "teleporter", 5
+                "stormstrike", 4
         ));
         return changed;
     }
@@ -489,7 +488,7 @@ public final class ConfigMigrationService {
         ));
         changed |= ensureChanceSection("v_one.chances", orderedMap(
                 "sonic_boom", 3,
-                "size_changer", 6
+                "stormstrike", 4
         ));
 
         changed |= setIfMissing("side_effects.temp_v.lethal_use_count", 5);
@@ -497,6 +496,98 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("v_null.mobs.effect_seconds", 120.0, 0);
         changed |= setIfMissing("v_null.unpowered.effect_seconds", 0);
         changed |= setIfMissing("v_null.mobs.effect_seconds", 0);
+
+        return changed;
+    }
+
+
+    private boolean migrateVersion110Step19Defaults() {
+        boolean changed = false;
+
+        changed |= ensureChanceSection("compound_v.chances", orderedMap(
+                "teleporter", 3,
+                "size_changer", 6,
+                "the_worm", 15,
+                "flash_light", 7
+        ));
+        changed |= replaceIfNumericEquals("compound_v.chances.teleporter", 2.0, 3);
+
+        changed |= ensureChanceSection("v_one.chances", orderedMap(
+                "the_veteran", 3,
+                "sonic_boom", 3,
+                "stormstrike", 4
+        ));
+        changed |= removeIfPresent("v_one.chances.the_patriot_v_one");
+        changed |= removeIfPresent("v_one.chances.teleporter");
+        changed |= removeIfPresent("v_one.chances.teleporter_v_one");
+        changed |= removeIfPresent("v_one.chances.size_changer");
+        changed |= removeIfPresent("v_one.chances.size_changer_v_one");
+
+        changed |= setIfMissing("abilities.heat_vision.strength_level", 1);
+        changed |= setIfMissing("abilities.heat_vision.resistance_level", 1);
+        changed |= setIfMissing("abilities.fly.strength_level", 1);
+        changed |= setIfMissing("abilities.fly.resistance_level", 1);
+        changed |= setIfMissing("abilities.fire.strength_level", 1);
+        changed |= setIfMissing("abilities.fire.resistance_level", 1);
+        changed |= setIfMissing("abilities.speedster.strength_level", 1);
+        changed |= setIfMissing("abilities.speedster.resistance_level", 1);
+        changed |= setIfMissing("abilities.jumper.strength_level", 1);
+        changed |= setIfMissing("abilities.jumper.resistance_level", 1);
+        changed |= setIfMissing("abilities.vision.strength_level", 1);
+        changed |= setIfMissing("abilities.vision.resistance_level", 1);
+
+        changed |= setIfMissing("abilities.the_worm.haste_level", 4);
+        changed |= setIfMissing("abilities.the_worm.strength_level", 1);
+        changed |= setIfMissing("abilities.the_worm.resistance_level", 1);
+
+        changed |= setIfMissing("abilities.flash_light.strength_level", 2);
+        changed |= setIfMissing("abilities.flash_light.resistance_level", 1);
+        changed |= setIfMissing("abilities.flash_light.flash_radius", 15.0);
+        changed |= setIfMissing("abilities.flash_light.blindness_ticks", 400);
+        changed |= setIfMissing("abilities.flash_light.blindness_amplifier", 1);
+        changed |= setIfMissing("abilities.flash_light.flash_cooldown_ms", 120000);
+        changed |= setIfMissing("abilities.flash_light.beam_range", 10.0);
+        changed |= setIfMissing("abilities.flash_light.beam_damage_hearts", 2.0);
+        changed |= setIfMissing("abilities.flash_light.beam_knockback", 0.75);
+        changed |= setIfMissing("abilities.flash_light.beam_vertical_knockback", 0.18);
+        changed |= setIfMissing("abilities.flash_light.beam_cooldown_ms", 750);
+
+        changed |= setIfMissing("abilities.stormstrike.strength_level", 1);
+        changed |= setIfMissing("abilities.stormstrike.resistance_level", 1);
+        changed |= setIfMissing("abilities.stormstrike.fly_speed", 0.275);
+        changed |= setIfMissing("abilities.stormstrike.launch_velocity", 2.75);
+        changed |= setIfMissing("abilities.stormstrike.launch_peak_ticks", 22);
+        changed |= setIfMissing("abilities.stormstrike.launch_cooldown_ms", 10000);
+        changed |= setIfMissing("abilities.stormstrike.lightning_cooldown_ms", 3000);
+        changed |= setIfMissing("abilities.stormstrike.lightning_range", 36.0);
+        changed |= setIfMissing("abilities.stormstrike.lightning_min_bolts", 2);
+        changed |= setIfMissing("abilities.stormstrike.lightning_max_bolts", 3);
+        changed |= setIfMissing("abilities.stormstrike.lightning_spread", 1.4);
+
+        changed |= replaceIfNumericEquals("abilities.teleporter.range", 50.0, 35.0);
+        changed |= setIfMissing("abilities.teleporter.range", 35.0);
+        changed |= setIfMissing("abilities.teleporter.cooldown_ms", 2000);
+        changed |= setIfMissing("abilities.teleporter.strength_level", 1);
+        changed |= replaceIfNumericEquals("abilities.teleporter.resistance_level", 2.0, 1);
+        changed |= setIfMissing("abilities.teleporter.resistance_level", 1);
+
+        changed |= setIfMissing("abilities.teleporter_v_one.range", 50.0);
+        changed |= setIfMissing("abilities.teleporter_v_one.cooldown_ms", 2000);
+        changed |= setIfMissing("abilities.teleporter_v_one.strength_level", 2);
+        changed |= setIfMissing("abilities.teleporter_v_one.resistance_level", 2);
+
+        changed |= setIfMissing("abilities.size_changer.strength_level", 2);
+        changed |= setIfMissing("abilities.size_changer.resistance_level", 2);
+        changed |= setIfMissing("abilities.size_changer_v_one.strength_level", 3);
+        changed |= setIfMissing("abilities.size_changer_v_one.resistance_level", 2);
+        changed |= setIfMissing("abilities.size_changer_v_one.cooldown_ms", 60000);
+        changed |= setIfMissing("abilities.size_changer_v_one.big_duration_ticks", 1200);
+        changed |= setIfMissing("abilities.size_changer_v_one.small_duration_ticks", 2400);
+        changed |= setIfMissing("abilities.size_changer_v_one.big_scale_bonus", 2.0);
+        changed |= setIfMissing("abilities.size_changer_v_one.small_scale_bonus", -0.8571428571);
+        changed |= setIfMissing("abilities.size_changer_v_one.big_extra_hearts", 20.0);
+        changed |= setIfMissing("abilities.size_changer_v_one.big_damage_multiplier", 4.0);
+        changed |= setIfMissing("abilities.size_changer_v_one.big_jump_boost_level", 4);
 
         return changed;
     }
@@ -526,6 +617,12 @@ public final class ConfigMigrationService {
                 plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_hearts", 4.725) * 2.0);
         double multiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_damage_multiplier", 5.0);
         plugin.getConfig().set("abilities.the_veteran.beam_damage_amount", patriotDamage * multiplier);
+        return true;
+    }
+
+    private boolean removeIfPresent(String path) {
+        if (!plugin.getConfig().contains(path)) return false;
+        plugin.getConfig().set(path, null);
         return true;
     }
 

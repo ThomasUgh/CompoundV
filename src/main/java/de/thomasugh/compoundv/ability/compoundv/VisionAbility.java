@@ -37,7 +37,15 @@ public class VisionAbility implements Ability {
     @Override public int getColor() { return 0x7DDCFF; }
     @Override public boolean needsTick() { return true; }
 
-    @Override public void apply(Player player) {}
+    @Override
+    public void apply(Player player) {
+        int strength = plugin.getConfig().getInt("abilities.vision.strength_level", 1);
+        int resistance = plugin.getConfig().getInt("abilities.vision.resistance_level", 1);
+        player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
+                Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
+                Integer.MAX_VALUE, Math.max(0, resistance - 1), false, false, true));
+    }
 
     @Override
     public void remove(Player player) {
@@ -45,6 +53,8 @@ public class VisionAbility implements Ability {
         xrayActive.remove(player.getUniqueId());
         ticker.remove(player.getUniqueId());
         player.removePotionEffect(PotionEffects.NIGHT_VISION);
+        player.removePotionEffect(PotionEffects.STRENGTH);
+        player.removePotionEffect(PotionEffects.RESISTANCE);
     }
 
     @Override

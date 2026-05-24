@@ -26,6 +26,10 @@ public class SizeChangerAbility implements Ability {
     }
 
     private final CompoundV plugin;
+    private final String id;
+    private final String displayName;
+    private final String configPath;
+    private final int color;
     private final NamespacedKey scaleKey;
     private final NamespacedKey healthKey;
     private final Map<UUID, Mode> activeMode = new HashMap<>();
@@ -34,19 +38,28 @@ public class SizeChangerAbility implements Ability {
     private final Map<UUID, TaskHandle> revertTasks = new HashMap<>();
 
     public SizeChangerAbility(CompoundV plugin) {
-        this.plugin = plugin;
-        this.scaleKey = new NamespacedKey(plugin, "size_changer_scale");
-        this.healthKey = new NamespacedKey(plugin, "size_changer_hearts");
+        this(plugin, "size_changer", "SizeChanger", "abilities.size_changer", 0x9C64FF);
     }
 
-    @Override public String getId() { return "size_changer"; }
-    @Override public String getDisplayName() { return "SizeChanger"; }
-    @Override public int getColor() { return 0x9C64FF; }
+    public SizeChangerAbility(CompoundV plugin, String id, String displayName, String configPath, int color) {
+        this.plugin = plugin;
+        this.id = id;
+        this.displayName = displayName;
+        this.configPath = configPath;
+        this.color = color;
+        this.scaleKey = new NamespacedKey(plugin, id + "_scale");
+        this.healthKey = new NamespacedKey(plugin, id + "_hearts");
+    }
+
+    @Override public String getId() { return id; }
+    @Override public String getDisplayName() { return displayName; }
+    @Override public int getColor() { return color; }
+    @Override public String getDescriptionKey() { return "ability." + id + ".description"; }
 
     @Override
     public void apply(Player player) {
-        int strength = plugin.getConfig().getInt("abilities.size_changer.strength_level", 2);
-        int resistance = plugin.getConfig().getInt("abilities.size_changer.resistance_level", 2);
+        int strength = plugin.getConfig().getInt(path("strength_level"), 2);
+        int resistance = plugin.getConfig().getInt(path("resistance_level"), 2);
 
         player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
                 Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
@@ -104,6 +117,10 @@ public class SizeChangerAbility implements Ability {
         return getMode(player) == Mode.BIG;
     }
 
+    public double bigDamageMultiplier() {
+        return plugin.getConfig().getDouble(path("big_damage_multiplier"), 2.0);
+    }
+
     public Mode getMode(Player player) {
         return activeMode.getOrDefault(player.getUniqueId(), Mode.NORMAL);
     }
@@ -113,13 +130,13 @@ public class SizeChangerAbility implements Ability {
         activeMode.put(uuid, Mode.BIG);
         cancelRevertTask(uuid);
 
-        double scaleBonus = plugin.getConfig().getDouble("abilities.size_changer.big_scale_bonus", 1.0);
-        double extraHearts = plugin.getConfig().getDouble("abilities.size_changer.big_extra_hearts", 10.0);
+        double scaleBonus = plugin.getConfig().getDouble(path("big_scale_bonus"), 1.0);
+        double extraHearts = plugin.getConfig().getDouble(path("big_extra_hearts"), 10.0);
         AttributeUtil.setScaleBonus(player, scaleKey, scaleBonus);
         AttributeUtil.setMaxHealthBonus(player, healthKey, extraHearts * 2.0);
 
-        long durationTicks = plugin.getConfig().getLong("abilities.size_changer.big_duration_ticks", 1200L);
-        int jumpBoostLevel = plugin.getConfig().getInt("abilities.size_changer.big_jump_boost_level", 2);
+        long durationTicks = plugin.getConfig().getLong(path("big_duration_ticks"), 1200L);
+        int jumpBoostLevel = plugin.getConfig().getInt(path("big_jump_boost_level"), 2);
         if (jumpBoostLevel > 0) {
             player.addPotionEffect(new PotionEffect(PotionEffects.JUMP_BOOST,
                     (int) Math.min(Integer.MAX_VALUE, durationTicks + 20L),
@@ -143,11 +160,11 @@ public class SizeChangerAbility implements Ability {
         activeMode.put(uuid, Mode.SMALL);
         cancelRevertTask(uuid);
 
-        double scaleBonus = plugin.getConfig().getDouble("abilities.size_changer.small_scale_bonus", -0.7142857143);
+        double scaleBonus = plugin.getConfig().getDouble(path("small_scale_bonus"), -0.7142857143);
         AttributeUtil.setScaleBonus(player, scaleKey, scaleBonus);
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0);
 
-        long durationTicks = plugin.getConfig().getLong("abilities.size_changer.small_duration_ticks", 2400L);
+        long durationTicks = plugin.getConfig().getLong(path("small_duration_ticks"), 2400L);
         revertTasks.put(uuid, SchedulerAdapter.runLater(plugin, () -> {
             if (player.isOnline() && getMode(player) == Mode.SMALL) {
                 revertToNormal(player, true, true);
@@ -181,12 +198,16 @@ public class SizeChangerAbility implements Ability {
     }
 
     private void startCooldown(Player player) {
-        long cooldownMs = plugin.getConfig().getLong("abilities.size_changer.cooldown_ms", 60000L);
+        long cooldownMs = plugin.getConfig().getLong(path("cooldown_ms"), 60000L);
         cooldownUntil.put(player.getUniqueId(), System.currentTimeMillis() + Math.max(0L, cooldownMs));
     }
 
     private void cancelRevertTask(UUID uuid) {
         TaskHandle task = revertTasks.remove(uuid);
         if (task != null) task.cancel();
+    }
+
+    private String path(String key) {
+        return configPath + "." + key;
     }
 }

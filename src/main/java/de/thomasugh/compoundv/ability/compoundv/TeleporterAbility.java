@@ -23,35 +23,50 @@ import java.util.UUID;
 public class TeleporterAbility implements Ability {
 
     private final CompoundV plugin;
+    private final String id;
+    private final String displayName;
+    private final String configPath;
+    private final int color;
     private final Map<UUID, Long> cooldowns = new HashMap<>();
 
     public TeleporterAbility(CompoundV plugin) {
-        this.plugin = plugin;
+        this(plugin, "teleporter", "Teleporter", "abilities.teleporter", 0x9C27B0);
     }
 
-    @Override public String getId() { return "teleporter"; }
-    @Override public String getDisplayName() { return "Teleporter"; }
-    @Override public int getColor() { return 0x9C27B0; }
+    public TeleporterAbility(CompoundV plugin, String id, String displayName, String configPath, int color) {
+        this.plugin = plugin;
+        this.id = id;
+        this.displayName = displayName;
+        this.configPath = configPath;
+        this.color = color;
+    }
+
+    @Override public String getId() { return id; }
+    @Override public String getDisplayName() { return displayName; }
+    @Override public int getColor() { return color; }
     @Override public boolean hasToggle() { return true; }
+    @Override public String getDescriptionKey() { return "ability." + id + ".description"; }
 
     @Override
     public void apply(Player player) {
-        int resistance = plugin.getConfig().getInt("abilities.teleporter.resistance_level", 2);
-        if (resistance > 0) {
-            player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
-                    Integer.MAX_VALUE, resistance - 1, false, false, true));
-        }
+        int strength = plugin.getConfig().getInt(path("strength_level"), 1);
+        int resistance = plugin.getConfig().getInt(path("resistance_level"), 1);
+        player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
+                Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
+                Integer.MAX_VALUE, Math.max(0, resistance - 1), false, false, true));
     }
 
     @Override
     public void remove(Player player) {
         cooldowns.remove(player.getUniqueId());
+        player.removePotionEffect(PotionEffects.STRENGTH);
         player.removePotionEffect(PotionEffects.RESISTANCE);
     }
 
     @Override
     public void onToggle(Player player) {
-        long cooldownMs = plugin.getConfig().getLong("abilities.teleporter.cooldown_ms", 2000L);
+        long cooldownMs = plugin.getConfig().getLong(path("cooldown_ms"), 2000L);
         long now = System.currentTimeMillis();
         long last = cooldowns.getOrDefault(player.getUniqueId(), 0L);
         if (now - last < cooldownMs) {
@@ -80,7 +95,7 @@ public class TeleporterAbility implements Ability {
         World world = player.getWorld();
         Location eye = player.getEyeLocation();
         Vector direction = eye.getDirection().normalize();
-        double range = plugin.getConfig().getDouble("abilities.teleporter.range", 50.0);
+        double range = plugin.getConfig().getDouble(path("range"), 35.0);
 
         RayTraceResult hit = world.rayTraceBlocks(eye, direction, range, FluidCollisionMode.NEVER, true);
         Location raw;
@@ -141,8 +156,7 @@ public class TeleporterAbility implements Ability {
         if (!isPassable(feet.getType()) || !isPassable(head.getType())) return null;
         if (!below.getType().isSolid() || isDangerous(below.getType()) || isDangerous(feet.getType())) return null;
 
-        Location safe = new Location(world, x + 0.5, y, z + 0.5, origin.getYaw(), origin.getPitch());
-        return safe;
+        return new Location(world, x + 0.5, y, z + 0.5, origin.getYaw(), origin.getPitch());
     }
 
     private boolean isPassable(Material material) {
@@ -159,5 +173,9 @@ public class TeleporterAbility implements Ability {
                 || name.equals("POWDER_SNOW")
                 || name.equals("CAMPFIRE")
                 || name.equals("SOUL_CAMPFIRE");
+    }
+
+    private String path(String key) {
+        return configPath + "." + key;
     }
 }

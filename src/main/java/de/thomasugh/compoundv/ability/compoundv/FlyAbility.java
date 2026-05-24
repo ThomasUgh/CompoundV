@@ -4,6 +4,7 @@ import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -11,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,12 +37,20 @@ public class FlyAbility implements Ability {
     @Override
     public void apply(Player player) {
         player.setAllowFlight(true);
+        int strength = plugin.getConfig().getInt("abilities.fly.strength_level", 1);
+        int resistance = plugin.getConfig().getInt("abilities.fly.resistance_level", 1);
+        player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
+                Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
+                Integer.MAX_VALUE, Math.max(0, resistance - 1), false, false, true));
     }
 
     @Override
     public void remove(Player player) {
         launching.remove(player.getUniqueId());
         launchCooldown.remove(player.getUniqueId());
+        player.removePotionEffect(PotionEffects.STRENGTH);
+        player.removePotionEffect(PotionEffects.RESISTANCE);
         player.setFlySpeed(0.1f);
         if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
             return;

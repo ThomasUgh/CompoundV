@@ -16,6 +16,7 @@ public final class PotionEffects {
     public static final PotionEffectType WEAKNESS = resolve("WEAKNESS");
     public static final PotionEffectType HUNGER = resolve("HUNGER");
     public static final PotionEffectType MINING_FATIGUE = resolve("SLOW_DIGGING", "MINING_FATIGUE");
+    public static final PotionEffectType HASTE = resolve("FAST_DIGGING", "HASTE");
     public static final PotionEffectType POISON = resolve("POISON");
     public static final PotionEffectType WITHER = resolve("WITHER");
     public static final PotionEffectType STRENGTH = resolve("INCREASE_DAMAGE", "STRENGTH");

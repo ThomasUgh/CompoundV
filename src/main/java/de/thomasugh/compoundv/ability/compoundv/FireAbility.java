@@ -25,14 +25,22 @@ public class FireAbility implements Ability {
 
     @Override
     public void apply(Player p) {
+        int strength = plugin.getConfig().getInt("abilities.fire.strength_level", 1);
+        int resistance = plugin.getConfig().getInt("abilities.fire.resistance_level", 1);
         p.addPotionEffect(new PotionEffect(PotionEffects.FIRE_RESISTANCE,
                 Integer.MAX_VALUE, 0, false, false, true));
+        p.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
+                Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
+        p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
+                Integer.MAX_VALUE, Math.max(0, resistance - 1), false, false, true));
     }
 
     @Override
     public void remove(Player p) {
         ticker.remove(p.getUniqueId());
         p.removePotionEffect(PotionEffects.FIRE_RESISTANCE);
+        p.removePotionEffect(PotionEffects.STRENGTH);
+        p.removePotionEffect(PotionEffects.RESISTANCE);
     }
 
     @Override

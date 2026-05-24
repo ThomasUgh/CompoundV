@@ -1,4 +1,4 @@
-language_file_version: 19
+language_file_version: 20
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -73,6 +73,12 @@ ability:
       - "<prefix>&8• &dSneak + Left-Click + look down&7: become &53.5x smaller&7 for max &e2min&7."
       - "<prefix>&8• &7While transformed, &dSneak + Left-Click + look up/down&7 returns you to normal instantly."
       - "<prefix>&8• &7Cooldown starts after returning to normal."
+  size_changer_v_one:
+    description:
+      - "<prefix>&8• &3V One Upgrade&7 for SizeChanger. Passive: &aStrength III&7 and &9Resistance II&7."
+      - "<prefix>&8• &dSneak + Left-Click + look up&7: about &53x bigger&7, stronger damage, &aJump Boost IV&7 and &c+20 hearts&7."
+      - "<prefix>&8• &dSneak + Left-Click + look down&7: about &57x smaller&7."
+      - "<prefix>&8• &7Only obtainable by upgrading an active SizeChanger with &3V One&7."
   heat_vision:
     description:
       - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the beam."
@@ -109,13 +115,18 @@ ability:
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance I&7, &c5 extra hearts&7 and no melee cooldown."
   teleporter:
     description:
+      - "<prefix>&8• &5Blink&7: press &dF&7 to teleport up to &e35 blocks&7."
+      - "<prefix>&8• &7Cooldown: &e2 seconds&7. Includes &aStrength I&7 and &9Resistance I&7."
+  teleporter_v_one:
+    description:
+      - "<prefix>&8• &3V One Upgrade&7 for Teleporter."
       - "<prefix>&8• &5Blink&7: press &dF&7 to teleport up to &e50 blocks&7."
-      - "<prefix>&8• &7Cooldown: &e2 seconds&7. Includes &9Resistance II&7."
+      - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance III&7."
   fly:
     description:
       - "<prefix>&8• &aFlight&7 is enabled automatically."
       - "<prefix>&8• &6Light Jump Start&7: &dSneak&7, look up and jump for a weaker launch."
-      - "<prefix>&8• &7Launch flight speed is around &e1.5x&7 normal flight."
+      - "<prefix>&8• &7Includes &aStrength I&7 and &9Resistance I&7."
   speedster:
     description:
       - "<prefix>&8• &eSuper Speed&7: press &dF&7 to toggle it on/off."
@@ -135,7 +146,23 @@ ability:
     description:
       - "<prefix>&8• &cFire Aura&7 ignites nearby enemies automatically."
       - "<prefix>&8• &6Fire Resistance&7 is enabled."
+      - "<prefix>&8• &7Includes &aStrength I&7 and &9Resistance I&7."
       - "<prefix>&8• &7Vanilla right-click fire placement with &6Flint and Steel&7 or &6Fire Charges&7 is blocked while you own this ability."
+  the_worm:
+    description:
+      - "<prefix>&8• &7Very fast digging with &eHaste IV&7, focused on dirt, grass, gravel and sand gameplay."
+      - "<prefix>&8• &dF&7 toggles &bNight Vision&7."
+      - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7."
+  flash_light:
+    description:
+      - "<prefix>&8• &7Style: like &eStarlight&7. Passive: &aStrength II&7 and &9Resistance I&7."
+      - "<prefix>&8• &dF&7 blinds nearby enemies in &e15 blocks&7 for &e20s&7. Cooldown: &e2min&7."
+      - "<prefix>&8• &dSneak + Left-Click&7 fires a 10-block light beam with &c2 hearts&7 and knockback."
+  stormstrike:
+    description:
+      - "<prefix>&8• &3V One only&7. Flight with electric jump start and about &e2.75x&7 fly speed."
+      - "<prefix>&8• &dSneak + Left-Click&7 summons &e2-3 lightning strikes&7. Cooldown: &e3s&7."
+      - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7."
   the_veteran:
     description:
       - "<prefix>&8• &7Style: like &eSoldier Boy&7."
@@ -164,6 +191,8 @@ toggle:
   ghost_on: "&5Ghost Mode &aenabled"
   ghost_off: "&7Ghost Mode disabled"
   ghost_cooldown: "&5Ghost Mode &cready in {seconds}s"
+  worm_night_vision_on: "&6The Worm &bNight Vision &aenabled"
+  worm_night_vision_off: "&6The Worm &7Night Vision disabled"
 
 teleporter:
   used: "&5Blink &acompleted"
@@ -187,6 +216,14 @@ launch_cooldown: "&cJump Start ready in {seconds}s"
 sonic_boom:
   ring_cooldown: "&3Sonic Ring &cready in {seconds}s"
   beam_cooldown: "&3Sonic Beam &cready in {seconds}s"
+
+stormstrike:
+  released: "&bStormstrike &7released"
+  cooldown: "&bStormstrike &cready in {seconds}s"
+
+flash_light:
+  flash_released: "&eFlash Light &7released &8({targets} targets)"
+  flash_cooldown: "&eFlash Light &cready in {seconds}s"
 
 jumper:
   activated: "&aJump Burst &aactivated"
@@ -477,11 +514,11 @@ tutorial_book:
   page_11:
     - "&6&lAbilities"
     - ""
-    - "&0Patriot: Homelander"
-    - "&0Diver: The Deep"
-    - "&0Runner: A-Train"
-    - "&0Veteran: Soldier Boy"
-    - "&0Sonic: Bombsight"
+    - "&0Patriot, Diver"
+    - "&0Runner, Worm"
+    - "&0Flash Light"
+    - "&0Veteran, Sonic"
+    - "&0Stormstrike V-One"
     - ""
     - "&8/cv info shows"
     - "&8your controls."

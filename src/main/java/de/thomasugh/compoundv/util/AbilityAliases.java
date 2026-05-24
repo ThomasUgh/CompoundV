@@ -38,6 +38,10 @@ public final class AbilityAliases {
             Map.entry("size_changer", "size_changer"),
             Map.entry("size-changer", "size_changer"),
             Map.entry("size", "size_changer"),
+            Map.entry("sizechanger_v_one", "size_changer_v_one"),
+            Map.entry("size_changer_v_one", "size_changer_v_one"),
+            Map.entry("size-changer-v-one", "size_changer_v_one"),
+            Map.entry("size_v_one", "size_changer_v_one"),
 
             Map.entry("diver", "the_diver"),
             Map.entry("thediver", "the_diver"),
@@ -56,6 +60,10 @@ public final class AbilityAliases {
             Map.entry("tp", "teleporter"),
             Map.entry("teleport", "teleporter"),
             Map.entry("blink", "teleporter"),
+            Map.entry("teleporter_v_one", "teleporter_v_one"),
+            Map.entry("teleporter-v-one", "teleporter_v_one"),
+            Map.entry("tp_v_one", "teleporter_v_one"),
+            Map.entry("blink_v_one", "teleporter_v_one"),
 
             Map.entry("xray", "vision"),
             Map.entry("x-ray", "vision"),
@@ -92,7 +100,24 @@ public final class AbilityAliases {
             Map.entry("shock", "shockwave"),
             Map.entry("shock_wave", "shockwave"),
             Map.entry("shockwave", "shockwave"),
-            Map.entry("shock-wave", "shockwave")
+            Map.entry("shock-wave", "shockwave"),
+
+            Map.entry("storm", "stormstrike"),
+            Map.entry("stormstrike", "stormstrike"),
+            Map.entry("storm_strike", "stormstrike"),
+            Map.entry("storm-strike", "stormstrike"),
+            Map.entry("thunderstrike", "stormstrike"),
+            Map.entry("thunder_strike", "stormstrike"),
+
+            Map.entry("worm", "the_worm"),
+            Map.entry("theworm", "the_worm"),
+            Map.entry("the_worm", "the_worm"),
+            Map.entry("the-worm", "the_worm"),
+
+            Map.entry("flashlight", "flash_light"),
+            Map.entry("flash_light", "flash_light"),
+            Map.entry("flash-light", "flash_light"),
+            Map.entry("starlight", "flash_light")
     );
 
     private AbilityAliases() {}

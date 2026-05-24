@@ -32,10 +32,11 @@ public class JumperAbility implements Ability {
     @Override
     public void apply(Player player) {
         int strength = plugin.getConfig().getInt("abilities.jumper.strength_level", 1);
-        if (strength > 0) {
-            player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
-                    Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
-        }
+        int resistance = plugin.getConfig().getInt("abilities.jumper.resistance_level", 1);
+        player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
+                Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
+                Integer.MAX_VALUE, Math.max(0, resistance - 1), false, false, true));
     }
 
     @Override
@@ -43,6 +44,7 @@ public class JumperAbility implements Ability {
         cooldownUntil.remove(player.getUniqueId());
         activeUntil.remove(player.getUniqueId());
         player.removePotionEffect(PotionEffects.STRENGTH);
+        player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.JUMP_BOOST);
     }
 

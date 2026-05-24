@@ -83,6 +83,15 @@ public class PotionRollManager {
         return (long) (min + ThreadLocalRandom.current().nextInt(span)) * 60_000L;
     }
 
+    private boolean isBlockedDirectVOneRoll(CompoundPotion type, String abilityId) {
+        if (type != CompoundPotion.V_ONE) return false;
+        return "the_patriot_v_one".equalsIgnoreCase(abilityId)
+                || "teleporter".equalsIgnoreCase(abilityId)
+                || "teleporter_v_one".equalsIgnoreCase(abilityId)
+                || "size_changer".equalsIgnoreCase(abilityId)
+                || "size_changer_v_one".equalsIgnoreCase(abilityId);
+    }
+
     private Map<String, Integer> getChances(CompoundPotion type) {
         ConfigurationSection section =
                 plugin.getConfig().getConfigurationSection(type.getConfigKey() + ".chances");
@@ -96,6 +105,11 @@ public class PotionRollManager {
             if (!plugin.getRegistry().contains(abilityId)) {
                 plugin.getLogger().warning("Ignoring unknown ability '" + key
                         + "' in " + type.getConfigKey() + ".chances");
+                continue;
+            }
+            if (isBlockedDirectVOneRoll(type, abilityId)) {
+                plugin.getLogger().warning("Ignoring upgrade-only ability '" + key
+                        + "' in " + type.getConfigKey() + ".chances. Use V One as an upgrade instead.");
                 continue;
             }
             map.merge(abilityId, weight, Integer::sum);

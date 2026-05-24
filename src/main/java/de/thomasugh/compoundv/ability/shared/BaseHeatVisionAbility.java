@@ -14,6 +14,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -39,6 +41,12 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     @Override
     public void apply(Player p) {
+        int strength = plugin.getConfig().getInt("abilities.heat_vision.strength_level", 1);
+        int resistance = plugin.getConfig().getInt("abilities.heat_vision.resistance_level", 1);
+        p.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
+                Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
+        p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
+                Integer.MAX_VALUE, Math.max(0, resistance - 1), false, false, true));
     }
 
     @Override
@@ -94,6 +102,8 @@ public abstract class BaseHeatVisionAbility implements Ability {
         damageCounter.remove(uuid);
         activeTicks.remove(uuid);
         cooldownUntil.remove(uuid);
+        p.removePotionEffect(PotionEffects.STRENGTH);
+        p.removePotionEffect(PotionEffects.RESISTANCE);
     }
 
     private void triggerOverheatCooldown(Player player) {

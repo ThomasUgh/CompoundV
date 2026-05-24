@@ -6,6 +6,7 @@ import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FlyAbility;
 import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
 import de.thomasugh.compoundv.ability.compoundv.JumperAbility;
+import de.thomasugh.compoundv.ability.compoundv.FlashLightAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheRunnerAbility;
 import de.thomasugh.compoundv.ability.compoundv.VisionAbility;
@@ -13,6 +14,7 @@ import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
 import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
+import de.thomasugh.compoundv.ability.vone.StormstrikeAbility;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.data.PlayerAbilityData;
 import de.thomasugh.compoundv.manager.AbilityManager;
@@ -177,6 +179,8 @@ public class PlayerActionListener implements Listener {
 
     private String vOneUpgradeFor(String abilityId) {
         if ("the_patriot".equalsIgnoreCase(abilityId)) return "the_patriot_v_one";
+        if ("teleporter".equalsIgnoreCase(abilityId)) return "teleporter_v_one";
+        if ("size_changer".equalsIgnoreCase(abilityId)) return "size_changer_v_one";
         return null;
     }
 
@@ -376,6 +380,18 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
+        if (ab instanceof StormstrikeAbility stormstrike && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            stormstrike.strikeLightning(p);
+            return;
+        }
+
+        if (ab instanceof FlashLightAbility flashLight && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            flashLight.fireLightBeam(p);
+            return;
+        }
+
         if (ab instanceof TheVeteranAbility veteran && canUseSneakLeftClickAny(p, a)) {
             cancelAbilityInteraction(e);
             veteran.handleSneakLeftClick(p);
@@ -390,7 +406,8 @@ public class PlayerActionListener implements Listener {
 
         boolean flightAbility = "fly".equalsIgnoreCase(ability.getId())
                 || ability instanceof ThePatriotAbility
-                || ability instanceof SonicBoomAbility;
+                || ability instanceof SonicBoomAbility
+                || ability instanceof StormstrikeAbility;
         if (!flightAbility) return;
 
         SchedulerAdapter.runLater(plugin, () -> {
@@ -444,6 +461,14 @@ public class PlayerActionListener implements Listener {
             sizeChanger.handleSneakLeftClick(player);
             return;
         }
+        if (ability instanceof StormstrikeAbility stormstrike) {
+            stormstrike.strikeLightning(player);
+            return;
+        }
+        if (ability instanceof FlashLightAbility flashLight) {
+            flashLight.fireLightBeam(player);
+            return;
+        }
         if (ability instanceof TheVeteranAbility veteran && !veteran.isBurstActive(player)) {
             veteran.handleSneakLeftClick(player);
         }
@@ -460,7 +485,8 @@ public class PlayerActionListener implements Listener {
 
         if (!(ability instanceof ThePatriotAbility)
                 && !(ability instanceof FlyAbility)
-                && !(ability instanceof SonicBoomAbility)) {
+                && !(ability instanceof SonicBoomAbility)
+                && !(ability instanceof StormstrikeAbility)) {
             return;
         }
 
@@ -518,6 +544,8 @@ public class PlayerActionListener implements Listener {
             fly.tryLaunch(p);
         } else if (ability instanceof SonicBoomAbility sonic && !sonic.isLaunching(p)) {
             sonic.tryLaunch(p);
+        } else if (ability instanceof StormstrikeAbility stormstrike && !stormstrike.isLaunching(p)) {
+            stormstrike.tryLaunch(p);
         }
     }
 
@@ -579,7 +607,7 @@ public class PlayerActionListener implements Listener {
         if (!(e.getDamager() instanceof Player attacker)) return;
         if (!(manager.getAbility(attacker) instanceof SizeChangerAbility sizeChanger)) return;
         if (!sizeChanger.isBig(attacker)) return;
-        double multiplier = plugin.getConfig().getDouble("abilities.size_changer.big_damage_multiplier", 2.0);
+        double multiplier = sizeChanger.bigDamageMultiplier();
         e.setDamage(e.getDamage() * Math.max(0.0, multiplier));
     }
 
