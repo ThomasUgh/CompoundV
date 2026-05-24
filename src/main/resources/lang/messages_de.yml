@@ -293,6 +293,8 @@ the_headpopper:
   no_target: "&cKein gültiges Ziel."
   cooldown: "&cHeadpop bereit in {seconds}s"
   countdown: "&cHeadpop &7in &e{seconds}s"
+  countdown_active: "&cHeadpop &7läuft bereits"
+  cancelled: "&7Headpop abgebrochen"
   released: "&cHeadpop &7ausgelöst"
   area_cooldown: "&cBlood Pulse bereit in {seconds}s"
   area_released: "&cBlood Pulse &7ausgelöst &8({targets} Ziele)"

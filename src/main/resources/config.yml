@@ -103,7 +103,7 @@ abilities:
     beam_range: 35.0
     beam_damage_hearts: 3.0
     beam_damage_interval_ticks: 10
-    beam_hit_radius: 0.7
+    beam_hit_radius: 1.35
     beam_max_ticks: 120
     beam_cooldown_ms: 5000
     beam_segment_length: 0.75

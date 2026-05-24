@@ -27,6 +27,7 @@ public class TheHeadpopperAbility implements Ability {
     private final Map<UUID, Long> cooldownUntil = new HashMap<>();
     private final Map<UUID, Long> areaCooldownUntil = new HashMap<>();
     private final Map<UUID, Long> lastHandledAt = new HashMap<>();
+    private final Map<UUID, UUID> activeMarkedTargets = new HashMap<>();
 
     public TheHeadpopperAbility(CompoundV plugin) {
         this.plugin = plugin;
@@ -56,6 +57,7 @@ public class TheHeadpopperAbility implements Ability {
     public void remove(Player player) {
         cooldownUntil.remove(player.getUniqueId());
         areaCooldownUntil.remove(player.getUniqueId());
+        activeMarkedTargets.remove(player.getUniqueId());
         lastHandledAt.remove(player.getUniqueId());
         player.removePotionEffect(PotionEffects.STRENGTH);
         player.removePotionEffect(PotionEffects.RESISTANCE);
@@ -68,6 +70,11 @@ public class TheHeadpopperAbility implements Ability {
         long lastHandled = lastHandledAt.getOrDefault(uuid, 0L);
         if (handledNow - lastHandled < 250L) return;
         lastHandledAt.put(uuid, handledNow);
+
+        if (activeMarkedTargets.containsKey(uuid)) {
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_headpopper.countdown_active"));
+            return;
+        }
 
         long now = System.currentTimeMillis();
         long readyAt = cooldownUntil.getOrDefault(uuid, 0L);
@@ -86,7 +93,6 @@ public class TheHeadpopperAbility implements Ability {
             return;
         }
 
-        cooldownUntil.put(uuid, now + plugin.getConfig().getLong("abilities.the_headpopper.cooldown_ms", 20000L));
         startCountdown(player, target);
     }
 
@@ -132,6 +138,9 @@ public class TheHeadpopperAbility implements Ability {
     }
 
     private void startCountdown(Player player, LivingEntity target) {
+        UUID playerId = player.getUniqueId();
+        activeMarkedTargets.put(playerId, target.getUniqueId());
+
         int seconds = plugin.getConfig().getInt("abilities.the_headpopper.countdown_seconds", 3);
         int slownessAmplifier = plugin.getConfig().getInt("abilities.the_headpopper.slowness_amplifier", 2);
         int totalTicks = Math.max(1, seconds * 20 + 10);
@@ -143,7 +152,10 @@ public class TheHeadpopperAbility implements Ability {
         for (int i = 0; i < seconds; i++) {
             final int remaining = seconds - i;
             SchedulerAdapter.runLater(plugin, () -> {
-                if (!isValidMarkedTarget(player, target)) return;
+                if (!isValidMarkedTarget(player, target)) {
+                    cancelCountdown(player, target);
+                    return;
+                }
                 renderMark(target);
                 MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_headpopper.countdown", "seconds", Integer.toString(remaining)));
             }, i * 20L);
@@ -153,7 +165,13 @@ public class TheHeadpopperAbility implements Ability {
     }
 
     private void pop(Player player, LivingEntity target) {
-        if (!isValidMarkedTarget(player, target)) return;
+        if (!isValidMarkedTarget(player, target)) {
+            cancelCountdown(player, target);
+            return;
+        }
+        activeMarkedTargets.remove(player.getUniqueId());
+        cooldownUntil.put(player.getUniqueId(), System.currentTimeMillis()
+                + plugin.getConfig().getLong("abilities.the_headpopper.cooldown_ms", 20000L));
         double damage = plugin.getConfig().getDouble("abilities.the_headpopper.damage_hearts", 12.5) * 2.0;
         double mobMultiplier = plugin.getConfig().getDouble("abilities.the_headpopper.mob_damage_multiplier", 2.5);
         if (!(target instanceof Player)) damage *= Math.max(0.0, mobMultiplier);
@@ -170,10 +188,23 @@ public class TheHeadpopperAbility implements Ability {
     }
 
     private boolean isValidMarkedTarget(Player player, LivingEntity target) {
-        if (!player.isOnline() || target.isDead() || !target.isValid()) return false;
+        if (!player.isOnline() || !player.isSneaking() || target.isDead() || !target.isValid()) return false;
+        UUID markedTarget = activeMarkedTargets.get(player.getUniqueId());
+        if (markedTarget == null || !markedTarget.equals(target.getUniqueId())) return false;
         if (!player.getWorld().equals(target.getWorld())) return false;
         double maxDistance = plugin.getConfig().getDouble("abilities.the_headpopper.range", 30.0) + 4.0;
         return player.getLocation().distanceSquared(target.getLocation()) <= maxDistance * maxDistance;
+    }
+
+    private void cancelCountdown(Player player, LivingEntity target) {
+        UUID playerId = player.getUniqueId();
+        UUID markedTarget = activeMarkedTargets.get(playerId);
+        if (markedTarget == null || !markedTarget.equals(target.getUniqueId())) return;
+        activeMarkedTargets.remove(playerId);
+        target.removePotionEffect(PotionEffects.GLOWING);
+        target.removePotionEffect(PotionEffects.SLOWNESS);
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_headpopper.cancelled"));
+        player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 0.38f, 0.65f);
     }
 
     private void renderMark(LivingEntity target) {
