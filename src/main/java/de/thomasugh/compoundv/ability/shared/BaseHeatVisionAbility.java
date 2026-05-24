@@ -414,7 +414,9 @@ public abstract class BaseHeatVisionAbility implements Ability {
     protected double adjustedDamageForTarget(LivingEntity target, double damage) {
         if (target instanceof Player targetPlayer) {
             var ability = plugin.getAbilityManager().getAbility(targetPlayer);
-            if (ability != null && "invisibility".equalsIgnoreCase(ability.getId())) {
+            if (ability != null && ("the_ghost".equalsIgnoreCase(ability.getId())
+                    || "invisibility".equalsIgnoreCase(ability.getId())
+                    || "the_headpopper".equalsIgnoreCase(ability.getId()))) {
                 return 0.0;
             }
             if (ability != null && "the_patriot_v_one".equalsIgnoreCase(ability.getId())) {

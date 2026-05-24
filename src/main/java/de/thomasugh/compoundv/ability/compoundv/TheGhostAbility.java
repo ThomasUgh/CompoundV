@@ -17,18 +17,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class InvisibilityAbility implements Ability {
+public class TheGhostAbility implements Ability {
 
     private final CompoundV plugin;
     private final Set<UUID> invisible = new HashSet<>();
     private final Map<UUID, Integer> targetClearTicker = new HashMap<>();
     private final Map<UUID, Long> toggleCooldown = new HashMap<>();
 
-    public InvisibilityAbility(CompoundV plugin) {
+    public TheGhostAbility(CompoundV plugin) {
         this.plugin = plugin;
     }
 
-    @Override public String getId() { return "invisibility"; }
+    @Override public String getId() { return "the_ghost"; }
     @Override public String getDisplayName() { return "The Ghost"; }
     @Override public int getColor() { return 0xAAAAAA; }
     @Override public boolean hasToggle() { return true; }
@@ -36,9 +36,9 @@ public class InvisibilityAbility implements Ability {
 
     @Override
     public void apply(Player player) {
-        int resistance = plugin.getConfig().getInt("abilities.invisibility.resistance_level", 2);
-        int strength = plugin.getConfig().getInt("abilities.invisibility.strength_level", 1);
-        boolean fireResistance = plugin.getConfig().getBoolean("abilities.invisibility.fire_resistance", true);
+        int resistance = plugin.getConfig().getInt("abilities.the_ghost.resistance_level", 2);
+        int strength = plugin.getConfig().getInt("abilities.the_ghost.strength_level", 1);
+        boolean fireResistance = plugin.getConfig().getBoolean("abilities.the_ghost.fire_resistance", true);
 
         if (resistance > 0) {
             player.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
@@ -70,10 +70,8 @@ public class InvisibilityAbility implements Ability {
     public void onTick(Player player) {
         if (!hidesFromMobs() || !isInvisible(player)) return;
         int tick = targetClearTicker.merge(player.getUniqueId(), 1, Integer::sum);
-        int period = Math.max(1, plugin.getConfig().getInt("abilities.invisibility.mob_target_clear_period_ticks", 10));
-        if (tick % period == 0) {
-            clearMobTargets(player);
-        }
+        int period = Math.max(1, plugin.getConfig().getInt("abilities.the_ghost.mob_target_clear_period_ticks", 10));
+        if (tick % period == 0) clearMobTargets(player);
     }
 
     @Override
@@ -81,12 +79,17 @@ public class InvisibilityAbility implements Ability {
         toggleGhostMode(player);
     }
 
+    @Override
+    public String getDescriptionKey() {
+        return "ability.the_ghost.description";
+    }
+
     public boolean isInvisible(Player player) {
         return invisible.contains(player.getUniqueId()) && player.hasPotionEffect(PotionEffects.INVISIBILITY);
     }
 
     public boolean hidesFromMobs() {
-        return plugin.getConfig().getBoolean("abilities.invisibility.hide_from_mobs", true);
+        return plugin.getConfig().getBoolean("abilities.the_ghost.hide_from_mobs", true);
     }
 
     public void toggleGhostMode(Player player) {
@@ -95,13 +98,12 @@ public class InvisibilityAbility implements Ability {
         long readyAt = toggleCooldown.getOrDefault(uuid, 0L);
         if (readyAt > now) {
             long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
-            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.ghost_cooldown",
-                    "seconds", Long.toString(seconds)));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("toggle.ghost_cooldown", "seconds", Long.toString(seconds)));
             return;
         }
 
         boolean next = !invisible.contains(uuid);
-        long cooldownMs = plugin.getConfig().getLong("abilities.invisibility.toggle_cooldown_ms", 5000L);
+        long cooldownMs = plugin.getConfig().getLong("abilities.the_ghost.toggle_cooldown_ms", 5000L);
         toggleCooldown.put(uuid, now + Math.max(0L, cooldownMs));
         if (next) {
             invisible.add(uuid);
@@ -116,7 +118,6 @@ public class InvisibilityAbility implements Ability {
         } else {
             invisible.remove(uuid);
             targetClearTicker.remove(uuid);
-        toggleCooldown.remove(uuid);
             player.removePotionEffect(PotionEffects.INVISIBILITY);
             player.getWorld().spawnParticle(Particle.POOF, player.getLocation().add(0, 1, 0),
                     25, 0.35, 0.55, 0.35, 0.03);
@@ -126,7 +127,7 @@ public class InvisibilityAbility implements Ability {
     }
 
     private void clearMobTargets(Player player) {
-        double radius = plugin.getConfig().getDouble("abilities.invisibility.mob_target_clear_radius", 48.0);
+        double radius = plugin.getConfig().getDouble("abilities.the_ghost.mob_target_clear_radius", 48.0);
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (entity instanceof Mob mob && player.equals(mob.getTarget())) {
                 mob.setTarget(null);

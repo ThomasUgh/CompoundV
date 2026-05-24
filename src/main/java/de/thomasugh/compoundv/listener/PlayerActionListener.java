@@ -3,8 +3,14 @@ package de.thomasugh.compoundv.listener;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
+import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
+import de.thomasugh.compoundv.ability.compoundv.ToxicCloudAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheCountessAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheWarriorAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheHeadpopperAbility;
+import de.thomasugh.compoundv.ability.compoundv.SpiderWeaverAbility;
 import de.thomasugh.compoundv.ability.compoundv.FlyAbility;
-import de.thomasugh.compoundv.ability.compoundv.InvisibilityAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheGhostAbility;
 import de.thomasugh.compoundv.ability.compoundv.JumperAbility;
 import de.thomasugh.compoundv.ability.compoundv.FlashLightAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDiverAbility;
@@ -40,6 +46,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
@@ -50,6 +57,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -392,6 +400,24 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
+        if (ab instanceof ToxicCloudAbility toxicCloud && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            toxicCloud.shootVomit(p);
+            return;
+        }
+
+        if (ab instanceof TheHeadpopperAbility headpopper && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            headpopper.markTarget(p);
+            return;
+        }
+
+        if (ab instanceof SpiderWeaverAbility spiderWeaver && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            spiderWeaver.shootWeb(p);
+            return;
+        }
+
         if (ab instanceof TheVeteranAbility veteran && canUseSneakLeftClickAny(p, a)) {
             cancelAbilityInteraction(e);
             veteran.handleSneakLeftClick(p);
@@ -407,7 +433,9 @@ public class PlayerActionListener implements Listener {
         boolean flightAbility = "fly".equalsIgnoreCase(ability.getId())
                 || ability instanceof ThePatriotAbility
                 || ability instanceof SonicBoomAbility
-                || ability instanceof StormstrikeAbility;
+                || ability instanceof StormstrikeAbility
+                || ability instanceof TheCountessAbility
+                || ability instanceof TheWarriorAbility;
         if (!flightAbility) return;
 
         SchedulerAdapter.runLater(plugin, () -> {
@@ -469,8 +497,35 @@ public class PlayerActionListener implements Listener {
             flashLight.fireLightBeam(player);
             return;
         }
+        if (ability instanceof ToxicCloudAbility toxicCloud) {
+            toxicCloud.shootVomit(player);
+            return;
+        }
+        if (ability instanceof TheHeadpopperAbility headpopper) {
+            headpopper.markTarget(player);
+            return;
+        }
+        if (ability instanceof SpiderWeaverAbility spiderWeaver) {
+            spiderWeaver.shootWeb(player);
+            return;
+        }
         if (ability instanceof TheVeteranAbility veteran && !veteran.isBurstActive(player)) {
             veteran.handleSneakLeftClick(player);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onToggleFlight(PlayerToggleFlightEvent event) {
+        Player player = event.getPlayer();
+        Ability ability = manager.getAbility(player);
+        if (ability instanceof TheCountessAbility countess) {
+            event.setCancelled(true);
+            countess.tryDoubleJump(player);
+            return;
+        }
+        if (ability instanceof TheWarriorAbility warrior) {
+            event.setCancelled(true);
+            warrior.tryDoubleJump(player);
         }
     }
 
@@ -558,6 +613,16 @@ public class PlayerActionListener implements Listener {
                 || event.getFrom().getZ() != event.getTo().getZ();
     }
 
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onProjectileHit(ProjectileHitEvent event) {
+        for (Ability ability : plugin.getRegistry().all()) {
+            if (ability instanceof TheCountessAbility countess && countess.isOwnedFireball(event.getEntity().getUniqueId())) {
+                countess.handleProjectileHit(event);
+                return;
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent e) {
         if (!de.thomasugh.compoundv.ability.shared.BaseHeatVisionAbility.shouldCookDrops(e.getEntity())) return;
@@ -584,7 +649,7 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onMobTargetInvisiblePlayer(EntityTargetLivingEntityEvent event) {
         if (!(event.getTarget() instanceof Player player)) return;
-        if (!(manager.getAbility(player) instanceof InvisibilityAbility ghost)) return;
+        if (!(manager.getAbility(player) instanceof TheGhostAbility ghost)) return;
         if (!ghost.hidesFromMobs() || !ghost.isInvisible(player)) return;
         if (event.getEntity() instanceof Mob) event.setCancelled(true);
     }
@@ -594,12 +659,37 @@ public class PlayerActionListener implements Listener {
         if (!(e.getEntity() instanceof Player p)) return;
         if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
             Ability ability = manager.getAbility(p);
+            if (ability instanceof TheWarriorAbility warrior) {
+                e.setCancelled(true);
+                warrior.triggerFallImpact(p, p.getFallDistance());
+                return;
+            }
             if (manager.isThePatriot(p)
                     || ability instanceof SonicBoomAbility
                     || (ability instanceof JumperAbility jumper && jumper.preventsFallDamage(p))) {
                 e.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onElementalMeleeHit(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player attacker)) return;
+        if (!(e.getEntity() instanceof org.bukkit.entity.LivingEntity target)) return;
+        Ability ability = manager.getAbility(attacker);
+        if (ability instanceof FireSonicAbility fireSonic) {
+            fireSonic.handleMeleeHit(attacker, target);
+        } else if (ability instanceof TheCountessAbility countess) {
+            countess.handleMeleeHit(attacker, target);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onShockwaveMeleeHit(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof Player attacker)) return;
+        if (!(manager.getAbility(attacker) instanceof de.thomasugh.compoundv.ability.compoundv.ShockwaveAbility shockwave)) return;
+        if (!(e.getEntity() instanceof org.bukkit.entity.LivingEntity target)) return;
+        shockwave.handleMeleeHit(attacker, target);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -653,7 +743,7 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onMobDamageInvisiblePlayer(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        if (!(manager.getAbility(player) instanceof InvisibilityAbility ghost)) return;
+        if (!(manager.getAbility(player) instanceof TheGhostAbility ghost)) return;
         if (!ghost.hidesFromMobs() || !ghost.isInvisible(player)) return;
 
         if (event.getDamager() instanceof Mob) {

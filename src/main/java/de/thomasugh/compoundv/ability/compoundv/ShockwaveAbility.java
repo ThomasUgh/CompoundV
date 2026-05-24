@@ -73,6 +73,49 @@ public class ShockwaveAbility implements Ability {
         releaseShockwave(player);
     }
 
+    public void handleMeleeHit(Player attacker, LivingEntity target) {
+        double knockback = plugin.getConfig().getDouble("abilities.shockwave.melee_knockback", 1.15);
+        double vertical = plugin.getConfig().getDouble("abilities.shockwave.melee_vertical_knockback", 0.28);
+        Vector push = target.getLocation().toVector().subtract(attacker.getLocation().toVector());
+        if (push.lengthSquared() < 0.0001) push = attacker.getLocation().getDirection().clone();
+        push.setY(0).normalize().multiply(knockback).setY(vertical);
+        target.setVelocity(target.getVelocity().add(push));
+        target.getWorld().spawnParticle(Particle.CRIT, target.getLocation().add(0, 1, 0), 8, 0.18, 0.22, 0.18, 0.04);
+
+        if (isCriticalHit(attacker)) {
+            releaseMiniShockwave(attacker, target.getLocation());
+        }
+    }
+
+    private void releaseMiniShockwave(Player attacker, Location center) {
+        World world = center.getWorld();
+        if (world == null) return;
+        double radius = plugin.getConfig().getDouble("abilities.shockwave.crit_radius", 3.0);
+        double damage = plugin.getConfig().getDouble("abilities.shockwave.crit_damage_hearts", 1.5) * 2.0;
+        double knockback = plugin.getConfig().getDouble("abilities.shockwave.crit_knockback", 1.45);
+        world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1.35f);
+        world.spawnParticle(Particle.EXPLOSION, center.clone().add(0, 0.6, 0), 1, 0.08, 0.08, 0.08, 0);
+        world.spawnParticle(Particle.CLOUD, center.clone().add(0, 0.35, 0), 20, 0.65, 0.10, 0.65, 0.05);
+        for (Entity entity : world.getNearbyEntities(center, radius, radius, radius)) {
+            if (!(entity instanceof LivingEntity victim) || victim.equals(attacker)) continue;
+            double distance = Math.max(0.2, victim.getLocation().distance(center));
+            if (distance > radius) continue;
+            double factor = Math.max(0.3, 1.0 - (distance / radius));
+            victim.damage(damage * factor);
+            Vector push = victim.getLocation().toVector().subtract(center.toVector());
+            if (push.lengthSquared() < 0.0001) push = attacker.getLocation().getDirection().clone();
+            victim.setVelocity(victim.getVelocity().add(push.normalize().multiply(knockback * factor).setY(0.28 + factor * 0.22)));
+        }
+    }
+
+    private boolean isCriticalHit(Player attacker) {
+        return attacker.getFallDistance() > 0.0f
+                && !attacker.isOnGround()
+                && !attacker.isInsideVehicle()
+                && !attacker.isSprinting()
+                && !attacker.hasPotionEffect(PotionEffects.BLINDNESS);
+    }
+
     private void releaseShockwave(Player player) {
         Location center = player.getLocation();
         World world = player.getWorld();

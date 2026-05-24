@@ -87,8 +87,12 @@ public final class AbilityAliases {
             Map.entry("heatvisioniv", "heat_vision_4"),
 
             Map.entry("flight", "fly"),
-            Map.entry("the_ghost", "invisibility"),
-            Map.entry("ghost", "invisibility"),
+            Map.entry("invisibility", "the_ghost"),
+            Map.entry("invisible", "the_ghost"),
+            Map.entry("translucent", "the_ghost"),
+            Map.entry("the_ghost", "the_ghost"),
+            Map.entry("the-ghost", "the_ghost"),
+            Map.entry("ghost", "the_ghost"),
             Map.entry("strength_men", "strength"),
             Map.entry("strengthmen", "strength"),
             Map.entry("fire_control", "fire"),
@@ -117,7 +121,34 @@ public final class AbilityAliases {
             Map.entry("flashlight", "flash_light"),
             Map.entry("flash_light", "flash_light"),
             Map.entry("flash-light", "flash_light"),
-            Map.entry("starlight", "flash_light")
+            Map.entry("starlight", "flash_light"),
+
+            Map.entry("fire_sonic", "fire_sonic"),
+            Map.entry("firesonic", "fire_sonic"),
+            Map.entry("fire-sonic", "fire_sonic"),
+
+            Map.entry("toxic_cloud", "toxic_cloud"),
+            Map.entry("toxiccloud", "toxic_cloud"),
+            Map.entry("toxic-cloud", "toxic_cloud"),
+
+            Map.entry("the_countess", "the_countess"),
+            Map.entry("countess", "the_countess"),
+            Map.entry("crimson_countess", "the_countess"),
+
+            Map.entry("the_warrior", "the_warrior"),
+            Map.entry("warrior", "the_warrior"),
+            Map.entry("queen_maeve", "the_warrior"),
+            Map.entry("maeve", "the_warrior"),
+
+            Map.entry("the_headpopper", "the_headpopper"),
+            Map.entry("headpopper", "the_headpopper"),
+            Map.entry("victoria_neuman", "the_headpopper"),
+            Map.entry("neuman", "the_headpopper"),
+
+            Map.entry("spider_weaver", "spider_weaver"),
+            Map.entry("spiderweaver", "spider_weaver"),
+            Map.entry("webweaver", "spider_weaver"),
+            Map.entry("web_weaver", "spider_weaver")
     );
 
     private AbilityAliases() {}

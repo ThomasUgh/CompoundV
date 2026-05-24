@@ -30,6 +30,7 @@ public final class ConfigMigrationService {
         changed |= migrateVersion104HotfixDefaults();
         changed |= migrateVersion110Defaults();
         changed |= migrateVersion110Step19Defaults();
+        changed |= migrateVersion110Step20Defaults();
 
         if (changed) {
             plugin.saveConfig();
@@ -588,6 +589,124 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.size_changer_v_one.big_extra_hearts", 20.0);
         changed |= setIfMissing("abilities.size_changer_v_one.big_damage_multiplier", 4.0);
         changed |= setIfMissing("abilities.size_changer_v_one.big_jump_boost_level", 4);
+
+        return changed;
+    }
+
+    private boolean migrateVersion110Step20Defaults() {
+        boolean changed = false;
+
+        changed |= moveIfMissing("compound_v.chances.invisibility", "compound_v.chances.the_ghost");
+        changed |= moveIfMissing("temp_v.chances.invisibility", "temp_v.chances.the_ghost");
+        changed |= moveIfMissing("abilities.invisibility", "abilities.the_ghost");
+
+        changed |= ensureChanceSection("compound_v.chances", orderedMap(
+                "flash_light", 5,
+                "fire_sonic", 4,
+                "toxic_cloud", 9,
+                "the_countess", 6,
+                "the_warrior", 3,
+                "the_headpopper", 2,
+                "spider_weaver", 8
+        ));
+        changed |= replaceIfNumericEquals("compound_v.chances.flash_light", 7.0, 5);
+
+        changed |= ensureChanceSection("temp_v.chances", orderedMap(
+                "the_ghost", 15
+        ));
+
+        changed |= replaceIfNumericEquals("abilities.flash_light.beam_range", 10.0, 15.0);
+        changed |= setIfMissing("abilities.flash_light.beam_range", 15.0);
+        changed |= setIfMissing("abilities.flash_light.beam_fire_ticks", 2);
+
+        changed |= replaceIfNumericEquals("abilities.stormstrike.strength_level", 1.0, 3);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.resistance_level", 1.0, 3);
+        changed |= setIfMissing("abilities.stormstrike.strength_level", 3);
+        changed |= setIfMissing("abilities.stormstrike.resistance_level", 3);
+        changed |= setIfMissing("abilities.stormstrike.extra_hearts", 10.0);
+        changed |= setIfMissing("abilities.stormstrike.beam_range", 35.0);
+        changed |= setIfMissing("abilities.stormstrike.beam_damage_hearts", 3.0);
+        changed |= setIfMissing("abilities.stormstrike.beam_damage_interval_ticks", 10);
+        changed |= setIfMissing("abilities.stormstrike.beam_hit_radius", 0.55);
+        changed |= setIfMissing("abilities.stormstrike.beam_max_ticks", 100);
+        changed |= setIfMissing("abilities.stormstrike.beam_cooldown_ms", 5000);
+        changed |= setIfMissing("abilities.stormstrike.beam_particle_step", 0.32);
+        changed |= setIfMissing("abilities.stormstrike.beam_zigzag_strength", 0.28);
+
+        changed |= setIfMissing("abilities.fire_sonic.strength_level", 1);
+        changed |= setIfMissing("abilities.fire_sonic.resistance_level", 1);
+        changed |= setIfMissing("abilities.fire_sonic.melee_fire_ticks", 160);
+        changed |= setIfMissing("abilities.fire_sonic.melee_bonus_damage_hearts", 0.5);
+        changed |= setIfMissing("abilities.fire_sonic.beam_range", 24.0);
+        changed |= setIfMissing("abilities.fire_sonic.beam_damage_hearts", 1.0);
+        changed |= setIfMissing("abilities.fire_sonic.beam_fire_ticks", 140);
+        changed |= setIfMissing("abilities.fire_sonic.beam_damage_interval_ticks", 5);
+        changed |= setIfMissing("abilities.fire_sonic.beam_hit_radius", 0.35);
+        changed |= setIfMissing("abilities.fire_sonic.beam_max_ticks", 40);
+        changed |= setIfMissing("abilities.fire_sonic.beam_cooldown_ms", 5000);
+
+        changed |= setIfMissing("abilities.toxic_cloud.strength_level", 1);
+        changed |= setIfMissing("abilities.toxic_cloud.resistance_level", 1);
+        changed |= setIfMissing("abilities.toxic_cloud.cloud_radius", 5.0);
+        changed |= setIfMissing("abilities.toxic_cloud.cloud_cone_dot", 0.25);
+        changed |= setIfMissing("abilities.toxic_cloud.cloud_poison_ticks", 120);
+        changed |= setIfMissing("abilities.toxic_cloud.poison_amplifier", 3);
+        changed |= setIfMissing("abilities.toxic_cloud.cloud_cooldown_ms", 120000);
+        changed |= setIfMissing("abilities.toxic_cloud.vomit_range", 5.0);
+        changed |= setIfMissing("abilities.toxic_cloud.vomit_damage_hearts", 1.5);
+        changed |= setIfMissing("abilities.toxic_cloud.vomit_poison_ticks", 80);
+        changed |= setIfMissing("abilities.toxic_cloud.vomit_cooldown_ms", 10000);
+
+        changed |= setIfMissing("abilities.the_countess.strength_level", 2);
+        changed |= setIfMissing("abilities.the_countess.resistance_level", 1);
+        changed |= setIfMissing("abilities.the_countess.fireball_cooldown_ms", 5000);
+        changed |= setIfMissing("abilities.the_countess.fireball_speed", 1.15);
+        changed |= setIfMissing("abilities.the_countess.fireball_explosion_power", 1.0);
+        changed |= setIfMissing("abilities.the_countess.fireball_damage_radius", 2.6);
+        changed |= setIfMissing("abilities.the_countess.fireball_damage_min_hearts", 2.0);
+        changed |= setIfMissing("abilities.the_countess.fireball_damage_max_hearts", 4.0);
+        changed |= setIfMissing("abilities.the_countess.double_jump_velocity", 0.85);
+        changed |= setIfMissing("abilities.the_countess.melee_fire_ticks", 60);
+
+        changed |= setIfMissing("abilities.the_warrior.strength_level", 3);
+        changed |= setIfMissing("abilities.the_warrior.resistance_level", 2);
+        changed |= setIfMissing("abilities.the_warrior.regeneration_level", 1);
+        changed |= setIfMissing("abilities.the_warrior.extra_hearts", 10.0);
+        changed |= setIfMissing("abilities.the_warrior.double_jump_min_velocity", 1.25);
+        changed |= setIfMissing("abilities.the_warrior.double_jump_max_velocity", 1.95);
+        changed |= setIfMissing("abilities.the_warrior.fall_impact_min_blocks", 6.0);
+        changed |= setIfMissing("abilities.the_warrior.fall_impact_power", 0.75);
+        changed |= setIfMissing("abilities.the_warrior.fall_impact_block_damage", true);
+        changed |= setIfMissing("abilities.the_warrior.fall_impact_radius", 3.0);
+        changed |= setIfMissing("abilities.the_warrior.fall_impact_damage_hearts", 2.0);
+        changed |= setIfMissing("abilities.the_warrior.fall_impact_knockback", 1.3);
+
+        changed |= setIfMissing("abilities.the_headpopper.strength_level", 2);
+        changed |= setIfMissing("abilities.the_headpopper.resistance_level", 2);
+        changed |= setIfMissing("abilities.the_headpopper.regeneration_level", 1);
+        changed |= setIfMissing("abilities.the_headpopper.range", 30.0);
+        changed |= setIfMissing("abilities.the_headpopper.countdown_seconds", 3);
+        changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 12.5);
+        changed |= setIfMissing("abilities.the_headpopper.mob_damage_multiplier", 2.5);
+        changed |= setIfMissing("abilities.the_headpopper.slowness_amplifier", 2);
+        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 30000);
+
+        changed |= setIfMissing("abilities.spider_weaver.strength_level", 1);
+        changed |= setIfMissing("abilities.spider_weaver.resistance_level", 1);
+        changed |= setIfMissing("abilities.spider_weaver.regeneration_level", 1);
+        changed |= setIfMissing("abilities.spider_weaver.web_range", 24.0);
+        changed |= setIfMissing("abilities.spider_weaver.web_cooldown_ms", 15000);
+        changed |= setIfMissing("abilities.spider_weaver.web_slowness_ticks", 120);
+        changed |= setIfMissing("abilities.spider_weaver.web_slowness_amplifier", 5);
+        changed |= setIfMissing("abilities.spider_weaver.web_duration_ticks", 120);
+        changed |= setIfMissing("abilities.spider_weaver.wall_climb_enabled", true);
+        changed |= setIfMissing("abilities.spider_weaver.wall_climb_velocity", 0.19);
+
+        changed |= setIfMissing("abilities.shockwave.melee_knockback", 1.15);
+        changed |= setIfMissing("abilities.shockwave.melee_vertical_knockback", 0.28);
+        changed |= setIfMissing("abilities.shockwave.crit_radius", 3.0);
+        changed |= setIfMissing("abilities.shockwave.crit_damage_hearts", 1.5);
+        changed |= setIfMissing("abilities.shockwave.crit_knockback", 1.45);
 
         return changed;
     }

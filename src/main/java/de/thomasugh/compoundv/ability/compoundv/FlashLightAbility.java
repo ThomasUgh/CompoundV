@@ -12,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.RayTraceResult;
@@ -79,6 +80,9 @@ public class FlashLightAbility implements Ability {
             if (!(entity instanceof LivingEntity living) || entity == player) continue;
             living.addPotionEffect(new PotionEffect(PotionEffects.BLINDNESS,
                     durationTicks, Math.max(0, amplifier), false, true, true));
+            if (living instanceof Mob mob) {
+                mob.setTarget(null);
+            }
             affected++;
         }
 
@@ -107,7 +111,7 @@ public class FlashLightAbility implements Ability {
         if (readyAt > now) return;
         beamCooldown.put(uuid, now + plugin.getConfig().getLong("abilities.flash_light.beam_cooldown_ms", 750L));
 
-        double range = plugin.getConfig().getDouble("abilities.flash_light.beam_range", 10.0);
+        double range = plugin.getConfig().getDouble("abilities.flash_light.beam_range", 15.0);
         double damage = plugin.getConfig().getDouble("abilities.flash_light.beam_damage_hearts", 2.0) * 2.0;
         double knockback = plugin.getConfig().getDouble("abilities.flash_light.beam_knockback", 0.75);
         double vertical = plugin.getConfig().getDouble("abilities.flash_light.beam_vertical_knockback", 0.18);
@@ -127,6 +131,8 @@ public class FlashLightAbility implements Ability {
 
         if (hit != null && hit.getHitEntity() instanceof LivingEntity target) {
             target.damage(Math.max(0.0, damage), player);
+            int fireTicks = plugin.getConfig().getInt("abilities.flash_light.beam_fire_ticks", 2);
+            if (fireTicks > 0) target.setFireTicks(Math.max(target.getFireTicks(), fireTicks));
             Vector push = target.getLocation().toVector().subtract(player.getLocation().toVector());
             if (push.lengthSquared() < 0.0001) push = direction.clone();
             push.normalize().multiply(knockback).setY(vertical);

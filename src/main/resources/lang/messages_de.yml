@@ -135,7 +135,7 @@ ability:
     description:
       - "<prefix>&8• &aStärke&7 ist dauerhaft aktiv, solange du diese Fähigkeit hast."
       - "<prefix>&8• &7Enthält einen kleinen &9Resistenz&7-Bonus."
-  invisibility:
+  the_ghost:
     description:
       - "<prefix>&8• &5Ghost Mode&7: Drücke &dF&7 zum Ein-/Ausschalten."
       - "<prefix>&8• &7Aktiviert gibt dir &5Unsichtbarkeit II&7 und Mobs targeten dich nicht."
@@ -156,13 +156,46 @@ ability:
   flash_light:
     description:
       - "<prefix>&8• &7Style: like &eStarlight&7. Passiv: &aStärke II&7 und &9Resistenz I&7."
-      - "<prefix>&8• &dF&7 blendet Gegner in &e15 Blöcken&7 für &e20s&7. Cooldown: &e2min&7."
-      - "<prefix>&8• &dSneak + Linksklick&7 feuert einen 10-Block-Lichtstrahl mit &c2 Herzen&7 und Rückstoß."
+      - "<prefix>&8• &dF&7 blendet Spieler, Mobs und Tiere in &e15 Blöcken&7 für &e20s&7. Cooldown: &e2min&7."
+      - "<prefix>&8• &dSneak + Linksklick&7 feuert einen 15-Block-Lichtstrahl mit &c2 Herzen&7, Mini-Verbrennung und Rückstoß."
   stormstrike:
     description:
-      - "<prefix>&8• &3Nur V One&7. Fliegen mit Elektro-Jump-Start und ca. &e2,75x&7 Fly-Speed."
+      - "<prefix>&8• &7Style: like &eStormfront&7. &3Nur V One&7 mit Elektro-Jump-Start und &e2,75x&7 Fly-Speed."
+      - "<prefix>&8• &dF&7 feuert einen gezackten 35-Block-Blitzstrahl für max. &e5s&7. Schaden: &c3 Herzen&7. Cooldown: &e5s&7."
       - "<prefix>&8• &dSneak + Linksklick&7 erzeugt &e2-3 Blitze&7. Cooldown: &e3s&7."
-      - "<prefix>&8• &7Passive Effekte: &aStärke I&7 und &9Resistenz I&7."
+      - "<prefix>&8• &7Passive Effekte: &aStärke III&7, &9Resistenz III&7 und &c10 Extra-Herzen&7."
+  fire_sonic:
+    description:
+      - "<prefix>&8• &cFlammenAura&7: Jeder Schlag verursacht starke Verbrennung."
+      - "<prefix>&8• &dF&7 feuert einen dünnen Feuerstrahl für max. &e2s&7. Schaden: &c1 Herz&7 und starke Verbrennung. Cooldown: &e5s&7."
+  toxic_cloud:
+    description:
+      - "<prefix>&8• &7Passive Effekte: &aStärke I&7 und &9Resistenz I&7. Immun gegen Gift."
+      - "<prefix>&8• &dF&7 erzeugt Giftgas vor dir mit &2Gift IV&7. Cooldown: &e2min&7."
+      - "<prefix>&8• &dSneak + Linksklick&7 schießt kurze Giftkotze mit &c1,5 Herzen&7 und &2Gift IV&7. Cooldown: &e10s&7."
+  the_countess:
+    description:
+      - "<prefix>&8• &7Style: like &cCrimson Countess&7."
+      - "<prefix>&8• &dF&7 wirft einen Feuerball. Cooldown: &e5s&7. Schaden: &c2-4 Herzen&7."
+      - "<prefix>&8• &7Doppelsprung mit kleiner Feueranimation. Schläge verursachen Verbrennung."
+      - "<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz I&7 und &6Feuerresistenz&7."
+  the_warrior:
+    description:
+      - "<prefix>&8• &7Style: like &eQueen Maeve&7."
+      - "<prefix>&8• &7Passive Effekte: &aStärke III&7, &9Resistenz II&7, &dRegeneration I&7 und &c10 Extra-Herzen&7."
+      - "<prefix>&8• &7Hoher Fallschutz, starker Doppelsprung und kleiner Explo-Fall ab &e6+ Blöcken&7."
+  the_headpopper:
+    description:
+      - "<prefix>&8• &7Style: like &cVictoria Neuman&7."
+      - "<prefix>&8• &dSneak + Linksklick&7 markiert ein Ziel bis &e30 Blöcke&7 für einen &c3s&7 Countdown."
+      - "<prefix>&8• &7Schaden: &c12,5 Herzen&7, Mobs/Tiere bekommen &cx2,5&7. Cooldown: &e30s&7."
+      - "<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz II&7, &dRegeneration I&7 und Heat-Vision-Immunität."
+  spider_weaver:
+    description:
+      - "<prefix>&8• &7Style: like &fWebweaver&7."
+      - "<prefix>&8• &dF&7 oder &dSneak + Linksklick&7 schießt ein Spinnweben-Projektil. Cooldown: &e15s&7."
+      - "<prefix>&8• &7Ziele werden verlangsamt/festgesetzt und temporäre Spinnennetze erscheinen um sie."
+      - "<prefix>&8• &7Kann Wände hochklettern. Passiv: &aStärke I&7, &9Resistenz I&7 und &dRegeneration I&7."
   the_veteran:
     description:
       - "<prefix>&8• &7Style: like &eSoldier Boy&7."
@@ -220,6 +253,10 @@ sonic_boom:
 stormstrike:
   released: "&bStormstrike &7ausgelöst"
   cooldown: "&bStormstrike &cbereit in {seconds}s"
+  beam_on: "&fStorm Beam &aaktiviert"
+  beam_off: "&7Storm Beam deaktiviert"
+  beam_overheated: "&fStorm Beam &7kühlt ab"
+  beam_cooldown: "&fStorm Beam &cbereit in {seconds}s"
 
 flash_light:
   flash_released: "&eFlash Light &7ausgelöst &8({targets} Ziele)"
@@ -233,6 +270,30 @@ jumper:
 shockwave:
   released: "&eShockwave &7ausgelöst"
   cooldown: "&eShockwave &cbereit in {seconds}s"
+
+fire_sonic:
+  beam_on: "&cFireSonic Beam &aaktiviert"
+  beam_off: "&7FireSonic Beam deaktiviert"
+  beam_overheated: "&cFireSonic Beam &7kühlt ab"
+  cooldown: "&cFireSonic Beam &cbereit in {seconds}s"
+
+toxic_cloud:
+  cloud_released: "&2Toxic Cloud &7ausgelöst &8({targets} Ziele)"
+  cloud_cooldown: "&2Toxic Cloud &cbereit in {seconds}s"
+  vomit_cooldown: "&2Giftkotze &cbereit in {seconds}s"
+
+the_countess:
+  fireball_cooldown: "&cFeuerball &cbereit in {seconds}s"
+
+the_headpopper:
+  no_target: "&cKein gültiges Ziel."
+  cooldown: "&cHeadpop bereit in {seconds}s"
+  countdown: "&cHeadpop &7in &e{seconds}s"
+  released: "&cHeadpop &7ausgelöst"
+
+spider_weaver:
+  cooldown: "&fWeb Shot &cbereit in {seconds}s"
+  hit: "&fWeb Shot &7getroffen"
 
 size_changer:
   big_on: "&5SizeChanger &aGroßform aktiviert"
