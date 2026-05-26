@@ -122,10 +122,10 @@ public class FireSonicAbility implements Ability {
 
     private void fireBeam(Player player) {
         double range = plugin.getConfig().getDouble("abilities.fire_sonic.beam_range", 24.0);
-        double damage = plugin.getConfig().getDouble("abilities.fire_sonic.beam_damage_hearts", 1.0) * 2.0;
+        double damage = plugin.getConfig().getDouble("abilities.fire_sonic.beam_damage_hearts", 1.5) * 2.0;
         int fireTicks = plugin.getConfig().getInt("abilities.fire_sonic.beam_fire_ticks", 140);
         int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.fire_sonic.beam_damage_interval_ticks", 2));
-        double radius = plugin.getConfig().getDouble("abilities.fire_sonic.beam_hit_radius", 0.80);
+        double radius = plugin.getConfig().getDouble("abilities.fire_sonic.beam_hit_radius", 1.20);
 
         Location eye = player.getEyeLocation();
         Vector dir = eye.getDirection().normalize();
@@ -144,6 +144,7 @@ public class FireSonicAbility implements Ability {
                 effectiveRange * 0.5 + radius, effectiveRange * 0.5 + radius, effectiveRange * 0.5 + radius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
             if (!isNearBeamTarget(eye, dir, effectiveRange, radius, target)) continue;
+            target.setNoDamageTicks(0);
             target.damage(Math.max(0.0, damage), player);
             target.setFireTicks(Math.max(target.getFireTicks(), fireTicks));
             world.spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), 18, 0.20, 0.30, 0.20, 0.04);
