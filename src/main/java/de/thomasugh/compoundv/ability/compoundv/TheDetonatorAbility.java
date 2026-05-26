@@ -101,10 +101,7 @@ public class TheDetonatorAbility implements Ability {
                     return;
                 }
 
-                long holdGraceMs = plugin.getConfig().getLong("abilities.the_detonator.explosion_hold_grace_ms", 850L);
-                long lastHoldPulse = lastHandledAt.getOrDefault(uuid, 0L);
-                boolean lostHold = age > 8 && System.currentTimeMillis() - lastHoldPulse > Math.max(250L, holdGraceMs);
-                if (!player.isSneaking() || lostHold) {
+                if (!player.isSneaking()) {
                     cancelCharge(uuid);
                     MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_detonator.charge_cancelled"));
                     player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.85f, 0.55f);
