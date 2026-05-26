@@ -62,7 +62,7 @@ ability:
       - "<prefix>&8• &7Style: like &3Bombsight&7."
       - "<prefix>&8• &aFliegen&7 ist automatisch aktiviert."
       - "<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen. Stärker als Flight, etwas schwächer als Patriot."
-      - "<prefix>&8• &3Sonic Beam&7: &dSneak + Linksklick&7 feuert einen Warden-ähnlichen Schallstrahl. Cooldown: &e5s&7."
+      - "<prefix>&8• &3Sonic Beam&7: &dSneak + Linksklick&7 feuert einen Warden-ähnlichen Schallstrahl. Cooldown: &e3s&7."
       - "<prefix>&8• &cExplosive Melee&7: Jeder 2. Treffer bekommt einen kleinen Explo-Bonus; Crits stärker."
       - "<prefix>&8• &cExplo-Aufschlag&7: &dSchleichen&7 beim Landen nach hohem Fall. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive Effekte: &aStärke IV&7 und &9Resistenz IV&7."
@@ -162,7 +162,7 @@ ability:
     description:
       - "<prefix>&8• &7Style: like &eStormfront&7. &3Nur V One&7 mit Elektro-Jump-Start und &e2,75x&7 Fly-Speed."
       - "<prefix>&8• &dF&7 feuert einen gezackten 35-Block-Blitzstrahl für max. &e6s&7. Schaden: &c3 Herzen&7 und Slowness. Überhitzt nur bei voller Nutzung."
-      - "<prefix>&8• &dSneak + Linksklick&7 erzeugt &e2-3 Blitze&7. Jeder 5. Schlag erzeugt einen Blitzeinschlag."
+      - "<prefix>&8• &dSneak + Linksklick&7 erzeugt &e4 Blitze&7. Jeder 5. Schlag erzeugt einen Blitzeinschlag."
       - "<prefix>&8• &7Sneak-Explo-Fall: 6 Blitze im 10-Block-Radius. Cooldown: &e100s&7."
       - "<prefix>&8• &7Passive Effekte: &aStärke III&7, &9Resistenz III&7 und &c10 Extra-Herzen&7."
   fire_sonic:
@@ -177,7 +177,7 @@ ability:
   the_countess:
     description:
       - "<prefix>&8• &7Style: like &cCrimson Countess&7."
-      - "<prefix>&8• &dF&7 wirft einen Feuerball. Cooldown: &e5s&7. Schaden: &c2-4 Herzen&7."
+      - "<prefix>&8• &dF&7 wirft einen Feuerball. Cooldown: &e3s&7. Schaden: &c2-4 Herzen&7."
       - "<prefix>&8• &7Doppelsprung mit kleiner Feueranimation. Schläge verursachen Verbrennung."
       - "<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz I&7 und &6Feuerresistenz&7."
   the_warrior:

@@ -62,7 +62,7 @@ ability:
       - "<prefix>&8• &7Style: like &3Bombsight&7."
       - "<prefix>&8• &aFlight&7 is enabled automatically."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump. Stronger than Flight, slightly weaker than Patriot."
-      - "<prefix>&8• &3Sonic Beam&7: &dSneak + Left-Click&7 to fire a Warden-like sonic beam. Cooldown: &e5s&7."
+      - "<prefix>&8• &3Sonic Beam&7: &dSneak + Left-Click&7 to fire a Warden-like sonic beam. Cooldown: &e3s&7."
       - "<prefix>&8• &cExplosive Melee&7: every 2nd hit adds a small blast; crits hit harder."
       - "<prefix>&8• &cExplosive Landing&7: &dSneak&7 when landing after a high fall. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength IV&7 and &9Resistance IV&7."
@@ -162,7 +162,7 @@ ability:
     description:
       - "<prefix>&8• &7Style: like &eStormfront&7. &3V One only&7 with electric jump start and &e2.75x&7 fly speed."
       - "<prefix>&8• &dF&7 fires a jagged 35-block lightning beam for max &e6s&7. Damage: &c3 hearts&7 and Slowness. Only overheats after full use."
-      - "<prefix>&8• &dSneak + Left-Click&7 summons &e2-3 lightning strikes&7. Every 5th melee hit calls a lightning strike."
+      - "<prefix>&8• &dSneak + Left-Click&7 summons &e4 lightning strikes&7. Every 5th melee hit calls a lightning strike."
       - "<prefix>&8• &7Sneak fall impact: 6 lightning strikes in a 10-block radius. Cooldown: &e100s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength III&7, &9Resistance III&7 and &c10 extra hearts&7."
   fire_sonic:
@@ -177,7 +177,7 @@ ability:
   the_countess:
     description:
       - "<prefix>&8• &7Style: like &cCrimson Countess&7."
-      - "<prefix>&8• &dF&7 launches a fireball. Cooldown: &e5s&7. Damage: &c2-4 hearts&7."
+      - "<prefix>&8• &dF&7 launches a fireball. Cooldown: &e3s&7. Damage: &c2-4 hearts&7."
       - "<prefix>&8• &7Double-jump with small fire animation. Melee hits apply burn."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance I&7 and &6Fire Resistance&7."
   the_warrior:
