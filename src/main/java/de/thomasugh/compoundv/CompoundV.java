@@ -3,6 +3,7 @@ package de.thomasugh.compoundv;
 import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheDetonatorAbility;
 import de.thomasugh.compoundv.ability.compoundv.ToxicCloudAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheCountessAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheWarriorAbility;
@@ -26,6 +27,8 @@ import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
 import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.ability.vone.StormstrikeAbility;
+import de.thomasugh.compoundv.ability.vone.HealAngelAbility;
+import de.thomasugh.compoundv.ability.vone.SubmarineAbility;
 import de.thomasugh.compoundv.command.CompoundVCommand;
 import de.thomasugh.compoundv.config.ConfigMigrationService;
 import de.thomasugh.compoundv.listener.DeathRespawnListener;
@@ -127,6 +130,7 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new TheWarriorAbility(this));
         registry.register(new TheHeadpopperAbility(this));
         registry.register(new SpiderWeaverAbility(this));
+        registry.register(new TheDetonatorAbility(this));
         registry.register(new SizeChangerAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one", 0xFF5252));
         registry.register(new TeleporterAbility(this, "teleporter_v_one", "Teleporter V One", "abilities.teleporter_v_one", 0xCE6BFF));
@@ -134,6 +138,8 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new TheVeteranAbility(this));
         registry.register(new SonicBoomAbility(this));
         registry.register(new StormstrikeAbility(this));
+        registry.register(new HealAngelAbility(this));
+        registry.register(new SubmarineAbility(this));
     }
 
     private void registerListeners() {

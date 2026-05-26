@@ -195,9 +195,27 @@ ability:
   spider_weaver:
     description:
       - "<prefix>&8• &7Style: like &fWebweaver&7."
-      - "<prefix>&8• &dF&7 or &dSneak + Left-Click&7 shoots a web projectile. Cooldown: &e5s&7."
+      - "<prefix>&8• &dF&7 or &dSneak + Left-Click&7 shoots a web projectile. Cooldown: &e3s&7."
       - "<prefix>&8• &7Targets take damage, are slowed/fixed and larger cobweb clusters can stay up to &e1min&7."
       - "<prefix>&8• &7Can climb walls and takes no fall damage. Passive: &aStrength I&7, &9Resistance I&7 and &dRegeneration I&7."
+  heal_angel:
+    description:
+      - "<prefix>&8• &7Style: like &fPrivate Angel&7. &3V One only&7."
+      - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance II&7, &dRegeneration II&7 and &c5 extra hearts&7."
+      - "<prefix>&8• &dSneak + melee hit&7 heals the target for &a10% max health&7, at least &a1 heart&7, and deals no damage. Cooldown: &e1s&7."
+      - "<prefix>&8• &dF&7 commands a targeted mob/animal to attack nearby targets except you for &e2min&7. Cooldown: &e30s&7."
+  submarine:
+    description:
+      - "<prefix>&8• &7Style: like &bTorpedo&7. &3V One only&7."
+      - "<prefix>&8• &7Passive: &aStrength II&7, &9Resistance II&7, Water Breathing, Dolphin's Grace and Conduit Power."
+      - "<prefix>&8• &7In water: &aStrength V&7 and Regeneration."
+      - "<prefix>&8• &dF&7 uses a double-strength dash with &e1s cooldown&7. &dSneak + Left-Click&7 toggles stronger sonar with &e65 blocks&7 range."
+  the_detonator:
+    description:
+      - "<prefix>&8• &7Style: like &cNaqib&7."
+      - "<prefix>&8• &dSneak + Left-Click&7 starts a cancellable countdown, then releases a huge self-centered explosion. Cooldown: &e10s&7."
+      - "<prefix>&8• &7Passive: &aStrength II&7, &9Resistance I&7 and &6Fire Resistance&7."
+      - "<prefix>&8• &7Melee hits burn targets. Every 3rd hit triggers a small explosive hit."
   the_veteran:
     description:
       - "<prefix>&8• &7Style: like &eSoldier Boy&7."
@@ -302,6 +320,29 @@ the_headpopper:
 spider_weaver:
   cooldown: "&fWeb Shot &cready in {seconds}s"
   hit: "&fWeb Shot &7hit"
+
+heal_angel:
+  heal_cooldown: "&aAngel Heal &cready in {seconds}s"
+  no_target: "&fHeal Angel &7needs a mob or animal target."
+  command_released: "&fHeal Angel &7command released"
+  command_cooldown: "&fAngel Command &cready in {seconds}s"
+  healed: "&aAngel Heal &7released"
+
+submarine:
+  sonar_on: "&bSubmarine Sonar &aenabled"
+  sonar_off: "&7Submarine Sonar disabled"
+  sonar_water_only: "&bSubmarine Sonar &7only works underwater"
+  dash: "&bSubmarine Dash &aactivated"
+  dash_water_or_rain: "&bSubmarine Dash &7only works in water or rain"
+  dash_cooldown: "&bSubmarine Dash &cready in {seconds}s"
+
+the_detonator:
+  released: "&cDetonation &7released"
+  cooldown: "&cDetonation &cready in {seconds}s"
+  charge_start: "&cDetonation charge &7started"
+  charge_progress: "&cDetonation &7in &e{seconds}s"
+  charge_cancelled: "&7Detonation &ccancelled"
+
 
 size_changer:
   big_on: "&5SizeChanger &abig form enabled"

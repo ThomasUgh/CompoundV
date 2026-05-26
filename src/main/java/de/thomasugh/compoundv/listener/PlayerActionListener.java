@@ -4,6 +4,7 @@ import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
+import de.thomasugh.compoundv.ability.compoundv.TheDetonatorAbility;
 import de.thomasugh.compoundv.ability.compoundv.ToxicCloudAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheCountessAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheWarriorAbility;
@@ -21,6 +22,8 @@ import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
 import de.thomasugh.compoundv.ability.vone.StormstrikeAbility;
+import de.thomasugh.compoundv.ability.vone.HealAngelAbility;
+import de.thomasugh.compoundv.ability.vone.SubmarineAbility;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.data.PlayerAbilityData;
 import de.thomasugh.compoundv.manager.AbilityManager;
@@ -368,6 +371,19 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
+        if (ab instanceof SubmarineAbility submarine) {
+            if (canUseSneakLeftClick(p, a)) {
+                cancelAbilityInteraction(e);
+                submarine.toggleSonar(p);
+                return;
+            }
+            if (canUseSneakRightClick(p, a)) {
+                cancelAbilityInteraction(e);
+                submarine.useRiptide(p);
+            }
+            return;
+        }
+
         if (ab instanceof VisionAbility vision) {
             if (canUseSneakLeftClick(p, a)) {
                 cancelAbilityInteraction(e);
@@ -417,6 +433,13 @@ public class PlayerActionListener implements Listener {
             spiderWeaver.shootWeb(p);
             return;
         }
+
+        if (ab instanceof TheDetonatorAbility detonator && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            detonator.triggerExplosion(p);
+            return;
+        }
+
 
         if (ab instanceof TheVeteranAbility veteran && canUseSneakLeftClickAny(p, a)) {
             cancelAbilityInteraction(e);
@@ -507,6 +530,10 @@ public class PlayerActionListener implements Listener {
         }
         if (ability instanceof SpiderWeaverAbility spiderWeaver) {
             spiderWeaver.shootWeb(player);
+            return;
+        }
+        if (ability instanceof TheDetonatorAbility detonator) {
+            detonator.triggerExplosion(player);
             return;
         }
         if (ability instanceof TheVeteranAbility veteran && !veteran.isBurstActive(player)) {
@@ -667,10 +694,37 @@ public class PlayerActionListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onHealAngelCommandedMobTargetsOwner(EntityTargetLivingEntityEvent event) {
+        if (!(event.getTarget() instanceof Player owner)) return;
+        if (!(manager.getAbility(owner) instanceof HealAngelAbility healAngel)) return;
+        if (!healAngel.isCommandedByOwner(event.getEntity(), owner)) return;
+        event.setCancelled(true);
+        event.setTarget(null);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onHealAngelCommandedMobDamagesOwner(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player owner)) return;
+        if (!(event.getDamager() instanceof Mob mob)) return;
+        if (!(manager.getAbility(owner) instanceof HealAngelAbility healAngel)) return;
+        if (!healAngel.isCommandedByOwner(mob, owner)) return;
+        event.setCancelled(true);
+        mob.setTarget(null);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onFall(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player p)) return;
+        Ability currentAbility = manager.getAbility(p);
+        if (currentAbility instanceof TheDetonatorAbility detonator
+                && detonator.shouldCancelSelfExplosionDamage(p)
+                && (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+                || e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
+            e.setCancelled(true);
+            return;
+        }
         if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            Ability ability = manager.getAbility(p);
+            Ability ability = currentAbility;
             if (ability instanceof TheWarriorAbility warrior) {
                 e.setCancelled(true);
                 if (p.isSneaking()) warrior.triggerFallImpact(p, p.getFallDistance());
@@ -693,10 +747,17 @@ public class PlayerActionListener implements Listener {
         if (!(e.getDamager() instanceof Player attacker)) return;
         if (!(e.getEntity() instanceof org.bukkit.entity.LivingEntity target)) return;
         Ability ability = manager.getAbility(attacker);
+        if (ability instanceof HealAngelAbility healAngel && healAngel.handleHealingHit(attacker, target)) {
+            e.setDamage(0.0);
+            e.setCancelled(true);
+            return;
+        }
         if (ability instanceof FireSonicAbility fireSonic) {
             fireSonic.handleMeleeHit(attacker, target);
         } else if (ability instanceof TheCountessAbility countess) {
             countess.handleMeleeHit(attacker, target);
+        } else if (ability instanceof TheDetonatorAbility detonator) {
+            detonator.handleMeleeHit(attacker, target);
         }
         if (ability instanceof ToxicCloudAbility toxicCloud) {
             toxicCloud.handleMeleeHit(attacker, target);

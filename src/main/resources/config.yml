@@ -27,6 +27,7 @@ compound_v:
     the_warrior: 3
     the_headpopper: 2
     spider_weaver: 8
+    the_detonator: 6
 
 temp_v:
   chances:
@@ -47,6 +48,8 @@ v_one:
     the_veteran: 3
     sonic_boom: 3
     stormstrike: 4
+    heal_angel: 6
+    submarine: 4
   drink_effect_seconds: 5
 
 heat_vision:
@@ -481,6 +484,50 @@ abilities:
     web_duration_ticks: 1200
     wall_climb_enabled: true
     wall_climb_velocity: 0.19
+
+  heal_angel:
+    strength_level: 2
+    resistance_level: 2
+    regeneration_level: 2
+    extra_hearts: 5.0
+    heal_percent_per_hit: 0.10
+    heal_min_hearts: 1.0
+    heal_cooldown_ms: 1000
+    command_range: 35.0
+    command_duration_ms: 120000
+    command_cooldown_ms: 30000
+    command_attack_radius: 20.0
+    command_pet_damage_hearts: 1.0
+
+  submarine:
+    strength_level: 2
+    resistance_level: 2
+    water_strength_level: 5
+    water_regeneration_level: 2
+    dolphins_grace_level: 10
+    conduit_power_level: 2
+    sonar_radius: 65.0
+    riptide_velocity: 10.0
+    riptide_vertical_boost: 0.35
+    riptide_cooldown_ms: 1000
+
+  the_detonator:
+    strength_level: 2
+    resistance_level: 1
+    explosion_cooldown_ms: 10000
+    explosion_charge_ticks: 60
+    explosion_hold_grace_ms: 850
+    explosion_power: 10.0
+    explosion_block_damage: true
+    explosion_radius: 13.0
+    explosion_damage_hearts: 12.0
+    explosion_knockback: 2.2
+    explosion_fire_ticks: 120
+    melee_fire_ticks: 60
+    melee_explosion_every_hits: 3
+    melee_explosion_power: 1.15
+    melee_explosion_damage_hearts: 2.0
+
 
 brewing:
   # Legacy fallback: custom brewing is still simulated for compatible ingredients.

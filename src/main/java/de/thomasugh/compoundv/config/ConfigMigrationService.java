@@ -31,6 +31,9 @@ public final class ConfigMigrationService {
         changed |= migrateVersion110Defaults();
         changed |= migrateVersion110Step19Defaults();
         changed |= migrateVersion110Step20Defaults();
+        changed |= migrateVersion110Step23Defaults();
+        changed |= migrateVersion110Step24Defaults();
+        changed |= migrateVersion110Step25Defaults();
 
         if (changed) {
             plugin.saveConfig();
@@ -735,6 +738,127 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.shockwave.crit_radius", 3.0);
         changed |= setIfMissing("abilities.shockwave.crit_damage_hearts", 1.5);
         changed |= setIfMissing("abilities.shockwave.crit_knockback", 1.45);
+
+        return changed;
+    }
+
+
+    private boolean migrateVersion110Step23Defaults() {
+        boolean changed = false;
+
+        changed |= ensureChanceSection("compound_v.chances", orderedMap(
+                "the_detonator", 6
+        ));
+        changed |= ensureChanceSection("v_one.chances", orderedMap(
+                "heal_angel", 6,
+                "submarine", 4
+        ));
+
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_range", 36.0, 55.0);
+        changed |= setIfMissing("abilities.stormstrike.lightning_range", 55.0);
+        changed |= setIfMissing("abilities.stormstrike.lightning_trace_radius", 1.1);
+        changed |= setIfMissing("abilities.stormstrike.lightning_hit_radius", 4.0);
+        changed |= setIfMissing("abilities.stormstrike.lightning_damage_hearts", 3.5);
+        changed |= setIfMissing("abilities.stormstrike.lightning_slowness_ticks", 80);
+        changed |= setIfMissing("abilities.stormstrike.lightning_slowness_amplifier", 1);
+
+        changed |= setIfMissing("abilities.heal_angel.strength_level", 2);
+        changed |= setIfMissing("abilities.heal_angel.resistance_level", 2);
+        changed |= setIfMissing("abilities.heal_angel.regeneration_level", 2);
+        changed |= setIfMissing("abilities.heal_angel.extra_hearts", 5.0);
+        changed |= setIfMissing("abilities.heal_angel.heal_percent_per_hit", 0.10);
+        changed |= setIfMissing("abilities.heal_angel.command_range", 35.0);
+        changed |= setIfMissing("abilities.heal_angel.command_duration_ms", 120000);
+        changed |= setIfMissing("abilities.heal_angel.command_cooldown_ms", 30000);
+        changed |= setIfMissing("abilities.heal_angel.command_attack_radius", 20.0);
+        changed |= setIfMissing("abilities.heal_angel.command_pet_damage_hearts", 1.0);
+
+        changed |= setIfMissing("abilities.submarine.strength_level", 2);
+        changed |= setIfMissing("abilities.submarine.resistance_level", 2);
+        changed |= setIfMissing("abilities.submarine.water_strength_level", 5);
+        changed |= setIfMissing("abilities.submarine.water_regeneration_level", 2);
+        changed |= setIfMissing("abilities.submarine.dolphins_grace_level", 10);
+        changed |= setIfMissing("abilities.submarine.conduit_power_level", 2);
+        changed |= setIfMissing("abilities.submarine.sonar_radius", 65.0);
+        changed |= setIfMissing("abilities.submarine.riptide_velocity", 5.0);
+        changed |= setIfMissing("abilities.submarine.riptide_vertical_boost", 0.35);
+        changed |= setIfMissing("abilities.submarine.riptide_cooldown_ms", 900);
+
+        changed |= setIfMissing("abilities.the_detonator.strength_level", 2);
+        changed |= setIfMissing("abilities.the_detonator.resistance_level", 1);
+        changed |= setIfMissing("abilities.the_detonator.explosion_cooldown_ms", 10000);
+        changed |= setIfMissing("abilities.the_detonator.explosion_power", 10.0);
+        changed |= setIfMissing("abilities.the_detonator.explosion_block_damage", true);
+        changed |= setIfMissing("abilities.the_detonator.explosion_radius", 13.0);
+        changed |= setIfMissing("abilities.the_detonator.explosion_damage_hearts", 12.0);
+        changed |= setIfMissing("abilities.the_detonator.explosion_knockback", 2.2);
+        changed |= setIfMissing("abilities.the_detonator.explosion_fire_ticks", 120);
+        changed |= setIfMissing("abilities.the_detonator.melee_fire_ticks", 60);
+        changed |= setIfMissing("abilities.the_detonator.melee_explosion_every_hits", 3);
+        changed |= setIfMissing("abilities.the_detonator.melee_explosion_power", 1.15);
+        changed |= setIfMissing("abilities.the_detonator.melee_explosion_damage_hearts", 2.0);
+
+
+        return changed;
+    }
+
+
+    private boolean migrateVersion110Step24Defaults() {
+        boolean changed = false;
+
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_range", 55.0, 60.0);
+        changed |= setIfMissing("abilities.stormstrike.lightning_range", 60.0);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_trace_radius", 1.1, 1.7);
+        changed |= setIfMissing("abilities.stormstrike.lightning_trace_radius", 1.7);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_hit_radius", 4.0, 7.0);
+        changed |= setIfMissing("abilities.stormstrike.lightning_hit_radius", 7.0);
+        changed |= setIfMissing("abilities.stormstrike.lightning_tick_damage_hearts", 1.2);
+        changed |= setIfMissing("abilities.stormstrike.lightning_duration_ticks", 30);
+        changed |= setIfMissing("abilities.stormstrike.lightning_damage_interval_ticks", 2);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_spread", 1.4, 1.8);
+        changed |= setIfMissing("abilities.stormstrike.lightning_spread", 1.8);
+
+        changed |= replaceIfNumericEquals("abilities.fire_sonic.beam_damage_hearts", 1.0, 1.5);
+        changed |= setIfMissing("abilities.fire_sonic.beam_damage_hearts", 1.5);
+        changed |= replaceIfNumericEquals("abilities.fire_sonic.beam_hit_radius", 0.80, 1.20);
+        changed |= setIfMissing("abilities.fire_sonic.beam_hit_radius", 1.20);
+
+        changed |= setIfMissing("abilities.heal_angel.heal_min_hearts", 1.0);
+        changed |= setIfMissing("abilities.heal_angel.heal_cooldown_ms", 1000);
+
+        changed |= setIfMissing("abilities.the_detonator.explosion_charge_ticks", 60);
+        changed |= setIfMissing("abilities.the_detonator.explosion_hold_grace_ms", 850);
+
+        return changed;
+    }
+
+    private boolean migrateVersion110Step25Defaults() {
+        boolean changed = false;
+
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_min_bolts", 2, 4);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_max_bolts", 3, 4);
+        changed |= setIfMissing("abilities.stormstrike.lightning_min_bolts", 4);
+        changed |= setIfMissing("abilities.stormstrike.lightning_max_bolts", 4);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_damage_interval_ticks", 10, 2);
+        changed |= setIfMissing("abilities.stormstrike.beam_damage_interval_ticks", 2);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 1.35, 4.0);
+        changed |= setIfMissing("abilities.stormstrike.beam_hit_radius", 4.0);
+
+        changed |= replaceIfNumericEquals("abilities.submarine.riptide_velocity", 5.0, 10.0);
+        changed |= setIfMissing("abilities.submarine.riptide_velocity", 10.0);
+        changed |= replaceIfNumericEquals("abilities.submarine.riptide_cooldown_ms", 900, 1000);
+        changed |= setIfMissing("abilities.submarine.riptide_cooldown_ms", 1000);
+
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_beam_cooldown_ms", 5000, 3000);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_beam_cooldown_ms", 3000);
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_cooldown_ms", 60000, 30000);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_ring_cooldown_ms", 30000);
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_damage_hearts", 11.2, 12.32);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_ring_damage_hearts", 12.32);
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_knockback", 2.68, 3.35);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_ring_knockback", 3.35);
+        changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.60, 0.75);
+        changed |= setIfMissing("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.75);
 
         return changed;
     }

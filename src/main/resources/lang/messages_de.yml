@@ -195,9 +195,27 @@ ability:
   spider_weaver:
     description:
       - "<prefix>&8• &7Style: like &fWebweaver&7."
-      - "<prefix>&8• &dF&7 oder &dSneak + Linksklick&7 schießt ein Spinnweben-Projektil. Cooldown: &e5s&7."
+      - "<prefix>&8• &dF&7 oder &dSneak + Linksklick&7 schießt ein Spinnweben-Projektil. Cooldown: &e3s&7."
       - "<prefix>&8• &7Ziele bekommen Schaden, werden festgesetzt und größere Netze können bis &e1min&7 halten."
       - "<prefix>&8• &7Kann Wände hochklettern und bekommt keinen Fallschaden. Passiv: &aStärke I&7, &9Resistenz I&7 und &dRegeneration I&7."
+  heal_angel:
+    description:
+      - "<prefix>&8• &7Stil: wie &fPrivate Angel&7. Nur &3V One&7."
+      - "<prefix>&8• &7Passiv: &aStärke II&7, &9Resistenz II&7, &dRegeneration II&7 und &c5 Extra-Herzen&7."
+      - "<prefix>&8• &dSneak + Schlag&7 heilt das Ziel um &a10% Max-Leben&7 und verursacht keinen Schaden."
+      - "<prefix>&8• &dF&7 befiehlt einem Mob/Tier, nahe Ziele außer dir für &e2min&7 anzugreifen. Cooldown: &e30s&7."
+  submarine:
+    description:
+      - "<prefix>&8• &7Stil: wie &bTorpedo&7. Nur &3V One&7."
+      - "<prefix>&8• &7Passiv: &aStärke II&7, &9Resistenz II&7, Wasseratmung, Delfins Gunst und Meereskraft."
+      - "<prefix>&8• &7Im Wasser: &aStärke V&7 und Regeneration."
+      - "<prefix>&8• &dF&7 nutzt einen doppelt starken Dash mit &e1s Cooldown&7. &dSneak + Linksklick&7 toggelt stärkeres Sonar mit &e65 Blöcken&7."
+  the_detonator:
+    description:
+      - "<prefix>&8• &7Stil: wie &cNaqib&7."
+      - "<prefix>&8• &dSneak + Linksklick&7 löst eine riesige Explosion bei dir aus. Cooldown: &e10s&7. Du bekommst keinen Eigenschaden."
+      - "<prefix>&8• &7Passiv: &aStärke II&7, &9Resistenz I&7 und &6Feuerresistenz&7."
+      - "<prefix>&8• &7Schläge verbrennen Ziele. Jeder 3. Schlag löst einen kleinen Explosionsschlag aus."
   the_veteran:
     description:
       - "<prefix>&8• &7Style: like &eSoldier Boy&7."
@@ -302,6 +320,29 @@ the_headpopper:
 spider_weaver:
   cooldown: "&fWeb Shot &cbereit in {seconds}s"
   hit: "&fWeb Shot &7getroffen"
+
+heal_angel:
+  heal_cooldown: "&aAngel-Heilung &cbereit in {seconds}s"
+  no_target: "&fHeal Angel &7braucht ein Mob- oder Tier-Ziel."
+  command_released: "&fHeal Angel &7Befehl ausgelöst"
+  command_cooldown: "&fAngel-Befehl &cbereit in {seconds}s"
+  healed: "&aAngel Heal &7ausgelöst"
+
+submarine:
+  sonar_on: "&bSubmarine Sonar &aaktiviert"
+  sonar_off: "&7Submarine Sonar deaktiviert"
+  sonar_water_only: "&bSubmarine Sonar &7funktioniert nur unter Wasser"
+  dash: "&bSubmarine Dash &aaktiviert"
+  dash_water_or_rain: "&bSubmarine Dash &7funktioniert nur im Wasser oder Regen"
+  dash_cooldown: "&bSubmarine Dash &cbereit in {seconds}s"
+
+the_detonator:
+  released: "&cDetonation &7ausgelöst"
+  cooldown: "&cDetonation &cbereit in {seconds}s"
+  charge_start: "&cDetonation lädt&7..."
+  charge_progress: "&cDetonation &7in &e{seconds}s"
+  charge_cancelled: "&7Detonation &cabgebrochen"
+
 
 size_changer:
   big_on: "&5SizeChanger &aGroßform aktiviert"
