@@ -29,6 +29,7 @@ public class TheDetonatorAbility implements Ability {
     private final Map<UUID, Integer> meleeCounter = new HashMap<>();
     private final Map<UUID, UUID> activeChargeTokens = new HashMap<>();
     private final Map<UUID, TaskHandle> chargeTasks = new HashMap<>();
+    private final Map<UUID, Long> lastChargeHoldSeenAt = new HashMap<>();
 
     public TheDetonatorAbility(CompoundV plugin) {
         this.plugin = plugin;
@@ -55,6 +56,7 @@ public class TheDetonatorAbility implements Ability {
         selfExplosionProtectionUntil.remove(uuid);
         lastHandledAt.remove(uuid);
         meleeCounter.remove(uuid);
+        lastChargeHoldSeenAt.remove(uuid);
         player.removePotionEffect(PotionEffects.STRENGTH);
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.FIRE_RESISTANCE);
@@ -85,6 +87,7 @@ public class TheDetonatorAbility implements Ability {
         UUID uuid = player.getUniqueId();
         UUID token = UUID.randomUUID();
         activeChargeTokens.put(uuid, token);
+        lastChargeHoldSeenAt.put(uuid, System.currentTimeMillis());
 
         int chargeTicks = Math.max(20, plugin.getConfig().getInt("abilities.the_detonator.explosion_charge_ticks", 60));
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_detonator.charge_start"));
@@ -101,7 +104,11 @@ public class TheDetonatorAbility implements Ability {
                     return;
                 }
 
-                if (!player.isSneaking()) {
+                long now = System.currentTimeMillis();
+                long graceMs = plugin.getConfig().getLong("abilities.the_detonator.explosion_hold_grace_ms", 2500L);
+                if (player.isSneaking()) {
+                    lastChargeHoldSeenAt.put(uuid, now);
+                } else if (now - lastChargeHoldSeenAt.getOrDefault(uuid, now) > Math.max(250L, graceMs)) {
                     cancelCharge(uuid);
                     MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_detonator.charge_cancelled"));
                     player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.85f, 0.55f);
@@ -132,6 +139,7 @@ public class TheDetonatorAbility implements Ability {
 
     private void cancelCharge(UUID uuid) {
         activeChargeTokens.remove(uuid);
+        lastChargeHoldSeenAt.remove(uuid);
         TaskHandle task = chargeTasks.remove(uuid);
         if (task != null) task.cancel();
     }
@@ -153,6 +161,7 @@ public class TheDetonatorAbility implements Ability {
         long now = System.currentTimeMillis();
         long cooldownMs = plugin.getConfig().getLong("abilities.the_detonator.explosion_cooldown_ms", 10000L);
         explosionCooldownUntil.put(uuid, now + Math.max(0L, cooldownMs));
+        lastChargeHoldSeenAt.remove(uuid);
         selfExplosionProtectionUntil.put(uuid, now + 3500L);
         player.setNoDamageTicks(Math.max(player.getNoDamageTicks(), 70));
 
