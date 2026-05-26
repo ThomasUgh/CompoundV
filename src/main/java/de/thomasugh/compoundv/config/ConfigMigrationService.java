@@ -34,6 +34,7 @@ public final class ConfigMigrationService {
         changed |= migrateVersion110Step23Defaults();
         changed |= migrateVersion110Step24Defaults();
         changed |= migrateVersion110Step25Defaults();
+        changed |= migrateVersion110Step26Defaults();
 
         if (changed) {
             plugin.saveConfig();
@@ -859,6 +860,23 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.sonic_boom.sonic_ring_knockback", 3.35);
         changed |= replaceIfNumericEquals("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.60, 0.75);
         changed |= setIfMissing("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.75);
+
+        return changed;
+    }
+
+
+    private boolean migrateVersion110Step26Defaults() {
+        boolean changed = false;
+
+        changed |= setIfMissing("updates.enabled", true);
+        changed |= setIfMissing("updates.console", true);
+        changed |= setIfMissing("updates.op_chat", true);
+        changed |= setIfMissing("heat_vision.hit_radius", 0.05);
+
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 4.0, 6.5);
+        changed |= setIfMissing("abilities.stormstrike.beam_hit_radius", 6.5);
+        changed |= replaceIfNumericEquals("abilities.the_detonator.explosion_hold_grace_ms", 850, 2500);
+        changed |= setIfMissing("abilities.the_detonator.explosion_hold_grace_ms", 2500);
 
         return changed;
     }

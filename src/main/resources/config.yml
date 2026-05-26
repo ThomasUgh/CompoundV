@@ -1,5 +1,10 @@
 language: en
 
+updates:
+  enabled: true
+  console: true
+  op_chat: true
+
 compound_v:
   chances:
     the_patriot: 1

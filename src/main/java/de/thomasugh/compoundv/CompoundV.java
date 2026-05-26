@@ -41,6 +41,7 @@ import de.thomasugh.compoundv.manager.PersistenceManager;
 import de.thomasugh.compoundv.manager.PotionRollManager;
 import de.thomasugh.compoundv.manager.SideEffectManager;
 import de.thomasugh.compoundv.server.ServerCompatibility;
+import de.thomasugh.compoundv.update.UpdateCheckerService;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
@@ -61,6 +62,7 @@ public final class CompoundV extends JavaPlugin {
     private PersistenceManager persistence;
     private LocaleManager localeManager;
     private ServerCompatibility compatibility;
+    private UpdateCheckerService updateChecker;
 
     @Override
     public void onEnable() {
@@ -72,6 +74,7 @@ public final class CompoundV extends JavaPlugin {
         registerAbilities();
         registerListeners();
         registerCommands();
+        startUpdateChecker();
         logStartup();
     }
 
@@ -159,6 +162,12 @@ public final class CompoundV extends JavaPlugin {
         CompoundVCommand handler = new CompoundVCommand(this, abilityManager, registry, rollManager);
         command.setExecutor(handler);
         command.setTabCompleter(handler);
+    }
+
+
+    private void startUpdateChecker() {
+        updateChecker = new UpdateCheckerService(this);
+        updateChecker.start();
     }
 
     private void logStartup() {
