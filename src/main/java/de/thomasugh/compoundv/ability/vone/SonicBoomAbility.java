@@ -249,7 +249,7 @@ public class SonicBoomAbility implements Ability {
             return;
         }
 
-        long cooldownMs = plugin.getConfig().getLong("abilities.sonic_boom.sonic_beam_cooldown_ms", 5000L);
+        long cooldownMs = plugin.getConfig().getLong("abilities.sonic_boom.sonic_beam_cooldown_ms", 3000L);
         sonicBeamCooldown.put(uuid, now + Math.max(0L, cooldownMs));
 
         double range = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_beam_range", 30.0);
@@ -348,15 +348,15 @@ public class SonicBoomAbility implements Ability {
             return;
         }
 
-        long cooldownMs = plugin.getConfig().getLong("abilities.sonic_boom.sonic_ring_cooldown_ms", 60000L);
+        long cooldownMs = plugin.getConfig().getLong("abilities.sonic_boom.sonic_ring_cooldown_ms", 30000L);
         sonicRingCooldown.put(uuid, now + Math.max(0L, cooldownMs));
 
         Location center = player.getLocation();
         World world = player.getWorld();
         double radius = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_radius", 5.0);
-        double maxDamage = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_damage_hearts", 11.2) * 2.0;
-        double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_knockback", 2.68);
-        double vertical = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.60);
+        double maxDamage = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_damage_hearts", 12.32) * 2.0;
+        double knockback = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_knockback", 3.35);
+        double vertical = plugin.getConfig().getDouble("abilities.sonic_boom.sonic_ring_vertical_knockback", 0.75);
 
         world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 2.35f, 0.75f);
         world.playSound(center, Sound.ENTITY_WARDEN_SONIC_BOOM, 1.15f, 1.25f);
