@@ -156,7 +156,7 @@ public class StormstrikeAbility implements Ability {
         double range = plugin.getConfig().getDouble("abilities.stormstrike.beam_range", 35.0);
         double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 3.0) * 2.0;
         int damageIntervalTicks = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.beam_damage_interval_ticks", 2));
-        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 4.0);
+        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 6.5);
         int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_ticks", 60);
         int slownessAmplifier = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_amplifier", 1);
 
