@@ -99,14 +99,22 @@ abilities:
     launch_peak_ticks: 22
     launch_cooldown_ms: 10000
     lightning_cooldown_ms: 3000
-    lightning_range: 36.0
-    lightning_min_bolts: 2
-    lightning_max_bolts: 3
-    lightning_spread: 1.4
+    lightning_range: 60.0
+    lightning_trace_radius: 1.7
+    lightning_hit_radius: 7.0
+    lightning_damage_hearts: 3.5
+    lightning_tick_damage_hearts: 1.2
+    lightning_duration_ticks: 30
+    lightning_damage_interval_ticks: 2
+    lightning_slowness_ticks: 80
+    lightning_slowness_amplifier: 1
+    lightning_min_bolts: 4
+    lightning_max_bolts: 4
+    lightning_spread: 1.8
     beam_range: 35.0
     beam_damage_hearts: 3.0
-    beam_damage_interval_ticks: 10
-    beam_hit_radius: 1.35
+    beam_damage_interval_ticks: 2
+    beam_hit_radius: 4.0
     beam_max_ticks: 120
     beam_cooldown_ms: 5000
     beam_segment_length: 0.75
@@ -145,7 +153,7 @@ abilities:
     fall_impact_entity_damage_hearts: 16.0
     fall_impact_player_damage_multiplier: 0.8
     fall_impact_knockback: 2.4
-    sonic_beam_cooldown_ms: 5000
+    sonic_beam_cooldown_ms: 3000
     sonic_beam_range: 30.0
     sonic_beam_radius: 1.85
     sonic_beam_damage_hearts: 5.0
@@ -156,11 +164,11 @@ abilities:
     sonic_beam_impact_block_damage: true
     sonic_beam_impact_radius: 2.5
     sonic_beam_impact_damage_hearts: 2.0
-    sonic_ring_cooldown_ms: 60000
+    sonic_ring_cooldown_ms: 30000
     sonic_ring_radius: 5.0
-    sonic_ring_damage_hearts: 11.2
-    sonic_ring_knockback: 2.68
-    sonic_ring_vertical_knockback: 0.60
+    sonic_ring_damage_hearts: 12.32
+    sonic_ring_knockback: 3.35
+    sonic_ring_vertical_knockback: 0.75
     extra_hearts: 10.0
     melee_explosion_damage_multiplier: 1.15
     melee_critical_damage_multiplier: 1.20
@@ -410,10 +418,10 @@ abilities:
     melee_fire_ticks: 160
     melee_bonus_damage_hearts: 0.5
     beam_range: 24.0
-    beam_damage_hearts: 1.0
+    beam_damage_hearts: 1.5
     beam_fire_ticks: 140
     beam_damage_interval_ticks: 2
-    beam_hit_radius: 0.80
+    beam_hit_radius: 1.20
     beam_max_ticks: 40
     beam_cooldown_ms: 5000
 
