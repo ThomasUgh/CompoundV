@@ -1,0 +1,622 @@
+language_file_version: 20
+prefix: '&8[&b&lCV&r&8] '
+general:
+  no_permission: <prefix>&cTu n'as pas la permission de faire cela.
+  player_not_found: <prefix>&cJoueur introuvable.
+  reloaded: <prefix>&aCompoundV a été rechargé.
+  not_a_player: <prefix>&cCette ordree ne peut être utilisée que par des joueurs.
+  only_players: <prefix>&cCette ordree ne peut être utilisée que par des joueurs.
+potion:
+  drinking: <prefix>&7Le &bsérum&7 s’active...
+  drink_temp_v: <prefix>&aTemp V&7 s’active. Ton pouvoir ne durera qu’un temps limité.
+  drink_v_one: <prefix>&3V One&7 s’active. Prépare-toi.
+  drink_anti_v: <prefix>&cAnti V&7 retire ton pouvoir actif.
+  no_ability: <prefix>&7Tu n'as aucun pouvoir actif.
+  no_chances: <prefix>&cCette potion n’a aucun pouvoir valide configuré. Contacte un admin.
+  roll_failed: <prefix>&cLe sérum n’a pas pu être traité. Contacte un admin.
+  drink_v_null: <prefix>&2V-Null Virus&7 se propage...
+  temp_v_extended: <prefix>&aTemp V&7 a été prolongé. Même pouvoir, durée plus longue.
+  compound_v_after_temp: <prefix>&bCompound V&7 s’est lié à ton pouvoir temporaire. Un pouvoir Compound V permanent s’activera
+    après l’expiration de Temp V.
+  compound_v_delayed_granted: <prefix>&bCompound V&7 est maintenant activé de façon permanente.
+  temp_v_blocked_by_compound: <prefix>&aTemp V&7 ne peut pas remplacer un Compound V permanent. Seuls de légers effets secondaires
+    sont apparus.
+  no_effect_compound_active: <prefix>&7Compound V n’a aucun effet si tu as déjà un pouvoir permanent. Utilise &cAnti V&7 d’abord.
+  no_effect_v_one_active: <prefix>&7Ton système V One rejette davantage de V. Rien ne se passe.
+  v_one_upgrade: <prefix>&3V One&7 a amélioré ton pouvoir actuel.
+  v_one_no_upgrade: <prefix>&7V One n’a pas encore réagi avec ce pouvoir.
+  only_drinkable: <prefix>&cLes sérums Compound V ne peuvent être utilisés que comme potions buvables normales. Le V-Null
+    Virus est lançable.
+ability:
+  granted_header: <prefix>&8━━━━━━━━ &aPouvoir débloqué &8━━━━━━━━
+  granted_name: <prefix>&7Tu as débloqué &a&l{name}&r&7 via &b{potion}&7.
+  controls_header: <prefix>&8────── &aContrôles et effets &8──────
+  granted_expires: '<prefix>&8• &7Durée: &e{minutes}m {seconds}s'
+  granted_footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  lost_on_death: <prefix>&cTu as perdu ton pouvoir en mourant.
+  expired: <prefix>&eTon pouvoir temporaire a expiré.
+  removed_admin: <prefix>&cTon pouvoir a été retiré par un admin.
+  removed_anti_v: <prefix>&cAnti V a retiré ton pouvoir.
+  the_patriot:
+    description:
+    - '<prefix>&8• &7Style : comme &cHomelander&7.'
+    - <prefix>&8• &aVol&7 est activé automatiquement.
+    - '<prefix>&8• &cVision thermique&7: appuie sur &dF&7 pour basculer. Défaut : &e5 cœurs&7, &e44 blocs&7.'
+    - '<prefix>&8• &bRayons X&7: &dSneak + clic gauche dans l’air&7 pour révéler entités proches.'
+    - '<prefix>&8• &6Démarrage sauté&7: &dSneak&7, regarde en haut et saute pour te propulser.'
+    - '<prefix>&8• &7Bonus passifs : &aForce&7, &9Résistance&7, &dRégénération&7 et &ccœurs bonus&7.'
+  the_patriot_v_one:
+    description:
+    - '<prefix>&8• &7Style : comme &cHomelander&7.'
+    - <prefix>&8• &aVol&7 est activé automatiquement avec des boosts V One plus forts.
+    - '<prefix>&8• &cVision thermique&7: appuie sur &dF&7 pour basculer. Défaut : &e4.725 cœurs&7, &e50 blocs&7.'
+    - '<prefix>&8• &bRayons X&7: &dSneak + clic gauche dans l’air&7 pour révéler entités proches.'
+    - '<prefix>&8• &6Démarrage sauté&7: &dSneak&7, regarde en haut et saute pour te propulser.'
+    - '<prefix>&8• &7Bonus passifs : &aForce&7, &9Résistance&7, &dRégénération&7, &6Résistance au feu&7 et &ccœurs bonus&7.'
+  sonic_boom:
+    description:
+    - '<prefix>&8• &7Style : comme &3Bombsight&7.'
+    - <prefix>&8• &aVol&7 est activé automatiquement.
+    - '<prefix>&8• &6Démarrage sauté&7: &dSneak&7, regarde en haut et saute. Stronger than Vol, slightly weaker than Patriot.'
+    - '<prefix>&8• &3Rayon sonique&7: &dSneak + clic gauche&7 pour tirer a rayon sonique façon Warden. Recharge : &e3s&7.'
+    - '<prefix>&8• &cMêlée explosive&7: chaque 2nd coup adds a small blast; crits coup harder.'
+    - '<prefix>&8• &cAtterrissage explosif&7: &dSneak&7 when landing après a high fall. Recharge : &e60s&7.'
+    - '<prefix>&8• &7Bonus passifs : &aForce IV&7 et &9Résistance IV&7.'
+  size_changer:
+    description:
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7 et &9Résistance II&7.'
+    - '<prefix>&8• &dSneak + clic gauche + regarde en haut&7: devenir &52x plus grand&7, dégâts doublés, &aJump Boost II&7
+      et &c+10 cœurs&7 for max &e1min&7.'
+    - '<prefix>&8• &dSneak + clic gauche + regarde en bas&7: devenir &53.5x plus petit&7 for max &e2min&7.'
+    - <prefix>&8• &7While transformed, &dSneak + clic gauche + regarde en haut/down&7 returns you to normal instantly.
+    - <prefix>&8• &7La recharge commence après le retour à la normale.
+  size_changer_v_one:
+    description:
+    - '<prefix>&8• &3V One Upgrade&7 for SizeChanger. Passive: &aForce III&7 et &9Résistance II&7.'
+    - '<prefix>&8• &dSneak + clic gauche + regarde en haut&7: env. &53x plus grand&7, dégâts plus forts, &aJump Boost IV&7
+      et &c+20 cœurs&7.'
+    - '<prefix>&8• &dSneak + clic gauche + regarde en bas&7: env. &57x plus petit&7.'
+    - <prefix>&8• &7Obtenu uniquement en améliorant un SizeChanger actif avec &3V One&7.
+  heat_vision:
+    description:
+    - '<prefix>&8• &bVision thermique&7: appuie sur &dF&7 pour basculer the beam.'
+    - '<prefix>&8• &7Stages: &bI&7 = 1.35 cœurs / 30 blocs, &aII&7 = 2 cœurs / 35 blocs.'
+    - '<prefix>&8• &7More stages: &6III&7 = 2.25 cœurs / 37 blocs, &cIV&7 = 2.7 cœurs / 40 blocs.'
+    - <prefix>&8• &7Can melt ice, snow blocs, flat snow layers, et cook raw mob drops.
+  the_diver:
+    description:
+    - '<prefix>&8• &7Style : comme &bThe Deep&7.'
+    - <prefix>&8• &bWater Breathing&7, &bDolphin's Grace VIII&7, &eSpeed pendant que sous l’eau&7 et &3Conduit Power II&7
+      are active de façon permanente.
+    - '<prefix>&8• &bSonar&7: &dSneak + clic gauche dans l’air&7 pendant que sous l’eau pour révéler entités proches.'
+    - '<prefix>&8• &bRiptide Dash&7: &dSneak + clic droit&7 in eau ou pluie, similar to Riptide IV sans holding a trident.'
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7 et &9Résistance I&7.'
+    - <prefix>&8• &7While sous l’eau, Force et Résistance are increased by &a+1 level&7.
+  jumper:
+    description:
+    - <prefix>&8• &aForce I&7 is active de façon permanente.
+    - '<prefix>&8• &aSaut explosif&7: appuie sur &dF&7 for &aJump Boost V&7 et no dégâts de chute pendant que active.'
+    - '<prefix>&8• &7Default active time: &e10s&7. Recharge : &e15s&7.'
+  shockwave:
+    description:
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7 et &9Résistance I&7.'
+    - '<prefix>&8• &eShockwave&7: appuie sur &dF&7 pour libérer a 10-block knockback wave.'
+    - '<prefix>&8• &7Dégâts : &c3 cœurs&7 to joueurs, &c6 cœurs&7 to mobs. Recharge : &e2min&7.'
+  vision:
+    description:
+    - '<prefix>&8• &bRayons X&7: &dSneak + clic gauche dans l’air&7 pour révéler entités proches.'
+    - '<prefix>&8• &7Default range: &e35 blocs&7.'
+  the_runner:
+    description:
+    - '<prefix>&8• &7Style : comme &eA-Tpluie&7.'
+    - '<prefix>&8• &eRunner Speed&7: appuie sur &dF&7 pour faire défiler Speed X, XI, XII, XV et off.'
+    - '<prefix>&8• &eImpact Run&7: running via entities at Speed X+ deals &c6 cœurs&7, plus &c+1 heart&7 per extra speed level.'
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7, &9Résistance I&7, &c5 extra cœurs&7 et aucune recharge en mêlée.'
+  teleporter:
+    description:
+    - '<prefix>&8• &5Blink&7: appuie sur &dF&7 pour te téléporter up to &e35 blocs&7.'
+    - '<prefix>&8• &7Recharge : &e2 seconds&7. Includes &aForce I&7 et &9Résistance I&7.'
+  teleporter_v_one:
+    description:
+    - <prefix>&8• &3V One Upgrade&7 for Teleporter.
+    - '<prefix>&8• &5Blink&7: appuie sur &dF&7 pour te téléporter up to &e50 blocs&7.'
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7 et &9Résistance III&7.'
+  fly:
+    description:
+    - <prefix>&8• &aVol&7 est activé automatiquement.
+    - '<prefix>&8• &6Light Démarrage sauté&7: &dSneak&7, regarde en haut et saute for a weaker launch.'
+    - <prefix>&8• &7Includes &aForce I&7 et &9Résistance I&7.
+  speedster:
+    description:
+    - '<prefix>&8• &eSuper Speed&7: appuie sur &dF&7 pour basculer it on/off.'
+    - <prefix>&8• &7Includes a small &9Résistance&7 bonus pendant que active.
+  strength:
+    description:
+    - <prefix>&8• &aForce&7 is active de façon permanente pendant que you own this pouvoir.
+    - <prefix>&8• &7Includes a small &9Résistance&7 bonus.
+  the_ghost:
+    description:
+    - '<prefix>&8• &5Ghost Mode&7: appuie sur &dF&7 pour basculer invisibility.'
+    - <prefix>&8• &7When activé you receive &5Invisibility II&7 et mobs will not cible you.
+    - <prefix>&8• &7Existing mob cibles are cleared pendant que Ghost Mode is active.
+    - '<prefix>&8• &7Bonus passifs : &9Résistance II&7, &aForce I&7 et &6Résistance au feu&7.'
+    - <prefix>&8• &7Vision thermique deals no damage to The Ghost.
+  fire:
+    description:
+    - <prefix>&8• &cFire Aura&7 ignites nearby enemies automatically.
+    - <prefix>&8• &6Résistance au feu&7 is activé.
+    - <prefix>&8• &7Includes &aForce I&7 et &9Résistance I&7.
+    - <prefix>&8• &7Vanilla right-click fire placement avec &6Flint et Steel&7 ou &6Fire Charges&7 is blocked pendant que
+      you own this pouvoir.
+  the_worm:
+    description:
+    - <prefix>&8• &7Very fast digging avec &eHaste IV&7, focused on dirt, grass, gravel et sand gameplay.
+    - <prefix>&8• &dF&7 toggles &bNight Vision&7.
+    - '<prefix>&8• &7Bonus passifs : &aForce I&7 et &9Résistance I&7.'
+  flash_light:
+    description:
+    - '<prefix>&8• &7Style : comme &eStarlight&7. Passive: &aForce II&7 et &9Résistance I&7.'
+    - '<prefix>&8• &dF&7 blinds joueurs, mobs et animaux in &e15 blocs&7 for &e20s&7. Recharge : &e2min&7.'
+    - <prefix>&8• &dSneak + clic gauche&7 fires a 15-block light beam avec &c2 cœurs&7, tiny brûlure et knockback.
+  stormstrike:
+    description:
+    - '<prefix>&8• &7Style : comme &eStormfront&7. &3V One seulement&7 avec electric saute start et &e2.75x&7 fly speed.'
+    - '<prefix>&8• &dF&7 fires a jagged 35-block lightning beam for max &e6s&7. Dégâts : &c3 cœurs&7 et Slowness. Only overheats
+      après full use.'
+    - <prefix>&8• &dSneak + clic gauche&7 summons &e4 lightning strikes&7. Every 5th melee coup calls a lightning strike.
+    - '<prefix>&8• &7Sneak fall impact: 6 lightning strikes in a 10-block radius. Recharge : &e100s&7.'
+    - '<prefix>&8• &7Bonus passifs : &aForce III&7, &9Résistance III&7 et &c10 extra cœurs&7.'
+  fire_sonic:
+    description:
+    - '<prefix>&8• &cFlame Aura&7: chaque melee coup applies heavy brûlure.'
+    - <prefix>&8• &dF&7 fires a thin flame beam for max &e2s&7. Damage ticks are slower than Vision thermique et seulement
+      overheat après full use.
+  toxic_cloud:
+    description:
+    - '<prefix>&8• &7Bonus passifs : &aForce I&7 et &9Résistance I&7. Immune to poison.'
+    - '<prefix>&8• &dF&7 releases poison gas in front of you, applying &2Poison IV&7. Recharge : &e2min&7.'
+    - <prefix>&8• &dSneak + clic gauche&7 shoots short poison vomit for &c1.5 cœurs&7 et &2Poison IV&7. Melee coups apply
+      short Poison I.
+  the_countess:
+    description:
+    - '<prefix>&8• &7Style : comme &cCrimson Countess&7.'
+    - '<prefix>&8• &dF&7 launches a fireball. Recharge : &e3s&7. Dégâts : &c2-4 cœurs&7.'
+    - <prefix>&8• &7Double-saute avec small fire animation. Melee coups apply brûlure.
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7, &9Résistance I&7 et &6Résistance au feu&7.'
+  the_warrior:
+    description:
+    - '<prefix>&8• &7Style : comme &eQueen Maeve&7.'
+    - '<prefix>&8• &7Bonus passifs : &aForce III&7, &9Résistance II&7, &dRégénération I&7 et &c10 extra cœurs&7.'
+    - <prefix>&8• &7High fall protection, strong double-saute et small explosive landing from &e6+ blocs&7 seulement pendant
+      que sneaking.
+  the_headpopper:
+    description:
+    - '<prefix>&8• &7Style : comme &cVictoria Neuman&7.'
+    - <prefix>&8• &dSneak + clic gauche&7 marks a cible up to &e30 blocs&7 for a &c3s&7 compte à rebours.
+    - '<prefix>&8• &7Dégâts : &c12.5 cœurs&7, mobs/animaux take &cx2.5&7. Recharge : &e20s&7.'
+    - '<prefix>&8• &dF&7 damages all nearby living cibles for &c25% current soignerth&7. Recharge : &e2min&7.'
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7, &9Résistance II&7, &dRégénération I&7 et Vision thermique immunity.'
+  spider_weaver:
+    description:
+    - '<prefix>&8• &7Style : comme &fWebweaver&7.'
+    - '<prefix>&8• &dF&7 ou &dSneak + clic gauche&7 shoots a web projectile. Recharge : &e3s&7.'
+    - <prefix>&8• &7Targets take damage, are slowed/fixed et larger cobweb clusters can stay up to &e1min&7.
+    - '<prefix>&8• &7Can climb walls et takes no dégâts de chute. Passive: &aForce I&7, &9Résistance I&7 et &dRégénération
+      I&7.'
+  heal_angel:
+    description:
+    - '<prefix>&8• &7Style : comme &fPrivate Angel&7. &3V One seulement&7.'
+    - '<prefix>&8• &7Bonus passifs : &aForce II&7, &9Résistance II&7, &dRégénération II&7 et &c5 extra cœurs&7.'
+    - '<prefix>&8• &dSneak + melee coup&7 soigne the cible for &a10% max soignerth&7, at least &a1 heart&7, et deals no damage.
+      Recharge : &e1s&7.'
+    - '<prefix>&8• &dF&7 ordres a cibleed mob/animal to attack nearby cibles except you for &e2min&7. Recharge : &e30s&7.'
+  submarine:
+    description:
+    - '<prefix>&8• &7Style : comme &bTorpedo&7. &3V One seulement&7.'
+    - '<prefix>&8• &7Passive: &aForce II&7, &9Résistance II&7, Water Breathing, Dolphin''s Grace et Conduit Power.'
+    - '<prefix>&8• &7In eau: &aForce V&7 et Régénération.'
+    - <prefix>&8• &dF&7 uses a double-strength dash avec &e1s cooldown&7. &dSneak + clic gauche&7 toggles stronger sonar avec
+      &e65 blocs&7 range.
+  the_detonator:
+    description:
+    - '<prefix>&8• &7Style : comme &cNaqib&7.'
+    - '<prefix>&8• &dSneak + clic gauche&7 starts a cancellable compte à rebours, then releases a huge self-centered explosion.
+      Recharge : &e10s&7.'
+    - '<prefix>&8• &7Passive: &aForce II&7, &9Résistance I&7 et &6Résistance au feu&7.'
+    - <prefix>&8• &7Melee coups brûlure cibles. Every 3rd coup triggers a small explosive coup.
+  the_veteran:
+    description:
+    - '<prefix>&8• &7Style : comme &eSoldier Boy&7.'
+    - <prefix>&8• &7High &aForce&7, &9Résistance&7 et &6Résistance au feu&7.
+    - '<prefix>&8• &dSneak + clic gauche&7: &e5s charge&7, then Chest Beam.'
+    - '<prefix>&8• &7Beam: high damage, block brûlure et player pouvoir removal.'
+    - <prefix>&8• &7Starts avec a strong point-blank blast et mushroom cloud.
+toggle:
+  heat_vision_on: '{label} &aactivé'
+  heat_vision_off: '{label} &7deactivé'
+  heat_vision_overheated: '{label} &cen recharge for {seconds}s'
+  heat_vision_cooldown: '{label} &cprêt dans {seconds}s'
+  xray_on: '&bRayons X &aactivé'
+  xray_off: '&7Rayons X désactivé'
+  sonar_on: '&bSonar &aactivé'
+  sonar_off: '&7Sonar désactivé'
+  sonar_water_only: '&bSonar &7fonctionne seulement sous l’eau'
+  diver_riptide: '&bRiptide Dash &aactivé'
+  diver_riptide_water_or_rain: '&bRiptide Dash &7fonctionne seulement dans l’eau ou sous la pluie'
+  diver_riptide_cooldown: '&cRiptide Dash prêt dans {seconds}s'
+  speed_on: '&eSuper Speed &aactivé'
+  speed_off: '&7Super Speed désactivé'
+  runner_speed_level: '&eRunner Speed &7Level &a{level}'
+  runner_speed_off: '&7Runner Speed désactivé'
+  ghost_on: '&5Ghost Mode &aactivé'
+  ghost_off: '&7Ghost Mode désactivé'
+  ghost_cooldown: '&5Ghost Mode &cprêt dans {seconds}s'
+  worm_night_vision_on: '&6The Worm &bNight Vision &aactivé'
+  worm_night_vision_off: '&6The Worm &7Night Vision désactivé'
+teleporter:
+  used: '&5Blink &aterminé'
+  cooldown: '&cBlink prêt dans {seconds}s'
+  no_safe_location: '&cAucun emplacement sûr trouvé.'
+veteran:
+  charge_start: '&eThe Veteran &7is charging the &eChest Beam&7...'
+  charge_progress: '&eChest Blast... &7fires in &a{seconds}s'
+  charge_cancelled: '&cChest Beam charge annulé.'
+  burst_start: '&eThe Veteran &7libéré the &eChest Beam&7.'
+  burst_end: '&7Chest Beam finished.'
+  cooldown: '&cChest Beam prêt dans {seconds}s'
+  hit_target: <prefix>&7You removed the pouvoir from &a{cible}&7.
+  hit_by: <prefix>&c{source}&7 a retiré ton pouvoir.
+fall_impact: '&cImpact'
+fall_impact_cooldown: '&cAtterrissage explosif prêt dans {seconds}s'
+launch_cooldown: '&cDémarrage sauté prêt dans {seconds}s'
+sonic_boom:
+  ring_cooldown: '&3Anneau sonique &cprêt dans {seconds}s'
+  beam_cooldown: '&3Rayon sonique &cprêt dans {seconds}s'
+stormstrike:
+  released: '&bStormstrike &7libéré'
+  cooldown: '&bStormstrike &cprêt dans {seconds}s'
+  beam_on: '&fStorm Beam &aactivé'
+  beam_off: '&7Storm Beam désactivé'
+  beam_overheated: '&fStorm Beam &7en recharge'
+  beam_cooldown: '&fStorm Beam &cprêt dans {seconds}s'
+  fall_impact: '&fStormfall &7libéré'
+  fall_cooldown: '&fStormfall &cprêt dans {seconds}s'
+flash_light:
+  flash_released: '&eFlash Light &7libéré &8({cibles} cibles)'
+  flash_cooldown: '&eFlash Light &cprêt dans {seconds}s'
+jumper:
+  activated: '&aSaut explosif &aactivé'
+  active: '&aSaut explosif &7active for {seconds}s'
+  cooldown: '&aSaut explosif &cprêt dans {seconds}s'
+shockwave:
+  released: '&eShockwave &7libéré'
+  cooldown: '&eShockwave &cprêt dans {seconds}s'
+fire_sonic:
+  beam_on: '&cFireRayon sonique &aactivé'
+  beam_off: '&7FireRayon sonique désactivé'
+  beam_overheated: '&cFireRayon sonique &7en recharge'
+  cooldown: '&cFireRayon sonique &cprêt dans {seconds}s'
+toxic_cloud:
+  cloud_released: '&2Toxic Cloud &7libéré &8({cibles} cibles)'
+  cloud_cooldown: '&2Toxic Cloud &cprêt dans {seconds}s'
+  vomit_cooldown: '&2Poison Vomit &cprêt dans {seconds}s'
+the_countess:
+  fireball_cooldown: '&cBoule de feu &cprêt dans {seconds}s'
+the_headpopper:
+  no_target: '&cAucune cible valide.'
+  cooldown: '&cHeadpop prêt dans {seconds}s'
+  countdown: '&cHeadpop &7dans &e{seconds}s'
+  countdown_active: '&cHeadpop &7is already charging'
+  cancelled: '&7Headpop annulé'
+  released: '&cHeadpop &7libéré'
+  area_cooldown: '&cBlood Pulse prêt dans {seconds}s'
+  area_released: '&cBlood Pulse &7libéré &8({cibles} cibles)'
+spider_weaver:
+  cooldown: '&fWeb Shot &cprêt dans {seconds}s'
+  hit: '&fWeb Shot &7coup'
+heal_angel:
+  heal_cooldown: '&aAngel Heal &cprêt dans {seconds}s'
+  no_target: '&fHeal Angel &7needs a mob ou animal cible.'
+  command_released: '&fHeal Angel &7ordre libéré'
+  command_cooldown: '&fAngel Command &cprêt dans {seconds}s'
+  healed: '&aAngel Heal &7libéré'
+submarine:
+  sonar_on: '&bSubmarine Sonar &aactivé'
+  sonar_off: '&7Submarine Sonar désactivé'
+  sonar_water_only: '&bSubmarine Sonar &7fonctionne seulement sous l’eau'
+  dash: '&bSubmarine Dash &aactivé'
+  dash_water_or_rain: '&bSubmarine Dash &7fonctionne seulement dans l’eau ou sous la pluie'
+  dash_cooldown: '&bSubmarine Dash &cprêt dans {seconds}s'
+the_detonator:
+  released: '&cDetonation &7libéré'
+  cooldown: '&cDetonation &cprêt dans {seconds}s'
+  charge_start: '&cDetonation charge &7started'
+  charge_progress: '&cDetonation &7dans &e{seconds}s'
+  charge_cancelled: '&7Detonation &cannulé'
+size_changer:
+  big_on: '&5SizeChanger &agrande forme activé'
+  small_on: '&5SizeChanger &apetite forme activé'
+  normal: '&7SizeChanger returned to taille normale'
+  cooldown: '&5SizeChanger &cprêt dans {seconds}s'
+  already_active: '&5SizeChanger &7is already active'
+  look_up_down: '&5SizeChanger &7regarde en haut for grande forme ou down for petite forme'
+command:
+  header: <prefix>&8━━━━━━━━ &aCompoundV Aide &8━━━━━━━━
+  give_bottle: <prefix>&8• &7/cv give &a<player>&7 bottle &d[compoundv|tempv|vone|antiv|vnull]
+  give_ability: <prefix>&8• &7/cv give &a<player>&7 &c<pouvoir>&7 &d[potionType]
+  remove: <prefix>&8• &7/cv remove &a<player>
+  info_self: <prefix>&8• &7/cv info &d[player]
+  tutorial: <prefix>&8• &7/cv tutorial &8- &7gives you the Compound V handbook
+  reload: <prefix>&8• &7/cv reload
+  abilities_list: '<prefix>&8• &7Pouvoirs : &a{list}'
+  footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  give_bottle_ok: <prefix>&7Donné &b{bottle}&7 to &a{player}&7.
+  give_ability_ok: <prefix>&a{name}&7 was assigned to &a{player}&7. The player received the usage guide.
+  unknown_ability: '<prefix>&cPouvoir inconnu : &f{pouvoir}'
+  remove_ok: <prefix>&7Pouvoir retiré de &a{player}&7.
+  usage_give: '<prefix>&cUtilisation : &7/cv give <player> <bottle|pouvoir> [potionType]'
+  usage_remove: '<prefix>&cUtilisation : &7/cv remove <player>'
+  tutorial_given: <prefix>&aYou received the Compound V handbook.
+info:
+  plugin_header: <prefix>&8━━━━━━━━ &aCompoundV Info &8━━━━━━━━
+  plugin_version: '<prefix>&8• &7Version : &a{version}'
+  plugin_author: '<prefix>&8• &7Auteur : &aThomas U.'
+  plugin_ability_count: '<prefix>&8• &7Pouvoirs chargés : &a{count}'
+  plugin_language: '<prefix>&8• &7Langue : &a{language}'
+  help_hint: '<prefix>&8• &7Aide: &f/cv help'
+  player_header: <prefix>&8────── &aStatut du joueur &8──────
+  player_target: '<prefix>&8• &7Joueur : &a{player}'
+  player_none: <prefix>&8• &a{player}&7 has no active pouvoir.
+  player_ability: '<prefix>&8• &7Pouvoir : &a&l{name}'
+  player_potion: '<prefix>&8• &7Source : &b{potion}'
+  player_status_permanent: '<prefix>&8• &7Statut : &aPermanent'
+  player_status_temporary: '<prefix>&8• &7Statut : &eTemporaire'
+  player_expires: '<prefix>&8• &7Expire dans : &e{minutes}m {seconds}s'
+  player_controls_header: <prefix>&8────── &aContrôles et effets &8──────
+  player_no_target_hint: <prefix>&8• &7Use &f/cv info <player>&7 to inspect a player.
+  plugin_footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+bottle:
+  compound_v:
+    name: '&b&lCompound V'
+    lore_1: '&7Sérum expérimental avec un pouvoir aléatoire.'
+    lore_2: '&8Bois-le pour débloquer ton pouvoir.'
+  temp_v:
+    name: '&a&lTemp V'
+    lore_1: '&7Temporaire serum avec a random pouvoir.'
+    lore_2: '&8Expire après la durée configurée.'
+  v_one:
+    name: '&3&lV One'
+    lore_1: '&7Sérum raffiné avec des pouvoirs puissants.'
+    lore_2: '&8À utiliser avec prudence.'
+  anti_v:
+    name: '&c&lAnti V'
+    lore_1: '&7Retire ton pouvoir actif.'
+    lore_2: '&8Bois-le pour réinitialiser ton pouvoir.'
+  v_null:
+    name: '&2&lV-Null Virus'
+    lore_1: '&7Airborne anti-super pathogen.'
+    lore_2: '&8Throwable forms are allowed.'
+    lore_3: '&4Dangerous against V-powered joueurs.'
+serum:
+  default_lore_1: '&7Intermediate brewing serum.'
+  default_lore_2: '&8Continue the brewing chain.'
+  crystalline_serum:
+    name: '&bCrystalline Serum'
+    lore_1: '&7Amethyst-stabilized base serum.'
+    lore_2: '&8Suivant : Echo Shard.'
+  resonant_v_serum:
+    name: '&9Resonant V Serum'
+    lore_1: '&7Echo-infused V base.'
+    lore_2: '&8Suivant : Glowstone Dust.'
+  activated_v_serum:
+    name: '&b&lActivated V Serum'
+    lore_1: '&7Ready to branch into Temp V ou Compound V.'
+    lore_2: '&8Sugar -> Temp V, Diamond -> Compound V.'
+  unstable_temp_v:
+    name: '&aUnstable Temp V'
+    lore_1: '&7Temporaire V serum still unstable.'
+    lore_2: '&8Suivant : Redstone Dust.'
+  unstable_v_serum:
+    name: '&bUnstable V Serum'
+    lore_1: '&7Permanent V serum still unstable.'
+    lore_2: '&8Suivant : Netherite Scrap.'
+  draconic_serum:
+    name: '&5Draconic Serum'
+    lore_1: '&7Dragon-breath V-One base.'
+    lore_2: '&8Suivant : Echo Shard.'
+  echo_charged_serum:
+    name: '&3Echo-Charged Serum'
+    lore_1: '&7Resonating V-One intermediate.'
+    lore_2: '&8Suivant : Netherite Scrap.'
+  reinforced_serum:
+    name: '&8Reinforced Serum'
+    lore_1: '&7Netherite-reinforced V-One serum.'
+    lore_2: '&8Suivant : Fermented Spider Eye.'
+  unstable_v_one_serum:
+    name: '&1Unstable V-One Serum'
+    lore_1: '&7Powerful but unstable V-One serum.'
+    lore_2: '&8Suivant : Totem of Undying.'
+  cleansing_serum:
+    name: '&fCleansing Serum'
+    lore_1: '&7Milk-based neutralizer base.'
+    lore_2: '&8Suivant : Ghast Tear.'
+  restorative_serum:
+    name: '&cRestorative Serum'
+    lore_1: '&7Restorative Anti V intermediate.'
+    lore_2: '&8Suivant : Fermented Spider Eye.'
+  decay_serum:
+    name: '&2Decay Serum'
+    lore_1: '&7Wither Rose pathogen base.'
+    lore_2: '&8Suivant : Fermented Spider Eye.'
+  corrupted_serum:
+    name: '&5Corrupted Serum'
+    lore_1: '&7Corrupted anti-super pathogen.'
+    lore_2: '&8Suivant : Echo Shard.'
+  resonant_pathogen:
+    name: '&2Resonant Pathogen'
+    lore_1: '&7Echo-reactive pathogen.'
+    lore_2: '&8Suivant : Dragon''s Breath.'
+  airborne_v_pathogen:
+    name: '&aAirborne V-Pathogen'
+    lore_1: '&7Airborne pathogen carrier.'
+    lore_2: '&8Suivant : Netherite Scrap.'
+  stabilized_v_null_pathogen:
+    name: '&2Stabilized V-Null Pathogen'
+    lore_1: '&7Stabilized V-Null core.'
+    lore_2: '&8Suivant : Totem of Undying.'
+side_effect:
+  temp_v_lethal: <prefix>&4Temp V Overdose&7. Ton corps collapses.
+  adrenaline_crash: '<prefix>&eEffet secondaire : &6Adrenaline Crash&7. Ton corps is exhausted.'
+  overload_sickness: '<prefix>&eEffet secondaire : &aOverload Sickness&7.'
+  muscle_failure: '<prefix>&eEffet secondaire : &7Muscle Failure&7. Movement is impaired.'
+  internal_damage: '<prefix>&eEffet secondaire : &cInternal Damage&7.'
+  severe_collapse: '<prefix>&eEffet secondaire : &4Severe Collapse&7.'
+  failed_transformation: <prefix>&cFailed Transformation&7. Ton corps rejects part of the serum.
+  heat_spike: '<prefix>&cEffet secondaire : &6Heat Spike&7.'
+  body_rejection: '<prefix>&cEffet secondaire : &4Body Rejection&7.'
+  critical_instability: <prefix>&4Critical Instpouvoir&7. V One destabilizes your body for a short time.
+  no_power: <prefix>&7No Power&7. V One is unstable, but the pouvoir remains active.
+v_null:
+  hit_powered: <prefix>&2V-Null Virus&7 infected your V system. Survive 15 minutes ou die.
+  hit_v_one: <prefix>&2V-Null Virus&7 coup you, but V One partially resists it.
+  no_effect: <prefix>&2V-Null Virus&7 found no V-system. Aucun effet.
+  hit_unpowered: <prefix>&2V-Null Virus&7 weakly affected you.
+tutorial_book:
+  title: Compound V Guide
+  author: Vought Lab
+  page_1:
+  - '&1&lCompound V'
+  - '&8Laboratoire d’établi'
+  - ''
+  - '&0Grille de craft uniquement.'
+  - '&0Always 2 items:'
+  - '&8Source + Ingredient'
+  - '&2= Result'
+  - ''
+  - '&0La forme n’a pas d’importance.'
+  - '&4Alambic désactivé.'
+  page_2:
+  - '&1&lBase 1/2'
+  - ''
+  - '&01) Water Bottle'
+  - '&8+ Nether Wart'
+  - '&2= Awkward'
+  - ''
+  - '&02) Awkward'
+  - '&8+ Amethyst'
+  - '&2= Crystalline'
+  page_3:
+  - '&1&lBase 2/2'
+  - ''
+  - '&03) Crystalline'
+  - '&8+ Echo Shard'
+  - '&2= Resonant V'
+  - ''
+  - '&04) Resonant V'
+  - '&8+ Glowstone'
+  - '&2= Activated V'
+  page_4:
+  - '&2&lTemp V'
+  - ''
+  - '&0Activated V'
+  - '&8+ Sugar'
+  - '&2= Unstable Temp'
+  - ''
+  - '&0Unstable Temp'
+  - '&8+ Redstone'
+  - '&2= Temp V'
+  - ''
+  - '&4Max 5 doses/life'
+  page_5:
+  - '&1&lCompound V'
+  - ''
+  - '&0Activated V'
+  - '&8+ Diamond'
+  - '&2= Unstable V'
+  - ''
+  - '&0Unstable V'
+  - '&8+ Netherite'
+  - '&2= Compound V'
+  - ''
+  - '&0Permanent until Anti V.'
+  page_6:
+  - '&3&lV One 1/2'
+  - ''
+  - '&01) Awkward'
+  - '&8+ Dragon Breath'
+  - '&2= Draconic'
+  - ''
+  - '&02) Draconic'
+  - '&8+ Echo Shard'
+  - '&2= Echo-Charged'
+  page_7:
+  - '&3&lV One 2/2'
+  - ''
+  - '&03) Echo-Charged'
+  - '&8+ Netherite'
+  - '&2= Reinforced'
+  - ''
+  - '&04) Reinforced'
+  - '&8+ Ferm. Eye'
+  - '&2= Unstable V-One'
+  - '&05) + Totem'
+  - '&2= V One'
+  page_8:
+  - '&2&lAnti V'
+  - ''
+  - '&01) Awkward'
+  - '&8+ Milk Bucket'
+  - '&2= Cleansing'
+  - ''
+  - '&02) Cleansing'
+  - '&8+ Ghast Tear'
+  - '&2= Restorative'
+  - '&03) + Ferm. Eye'
+  - '&2= Anti V'
+  page_9:
+  - '&4&lV-Null 1/2'
+  - ''
+  - '&01) Awkward'
+  - '&8+ Wither Rose'
+  - '&2= Decay'
+  - ''
+  - '&02) Decay'
+  - '&8+ Ferm. Eye'
+  - '&2= Corrupted'
+  - '&03) + Echo Shard'
+  - '&2= Resonant'
+  page_10:
+  - '&4&lV-Null 2/2'
+  - ''
+  - '&0Resonant'
+  - '&8+ Dragon Breath'
+  - '&2= Airborne'
+  - ''
+  - '&0Airborne'
+  - '&8+ Netherite'
+  - '&2= Stabilized'
+  - '&0Stabilized + Totem'
+  - '&2= V-Null'
+  page_11:
+  - '&6&lPouvoirs'
+  - ''
+  - '&0Patriot, Diver'
+  - '&0Runner, Worm'
+  - '&0Flash Light'
+  - '&0Veteran, Sonic'
+  - '&0Stormstrike V-One'
+  - ''
+  - '&8/cv info shows'
+  - '&8your controls.'
+  page_12:
+  - '&4&lEffets secondaires'
+  - ''
+  - '&0Temp V:'
+  - '&8Crash/Sickness'
+  - '&8Failure/Collapse'
+  - ''
+  - '&0CV/V One:'
+  - '&8rare extra debuffs'
+  - ''
+  - '&4Side effects are'
+  - '&4added to powers.'

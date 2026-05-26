@@ -14,7 +14,11 @@ public final class LanguageResourceInstaller {
 
     private static final String[] LANGUAGE_FILES = {
             "lang/messages_en.yml",
-            "lang/messages_de.yml"
+            "lang/messages_de.yml",
+            "lang/messages_es.yml",
+            "lang/messages_fr.yml",
+            "lang/messages_hi.yml",
+            "lang/messages_ru.yml"
     };
 
     private final JavaPlugin plugin;
