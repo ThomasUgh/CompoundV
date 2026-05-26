@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.ability.vone;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
+import de.thomasugh.compoundv.server.TaskHandle;
 import de.thomasugh.compoundv.util.AttributeUtil;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
@@ -21,8 +22,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -34,6 +37,8 @@ public class StormstrikeAbility implements Ability {
     private final Set<UUID> launching = new HashSet<>();
     private final Map<UUID, Long> launchCooldown = new HashMap<>();
     private final Map<UUID, Long> lightningCooldown = new HashMap<>();
+    private final Map<UUID, UUID> activeLightningTokens = new HashMap<>();
+    private final Map<UUID, TaskHandle> lightningStrikeTasks = new HashMap<>();
     private final Map<UUID, Long> fallImpactCooldown = new HashMap<>();
     private final Map<UUID, Long> lastHandledAt = new HashMap<>();
     private final Map<UUID, Boolean> beamActive = new HashMap<>();
@@ -74,6 +79,9 @@ public class StormstrikeAbility implements Ability {
         launching.remove(uuid);
         launchCooldown.remove(uuid);
         lightningCooldown.remove(uuid);
+        activeLightningTokens.remove(uuid);
+        TaskHandle lightningTask = lightningStrikeTasks.remove(uuid);
+        if (lightningTask != null) lightningTask.cancel();
         fallImpactCooldown.remove(uuid);
         lastHandledAt.remove(uuid);
         beamActive.remove(uuid);
@@ -147,8 +155,8 @@ public class StormstrikeAbility implements Ability {
     private void fireStormBeam(Player player) {
         double range = plugin.getConfig().getDouble("abilities.stormstrike.beam_range", 35.0);
         double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 3.0) * 2.0;
-        int damageIntervalTicks = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.beam_damage_interval_ticks", 10));
-        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 1.35);
+        int damageIntervalTicks = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.beam_damage_interval_ticks", 2));
+        double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 4.0);
         int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_ticks", 60);
         int slownessAmplifier = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_amplifier", 1);
 
@@ -172,6 +180,7 @@ public class StormstrikeAbility implements Ability {
                 effectiveRange * 0.5 + hitRadius, effectiveRange * 0.5 + hitRadius, effectiveRange * 0.5 + hitRadius)) {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
             if (!isNearBeamTarget(eye, dir, effectiveRange, hitRadius, target)) continue;
+            target.setNoDamageTicks(0);
             target.damage(Math.max(0.0, damage), player);
             target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS,
                     Math.max(20, slownessTicks), Math.max(0, slownessAmplifier), false, true, true));
@@ -317,6 +326,8 @@ public class StormstrikeAbility implements Ability {
         if (handledNow - lastHandled < 250L) return;
         lastHandledAt.put(uuid, handledNow);
 
+        if (activeLightningTokens.containsKey(uuid)) return;
+
         long cooldownMs = plugin.getConfig().getLong("abilities.stormstrike.lightning_cooldown_ms", 3000L);
         long now = System.currentTimeMillis();
         long readyAt = lightningCooldown.getOrDefault(uuid, 0L);
@@ -335,22 +346,89 @@ public class StormstrikeAbility implements Ability {
         }
 
         lightningCooldown.put(uuid, now + Math.max(0L, cooldownMs));
-        int minBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_min_bolts", 2);
-        int maxBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_max_bolts", 3);
+
+        int minBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_min_bolts", 4);
+        int maxBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_max_bolts", 4);
         if (maxBolts < minBolts) maxBolts = minBolts;
         int bolts = minBolts + ThreadLocalRandom.current().nextInt(Math.max(1, maxBolts - minBolts + 1));
-        double spread = plugin.getConfig().getDouble("abilities.stormstrike.lightning_spread", 1.4);
+        double spread = plugin.getConfig().getDouble("abilities.stormstrike.lightning_spread", 1.8);
 
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.7f, 1.55f);
+        List<Location> strikeCenters = new ArrayList<>();
         for (int i = 0; i < bolts; i++) {
-            Location bolt = target.clone().add(
+            strikeCenters.add(target.clone().add(
                     ThreadLocalRandom.current().nextDouble(-spread, spread),
-                    0,
-                    ThreadLocalRandom.current().nextDouble(-spread, spread));
-            player.getWorld().strikeLightning(bolt);
-            player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, bolt.clone().add(0, 1, 0), 28, 0.35, 0.55, 0.35, 0.12);
+                    0.15,
+                    ThreadLocalRandom.current().nextDouble(-spread, spread)));
         }
+
+        UUID token = UUID.randomUUID();
+        activeLightningTokens.put(uuid, token);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.55f, 1.65f);
+        player.getWorld().playSound(target, Sound.BLOCK_BEACON_POWER_SELECT, 0.55f, 1.85f);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.released"));
+
+        int durationTicks = Math.max(2, plugin.getConfig().getInt("abilities.stormstrike.lightning_duration_ticks", 30));
+        int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.lightning_damage_interval_ticks", 2));
+        final TaskHandle[] task = new TaskHandle[1];
+        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+            int age = 0;
+
+            @Override public void run() {
+                if (!player.isOnline() || !token.equals(activeLightningTokens.get(uuid))) {
+                    if (task[0] != null) task[0].cancel();
+                    return;
+                }
+
+                Set<UUID> damagedThisTick = new HashSet<>();
+                for (Location center : strikeCenters) {
+                    if (age == 0 && center.getWorld() != null) center.getWorld().strikeLightningEffect(center);
+                    renderLightningStrikeEffect(center, age);
+                    if (age % damageInterval == 0) {
+                        applyStrikeHitRange(player, center, damagedThisTick);
+                    }
+                }
+
+                age++;
+                if (age >= durationTicks) {
+                    activeLightningTokens.remove(uuid);
+                    lightningStrikeTasks.remove(uuid);
+                    if (task[0] != null) task[0].cancel();
+                }
+            }
+        }, 0L, 1L);
+        lightningStrikeTasks.put(uuid, task[0]);
+    }
+
+    private void renderLightningStrikeEffect(Location base, int age) {
+        World world = base.getWorld();
+        if (world == null) return;
+
+        Particle.DustOptions white = new Particle.DustOptions(Color.fromRGB(250, 250, 255), 0.72f);
+        Particle.DustOptions purple = new Particle.DustOptions(Color.fromRGB(176, 128, 255), 0.62f);
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        Location from = base.clone().add(random.nextDouble(-0.22, 0.22), 2.8 + random.nextDouble(0.0, 0.8), random.nextDouble(-0.22, 0.22));
+        Location previous = from;
+        int joints = 5 + random.nextInt(3);
+        for (int i = 1; i <= joints; i++) {
+            double progress = i / (double) joints;
+            Location current = base.clone().add(
+                    random.nextDouble(-0.65, 0.65) * (1.0 - progress * 0.45),
+                    2.8 * (1.0 - progress) + 0.22,
+                    random.nextDouble(-0.65, 0.65) * (1.0 - progress * 0.45));
+            drawLightningSegment(world, previous, current, white, purple);
+            if (random.nextDouble() < 0.42) {
+                Location branch = current.clone().add(random.nextDouble(-1.2, 1.2), random.nextDouble(-0.25, 0.65), random.nextDouble(-1.2, 1.2));
+                drawLightningSegment(world, current, branch, white, purple);
+            }
+            previous = current;
+        }
+
+        if (age % 3 == 0) {
+            world.spawnParticle(Particle.ELECTRIC_SPARK, base.clone().add(0, 0.75, 0), 32, 0.85, 0.55, 0.85, 0.20);
+            world.spawnParticle(Particle.END_ROD, base.clone().add(0, 0.95, 0), 12, 0.70, 0.40, 0.70, 0.035);
+            world.playSound(base, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.12f, 1.9f);
+        }
     }
 
     public void handleMeleeHit(Player attacker, LivingEntity target) {
@@ -420,12 +498,37 @@ public class StormstrikeAbility implements Ability {
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.fall_impact"));
     }
 
+    private void applyStrikeHitRange(Player player, Location bolt, Set<UUID> damagedThisTick) {
+        double radius = plugin.getConfig().getDouble("abilities.stormstrike.lightning_hit_radius", 7.0);
+        double damage = plugin.getConfig().getDouble("abilities.stormstrike.lightning_tick_damage_hearts", 1.2) * 2.0;
+        int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.lightning_slowness_ticks", 80);
+        int slownessAmplifier = plugin.getConfig().getInt("abilities.stormstrike.lightning_slowness_amplifier", 1);
+
+        for (Entity entity : bolt.getWorld().getNearbyEntities(bolt, radius, radius, radius)) {
+            if (!(entity instanceof LivingEntity target) || target.equals(player)) continue;
+            if (target.getLocation().distanceSquared(bolt) > radius * radius) continue;
+            if (!damagedThisTick.add(target.getUniqueId())) continue;
+            target.setNoDamageTicks(0);
+            target.setNoDamageTicks(0);
+            target.damage(Math.max(0.0, damage), player);
+            target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS,
+                    Math.max(20, slownessTicks), Math.max(0, slownessAmplifier), false, true, true));
+            target.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,
+                    target.getLocation().add(0, Math.min(1.4, Math.max(0.7, target.getEyeHeight())), 0),
+                    32, 0.42, 0.48, 0.42, 0.16);
+            target.getWorld().spawnParticle(Particle.END_ROD,
+                    target.getLocation().add(0, Math.min(1.4, Math.max(0.7, target.getEyeHeight())), 0),
+                    8, 0.30, 0.34, 0.30, 0.04);
+        }
+    }
+
     private Location findStrikeTarget(Player player) {
-        double range = plugin.getConfig().getDouble("abilities.stormstrike.lightning_range", 36.0);
+        double range = plugin.getConfig().getDouble("abilities.stormstrike.lightning_range", 55.0);
+        double traceRadius = plugin.getConfig().getDouble("abilities.stormstrike.lightning_trace_radius", 1.1);
         Location eye = player.getEyeLocation();
         Vector direction = eye.getDirection().normalize();
         RayTraceResult result = player.getWorld().rayTrace(eye, direction, range,
-                FluidCollisionMode.NEVER, true, 0.35,
+                FluidCollisionMode.NEVER, true, Math.max(0.2, traceRadius),
                 entity -> entity != player && entity instanceof LivingEntity);
         if (result != null) {
             if (result.getHitEntity() != null) return result.getHitEntity().getLocation();
