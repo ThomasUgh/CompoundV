@@ -69,6 +69,8 @@ heat_vision:
       range: 40.0
   v_one_received_damage_multiplier: 0.5
   damage_interval: 2
+  # Entity raytrace hit radius in blocks. 0.05 is the current vanilla-like default.
+  hit_radius: 0.05
   ignite_blocks: true
   ignite_entities: true
   break_glass: true
@@ -114,7 +116,7 @@ abilities:
     beam_range: 35.0
     beam_damage_hearts: 3.0
     beam_damage_interval_ticks: 2
-    beam_hit_radius: 4.0
+    beam_hit_radius: 6.5
     beam_max_ticks: 120
     beam_cooldown_ms: 5000
     beam_segment_length: 0.75
@@ -524,7 +526,7 @@ abilities:
     resistance_level: 1
     explosion_cooldown_ms: 10000
     explosion_charge_ticks: 60
-    explosion_hold_grace_ms: 850
+    explosion_hold_grace_ms: 2500
     explosion_power: 10.0
     explosion_block_damage: true
     explosion_radius: 13.0

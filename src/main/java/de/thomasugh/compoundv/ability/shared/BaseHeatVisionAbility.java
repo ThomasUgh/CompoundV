@@ -139,9 +139,10 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
         Location lEye = eye.clone().subtract(right);
         Location rEye = eye.clone().add(right);
-        RayTraceResult rL = w.rayTrace(lEye, dir, range, FluidCollisionMode.NEVER, true, 0.05,
+        double hitRadius = hitRadius();
+        RayTraceResult rL = w.rayTrace(lEye, dir, range, FluidCollisionMode.NEVER, true, hitRadius,
                 e -> e != player && e instanceof LivingEntity);
-        RayTraceResult rR = w.rayTrace(rEye, dir, range, FluidCollisionMode.NEVER, true, 0.05,
+        RayTraceResult rR = w.rayTrace(rEye, dir, range, FluidCollisionMode.NEVER, true, hitRadius,
                 e -> e != player && e instanceof LivingEntity);
         RayTraceResult hit = rL != null ? rL : rR;
         double dL = rL != null ? rL.getHitPosition().distance(lEye.toVector()) : range;
@@ -172,7 +173,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
             if (igniteE) le.setFireTicks(entityFireTicks());
             w.spawnParticle(Particle.DUST,  imp, impactParticles(), 0.3, 0.4, 0.3, 0, core);
             w.spawnParticle(Particle.SMOKE, imp,  5, 0.1, 0.2, 0.1, 0.02);
-            w.playSound(imp, hurtSoundFor(le), 0.8f, 1.0f);
+            playHeatVisionDamageSounds(w, imp, le);
         }
 
         if (hit.getHitBlock() != null) {
@@ -327,6 +328,13 @@ public abstract class BaseHeatVisionAbility implements Ability {
         return true;
     }
 
+    private void playHeatVisionDamageSounds(World world, Location impact, LivingEntity target) {
+        Sound specific = hurtSoundFor(target);
+        world.playSound(impact, specific, 1.00f, 1.0f);
+        world.playSound(impact, specific, 0.55f, 1.18f);
+        world.playSound(impact, Sound.ENTITY_GENERIC_HURT, 0.38f, 1.28f);
+    }
+
     private Sound hurtSoundFor(LivingEntity target) {
         String entityName = target.getType().name();
 
@@ -435,6 +443,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         return until != null && until >= System.currentTimeMillis();
     }
     protected int damageInterval()  { return plugin.getConfig().getInt("heat_vision.damage_interval", 2); }
+    protected double hitRadius()    { return Math.max(0.01, plugin.getConfig().getDouble("heat_vision.hit_radius", 0.05)); }
     protected Color coreColor()     { return Color.fromRGB(45, 210, 255); }
     protected Color glowColor()     { return Color.fromRGB(150, 235, 255); }
     protected boolean fireParticles() { return plugin.getConfig().getBoolean("heat_vision.fire_particles", false); }
