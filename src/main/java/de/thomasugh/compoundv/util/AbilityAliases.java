@@ -148,7 +148,19 @@ public final class AbilityAliases {
             Map.entry("spider_weaver", "spider_weaver"),
             Map.entry("spiderweaver", "spider_weaver"),
             Map.entry("webweaver", "spider_weaver"),
-            Map.entry("web_weaver", "spider_weaver")
+            Map.entry("web_weaver", "spider_weaver"),
+
+            Map.entry("heal_angel", "heal_angel"),
+            Map.entry("healangel", "heal_angel"),
+            Map.entry("private_angel", "heal_angel"),
+            Map.entry("angel", "heal_angel"),
+
+            Map.entry("submarine", "submarine"),
+            Map.entry("torpedo", "submarine"),
+
+            Map.entry("the_detonator", "the_detonator"),
+            Map.entry("detonator", "the_detonator"),
+            Map.entry("naqib", "the_detonator")
     );
 
     private AbilityAliases() {}
