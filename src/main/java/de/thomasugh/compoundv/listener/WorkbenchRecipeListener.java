@@ -34,11 +34,11 @@ public class WorkbenchRecipeListener implements Listener {
                 CustomRecipe.serum("unstable_temp_v", SerumType.ACTIVATED_V_SERUM, Material.SUGAR, SerumType.UNSTABLE_TEMP_V),
                 CustomRecipe.serum("temp_v", SerumType.UNSTABLE_TEMP_V, Material.REDSTONE, CompoundPotion.TEMP_V),
                 CustomRecipe.serum("unstable_v_serum", SerumType.ACTIVATED_V_SERUM, Material.DIAMOND, SerumType.UNSTABLE_V_SERUM),
-                CustomRecipe.serum("compound_v", SerumType.UNSTABLE_V_SERUM, Material.NETHERITE_SCRAP, CompoundPotion.COMPOUND_V),
+                CustomRecipe.serum("compound_v", SerumType.UNSTABLE_V_SERUM, Material.ANCIENT_DEBRIS, CompoundPotion.COMPOUND_V),
 
                 CustomRecipe.awkward("draconic_serum", Material.DRAGON_BREATH, SerumType.DRACONIC_SERUM),
                 CustomRecipe.serum("echo_charged_serum", SerumType.DRACONIC_SERUM, Material.ECHO_SHARD, SerumType.ECHO_CHARGED_SERUM),
-                CustomRecipe.serum("reinforced_serum", SerumType.ECHO_CHARGED_SERUM, Material.NETHERITE_SCRAP, SerumType.REINFORCED_SERUM),
+                CustomRecipe.serum("reinforced_serum", SerumType.ECHO_CHARGED_SERUM, Material.ANCIENT_DEBRIS, SerumType.REINFORCED_SERUM),
                 CustomRecipe.serum("unstable_v_one_serum", SerumType.REINFORCED_SERUM, Material.FERMENTED_SPIDER_EYE, SerumType.UNSTABLE_V_ONE_SERUM),
                 CustomRecipe.serum("v_one", SerumType.UNSTABLE_V_ONE_SERUM, Material.TOTEM_OF_UNDYING, CompoundPotion.V_ONE),
 
@@ -50,7 +50,7 @@ public class WorkbenchRecipeListener implements Listener {
                 CustomRecipe.serum("corrupted_serum", SerumType.DECAY_SERUM, Material.FERMENTED_SPIDER_EYE, SerumType.CORRUPTED_SERUM),
                 CustomRecipe.serum("resonant_pathogen", SerumType.CORRUPTED_SERUM, Material.ECHO_SHARD, SerumType.RESONANT_PATHOGEN),
                 CustomRecipe.serum("airborne_v_pathogen", SerumType.RESONANT_PATHOGEN, Material.DRAGON_BREATH, SerumType.AIRBORNE_V_PATHOGEN),
-                CustomRecipe.serum("stabilized_v_null_pathogen", SerumType.AIRBORNE_V_PATHOGEN, Material.NETHERITE_SCRAP, SerumType.STABILIZED_V_NULL_PATHOGEN),
+                CustomRecipe.serum("stabilized_v_null_pathogen", SerumType.AIRBORNE_V_PATHOGEN, Material.ANCIENT_DEBRIS, SerumType.STABILIZED_V_NULL_PATHOGEN),
                 CustomRecipe.serum("v_null", SerumType.STABILIZED_V_NULL_PATHOGEN, Material.TOTEM_OF_UNDYING, CompoundPotion.V_NULL),
                 CustomRecipe.bottle("v_null_splash", CompoundPotion.V_NULL, Material.POTION, Material.GUNPOWDER, CompoundPotion.V_NULL, Material.SPLASH_POTION),
                 CustomRecipe.bottle("v_null_lingering", CompoundPotion.V_NULL, Material.SPLASH_POTION, Material.DRAGON_BREATH, CompoundPotion.V_NULL, Material.LINGERING_POTION)
@@ -162,6 +162,11 @@ public class WorkbenchRecipeListener implements Listener {
         for (int i = 0; i < matrix.length; i++) {
             ItemStack item = matrix[i];
             if (item == null || item.getType() == Material.AIR) continue;
+            // Custom lab recipes are intentionally single-step only. Rejecting
+            // stacked ingredients prevents Bukkit client/server desyncs that can
+            // duplicate potions, amethyst shards or other recipe items when the
+            // result is shift-clicked or repeatedly taken from the matrix.
+            if (item.getAmount() != 1) return null;
             usedSlots++;
 
             if (sourceSlot < 0 && recipe.matchesSource(item)) {

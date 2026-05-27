@@ -21,20 +21,13 @@ public final class ConfigMigrationService {
     public void migrate() {
         boolean changed = false;
 
+        // 1.1.1 intentionally ships a compact public config. Older verbose
+        // runtime-only tuning keys are no longer copied into config.yml; the
+        // abilities keep safe built-in defaults for those values.
         changed |= mergeBundledDefaults();
         changed |= migrateLegacyAliases();
-        changed |= ensureRollChances();
-        changed |= migrateVeteranBalance();
-        changed |= migrateVersion102Defaults();
-        changed |= migrateVersion103Defaults();
-        changed |= migrateVersion104HotfixDefaults();
-        changed |= migrateVersion110Defaults();
-        changed |= migrateVersion110Step19Defaults();
-        changed |= migrateVersion110Step20Defaults();
-        changed |= migrateVersion110Step23Defaults();
-        changed |= migrateVersion110Step24Defaults();
-        changed |= migrateVersion110Step25Defaults();
-        changed |= migrateVersion110Step26Defaults();
+        changed |= cleanupObsoleteEntries();
+        changed |= pruneToBundledConfigShape();
 
         if (changed) {
             plugin.saveConfig();
@@ -48,11 +41,59 @@ public final class ConfigMigrationService {
                     new InputStreamReader(in, StandardCharsets.UTF_8));
             plugin.getConfig().setDefaults(defaults);
             plugin.getConfig().options().copyDefaults(true);
-            return true;
+            return false;
         } catch (Exception ex) {
             plugin.getLogger().warning("Could not merge config defaults: " + ex.getMessage());
             return false;
         }
+    }
+
+    private boolean cleanupObsoleteEntries() {
+        boolean changed = false;
+        String[] obsolete = {
+                "compound_v.chances.invisibility",
+                "temp_v.chances.invisibility"
+        };
+        for (String path : obsolete) {
+            if (plugin.getConfig().contains(path)) {
+                plugin.getConfig().set(path, null);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    private boolean pruneToBundledConfigShape() {
+        try (InputStream in = plugin.getResource("config.yml")) {
+            if (in == null) return false;
+            YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(in, StandardCharsets.UTF_8));
+            return pruneSection("", plugin.getConfig(), defaults);
+        } catch (Exception ex) {
+            plugin.getLogger().warning("Could not compact config: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    private boolean pruneSection(String prefix, ConfigurationSection current, ConfigurationSection defaults) {
+        boolean changed = false;
+        for (String key : current.getKeys(false).toArray(new String[0])) {
+            String path = prefix.isEmpty() ? key : prefix + "." + key;
+            if (!defaults.contains(key)) {
+                plugin.getConfig().set(path, null);
+                changed = true;
+                continue;
+            }
+            Object cur = current.get(key);
+            Object def = defaults.get(key);
+            if (cur instanceof ConfigurationSection currentChild && def instanceof ConfigurationSection defaultChild) {
+                changed |= pruneSection(path, currentChild, defaultChild);
+            } else if (cur instanceof ConfigurationSection || def instanceof ConfigurationSection) {
+                plugin.getConfig().set(path, defaults.get(key));
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     private boolean migrateLegacyAliases() {

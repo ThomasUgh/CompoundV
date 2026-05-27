@@ -42,11 +42,11 @@ public class BrewingRecipeListener implements Listener {
                 CustomRecipe.serum(SerumType.ACTIVATED_V_SERUM, Material.SUGAR, SerumType.UNSTABLE_TEMP_V),
                 CustomRecipe.serum(SerumType.UNSTABLE_TEMP_V, Material.REDSTONE, CompoundPotion.TEMP_V),
                 CustomRecipe.serum(SerumType.ACTIVATED_V_SERUM, Material.DIAMOND, SerumType.UNSTABLE_V_SERUM),
-                CustomRecipe.serum(SerumType.UNSTABLE_V_SERUM, Material.NETHERITE_SCRAP, CompoundPotion.COMPOUND_V),
+                CustomRecipe.serum(SerumType.UNSTABLE_V_SERUM, Material.ANCIENT_DEBRIS, CompoundPotion.COMPOUND_V),
 
                 CustomRecipe.awkward(Material.DRAGON_BREATH, SerumType.DRACONIC_SERUM),
                 CustomRecipe.serum(SerumType.DRACONIC_SERUM, Material.ECHO_SHARD, SerumType.ECHO_CHARGED_SERUM),
-                CustomRecipe.serum(SerumType.ECHO_CHARGED_SERUM, Material.NETHERITE_SCRAP, SerumType.REINFORCED_SERUM),
+                CustomRecipe.serum(SerumType.ECHO_CHARGED_SERUM, Material.ANCIENT_DEBRIS, SerumType.REINFORCED_SERUM),
                 CustomRecipe.serum(SerumType.REINFORCED_SERUM, Material.FERMENTED_SPIDER_EYE, SerumType.UNSTABLE_V_ONE_SERUM),
                 CustomRecipe.serum(SerumType.UNSTABLE_V_ONE_SERUM, Material.TOTEM_OF_UNDYING, CompoundPotion.V_ONE),
 
@@ -58,7 +58,7 @@ public class BrewingRecipeListener implements Listener {
                 CustomRecipe.serum(SerumType.DECAY_SERUM, Material.FERMENTED_SPIDER_EYE, SerumType.CORRUPTED_SERUM),
                 CustomRecipe.serum(SerumType.CORRUPTED_SERUM, Material.ECHO_SHARD, SerumType.RESONANT_PATHOGEN),
                 CustomRecipe.serum(SerumType.RESONANT_PATHOGEN, Material.DRAGON_BREATH, SerumType.AIRBORNE_V_PATHOGEN),
-                CustomRecipe.serum(SerumType.AIRBORNE_V_PATHOGEN, Material.NETHERITE_SCRAP, SerumType.STABILIZED_V_NULL_PATHOGEN),
+                CustomRecipe.serum(SerumType.AIRBORNE_V_PATHOGEN, Material.ANCIENT_DEBRIS, SerumType.STABILIZED_V_NULL_PATHOGEN),
                 CustomRecipe.serum(SerumType.STABILIZED_V_NULL_PATHOGEN, Material.TOTEM_OF_UNDYING, CompoundPotion.V_NULL),
                 CustomRecipe.bottle(CompoundPotion.V_NULL, Material.POTION, Material.GUNPOWDER, CompoundPotion.V_NULL, Material.SPLASH_POTION),
                 CustomRecipe.bottle(CompoundPotion.V_NULL, Material.SPLASH_POTION, Material.DRAGON_BREATH, CompoundPotion.V_NULL, Material.LINGERING_POTION)

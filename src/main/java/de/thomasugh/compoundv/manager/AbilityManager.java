@@ -77,6 +77,7 @@ public class AbilityManager {
             dh.put("seconds", Long.toString(s % 60));
             player.sendMessage(loc.msg("ability.granted_expires", dh));
         }
+        player.sendMessage(loc.msg("ability.granted_tip"));
         player.sendMessage(loc.msg("ability.granted_footer"));
 
         playGrantEffects(player, type);

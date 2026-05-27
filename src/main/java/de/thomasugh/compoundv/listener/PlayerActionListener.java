@@ -29,10 +29,9 @@ import de.thomasugh.compoundv.data.PlayerAbilityData;
 import de.thomasugh.compoundv.manager.AbilityManager;
 import de.thomasugh.compoundv.manager.PotionRollManager;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
+import de.thomasugh.compoundv.server.TaskHandle;
 import de.thomasugh.compoundv.util.ItemUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
@@ -88,7 +87,13 @@ public class PlayerActionListener implements Listener {
     public void onDrink(PlayerItemConsumeEvent e) {
         if (e.isCancelled()) return;
         CompoundPotion type = ItemUtil.getBottleType(e.getItem());
-        if (type == null) return;
+        if (type == null) {
+            if (e.getItem() != null && e.getItem().getType() == Material.MILK_BUCKET && manager.hasAbility(e.getPlayer())) {
+                e.setCancelled(true);
+                e.getPlayer().sendMessage(plugin.getLocaleManager().msg("potion.milk_blocked"));
+            }
+            return;
+        }
 
         e.setCancelled(true);
 
@@ -286,9 +291,14 @@ public class PlayerActionListener implements Listener {
         if (ItemUtil.getAnyBottleType(potion.getItem()) != CompoundPotion.V_NULL) return;
 
         event.setCancelled(true);
+        double radius = plugin.getConfig().getDouble("v_null.splash.radius", 4.0);
         potion.getWorld().playSound(potion.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.9f, 0.65f);
-        for (LivingEntity entity : event.getAffectedEntities()) {
-            plugin.getSideEffectManager().applyVNull(entity);
+        potion.getWorld().spawnParticle(Particle.WITCH, potion.getLocation(), 55, radius * 0.35, 0.45, radius * 0.35, 0.08);
+        potion.getWorld().spawnParticle(Particle.SMOKE, potion.getLocation(), 35, radius * 0.30, 0.30, radius * 0.30, 0.03);
+        for (org.bukkit.entity.Entity nearby : potion.getWorld().getNearbyEntities(potion.getLocation(), radius, radius, radius)) {
+            if (nearby instanceof LivingEntity entity) {
+                plugin.getSideEffectManager().applyVNull(entity);
+            }
         }
     }
 
@@ -297,15 +307,34 @@ public class PlayerActionListener implements Listener {
         ThrownPotion potion = event.getEntity();
         if (ItemUtil.getAnyBottleType(potion.getItem()) != CompoundPotion.V_NULL) return;
 
-        event.setCancelled(true);
         AreaEffectCloud cloud = event.getAreaEffectCloud();
-        double radius = cloud != null ? Math.max(3.0, cloud.getRadius()) : 4.0;
-        potion.getWorld().playSound(potion.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.9f, 0.55f);
-        for (org.bukkit.entity.Entity nearby : potion.getWorld().getNearbyEntities(potion.getLocation(), radius, radius, radius)) {
-            if (nearby instanceof LivingEntity entity) {
-                plugin.getSideEffectManager().applyVNull(entity);
-            }
+        double radius = plugin.getConfig().getDouble("v_null.lingering.radius", cloud != null ? Math.max(3.0, cloud.getRadius()) : 4.0);
+        int durationTicks = Math.max(20, plugin.getConfig().getInt("v_null.lingering.duration_ticks", 160));
+        if (cloud != null) {
+            cloud.setRadius((float) radius);
+            cloud.setDuration(durationTicks);
+            cloud.setRadiusPerTick(0.0f);
+            cloud.setParticle(Particle.WITCH);
         }
+        potion.getWorld().playSound(potion.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.9f, 0.55f);
+        final Location origin = potion.getLocation().clone();
+        final TaskHandle[] task = new TaskHandle[1];
+        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+            int age = 0;
+            @Override public void run() {
+                if (age >= durationTicks) {
+                    if (task[0] != null) task[0].cancel();
+                    return;
+                }
+                origin.getWorld().spawnParticle(Particle.WITCH, origin, 18, radius * 0.35, 0.35, radius * 0.35, 0.04);
+                for (org.bukkit.entity.Entity nearby : origin.getWorld().getNearbyEntities(origin, radius, radius, radius)) {
+                    if (nearby instanceof LivingEntity entity) {
+                        plugin.getSideEffectManager().applyVNull(entity);
+                    }
+                }
+                age += 10;
+            }
+        }, 0L, 10L);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -362,11 +391,6 @@ public class PlayerActionListener implements Listener {
             if (canUseSneakLeftClick(p, a)) {
                 cancelAbilityInteraction(e);
                 diver.toggleSonar(p);
-                return;
-            }
-            if (canUseSneakRightClick(p, a)) {
-                cancelAbilityInteraction(e);
-                diver.useRiptide(p);
             }
             return;
         }
