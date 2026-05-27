@@ -1,4 +1,4 @@
-language_file_version: 20
+language_file_version: 21
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cУ вас нет прав для этого действия.
@@ -16,18 +16,15 @@ potion:
   roll_failed: <prefix>&cСыворотку не удалось обработать. Обратитесь к администратору.
   drink_v_null: <prefix>&2V-Null Virus&7 распространяется...
   temp_v_extended: <prefix>&aTemp V&7 продлён. Та же способность, больше длительность.
-  compound_v_after_temp: <prefix>&bCompound V&7 связался с вашей временной способностью. Постоянная способность Compound V
-    активируется после окончания Temp V.
+  compound_v_after_temp: <prefix>&bCompound V&7 связался с вашей временной способностью. Постоянная способность Compound V активируется после окончания Temp V.
   compound_v_delayed_granted: <prefix>&bCompound V&7 теперь активирован постоянно.
-  temp_v_blocked_by_compound: <prefix>&aTemp V&7 не может заменить постоянный Compound V. Возникли только слабые побочные
-    эффекты.
-  no_effect_compound_active: <prefix>&7Compound V не действует, пока у вас уже есть постоянная способность. Сначала используйте
-    &cAnti V&7.
+  temp_v_blocked_by_compound: <prefix>&aTemp V&7 не может заменить постоянный Compound V. Возникли только слабые побочные эффекты.
+  no_effect_compound_active: <prefix>&7Compound V не действует, пока у вас уже есть постоянная способность. Сначала используйте &cAnti V&7.
   no_effect_v_one_active: <prefix>&7Ваша система V One отвергает дополнительный V. Ничего не происходит.
   v_one_upgrade: <prefix>&3V One&7 усилил вашу текущую способность.
   v_one_no_upgrade: <prefix>&7V One пока не реагирует с этой способностью.
-  only_drinkable: <prefix>&cСыворотки Compound V можно использовать только как обычные питьевые зелья. V-Null Virus можно
-    бросать.
+  only_drinkable: <prefix>&cСыворотки Compound V можно использовать только как обычные питьевые зелья. V-Null Virus можно бросать.
+  milk_blocked: <prefix>&cMilk cannot remove Compound V powers. Use Anti V or V-Null mechanics instead.
 ability:
   granted_header: <prefix>&8━━━━━━━━ &aСпособность открыта &8━━━━━━━━
   granted_name: <prefix>&7Вы открыли &a&l{name}&r&7 через &b{potion}&7.
@@ -42,7 +39,7 @@ ability:
     description:
     - '<prefix>&8• &7Стиль: как &cHomelander&7.'
     - <prefix>&8• &aПолёт&7 включён автоматически.
-    - '<prefix>&8• &cТепловое зрение&7: нажмите &dF&7 для переключения. По умолчанию: &e5 сердец&7, &e44 блоков&7.'
+    - '<prefix>&8• &cТепловое зрение&7: нажмите &dF &8(Swap Item with Offhand)&7 для переключения. По умолчанию: &e5 сердец&7, &e44 блоков&7.'
     - '<prefix>&8• &bрентген&7: &dШифт + ЛКМ в воздух&7 чтобы показать ближайших сущностей.'
     - '<prefix>&8• &6старт прыжка&7: &dШифт&7, смотрите вверх и прыгните для запуска.'
     - '<prefix>&8• &7Пассивные усиления: &aСила&7, &9Сопротивление&7, &dРегенерация&7 и &cбонусные сердца&7.'
@@ -50,7 +47,7 @@ ability:
     description:
     - '<prefix>&8• &7Стиль: как &cHomelander&7.'
     - <prefix>&8• &aПолёт&7 включён автоматически с более сильными усилениями V One.
-    - '<prefix>&8• &cТепловое зрение&7: нажмите &dF&7 для переключения. По умолчанию: &e4.725 сердец&7, &e50 блоков&7.'
+    - '<prefix>&8• &cТепловое зрение&7: нажмите &dF &8(Swap Item with Offhand)&7 для переключения. По умолчанию: &e4.725 сердец&7, &e50 блоков&7.'
     - '<prefix>&8• &bрентген&7: &dШифт + ЛКМ в воздух&7 чтобы показать ближайших сущностей.'
     - '<prefix>&8• &6старт прыжка&7: &dШифт&7, смотрите вверх и прыгните для запуска.'
     - '<prefix>&8• &7Пассивные усиления: &aСила&7, &9Сопротивление&7, &dРегенерация&7, &6Огнестойкость&7 и &cбонусные сердца&7.'
@@ -66,8 +63,7 @@ ability:
   size_changer:
     description:
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7 и &9Сопротивление II&7.'
-    - '<prefix>&8• &dШифт + ЛКМ + смотрите вверх&7: стать &52x больше&7, двойной урон, &aJump Boost II&7 и &c+10 сердец&7
-      for max &e1min&7.'
+    - '<prefix>&8• &dШифт + ЛКМ + смотрите вверх&7: стать &52x больше&7, двойной урон, &aJump Boost II&7 и &c+10 сердец&7 for max &e1min&7.'
     - '<prefix>&8• &dШифт + ЛКМ + смотрите вниз&7: стать &53.5x меньше&7 for max &e2min&7.'
     - <prefix>&8• &7While transformed, &dШифт + ЛКМ + смотрите вверх/down&7 returns you to normal instantly.
     - <prefix>&8• &7Перезарядка начинается после возврата к норме.
@@ -79,15 +75,14 @@ ability:
     - <prefix>&8• &7Доступно только при улучшении активного SizeChanger через &3V One&7.
   heat_vision:
     description:
-    - '<prefix>&8• &bТепловое зрение&7: нажмите &dF&7 для переключения the beam.'
+    - '<prefix>&8• &bТепловое зрение&7: нажмите &dF &8(Swap Item with Offhand)&7 для переключения the beam.'
     - '<prefix>&8• &7Stages: &bI&7 = 1.35 сердец / 30 блоков, &aII&7 = 2 сердец / 35 блоков.'
     - '<prefix>&8• &7More stages: &6III&7 = 2.25 сердец / 37 блоков, &cIV&7 = 2.7 сердец / 40 блоков.'
     - <prefix>&8• &7Can melt ice, snow блоков, flat snow layers, и cook raw mob drops.
   the_diver:
     description:
     - '<prefix>&8• &7Стиль: как &bThe Deep&7.'
-    - <prefix>&8• &bWater Breathing&7, &bDolphin's Grace VIII&7, &eSpeed пока под водой&7 и &3Conduit Power II&7 are active
-      постоянно.
+    - <prefix>&8• &bWater Breathing&7, &bDolphin's Grace VIII&7, &eSpeed пока под водой&7 и &3Conduit Power II&7 are active постоянно.
     - '<prefix>&8• &bсонар&7: &dШифт + ЛКМ в воздух&7 пока под водой чтобы показать ближайших сущностей.'
     - '<prefix>&8• &bRiptide рывок&7: &dШифт + ПКМ&7 in вода или дождь, similar to Riptide IV без holding a trident.'
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7 и &9Сопротивление I&7.'
@@ -95,12 +90,12 @@ ability:
   jumper:
     description:
     - <prefix>&8• &aСила I&7 is active постоянно.
-    - '<prefix>&8• &aрывок прыжка&7: нажмите &dF&7 for &aJump Boost V&7 и no урон от падения пока active.'
+    - '<prefix>&8• &aрывок прыжка&7: нажмите &dF &8(Swap Item with Offhand)&7 for &aJump Boost V&7 и no урон от падения пока active.'
     - '<prefix>&8• &7Default active time: &e10s&7. Перезарядка: &e15s&7.'
   shockwave:
     description:
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7 и &9Сопротивление I&7.'
-    - '<prefix>&8• &eShockwave&7: нажмите &dF&7 чтобы выпустить a 10-block knockback wave.'
+    - '<prefix>&8• &eShockwave&7: нажмите &dF &8(Swap Item with Offhand)&7 чтобы выпустить a 10-block knockback wave.'
     - '<prefix>&8• &7Урон: &c3 сердец&7 to игроки, &c6 сердец&7 to мобы. Перезарядка: &e2min&7.'
   vision:
     description:
@@ -109,18 +104,17 @@ ability:
   the_runner:
     description:
     - '<prefix>&8• &7Стиль: как &eA-Tдождь&7.'
-    - '<prefix>&8• &eRunner Speed&7: нажмите &dF&7 для переключения Speed X, XI, XII, XV и off.'
-    - '<prefix>&8• &eImpact Run&7: running через entities at Speed X+ deals &c6 сердец&7, plus &c+1 heart&7 per extra speed
-      level.'
+    - '<prefix>&8• &eRunner Speed&7: нажмите &dF &8(Swap Item with Offhand)&7 для переключения Speed X, XI, XII, XV и off.'
+    - '<prefix>&8• &eImpact Run&7: running через entities at Speed X+ deals &c6 сердец&7, plus &c+1 heart&7 per extra speed level.'
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7, &9Сопротивление I&7, &c5 extra сердец&7 и без перезарядки ближнего боя.'
   teleporter:
     description:
-    - '<prefix>&8• &5блинк&7: нажмите &dF&7 чтобы телепортироваться up to &e35 блоков&7.'
+    - '<prefix>&8• &5блинк&7: нажмите &dF &8(Swap Item with Offhand)&7 чтобы телепортироваться up to &e35 блоков&7.'
     - '<prefix>&8• &7Перезарядка: &e2 seconds&7. Includes &aСила I&7 и &9Сопротивление I&7.'
   teleporter_v_one:
     description:
     - <prefix>&8• &3V One Upgrade&7 for Teleporter.
-    - '<prefix>&8• &5блинк&7: нажмите &dF&7 чтобы телепортироваться up to &e50 блоков&7.'
+    - '<prefix>&8• &5блинк&7: нажмите &dF &8(Swap Item with Offhand)&7 чтобы телепортироваться up to &e50 блоков&7.'
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7 и &9Сопротивление III&7.'
   fly:
     description:
@@ -129,7 +123,7 @@ ability:
     - <prefix>&8• &7Includes &aСила I&7 и &9Сопротивление I&7.
   speedster:
     description:
-    - '<prefix>&8• &eSuper Speed&7: нажмите &dF&7 для переключения it on/off.'
+    - '<prefix>&8• &eSuper Speed&7: нажмите &dF &8(Swap Item with Offhand)&7 для переключения it on/off.'
     - <prefix>&8• &7Includes a small &9Сопротивление&7 bonus пока active.
   strength:
     description:
@@ -137,7 +131,7 @@ ability:
     - <prefix>&8• &7Includes a small &9Сопротивление&7 bonus.
   the_ghost:
     description:
-    - '<prefix>&8• &5Ghost Mode&7: нажмите &dF&7 для переключения invisibility.'
+    - '<prefix>&8• &5Ghost Mode&7: нажмите &dF &8(Swap Item with Offhand)&7 для переключения invisibility.'
     - <prefix>&8• &7When включено you receive &5Invisibility II&7 и мобы will not цель you.
     - <prefix>&8• &7Existing mob цельs are cleared пока Ghost Mode is active.
     - '<prefix>&8• &7Пассивные усиления: &9Сопротивление II&7, &aСила I&7 и &6Огнестойкость&7.'
@@ -147,81 +141,73 @@ ability:
     - <prefix>&8• &cFire Aura&7 ignites nearby enemies automatically.
     - <prefix>&8• &6Огнестойкость&7 is включено.
     - <prefix>&8• &7Includes &aСила I&7 и &9Сопротивление I&7.
-    - <prefix>&8• &7Vanilla right-click fire placement с &6Flint и Steel&7 или &6Fire Charges&7 is blocked пока you own this
-      способность.
+    - <prefix>&8• &7Vanilla right-click fire placement с &6Flint и Steel&7 или &6Fire Charges&7 is blocked пока you own this способность.
   the_worm:
     description:
     - <prefix>&8• &7Very fast digging с &eHaste IV&7, focused on dirt, grass, gravel и sand gameplay.
-    - <prefix>&8• &dF&7 toggles &bNight Vision&7.
+    - <prefix>&8• &dF &8(Swap Item with Offhand)&7 toggles &bNight Vision&7.
     - '<prefix>&8• &7Пассивные усиления: &aСила I&7 и &9Сопротивление I&7.'
   flash_light:
     description:
     - '<prefix>&8• &7Стиль: как &eStarlight&7. Passive: &aСила II&7 и &9Сопротивление I&7.'
-    - '<prefix>&8• &dF&7 blinds игроки, мобы и животные in &e15 блоков&7 for &e20s&7. Перезарядка: &e2min&7.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 blinds игроки, мобы и животные in &e15 блоков&7 for &e20s&7. Перезарядка: &e2min&7.'
     - <prefix>&8• &dШифт + ЛКМ&7 fires a 15-block light beam с &c2 сердец&7, tiny горение и knockback.
   stormstrike:
     description:
     - '<prefix>&8• &7Стиль: как &eStormfront&7. &3V One только&7 с electric прыгните start и &e2.75x&7 fly speed.'
-    - '<prefix>&8• &dF&7 fires a jagged 35-block lightning beam for max &e6s&7. Урон: &c3 сердец&7 и Slowness. Only overheats
-      после full use.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 fires a jagged 35-block lightning beam for max &e6s&7. Урон: &c3 сердец&7 и Slowness. Only overheats после full use.'
     - <prefix>&8• &dШифт + ЛКМ&7 summons &e4 lightning strikes&7. Every 5th melee удар calls a lightning strike.
     - '<prefix>&8• &7Шифт fall impact: 6 lightning strikes in a 10-block radius. Перезарядка: &e100s&7.'
     - '<prefix>&8• &7Пассивные усиления: &aСила III&7, &9Сопротивление III&7 и &c10 extra сердец&7.'
   fire_sonic:
     description:
     - '<prefix>&8• &cFlame Aura&7: каждый melee удар applies heavy горение.'
-    - <prefix>&8• &dF&7 fires a thin flame beam for max &e2s&7. Damage ticks are slower than Тепловое зрение и только overheat
-      после full use.
+    - <prefix>&8• &dF &8(Swap Item with Offhand)&7 fires a thin flame beam for max &e2s&7. Damage ticks are slower than Тепловое зрение и только overheat после full use.
   toxic_cloud:
     description:
     - '<prefix>&8• &7Пассивные усиления: &aСила I&7 и &9Сопротивление I&7. Immune to яд.'
-    - '<prefix>&8• &dF&7 releases яд gas in front of you, applying &2Яд IV&7. Перезарядка: &e2min&7.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 releases яд gas in front of you, applying &2Яд IV&7. Перезарядка: &e2min&7.'
     - <prefix>&8• &dШифт + ЛКМ&7 shoots short яд vomit for &c1.5 сердец&7 и &2Яд IV&7. Melee ударs apply short Яд I.
   the_countess:
     description:
     - '<prefix>&8• &7Стиль: как &cCrimson Countess&7.'
-    - '<prefix>&8• &dF&7 launches a fireball. Перезарядка: &e3s&7. Урон: &c2-4 сердец&7.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 launches a fireball. Перезарядка: &e3s&7. Урон: &c2-4 сердец&7.'
     - <prefix>&8• &7Double-прыгните с small fire animation. Melee ударs apply горение.
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7, &9Сопротивление I&7 и &6Огнестойкость&7.'
   the_warrior:
     description:
     - '<prefix>&8• &7Стиль: как &eQueen Maeve&7.'
     - '<prefix>&8• &7Пассивные усиления: &aСила III&7, &9Сопротивление II&7, &dРегенерация I&7 и &c10 extra сердец&7.'
-    - <prefix>&8• &7High fall protection, strong double-прыгните и small explosive landing from &e6+ блоков&7 только пока
-      sneaking.
+    - <prefix>&8• &7High fall protection, strong double-прыгните и small explosive landing from &e6+ блоков&7 только пока sneaking.
   the_headpopper:
     description:
     - '<prefix>&8• &7Стиль: как &cVictoria Neuman&7.'
     - <prefix>&8• &dШифт + ЛКМ&7 marks a цель up to &e30 блоков&7 for a &c3s&7 обратный отсчёт.
     - '<prefix>&8• &7Урон: &c12.5 сердец&7, мобы/животные take &cx2.5&7. Перезарядка: &e20s&7.'
-    - '<prefix>&8• &dF&7 damages all nearby living цельs for &c25% current лечениеth&7. Перезарядка: &e2min&7.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 damages all nearby living цельs for &c25% current лечениеth&7. Перезарядка: &e2min&7.'
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7, &9Сопротивление II&7, &dРегенерация I&7 и Тепловое зрение immunity.'
   spider_weaver:
     description:
     - '<prefix>&8• &7Стиль: как &fWebweaver&7.'
-    - '<prefix>&8• &dF&7 или &dШифт + ЛКМ&7 shoots a web projectile. Перезарядка: &e3s&7.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 или &dШифт + ЛКМ&7 shoots a web projectile. Перезарядка: &e3s&7.'
     - <prefix>&8• &7Targets take damage, are slowed/fixed и larger cobweb clusters can stay up to &e1min&7.
-    - '<prefix>&8• &7Can climb walls и takes no урон от падения. Passive: &aСила I&7, &9Сопротивление I&7 и &dРегенерация
-      I&7.'
+    - '<prefix>&8• &7Can climb walls и takes no урон от падения. Passive: &aСила I&7, &9Сопротивление I&7 и &dРегенерация I&7.'
   heal_angel:
     description:
     - '<prefix>&8• &7Стиль: как &fPrivate Angel&7. &3V One только&7.'
     - '<prefix>&8• &7Пассивные усиления: &aСила II&7, &9Сопротивление II&7, &dРегенерация II&7 и &c5 extra сердец&7.'
-    - '<prefix>&8• &dШифт + melee удар&7 лечит the цель for &a10% max лечениеth&7, at least &a1 heart&7, и deals no damage.
-      Перезарядка: &e1s&7.'
-    - '<prefix>&8• &dF&7 командаs a цельed mob/animal to attack nearby цельs except you for &e2min&7. Перезарядка: &e30s&7.'
+    - '<prefix>&8• &dШифт + melee удар&7 лечит the цель for &a10% max лечениеth&7, at least &a1 heart&7, и deals no damage. Перезарядка: &e1s&7.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 командаs a цельed mob/animal to attack nearby цельs except you for &e2min&7. Перезарядка: &e30s&7.'
   submarine:
     description:
     - '<prefix>&8• &7Стиль: как &bTorpedo&7. &3V One только&7.'
     - '<prefix>&8• &7Passive: &aСила II&7, &9Сопротивление II&7, Water Breathing, Dolphin''s Grace и Conduit Power.'
     - '<prefix>&8• &7In вода: &aСила V&7 и Регенерация.'
-    - <prefix>&8• &dF&7 uses a double-strength dash с &e1s cooldown&7. &dШифт + ЛКМ&7 toggles stronger sonar с &e65 блоков&7
-      range.
+    - <prefix>&8• &dF &8(Swap Item with Offhand)&7 uses a double-strength dash с &e1s cooldown&7. &dШифт + ЛКМ&7 toggles stronger sonar с &e65 блоков&7 range.
   the_detonator:
     description:
     - '<prefix>&8• &7Стиль: как &cNaqib&7.'
-    - '<prefix>&8• &dШифт + ЛКМ&7 starts a cancellable обратный отсчёт, then releases a huge self-centered explosion. Перезарядка:
-      &e10s&7.'
+    - '<prefix>&8• &dШифт + ЛКМ&7 starts a cancellable обратный отсчёт, then releases a huge self-centered explosion. Перезарядка: &e10s&7.'
     - '<prefix>&8• &7Passive: &aСила II&7, &9Сопротивление I&7 и &6Огнестойкость&7.'
     - <prefix>&8• &7Melee ударs горение цельs. Every 3rd удар triggers a small explosive удар.
   the_veteran:
@@ -231,6 +217,7 @@ ability:
     - '<prefix>&8• &dШифт + ЛКМ&7: &e5s charge&7, then Chest Beam.'
     - '<prefix>&8• &7Beam: high damage, block горение и player способность removal.'
     - <prefix>&8• &7Starts с a strong point-blank blast и mushroom cloud.
+  granted_tip: <prefix>&8• &7Use &f/cv stats&7 anytime to view your current ability and controls.
 toggle:
   heat_vision_on: '{label} &aактивировано'
   heat_vision_off: '{label} &7deактивировано'
@@ -357,6 +344,7 @@ command:
   usage_give: '<prefix>&cИспользование: &7/cv give <player> <bottle|способность> [potionType]'
   usage_remove: '<prefix>&cИспользование: &7/cv remove <player>'
   tutorial_given: <prefix>&aYou received the Compound V handbook.
+  stats: <prefix>&8• &7/cv stats &d[player] &8- &7shows the active ability and controls
 info:
   plugin_header: <prefix>&8━━━━━━━━ &aCompoundV Info &8━━━━━━━━
   plugin_version: '<prefix>&8• &7Версия: &a{version}'
@@ -419,7 +407,7 @@ serum:
   unstable_v_serum:
     name: '&bUnstable V Serum'
     lore_1: '&7Постоянная V serum still unstable.'
-    lore_2: '&8Далее: Netherite Scrap.'
+    lore_2: '&8Далее: Ancient Debris.'
   draconic_serum:
     name: '&5Draconic Serum'
     lore_1: '&7Dragon-breath V-One base.'
@@ -427,7 +415,7 @@ serum:
   echo_charged_serum:
     name: '&3Echo-Charged Serum'
     lore_1: '&7Resonating V-One intermediate.'
-    lore_2: '&8Далее: Netherite Scrap.'
+    lore_2: '&8Далее: Ancient Debris.'
   reinforced_serum:
     name: '&8Reinforced Serum'
     lore_1: '&7Netherite-reinforced V-One serum.'
@@ -459,7 +447,7 @@ serum:
   airborne_v_pathogen:
     name: '&aAirborne V-Pathogen'
     lore_1: '&7Airborne pathogen carrier.'
-    lore_2: '&8Далее: Netherite Scrap.'
+    lore_2: '&8Далее: Ancient Debris.'
   stabilized_v_null_pathogen:
     name: '&2Stabilized V-Null Pathogen'
     lore_1: '&7Stabilized V-Null core.'
@@ -535,7 +523,7 @@ tutorial_book:
   - '&2= Unstable V'
   - ''
   - '&0Unstable V'
-  - '&8+ Netherite'
+  - '&8+ Ancient Debris'
   - '&2= Compound V'
   - ''
   - '&0Постоянная until Anti V.'
@@ -553,7 +541,7 @@ tutorial_book:
   - '&3&lV One 2/2'
   - ''
   - '&03) Echo-Charged'
-  - '&8+ Netherite'
+  - '&8+ Ancient Debris'
   - '&2= Reinforced'
   - ''
   - '&04) Reinforced'
@@ -593,7 +581,7 @@ tutorial_book:
   - '&2= Airborne'
   - ''
   - '&0Airborne'
-  - '&8+ Netherite'
+  - '&8+ Ancient Debris'
   - '&2= Stabilized'
   - '&0Stabilized + Totem'
   - '&2= V-Null'
@@ -620,3 +608,13 @@ tutorial_book:
   - ''
   - '&4Side effects are'
   - '&4added to powers.'
+stats:
+  header: <prefix>&8━━━━━━━━ &aCompoundV Stats &8━━━━━━━━
+  player: '<prefix>&8• &7Player: &a{player}'
+  ability: '<prefix>&8• &7Ability: &a&l{name}'
+  source: '<prefix>&8• &7Source: &b{potion}'
+  permanent: '<prefix>&8• &7Status: &aPermanent'
+  temporary: '<prefix>&8• &7Expires in: &e{minutes}m {seconds}s'
+  description_header: <prefix>&8────── &aAbility Description &8──────
+  none: <prefix>&a{player}&7 has no active CompoundV ability.
+  footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

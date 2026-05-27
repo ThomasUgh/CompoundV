@@ -1,4 +1,4 @@
-language_file_version: 20
+language_file_version: 21
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -14,6 +14,7 @@ potion:
   drink_v_one: "<prefix>&3V One&7 is activating. Brace yourself."
   drink_anti_v: "<prefix>&cAnti V&7 is removing your active ability."
   no_ability: "<prefix>&7You do not have an active ability."
+  milk_blocked: "<prefix>&cMilk cannot remove Compound V powers. Use Anti V or V-Null mechanics instead."
   no_chances: "<prefix>&cThis potion has no valid abilities configured. Please contact an admin."
   roll_failed: "<prefix>&cThe serum could not be processed. Please contact an admin."
 
@@ -34,6 +35,7 @@ ability:
   granted_name: "<prefix>&7You unlocked &a&l{name}&r&7 through &b{potion}&7."
   controls_header: "<prefix>&8────── &aControls & Effects &8──────"
   granted_expires: "<prefix>&8• &7Duration: &e{minutes}m {seconds}s"
+  granted_tip: "<prefix>&8• &7Use &f/cv stats&7 anytime to view your current ability and controls."
   granted_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
   lost_on_death: "<prefix>&cYou lost your ability on death."
@@ -45,7 +47,7 @@ ability:
     description:
       - "<prefix>&8• &7Style: like &cHomelander&7."
       - "<prefix>&8• &aFlight&7 is enabled automatically."
-      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle. Default: &e5 hearts&7, &e44 blocks&7."
+      - "<prefix>&8• &cHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle. Default: &e5 hearts&7, &e44 blocks&7."
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7 and &cBonus Hearts&7."
@@ -53,7 +55,7 @@ ability:
     description:
       - "<prefix>&8• &7Style: like &cHomelander&7."
       - "<prefix>&8• &aFlight&7 is enabled automatically with stronger V One boosts."
-      - "<prefix>&8• &cHeat Vision&7: press &dF&7 to toggle. Default: &e4.725 hearts&7, &e50 blocks&7."
+      - "<prefix>&8• &cHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle. Default: &e4.725 hearts&7, &e50 blocks&7."
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7, &6Fire Resistance&7 and &cBonus Hearts&7."
@@ -68,20 +70,20 @@ ability:
       - "<prefix>&8• &7Passive boosts: &aStrength IV&7 and &9Resistance IV&7."
   size_changer:
     description:
-      - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance II&7."
-      - "<prefix>&8• &dSneak + Left-Click + look up&7: become &52x bigger&7, double damage, &aJump Boost II&7 and &c+10 hearts&7 for max &e1min&7."
+      - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7."
+      - "<prefix>&8• &dSneak + Left-Click + look up&7: become &52x bigger&7 with reduced bonus damage for max &e1min&7."
       - "<prefix>&8• &dSneak + Left-Click + look down&7: become &53.5x smaller&7 for max &e2min&7."
       - "<prefix>&8• &7While transformed, &dSneak + Left-Click + look up/down&7 returns you to normal instantly."
       - "<prefix>&8• &7Cooldown starts after returning to normal."
   size_changer_v_one:
     description:
-      - "<prefix>&8• &3V One Upgrade&7 for SizeChanger. Passive: &aStrength III&7 and &9Resistance II&7."
-      - "<prefix>&8• &dSneak + Left-Click + look up&7: about &53x bigger&7, stronger damage, &aJump Boost IV&7 and &c+20 hearts&7."
+      - "<prefix>&8• &3V One Upgrade&7 for SizeChanger. Passive: &aStrength I&7 and &9Resistance I&7."
+      - "<prefix>&8• &dSneak + Left-Click + look up&7: about &53x bigger&7 with reduced V-One bonus damage."
       - "<prefix>&8• &dSneak + Left-Click + look down&7: about &57x smaller&7."
       - "<prefix>&8• &7Only obtainable by upgrading an active SizeChanger with &3V One&7."
   heat_vision:
     description:
-      - "<prefix>&8• &bHeat Vision&7: press &dF&7 to toggle the beam."
+      - "<prefix>&8• &bHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle the beam."
       - "<prefix>&8• &7Stages: &bI&7 = 1.35 hearts / 30 blocks, &aII&7 = 2 hearts / 35 blocks."
       - "<prefix>&8• &7More stages: &6III&7 = 2.25 hearts / 37 blocks, &cIV&7 = 2.7 hearts / 40 blocks."
       - "<prefix>&8• &7Can melt ice, snow blocks, flat snow layers, and cook raw mob drops."
@@ -90,18 +92,18 @@ ability:
       - "<prefix>&8• &7Style: like &bThe Deep&7."
       - "<prefix>&8• &bWater Breathing&7, &bDolphin's Grace VIII&7, &eSpeed while underwater&7 and &3Conduit Power II&7 are active permanently."
       - "<prefix>&8• &bSonar&7: &dSneak + Left-Click Air&7 while underwater to reveal nearby entities."
-      - "<prefix>&8• &bRiptide Dash&7: &dSneak + Right-Click&7 in water or rain, similar to Riptide IV without holding a trident."
+      - "<prefix>&8• &bRiptide Dash&7: press &dF &8(Swap Item with Offhand)&7 in water or rain, similar to Riptide IV without holding a trident."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
       - "<prefix>&8• &7While underwater, Strength and Resistance are increased by &a+1 level&7."
   jumper:
     description:
       - "<prefix>&8• &aStrength I&7 is active permanently."
-      - "<prefix>&8• &aJump Burst&7: press &dF&7 for &aJump Boost V&7 and no fall damage while active."
+      - "<prefix>&8• &aJump Burst&7: press &dF &8(Swap Item with Offhand)&7 for &aJump Boost V&7 and no fall damage while active."
       - "<prefix>&8• &7Default active time: &e10s&7. Cooldown: &e15s&7."
   shockwave:
     description:
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance I&7."
-      - "<prefix>&8• &eShockwave&7: press &dF&7 to release a 10-block knockback wave."
+      - "<prefix>&8• &eShockwave&7: press &dF &8(Swap Item with Offhand)&7 to release a 10-block knockback wave."
       - "<prefix>&8• &7Damage: &c3 hearts&7 to players, &c6 hearts&7 to mobs. Cooldown: &e2min&7."
   vision:
     description:
@@ -110,17 +112,17 @@ ability:
   the_runner:
     description:
       - "<prefix>&8• &7Style: like &eA-Train&7."
-      - "<prefix>&8• &eRunner Speed&7: press &dF&7 to cycle Speed X, XI, XII, XV and off."
+      - "<prefix>&8• &eRunner Speed&7: press &dF &8(Swap Item with Offhand)&7 to cycle Speed X, XI, XII, XV and off."
       - "<prefix>&8• &eImpact Run&7: running through entities at Speed X+ deals &c6 hearts&7, plus &c+1 heart&7 per extra speed level."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance I&7, &c5 extra hearts&7 and no melee cooldown."
   teleporter:
     description:
-      - "<prefix>&8• &5Blink&7: press &dF&7 to teleport up to &e35 blocks&7."
+      - "<prefix>&8• &5Blink&7: press &dF &8(Swap Item with Offhand)&7 to teleport up to &e35 blocks&7."
       - "<prefix>&8• &7Cooldown: &e2 seconds&7. Includes &aStrength I&7 and &9Resistance I&7."
   teleporter_v_one:
     description:
       - "<prefix>&8• &3V One Upgrade&7 for Teleporter."
-      - "<prefix>&8• &5Blink&7: press &dF&7 to teleport up to &e50 blocks&7."
+      - "<prefix>&8• &5Blink&7: press &dF &8(Swap Item with Offhand)&7 to teleport up to &e50 blocks&7."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7 and &9Resistance III&7."
   fly:
     description:
@@ -129,7 +131,7 @@ ability:
       - "<prefix>&8• &7Includes &aStrength I&7 and &9Resistance I&7."
   speedster:
     description:
-      - "<prefix>&8• &eSuper Speed&7: press &dF&7 to toggle it on/off."
+      - "<prefix>&8• &eSuper Speed&7: press &dF &8(Swap Item with Offhand)&7 to toggle it on/off."
       - "<prefix>&8• &7Includes a small &9Resistance&7 bonus while active."
   strength:
     description:
@@ -137,7 +139,7 @@ ability:
       - "<prefix>&8• &7Includes a small &9Resistance&7 bonus."
   the_ghost:
     description:
-      - "<prefix>&8• &5Ghost Mode&7: press &dF&7 to toggle invisibility."
+      - "<prefix>&8• &5Ghost Mode&7: press &dF &8(Swap Item with Offhand)&7 to toggle invisibility."
       - "<prefix>&8• &7When enabled you receive &5Invisibility II&7 and mobs will not target you."
       - "<prefix>&8• &7Existing mob targets are cleared while Ghost Mode is active."
       - "<prefix>&8• &7Passive boosts: &9Resistance II&7, &aStrength I&7 and &6Fire Resistance&7."
@@ -151,33 +153,33 @@ ability:
   the_worm:
     description:
       - "<prefix>&8• &7Very fast digging with &eHaste IV&7, focused on dirt, grass, gravel and sand gameplay."
-      - "<prefix>&8• &dF&7 toggles &bNight Vision&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 toggles &bNight Vision&7."
       - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7."
   flash_light:
     description:
       - "<prefix>&8• &7Style: like &eStarlight&7. Passive: &aStrength II&7 and &9Resistance I&7."
-      - "<prefix>&8• &dF&7 blinds players, mobs and animals in &e15 blocks&7 for &e20s&7. Cooldown: &e2min&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 blinds players, mobs and animals in &e15 blocks&7 for &e20s&7. Cooldown: &e2min&7."
       - "<prefix>&8• &dSneak + Left-Click&7 fires a 15-block light beam with &c2 hearts&7, tiny burn and knockback."
   stormstrike:
     description:
       - "<prefix>&8• &7Style: like &eStormfront&7. &3V One only&7 with electric jump start and &e2.75x&7 fly speed."
-      - "<prefix>&8• &dF&7 fires a jagged 35-block lightning beam for max &e6s&7. Damage: &c3 hearts&7 and Slowness. Only overheats after full use."
-      - "<prefix>&8• &dSneak + Left-Click&7 summons &e4 lightning strikes&7. Every 5th melee hit calls a lightning strike."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 fires a jagged 35-block lightning beam for max &e6s&7. Damage: &c2.55 hearts&7 and Slowness. Only overheats after full use."
+      - "<prefix>&8• &dSneak + Left-Click&7 summons &e4 real lightning strikes&7. Every 5th melee hit calls a lightning strike."
       - "<prefix>&8• &7Sneak fall impact: 6 lightning strikes in a 10-block radius. Cooldown: &e100s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength III&7, &9Resistance III&7 and &c10 extra hearts&7."
   fire_sonic:
     description:
       - "<prefix>&8• &cFlame Aura&7: every melee hit applies heavy burn."
-      - "<prefix>&8• &dF&7 fires a thin flame beam for max &e2s&7. Damage ticks are slower than Heat Vision and only overheat after full use."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 fires a thin flame beam for max &e2s&7. Damage ticks are close to Heat Vision speed but weaker and only overheat after full use."
   toxic_cloud:
     description:
       - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7. Immune to poison."
-      - "<prefix>&8• &dF&7 releases poison gas in front of you, applying &2Poison IV&7. Cooldown: &e2min&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 releases poison gas in front of you, applying &2Poison IV&7. Cooldown: &e2min&7."
       - "<prefix>&8• &dSneak + Left-Click&7 shoots short poison vomit for &c1.5 hearts&7 and &2Poison IV&7. Melee hits apply short Poison I."
   the_countess:
     description:
       - "<prefix>&8• &7Style: like &cCrimson Countess&7."
-      - "<prefix>&8• &dF&7 launches a fireball. Cooldown: &e3s&7. Damage: &c2-4 hearts&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 launches a fireball. Cooldown: &e5s&7. Damage: &c2-4 hearts&7."
       - "<prefix>&8• &7Double-jump with small fire animation. Melee hits apply burn."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance I&7 and &6Fire Resistance&7."
   the_warrior:
@@ -190,12 +192,12 @@ ability:
       - "<prefix>&8• &7Style: like &cVictoria Neuman&7."
       - "<prefix>&8• &dSneak + Left-Click&7 marks a target up to &e30 blocks&7 for a &c3s&7 countdown."
       - "<prefix>&8• &7Damage: &c12.5 hearts&7, mobs/animals take &cx2.5&7. Cooldown: &e20s&7."
-      - "<prefix>&8• &dF&7 damages all nearby living targets for &c25% current health&7. Cooldown: &e2min&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 damages all nearby living targets for &c25% current health&7. Cooldown: &e2min&7."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance II&7, &dRegeneration I&7 and Heat Vision immunity."
   spider_weaver:
     description:
       - "<prefix>&8• &7Style: like &fWebweaver&7."
-      - "<prefix>&8• &dF&7 or &dSneak + Left-Click&7 shoots a web projectile. Cooldown: &e3s&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 or &dSneak + Left-Click&7 shoots a web projectile. Cooldown: &e5s&7."
       - "<prefix>&8• &7Targets take damage, are slowed/fixed and larger cobweb clusters can stay up to &e1min&7."
       - "<prefix>&8• &7Can climb walls and takes no fall damage. Passive: &aStrength I&7, &9Resistance I&7 and &dRegeneration I&7."
   heal_angel:
@@ -203,13 +205,13 @@ ability:
       - "<prefix>&8• &7Style: like &fPrivate Angel&7. &3V One only&7."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance II&7, &dRegeneration II&7 and &c5 extra hearts&7."
       - "<prefix>&8• &dSneak + melee hit&7 heals the target for &a10% max health&7, at least &a1 heart&7, and deals no damage. Cooldown: &e1s&7."
-      - "<prefix>&8• &dF&7 commands a targeted mob/animal to attack nearby targets except you for &e2min&7. Cooldown: &e30s&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 commands a targeted mob/animal to attack nearby targets except you for &e2min&7. Cooldown: &e30s&7."
   submarine:
     description:
       - "<prefix>&8• &7Style: like &bTorpedo&7. &3V One only&7."
       - "<prefix>&8• &7Passive: &aStrength II&7, &9Resistance II&7, Water Breathing, Dolphin's Grace and Conduit Power."
       - "<prefix>&8• &7In water: &aStrength V&7 and Regeneration."
-      - "<prefix>&8• &dF&7 uses a double-strength dash with &e1s cooldown&7. &dSneak + Left-Click&7 toggles stronger sonar with &e65 blocks&7 range."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 uses a double-strength dash with &e1s cooldown&7. &dSneak + Left-Click&7 toggles stronger sonar with &e65 blocks&7 range."
   the_detonator:
     description:
       - "<prefix>&8• &7Style: like &cNaqib&7."
@@ -358,6 +360,7 @@ command:
   give_ability: "<prefix>&8• &7/cv give &a<player>&7 &c<ability>&7 &d[potionType]"
   remove: "<prefix>&8• &7/cv remove &a<player>"
   info_self: "<prefix>&8• &7/cv info &d[player]"
+  stats: "<prefix>&8• &7/cv stats &d[player] &8- &7shows the active ability and controls"
   tutorial: "<prefix>&8• &7/cv tutorial &8- &7gives you the Compound V handbook"
   reload: "<prefix>&8• &7/cv reload"
   abilities_list: "<prefix>&8• &7Abilities: &a{list}"
@@ -389,6 +392,17 @@ info:
   player_controls_header: "<prefix>&8────── &aControls & Effects &8──────"
   player_no_target_hint: "<prefix>&8• &7Use &f/cv info <player>&7 to inspect a player."
   plugin_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+stats:
+  header: "<prefix>&8━━━━━━━━ &aCompoundV Stats &8━━━━━━━━"
+  player: "<prefix>&8• &7Player: &a{player}"
+  ability: "<prefix>&8• &7Ability: &a&l{name}"
+  source: "<prefix>&8• &7Source: &b{potion}"
+  permanent: "<prefix>&8• &7Status: &aPermanent"
+  temporary: "<prefix>&8• &7Expires in: &e{minutes}m {seconds}s"
+  description_header: "<prefix>&8────── &aAbility Description &8──────"
+  none: "<prefix>&a{player}&7 has no active CompoundV ability."
+  footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 bottle:
   compound_v:
@@ -437,7 +451,7 @@ serum:
   unstable_v_serum:
     name: "&bUnstable V Serum"
     lore_1: "&7Permanent V serum still unstable."
-    lore_2: "&8Next: Netherite Scrap."
+    lore_2: "&8Next: Ancient Debris."
   draconic_serum:
     name: "&5Draconic Serum"
     lore_1: "&7Dragon-breath V-One base."
@@ -445,7 +459,7 @@ serum:
   echo_charged_serum:
     name: "&3Echo-Charged Serum"
     lore_1: "&7Resonating V-One intermediate."
-    lore_2: "&8Next: Netherite Scrap."
+    lore_2: "&8Next: Ancient Debris."
   reinforced_serum:
     name: "&8Reinforced Serum"
     lore_1: "&7Netherite-reinforced V-One serum."
@@ -477,7 +491,7 @@ serum:
   airborne_v_pathogen:
     name: "&aAirborne V-Pathogen"
     lore_1: "&7Airborne pathogen carrier."
-    lore_2: "&8Next: Netherite Scrap."
+    lore_2: "&8Next: Ancient Debris."
   stabilized_v_null_pathogen:
     name: "&2Stabilized V-Null Pathogen"
     lore_1: "&7Stabilized V-Null core."
@@ -559,7 +573,7 @@ tutorial_book:
     - "&2= Unstable V"
     - ""
     - "&0Unstable V"
-    - "&8+ Netherite"
+    - "&8+ Ancient Debris"
     - "&2= Compound V"
     - ""
     - "&0Permanent until Anti V."
@@ -577,7 +591,7 @@ tutorial_book:
     - "&3&lV One 2/2"
     - ""
     - "&03) Echo-Charged"
-    - "&8+ Netherite"
+    - "&8+ Ancient Debris"
     - "&2= Reinforced"
     - ""
     - "&04) Reinforced"
@@ -617,7 +631,7 @@ tutorial_book:
     - "&2= Airborne"
     - ""
     - "&0Airborne"
-    - "&8+ Netherite"
+    - "&8+ Ancient Debris"
     - "&2= Stabilized"
     - "&0Stabilized + Totem"
     - "&2= V-Null"

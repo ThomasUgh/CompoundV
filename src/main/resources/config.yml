@@ -1,11 +1,24 @@
+# CompoundV 1.1.1 configuration
+# Keep this file small. Values not listed here use safe built-in defaults.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# General
+# ─────────────────────────────────────────────────────────────────────────────
 # Available languages: en, de, es, fr, hi, ru
 language: en
 
 updates:
+  # Checks Modrinth for a newer CompoundV version on startup.
   enabled: true
+  # Print update notices to the server console.
   console: true
+  # Show update notices to OP players when they join.
   op_chat: true
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Potion roll chances
+# ─────────────────────────────────────────────────────────────────────────────
+# These are weighted chances, not strict percentages. Higher value = more common.
 compound_v:
   chances:
     the_patriot: 1
@@ -36,6 +49,9 @@ compound_v:
     the_detonator: 6
 
 temp_v:
+  # Temp V uses minutes. Re-drinking Temp V can extend the same temporary power.
+  min_duration_minutes: 15
+  max_duration_minutes: 120
   chances:
     fly: 10
     heat_vision: 9
@@ -46,582 +62,101 @@ temp_v:
     strength: 25
     the_ghost: 15
     fire: 10
-  min_duration_minutes: 15
-  max_duration_minutes: 120
 
 v_one:
+  # V One can roll V-One-only powers. Upgrade powers still require an existing CV power.
+  drink_effect_seconds: 5
   chances:
     the_veteran: 3
     sonic_boom: 3
     stormstrike: 4
     heal_angel: 6
     submarine: 4
-  drink_effect_seconds: 5
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Core combat tuning
+# ─────────────────────────────────────────────────────────────────────────────
 heat_vision:
-  # Bukkit damage uses health points internally. These stage values are configured as hearts.
-  stages:
-    stage_1:
-      damage_hearts: 1.35
-      range: 30.0
-    stage_2:
-      damage_hearts: 2.0
-      range: 35.0
-    stage_3:
-      damage_hearts: 2.25
-      range: 37.0
-    stage_4:
-      damage_hearts: 2.7
-      range: 40.0
-  v_one_received_damage_multiplier: 0.5
-  damage_interval: 2
-  # Entity raytrace hit radius in blocks. 0.05 is the current vanilla-like default.
+  # Entity raytrace hit radius in blocks. 0.05 is the old/default thin beam.
   hit_radius: 0.05
-  ignite_blocks: true
-  ignite_entities: true
-  break_glass: true
-  break_leaves: true
-  fire_particles: false
-  max_continuous_ticks: 400
-  overheat_cooldown_ms: 10000
+  damage_interval: 2
+  stages:
+    stage_1: { damage_hearts: 1.35, range: 30.0 }
+    stage_2: { damage_hearts: 2.0, range: 35.0 }
+    stage_3: { damage_hearts: 2.25, range: 37.0 }
+    stage_4: { damage_hearts: 2.7, range: 40.0 }
 
 abilities:
-  heat_vision:
-    strength_level: 1
-    resistance_level: 1
-
-  fly:
-    strength_level: 1
-    resistance_level: 1
-    launch_velocity: 1.75
-    launch_peak_ticks: 14
-    launch_cooldown_ms: 10000
-    launch_fly_speed: 0.15
-
+  # Stormstrike: F = beam, Sneak + Left-Click = 4 lightning strikes.
   stormstrike:
-    strength_level: 3
-    resistance_level: 3
-    extra_hearts: 10.0
-    fly_speed: 0.275
-    launch_velocity: 2.75
-    launch_peak_ticks: 22
-    launch_cooldown_ms: 10000
-    lightning_cooldown_ms: 3000
-    lightning_range: 60.0
-    lightning_trace_radius: 1.7
+    beam_damage_hearts: 2.55     # 15% weaker than the previous 3.0 hearts
+    beam_hit_radius: 6.5         # Damage radius around the visible beam particles
+    lightning_tick_damage_hearts: 0.9  # 25% weaker strike tick damage
     lightning_hit_radius: 7.0
-    lightning_damage_hearts: 3.5
-    lightning_tick_damage_hearts: 1.2
-    lightning_duration_ticks: 30
-    lightning_damage_interval_ticks: 2
-    lightning_slowness_ticks: 80
-    lightning_slowness_amplifier: 1
-    lightning_min_bolts: 4
-    lightning_max_bolts: 4
-    lightning_spread: 1.8
-    beam_range: 35.0
-    beam_damage_hearts: 3.0
-    beam_damage_interval_ticks: 2
-    beam_hit_radius: 6.5
-    beam_max_ticks: 120
-    beam_cooldown_ms: 5000
-    beam_segment_length: 0.75
-    beam_zigzag_strength: 0.46
-    beam_slowness_ticks: 60
-    beam_slowness_amplifier: 1
-    melee_lightning_every_hits: 5
-    melee_lightning_slowness_ticks: 80
-    fall_impact_min_blocks: 10.0
-    fall_impact_cooldown_ms: 100000
-    fall_impact_radius: 10.0
-    fall_impact_bolts: 6
-    fall_impact_power: 1.1
-    fall_impact_block_damage: true
-    fall_impact_damage_hearts: 3.0
-    fall_impact_knockback: 1.65
 
-  sonic_boom:
-    strength_level: 4
-    resistance_level: 4
-    launch_velocity: 3.05
-    launch_peak_ticks: 24
-    launch_cooldown_ms: 10000
-    launch_fly_speed: 0.30
-    launch_block_damage: true
-    launch_block_damage_power: 1.15
-    launch_entity_radius: 3.5
-    launch_entity_damage_hearts: 4.0
-    launch_entity_knockback: 1.4
-    fall_impact_particle_height: 10
-    fall_impact_block_height: 35
-    fall_impact_cooldown_ms: 60000
-    fall_impact_power: 10.0
-    fall_impact_block_damage: true
-    fall_impact_entity_radius: 9.0
-    fall_impact_entity_damage_hearts: 16.0
-    fall_impact_player_damage_multiplier: 0.8
-    fall_impact_knockback: 2.4
-    sonic_beam_cooldown_ms: 3000
-    sonic_beam_range: 30.0
-    sonic_beam_radius: 1.85
-    sonic_beam_damage_hearts: 5.0
-    sonic_beam_knockback: 1.85
-    sonic_beam_vertical_knockback: 0.35
-    sonic_beam_pve_damage_multiplier: 2.0
-    sonic_beam_impact_power: 0.65
-    sonic_beam_impact_block_damage: true
-    sonic_beam_impact_radius: 2.5
-    sonic_beam_impact_damage_hearts: 2.0
-    sonic_ring_cooldown_ms: 30000
-    sonic_ring_radius: 5.0
-    sonic_ring_damage_hearts: 12.32
-    sonic_ring_knockback: 3.35
-    sonic_ring_vertical_knockback: 0.75
-    extra_hearts: 10.0
-    melee_explosion_damage_multiplier: 1.15
-    melee_critical_damage_multiplier: 1.20
+  # FireSonic is intentionally weaker than Heat Vision but ticks at a similar speed.
+  fire_sonic:
+    beam_damage_hearts: 0.75
+    beam_fire_ticks: 70
+    melee_fire_ticks: 80
 
+  # SizeChanger keeps the size fantasy, but transformation damage is heavily reduced.
   size_changer:
-    strength_level: 2
-    resistance_level: 2
-    cooldown_ms: 60000
-    big_duration_ticks: 1200
-    small_duration_ticks: 2400
-    big_scale_bonus: 1.0
-    small_scale_bonus: -0.7142857143
-    big_extra_hearts: 10.0
-    big_damage_multiplier: 2.0
-    big_jump_boost_level: 2
-
+    strength_level: 1
+    resistance_level: 1
+    big_damage_multiplier: 1.25
+    big_extra_hearts: 0.0
+    big_jump_boost_level: 0
   size_changer_v_one:
-    strength_level: 3
-    resistance_level: 2
-    cooldown_ms: 60000
-    big_duration_ticks: 1200
-    small_duration_ticks: 2400
-    big_scale_bonus: 2.0
-    small_scale_bonus: -0.8571428571
-    big_extra_hearts: 20.0
-    big_damage_multiplier: 4.0
-    big_jump_boost_level: 4
-
-  the_patriot:
-    shared:
-      launch_velocity: 3.5
-      launch_peak_ticks: 28
-      launch_cooldown_ms: 10000
-      launch_fly_speed: 0.375
-      glow_radius: 50
-      fall_impact_particle_height: 10
-      fall_impact_block_height: 40
-      fall_impact_cooldown_ms: 60000
-      fall_impact_power: 4.0
-      fall_impact_block_damage: true
-      extra_hearts: 10
-
-    compound_v:
-      strength_level: 3
-      resistance_level: 2
-      regen_level: 1
-      fire_resistance: false
-      launch_fly_speed: 0.375
-      heat_vision_range: 44.0
-      heat_vision_damage_hearts: 4.5
-      heat_vision_damage_multiplier: 1.0
-      heat_vision_cooks_meat: true
-      heat_vision_max_continuous_ticks: 500
-      heat_vision_overheat_cooldown_ms: 5000
-
-    v_one:
-      strength_level: 4
-      resistance_level: 3
-      regen_level: 3
-      fire_resistance: true
-      launch_fly_speed: 0.400
-      heat_vision_range: 50.0
-      heat_vision_damage_hearts: 4.725
-      heat_vision_damage_multiplier: 1.0
-      heat_vision_cooks_meat: true
-      heat_vision_max_continuous_ticks: 600
-      heat_vision_overheat_cooldown_ms: 5000
-
-  the_veteran:
-    strength_level: 5
-    resistance_level: 4
-    extra_hearts: 20
-    burst_cooldown_ms: 300000
-    charge_duration_ticks: 100
-    charge_period_ticks: 5
-    beam_duration_ticks: 100
-    beam_period_ticks: 2
-    beam_range: 53.0
-    beam_radius: 1.35
-    beam_particle_step: 0.65
-    beam_particle_density_multiplier: 0.70
-    beam_particle_start_distance: 1.8
-    beam_damage_amount: 50.0
-    beam_entity_damage_multiplier: 1.045
-    beam_player_damage_multiplier: 0.0
-    beam_player_damage_cap_fraction: 0.20
-    pve_damage_multiplier: 0.9
-    beam_damage_multiplier: 5.0
-    beam_full_damage_range: 7.0
-    beam_far_damage_multiplier: 0.5
-    beam_damage_interval_ticks: 2
-    beam_break_blocks: true
-    beam_ignite_blocks: true
-    beam_block_affect_interval_ticks: 4
-    beam_max_blocks_per_pulse: 5
-    beam_block_hits_to_break: 5
-    beam_block_damage_multiplier: 1.21
-    beam_surface_only: true
-    beam_removes_player_abilities: true
-    ground_zero_radius: 14.0
-    ground_zero_damage: 525.0
-    ground_zero_player_damage_multiplier: 0.0
-    ground_zero_player_damage_cap_fraction: 0.25
-    ground_zero_knockback: 0.12
-    ground_zero_vertical_knockback: 0.03
-    ground_zero_max_horizontal_velocity: 0.18
-    ground_zero_max_vertical_velocity: 0.04
-    ground_zero_set_fire: true
-    mushroom_cloud_duration_ticks: 2400
-    mushroom_cloud_period_ticks: 12
-    mushroom_cloud_height: 32.0
-    mushroom_cloud_radius: 15.5
-    mushroom_cloud_particle_multiplier: 0.78
-    ground_zero_particle_multiplier: 0.75
-    mushroom_cloud_sound_duration_ticks: 80
-    mushroom_cloud_delay_after_beam_ticks: 30
-    beam_sound_duration_ticks: 40
-    beam_sound_period_ticks: 20
-    melee_knockback_horizontal: 1.35
-    melee_knockback_vertical: 0.28
-    beam_hit_knockback: 0.025
-    beam_hit_vertical_knockback: 0.0
-    beam_hit_max_horizontal_velocity: 0.16
-    beam_hit_max_vertical_velocity: 0.02
-    post_burst_strength_multiplier: 0.5
-    post_burst_strength_reduction_ticks: 2400
-
-  the_runner:
-    speed_levels: [10, 11, 12, 15]
-    default_speed_level: 10
-    resistance_level: 1
-    strength_level: 2
-    extra_hearts: 5
-    attack_speed_bonus: 1024.0
-    impact_min_speed_level: 10
-    impact_base_damage_hearts: 6.0
-    impact_damage_per_speed_level_hearts: 1.0
-    impact_radius: 0.65
-    impact_vertical_radius: 0.55
-    impact_min_move_delta: 0.08
-    impact_min_horizontal_speed: 0.32
-    impact_path_step: 0.28
-    impact_cooldown_ms: 750
-    impact_knockback: 1.15
-
-  jumper:
     strength_level: 1
     resistance_level: 1
-    jump_boost_level: 5
-    active_ticks: 200
-    cooldown_ms: 15000
+    big_damage_multiplier: 1.75
+    big_extra_hearts: 0.0
+    big_jump_boost_level: 0
 
-  shockwave:
-    strength_level: 2
-    resistance_level: 1
-    cooldown_ms: 120000
-    radius: 10.0
-    damage_hearts: 3.0
-    pve_damage_hearts: 6.0
-    knockback: 3.25
-    vertical_knockback: 0.75
-    hit_band: 1.65
-    animation_step: 1.0
-    animation_period_ticks: 2
-    melee_knockback: 1.15
-    melee_vertical_knockback: 0.28
-    crit_radius: 3.0
-    crit_damage_hearts: 1.5
-    crit_knockback: 1.45
-
-  teleporter:
-    range: 35.0
-    cooldown_ms: 2000
-    strength_level: 1
-    resistance_level: 1
-
-  teleporter_v_one:
-    range: 50.0
-    cooldown_ms: 2000
-    strength_level: 2
-    resistance_level: 2
-
-  speedster:
-    speed_level: 4
-    strength_level: 1
-    resistance_level: 1
-
-  strength:
-    level: 3
-    resistance_level: 1
-
-  fire:
-    radius: 3.5
-    strength_level: 1
-    resistance_level: 1
-
-  the_ghost:
-    resistance_level: 2
-    strength_level: 1
-    fire_resistance: true
-    hide_from_mobs: true
-    mob_target_clear_radius: 48.0
-    mob_target_clear_period_ticks: 10
-    toggle_cooldown_ms: 5000
-
+  # The Diver: F uses Riptide Dash. Sneak + Left-Click toggles Sonar.
   the_diver:
-    water_breathing_level: 1
-    dolphins_grace_level: 8
-    water_speed_level: 2
-    conduit_power_level: 2
-    strength_level: 2
-    resistance_level: 1
-    water_bonus_levels: 1
     sonar_radius: 45.0
-    riptide_level: 4
     riptide_velocity: 3.85
-    riptide_vertical_boost: 0.22
     riptide_cooldown_ms: 1800
 
-  vision:
-    xray_radius: 35.0
-    strength_level: 1
-    resistance_level: 1
-
-  the_worm:
-    haste_level: 4
-    strength_level: 1
-    resistance_level: 1
-
-  flash_light:
-    strength_level: 2
-    resistance_level: 1
-    flash_radius: 15.0
-    blindness_ticks: 400
-    blindness_amplifier: 1
-    flash_cooldown_ms: 120000
-    beam_range: 15.0
-    beam_damage_hearts: 2.0
-    beam_fire_ticks: 2
-    beam_knockback: 0.75
-    beam_vertical_knockback: 0.18
-    beam_cooldown_ms: 750
-
-  fire_sonic:
-    strength_level: 1
-    resistance_level: 1
-    melee_fire_ticks: 160
-    melee_bonus_damage_hearts: 0.5
-    beam_range: 24.0
-    beam_damage_hearts: 1.5
-    beam_fire_ticks: 140
-    beam_damage_interval_ticks: 2
-    beam_hit_radius: 1.20
-    beam_max_ticks: 40
-    beam_cooldown_ms: 5000
-
-  toxic_cloud:
-    strength_level: 1
-    resistance_level: 1
-    cloud_radius: 5.0
-    cloud_cone_dot: 0.25
-    cloud_poison_ticks: 120
-    poison_amplifier: 3
-    cloud_cooldown_ms: 120000
-    vomit_range: 5.0
-    vomit_damage_hearts: 1.5
-    vomit_poison_ticks: 80
-    vomit_cooldown_ms: 10000
-    melee_poison_ticks: 40
-    melee_poison_amplifier: 0
-
-  the_countess:
-    strength_level: 2
-    resistance_level: 1
-    fireball_cooldown_ms: 5000
-    fireball_speed: 1.15
-    fireball_explosion_power: 1.0
-    fireball_damage_radius: 2.6
-    fireball_damage_min_hearts: 2.0
-    fireball_damage_max_hearts: 4.0
-    double_jump_velocity: 0.85
-    melee_fire_ticks: 60
-
-  the_warrior:
-    strength_level: 3
-    resistance_level: 2
-    regeneration_level: 1
-    extra_hearts: 10.0
-    double_jump_min_velocity: 1.25
-    double_jump_max_velocity: 1.95
-    fall_impact_min_blocks: 6.0
-    fall_impact_power: 0.75
-    fall_impact_block_damage: true
-    fall_impact_radius: 3.0
-    fall_impact_damage_hearts: 2.0
-    fall_impact_knockback: 1.3
-
-  the_headpopper:
-    strength_level: 2
-    resistance_level: 2
-    regeneration_level: 1
-    range: 30.0
-    countdown_seconds: 3
-    damage_hearts: 12.5
-    mob_damage_multiplier: 2.5
-    slowness_amplifier: 2
-    cooldown_ms: 20000
-    area_radius: 10.0
-    area_damage_health_percent: 0.25
-    area_cooldown_ms: 120000
-
-  spider_weaver:
-    strength_level: 1
-    resistance_level: 1
-    regeneration_level: 1
-    web_range: 24.0
-    web_cooldown_ms: 5000
-    web_damage_hearts: 1.5
-    web_slowness_ticks: 120
-    web_slowness_amplifier: 5
-    web_duration_ticks: 1200
-    wall_climb_enabled: true
-    wall_climb_velocity: 0.19
-
-  heal_angel:
-    strength_level: 2
-    resistance_level: 2
-    regeneration_level: 2
-    extra_hearts: 5.0
-    heal_percent_per_hit: 0.10
-    heal_min_hearts: 1.0
-    heal_cooldown_ms: 1000
-    command_range: 35.0
-    command_duration_ms: 120000
-    command_cooldown_ms: 30000
-    command_attack_radius: 20.0
-    command_pet_damage_hearts: 1.0
-
+  # Submarine: F uses the stronger dash. Sneak + Left-Click toggles Sonar.
   submarine:
-    strength_level: 2
-    resistance_level: 2
-    water_strength_level: 5
-    water_regeneration_level: 2
-    dolphins_grace_level: 10
-    conduit_power_level: 2
     sonar_radius: 65.0
     riptide_velocity: 10.0
-    riptide_vertical_boost: 0.35
     riptide_cooldown_ms: 1000
 
+  # The Detonator: the countdown starts with Sneak + Left-Click, including air clicks.
   the_detonator:
-    strength_level: 2
-    resistance_level: 1
-    explosion_cooldown_ms: 10000
     explosion_charge_ticks: 60
-    explosion_hold_grace_ms: 2500
-    explosion_power: 10.0
-    explosion_block_damage: true
-    explosion_radius: 13.0
-    explosion_damage_hearts: 12.0
-    explosion_knockback: 2.2
-    explosion_fire_ticks: 120
-    melee_fire_ticks: 60
-    melee_explosion_every_hits: 3
-    melee_explosion_power: 1.15
-    melee_explosion_damage_hearts: 2.0
+    explosion_cooldown_ms: 10000
+    cancel_charge_when_sneak_released: false
 
-
+# ─────────────────────────────────────────────────────────────────────────────
+# Crafting / V-Null / Side effects
+# ─────────────────────────────────────────────────────────────────────────────
 brewing:
-  # Legacy fallback: custom brewing is still simulated for compatible ingredients.
-  # Main production recipes are also available in the workbench because several items cannot be inserted into vanilla brewing stands.
+  # Custom brewing simulation fallback. Workbench recipes are the main supported lab path.
   require_blaze_powder: false
   custom_brew_time_ticks: 400
 
-side_effects:
-  enabled: true
-  temp_v:
-    reuse_window_minutes: 30
-    lethal_use_count: 5
-    max_total_chance: 95.0
-    reuse_bonus:
-      use_1: 0.0
-      use_2: 10.0
-      use_3: 25.0
-      use_4_plus: 50.0
-    adrenaline_crash:
-      chance: 35.0
-      min_seconds: 120
-      max_seconds: 240
-    overload_sickness:
-      chance: 25.0
-      min_seconds: 30
-      max_seconds: 60
-    muscle_failure:
-      chance: 15.0
-      seconds: 30
-      amplifier: 1
-    internal_damage:
-      chance: 8.0
-      min_hearts: 1.0
-      max_hearts: 3.0
-    severe_collapse:
-      chance: 5.0
-      seconds: 120
-  compound_v:
-    failed_transformation:
-      chance: 4.0
-      seconds: 300
-    overload_sickness:
-      chance: 2.0
-      min_seconds: 30
-      max_seconds: 60
-    muscle_failure:
-      chance: 1.0
-      seconds: 30
-      amplifier: 1
-  v_one:
-    heat_spike:
-      chance: 20.0
-      damage_hearts_min: 1.0
-      damage_hearts_max: 2.0
-    body_rejection:
-      chance: 15.0
-      min_seconds: 60
-      max_seconds: 600
-    critical_instability:
-      chance: 5.0
-      min_seconds: 60
-      max_seconds: 180
-    no_power:
-      chance: 10.0
-    muscle_failure:
-      chance: 2.0
-      seconds: 300
-      amplifier: 1
-
 v_null:
+  # V-Null removes/suppresses powers. Splash and lingering variants use custom radius logic.
   standard:
     effect_seconds: 900
   v_one:
     min_seconds: 60
     max_seconds: 120
     slowness_seconds: 30
-  # Unpowered players, mobs and animals are immune to V-Null.
+  splash:
+    radius: 4.0
+  lingering:
+    radius: 4.0
+    duration_ticks: 160
   unpowered:
     effect_seconds: 0
   mobs:
     effect_seconds: 0
+
+side_effects:
+  enabled: true
