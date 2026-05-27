@@ -39,6 +39,12 @@ public class TheDiverAbility implements Ability {
     @Override public String getDisplayName() { return "The Diver"; }
     @Override public int getColor() { return 0x1EA7FF; }
     @Override public boolean needsTick() { return true; }
+    @Override public boolean hasToggle() { return true; }
+
+    @Override
+    public void onToggle(Player player) {
+        useRiptide(player);
+    }
 
     @Override
     public void apply(Player player) {
