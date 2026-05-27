@@ -105,15 +105,18 @@ public class TheDetonatorAbility implements Ability {
                 }
 
                 long now = System.currentTimeMillis();
-                long graceMs = plugin.getConfig().getLong("abilities.the_detonator.explosion_hold_grace_ms", 2500L);
+                boolean cancelWhenSneakReleased = plugin.getConfig().getBoolean("abilities.the_detonator.cancel_charge_when_sneak_released", false);
                 if (player.isSneaking()) {
                     lastChargeHoldSeenAt.put(uuid, now);
-                } else if (now - lastChargeHoldSeenAt.getOrDefault(uuid, now) > Math.max(250L, graceMs)) {
-                    cancelCharge(uuid);
-                    MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_detonator.charge_cancelled"));
-                    player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.85f, 0.55f);
-                    if (task[0] != null) task[0].cancel();
-                    return;
+                } else if (cancelWhenSneakReleased) {
+                    long graceMs = plugin.getConfig().getLong("abilities.the_detonator.explosion_hold_grace_ms", 2500L);
+                    if (now - lastChargeHoldSeenAt.getOrDefault(uuid, now) > Math.max(250L, graceMs)) {
+                        cancelCharge(uuid);
+                        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_detonator.charge_cancelled"));
+                        player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.85f, 0.55f);
+                        if (task[0] != null) task[0].cancel();
+                        return;
+                    }
                 }
 
                 animateCharge(player, age, chargeTicks);

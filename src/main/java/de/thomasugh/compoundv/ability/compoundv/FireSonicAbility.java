@@ -102,7 +102,7 @@ public class FireSonicAbility implements Ability {
     }
 
     public void handleMeleeHit(Player attacker, LivingEntity target) {
-        int fireTicks = plugin.getConfig().getInt("abilities.fire_sonic.melee_fire_ticks", 160);
+        int fireTicks = plugin.getConfig().getInt("abilities.fire_sonic.melee_fire_ticks", 80);
         target.setFireTicks(Math.max(target.getFireTicks(), fireTicks));
         target.getWorld().spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), 12, 0.25, 0.35, 0.25, 0.03);
     }
@@ -122,8 +122,8 @@ public class FireSonicAbility implements Ability {
 
     private void fireBeam(Player player) {
         double range = plugin.getConfig().getDouble("abilities.fire_sonic.beam_range", 24.0);
-        double damage = plugin.getConfig().getDouble("abilities.fire_sonic.beam_damage_hearts", 1.5) * 2.0;
-        int fireTicks = plugin.getConfig().getInt("abilities.fire_sonic.beam_fire_ticks", 140);
+        double damage = plugin.getConfig().getDouble("abilities.fire_sonic.beam_damage_hearts", 0.75) * 2.0;
+        int fireTicks = plugin.getConfig().getInt("abilities.fire_sonic.beam_fire_ticks", 70);
         int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.fire_sonic.beam_damage_interval_ticks", 2));
         double radius = plugin.getConfig().getDouble("abilities.fire_sonic.beam_hit_radius", 1.20);
 
