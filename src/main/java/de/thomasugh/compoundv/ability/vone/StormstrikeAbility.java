@@ -154,7 +154,7 @@ public class StormstrikeAbility implements Ability {
 
     private void fireStormBeam(Player player) {
         double range = plugin.getConfig().getDouble("abilities.stormstrike.beam_range", 35.0);
-        double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 3.0) * 2.0;
+        double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 2.55) * 2.0;
         int damageIntervalTicks = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.beam_damage_interval_ticks", 2));
         double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 6.5);
         int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_ticks", 60);
@@ -500,7 +500,7 @@ public class StormstrikeAbility implements Ability {
 
     private void applyStrikeHitRange(Player player, Location bolt, Set<UUID> damagedThisTick) {
         double radius = plugin.getConfig().getDouble("abilities.stormstrike.lightning_hit_radius", 7.0);
-        double damage = plugin.getConfig().getDouble("abilities.stormstrike.lightning_tick_damage_hearts", 1.2) * 2.0;
+        double damage = plugin.getConfig().getDouble("abilities.stormstrike.lightning_tick_damage_hearts", 0.9) * 2.0;
         int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.lightning_slowness_ticks", 80);
         int slownessAmplifier = plugin.getConfig().getInt("abilities.stormstrike.lightning_slowness_amplifier", 1);
 

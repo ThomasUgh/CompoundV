@@ -58,8 +58,8 @@ public class SizeChangerAbility implements Ability {
 
     @Override
     public void apply(Player player) {
-        int strength = plugin.getConfig().getInt(path("strength_level"), 2);
-        int resistance = plugin.getConfig().getInt(path("resistance_level"), 2);
+        int strength = plugin.getConfig().getInt(path("strength_level"), 1);
+        int resistance = plugin.getConfig().getInt(path("resistance_level"), 1);
 
         player.addPotionEffect(new PotionEffect(PotionEffects.STRENGTH,
                 Integer.MAX_VALUE, Math.max(0, strength - 1), false, false, true));
@@ -118,7 +118,7 @@ public class SizeChangerAbility implements Ability {
     }
 
     public double bigDamageMultiplier() {
-        return plugin.getConfig().getDouble(path("big_damage_multiplier"), 2.0);
+        return plugin.getConfig().getDouble(path("big_damage_multiplier"), id.equalsIgnoreCase("size_changer_v_one") ? 1.75 : 1.25);
     }
 
     public Mode getMode(Player player) {
@@ -131,12 +131,12 @@ public class SizeChangerAbility implements Ability {
         cancelRevertTask(uuid);
 
         double scaleBonus = plugin.getConfig().getDouble(path("big_scale_bonus"), 1.0);
-        double extraHearts = plugin.getConfig().getDouble(path("big_extra_hearts"), 10.0);
+        double extraHearts = plugin.getConfig().getDouble(path("big_extra_hearts"), 0.0);
         AttributeUtil.setScaleBonus(player, scaleKey, scaleBonus);
         AttributeUtil.setMaxHealthBonus(player, healthKey, extraHearts * 2.0);
 
         long durationTicks = plugin.getConfig().getLong(path("big_duration_ticks"), 1200L);
-        int jumpBoostLevel = plugin.getConfig().getInt(path("big_jump_boost_level"), 2);
+        int jumpBoostLevel = plugin.getConfig().getInt(path("big_jump_boost_level"), 0);
         if (jumpBoostLevel > 0) {
             player.addPotionEffect(new PotionEffect(PotionEffects.JUMP_BOOST,
                     (int) Math.min(Integer.MAX_VALUE, durationTicks + 20L),
