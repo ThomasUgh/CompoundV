@@ -15,6 +15,10 @@ updates:
   # Show update notices to OP players when they join.
   op_chat: true
 
+metrics:
+  # Sends anonymous usage statistics through bStats. Server owners can also opt out globally in /plugins/bStats/config.yml.
+  enabled: true
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Potion roll chances
 # ─────────────────────────────────────────────────────────────────────────────

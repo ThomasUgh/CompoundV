@@ -40,6 +40,7 @@ import de.thomasugh.compoundv.manager.AbilityManager;
 import de.thomasugh.compoundv.manager.PersistenceManager;
 import de.thomasugh.compoundv.manager.PotionRollManager;
 import de.thomasugh.compoundv.manager.SideEffectManager;
+import de.thomasugh.compoundv.metrics.MetricsService;
 import de.thomasugh.compoundv.server.ServerCompatibility;
 import de.thomasugh.compoundv.update.UpdateCheckerService;
 import org.bukkit.NamespacedKey;
@@ -63,6 +64,7 @@ public final class CompoundV extends JavaPlugin {
     private LocaleManager localeManager;
     private ServerCompatibility compatibility;
     private UpdateCheckerService updateChecker;
+    private MetricsService metricsService;
 
     @Override
     public void onEnable() {
@@ -74,6 +76,7 @@ public final class CompoundV extends JavaPlugin {
         registerAbilities();
         registerListeners();
         registerCommands();
+        startMetrics();
         startUpdateChecker();
         logStartup();
     }
@@ -106,6 +109,7 @@ public final class CompoundV extends JavaPlugin {
         sideEffectManager = new SideEffectManager(this);
         abilityManager = new AbilityManager(this, registry, persistence);
         rollManager = new PotionRollManager(this, abilityManager);
+        metricsService = new MetricsService(this);
     }
 
     private void registerAbilities() {
@@ -164,6 +168,10 @@ public final class CompoundV extends JavaPlugin {
         command.setTabCompleter(handler);
     }
 
+
+    private void startMetrics() {
+        metricsService.start();
+    }
 
     private void startUpdateChecker() {
         updateChecker = new UpdateCheckerService(this);
