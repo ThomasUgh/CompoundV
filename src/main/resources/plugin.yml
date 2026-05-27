@@ -11,7 +11,7 @@ commands:
   compoundv:
     description: CompoundV main command
     aliases: [cv]
-    usage: /cv <give|remove|info|tutorial|reload|help>
+    usage: /cv <give|remove|info|stats|tutorial|reload|help>
 
 permissions:
   compoundv.use:

@@ -47,6 +47,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             case "give"   -> handleGive(sender, args);
             case "remove" -> handleRemove(sender, args);
             case "info"   -> handleInfo(sender, args);
+            case "stats"  -> handleStats(sender, args);
             case "tutorial", "guide", "book" -> handleTutorial(sender);
             case "reload" -> handleReload(sender);
             case "help"   -> help(sender);
@@ -198,6 +199,63 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(loc().msg("info.plugin_footer"));
     }
 
+
+    private void handleStats(CommandSender sender, String[] args) {
+        Player target = null;
+        if (args.length >= 2) {
+            if (!sender.hasPermission("compoundv.admin")) {
+                sender.sendMessage(loc().msg("general.no_permission"));
+                return;
+            }
+            target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                sender.sendMessage(loc().msg("general.player_not_found"));
+                return;
+            }
+        } else if (sender instanceof Player p) {
+            target = p;
+        }
+
+        if (target == null) {
+            sender.sendMessage(loc().msg("general.only_players"));
+            return;
+        }
+
+        PlayerAbilityData data = manager.getData(target);
+        if (data == null || data.isExpired()) {
+            sender.sendMessage(loc().msg("stats.none", "player", target.getName()));
+            return;
+        }
+
+        Ability ability = registry.get(data.abilityId()).orElse(null);
+        String name = ability != null ? ability.getDisplayName() : data.abilityId();
+        Map<String, String> ph = new HashMap<>();
+        ph.put("player", target.getName());
+        ph.put("name", name);
+        ph.put("potion", data.potionType().getDisplayName());
+        sender.sendMessage(loc().msg("stats.header"));
+        sender.sendMessage(loc().msg("stats.player", ph));
+        sender.sendMessage(loc().msg("stats.ability", ph));
+        sender.sendMessage(loc().msg("stats.source", ph));
+        if (data.isTemporary()) {
+            long seconds = data.remainingSec();
+            Map<String, String> ttl = new HashMap<>();
+            ttl.put("minutes", Long.toString(seconds / 60));
+            ttl.put("seconds", Long.toString(seconds % 60));
+            sender.sendMessage(loc().msg("stats.temporary", ttl));
+        } else {
+            sender.sendMessage(loc().msg("stats.permanent"));
+        }
+
+        if (ability != null) {
+            sender.sendMessage(loc().msg("stats.description_header"));
+            for (String line : loc().msgList(ability.getDescriptionKey())) {
+                sender.sendMessage(line);
+            }
+        }
+        sender.sendMessage(loc().msg("stats.footer"));
+    }
+
     private void handleTutorial(CommandSender sender) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(loc().msg("general.only_players"));
@@ -223,6 +281,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
         s.sendMessage(loc().msg("command.give_ability"));
         s.sendMessage(loc().msg("command.remove"));
         s.sendMessage(loc().msg("command.info_self"));
+        s.sendMessage(loc().msg("command.stats"));
         s.sendMessage(loc().msg("command.tutorial"));
         s.sendMessage(loc().msg("command.reload"));
         s.sendMessage(loc().msg("command.abilities_list",
@@ -245,7 +304,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender s, Command c, String a, String[] args) {
         List<String> out = new ArrayList<>();
         if (args.length == 1) {
-            out.addAll(List.of("give", "remove", "info", "tutorial", "reload", "help"));
+            out.addAll(List.of("give", "remove", "info", "stats", "tutorial", "reload", "help"));
         } else if (args.length == 2) {
             Bukkit.getOnlinePlayers().stream().map(Player::getName).forEach(out::add);
         } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
