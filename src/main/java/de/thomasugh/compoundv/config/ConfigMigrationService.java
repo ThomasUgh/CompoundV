@@ -26,6 +26,7 @@ public final class ConfigMigrationService {
         // abilities keep safe built-in defaults for those values.
         changed |= mergeBundledDefaults();
         changed |= migrateLegacyAliases();
+        changed |= migrateVersion111Step32Defaults();
         changed |= cleanupObsoleteEntries();
         changed |= pruneToBundledConfigShape();
 
@@ -46,6 +47,19 @@ public final class ConfigMigrationService {
             plugin.getLogger().warning("Could not merge config defaults: " + ex.getMessage());
             return false;
         }
+    }
+
+    private boolean migrateVersion111Step32Defaults() {
+        boolean changed = false;
+
+        changed |= replaceIfNumericEquals("heat_vision.hit_radius", 0.05, 0.051);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_damage_hearts", 2.55, 1.275);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_tick_damage_hearts", 0.9, 0.675);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_cooldown_ms", 3000, 7000);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_min_bolts", 4, 2);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_max_bolts", 4, 2);
+
+        return changed;
     }
 
     private boolean cleanupObsoleteEntries() {

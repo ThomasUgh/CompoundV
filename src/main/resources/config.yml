@@ -91,12 +91,15 @@ heat_vision:
     stage_4: { damage_hearts: 2.7, range: 40.0 }
 
 abilities:
-  # Stormstrike: F = beam, Sneak + Left-Click = 4 lightning strikes.
+  # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:
-    beam_damage_hearts: 2.55     # 15% weaker than the previous 3.0 hearts
+    beam_damage_hearts: 1.275    # 50% weaker than Step 31 beam damage
     beam_hit_radius: 6.5         # Damage radius around the visible beam particles
-    lightning_tick_damage_hearts: 0.9  # 25% weaker strike tick damage
+    lightning_tick_damage_hearts: 0.675 # 25% weaker than Step 31 strike tick damage
     lightning_hit_radius: 7.0
+    lightning_cooldown_ms: 7000
+    lightning_min_bolts: 2
+    lightning_max_bolts: 2
 
   # FireSonic is intentionally weaker than Heat Vision but ticks at a similar speed.
   fire_sonic:

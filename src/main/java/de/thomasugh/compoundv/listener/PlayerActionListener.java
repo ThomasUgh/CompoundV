@@ -747,6 +747,11 @@ public class PlayerActionListener implements Listener {
             e.setCancelled(true);
             return;
         }
+        if (currentAbility instanceof StormstrikeAbility
+                && e.getCause() == EntityDamageEvent.DamageCause.LIGHTNING) {
+            e.setCancelled(true);
+            return;
+        }
         if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
             Ability ability = currentAbility;
             if (ability instanceof TheWarriorAbility warrior) {

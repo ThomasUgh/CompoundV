@@ -127,6 +127,8 @@ public class StormstrikeAbility implements Ability {
 
     @Override
     public void onTick(Player player) {
+        renderFlightParticles(player);
+
         if (!beamActive.getOrDefault(player.getUniqueId(), false)) return;
 
         int ticks = beamTicks.merge(player.getUniqueId(), 1, Integer::sum);
@@ -154,7 +156,7 @@ public class StormstrikeAbility implements Ability {
 
     private void fireStormBeam(Player player) {
         double range = plugin.getConfig().getDouble("abilities.stormstrike.beam_range", 35.0);
-        double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 2.55) * 2.0;
+        double damage = plugin.getConfig().getDouble("abilities.stormstrike.beam_damage_hearts", 1.275) * 2.0;
         int damageIntervalTicks = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.beam_damage_interval_ticks", 2));
         double hitRadius = plugin.getConfig().getDouble("abilities.stormstrike.beam_hit_radius", 6.5);
         int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.beam_slowness_ticks", 60);
@@ -307,6 +309,18 @@ public class StormstrikeAbility implements Ability {
         }, peakTicks);
     }
 
+    private void renderFlightParticles(Player player) {
+        if (!player.isFlying()) return;
+        if (player.getTicksLived() % 3 != 0) return;
+
+        Location trail = player.getLocation().add(0, 0.55, 0);
+        World world = player.getWorld();
+        world.spawnParticle(Particle.ELECTRIC_SPARK, trail, 5, 0.32, 0.28, 0.32, 0.035);
+        if (player.getTicksLived() % 9 == 0) {
+            world.spawnParticle(Particle.END_ROD, trail, 2, 0.22, 0.18, 0.22, 0.012);
+        }
+    }
+
     private void renderLaunchElectricArcs(World world, Location center) {
         Particle.DustOptions white = new Particle.DustOptions(Color.fromRGB(255, 255, 255), 0.82f);
         Particle.DustOptions yellow = new Particle.DustOptions(Color.fromRGB(255, 246, 170), 0.65f);
@@ -328,7 +342,7 @@ public class StormstrikeAbility implements Ability {
 
         if (activeLightningTokens.containsKey(uuid)) return;
 
-        long cooldownMs = plugin.getConfig().getLong("abilities.stormstrike.lightning_cooldown_ms", 3000L);
+        long cooldownMs = plugin.getConfig().getLong("abilities.stormstrike.lightning_cooldown_ms", 7000L);
         long now = System.currentTimeMillis();
         long readyAt = lightningCooldown.getOrDefault(uuid, 0L);
         if (readyAt > now) {
@@ -347,8 +361,8 @@ public class StormstrikeAbility implements Ability {
 
         lightningCooldown.put(uuid, now + Math.max(0L, cooldownMs));
 
-        int minBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_min_bolts", 4);
-        int maxBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_max_bolts", 4);
+        int minBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_min_bolts", 2);
+        int maxBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_max_bolts", 2);
         if (maxBolts < minBolts) maxBolts = minBolts;
         int bolts = minBolts + ThreadLocalRandom.current().nextInt(Math.max(1, maxBolts - minBolts + 1));
         double spread = plugin.getConfig().getDouble("abilities.stormstrike.lightning_spread", 1.8);
@@ -432,19 +446,8 @@ public class StormstrikeAbility implements Ability {
     }
 
     public void handleMeleeHit(Player attacker, LivingEntity target) {
-        World world = target.getWorld();
-        Location hit = target.getLocation().add(0, Math.min(1.4, Math.max(0.8, target.getEyeHeight())), 0);
-        world.spawnParticle(Particle.ELECTRIC_SPARK, hit, 16, 0.25, 0.32, 0.25, 0.08);
-        world.spawnParticle(Particle.END_ROD, hit, 5, 0.18, 0.22, 0.18, 0.02);
-        world.playSound(hit, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.18f, 1.9f);
-
-        int hitCount = meleeCounter.merge(attacker.getUniqueId(), 1, Integer::sum);
-        int interval = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.melee_lightning_every_hits", 5));
-        if (hitCount % interval != 0) return;
-
-        int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.melee_lightning_slowness_ticks", 80);
-        target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS, Math.max(20, slownessTicks), 1, false, true, true));
-        world.strikeLightning(target.getLocation());
+        // Stormstrike melee no longer spawns lightning or spark hits.
+        // Lightning is intentionally limited to Sneak + Left-Click and the F beam.
     }
 
     public void triggerFallImpact(Player player, double fallenBlocks) {
@@ -500,12 +503,14 @@ public class StormstrikeAbility implements Ability {
 
     private void applyStrikeHitRange(Player player, Location bolt, Set<UUID> damagedThisTick) {
         double radius = plugin.getConfig().getDouble("abilities.stormstrike.lightning_hit_radius", 7.0);
-        double damage = plugin.getConfig().getDouble("abilities.stormstrike.lightning_tick_damage_hearts", 0.9) * 2.0;
+        double damage = plugin.getConfig().getDouble("abilities.stormstrike.lightning_tick_damage_hearts", 0.675) * 2.0;
         int slownessTicks = plugin.getConfig().getInt("abilities.stormstrike.lightning_slowness_ticks", 80);
         int slownessAmplifier = plugin.getConfig().getInt("abilities.stormstrike.lightning_slowness_amplifier", 1);
 
         for (Entity entity : bolt.getWorld().getNearbyEntities(bolt, radius, radius, radius)) {
             if (!(entity instanceof LivingEntity target) || target.equals(player)) continue;
+            if (target instanceof Player targetPlayer
+                    && plugin.getAbilityManager().getAbility(targetPlayer) instanceof StormstrikeAbility) continue;
             if (target.getLocation().distanceSquared(bolt) > radius * radius) continue;
             if (!damagedThisTick.add(target.getUniqueId())) continue;
             target.setNoDamageTicks(0);
