@@ -331,12 +331,44 @@ public abstract class BaseHeatVisionAbility implements Ability {
     }
 
     private void playRainSizzleIfWet(Player player, World world) {
-        if (!world.hasStorm()) return;
-        Location location = player.getLocation();
-        if (world.getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) > location.getBlockY()) return;
         if (player.getTicksLived() % 8 != 0) return;
+        Location location = player.getLocation();
+        if (!isTouchingWater(player) && !isExposedToActualRain(player, world, location)) return;
         world.playSound(location, Sound.BLOCK_FIRE_EXTINGUISH, 0.30f, 1.85f);
         world.spawnParticle(Particle.SMOKE, location.clone().add(0, 1.35, 0), 3, 0.20, 0.16, 0.20, 0.012);
+    }
+
+    private boolean isTouchingWater(Player player) {
+        if (player.isInWater() || player.isSwimming()) return true;
+        return isWaterLike(player.getLocation().getBlock().getType())
+                || isWaterLike(player.getEyeLocation().getBlock().getType());
+    }
+
+    private boolean isWaterLike(Material material) {
+        String name = material.name();
+        return name.equals("WATER")
+                || name.equals("BUBBLE_COLUMN")
+                || name.equals("KELP")
+                || name.equals("KELP_PLANT")
+                || name.equals("SEAGRASS")
+                || name.equals("TALL_SEAGRASS");
+    }
+
+    private boolean isExposedToActualRain(Player player, World world, Location location) {
+        if (!world.hasStorm()) return false;
+        if (world.getEnvironment() != World.Environment.NORMAL) return false;
+        if (isDryBiome(location.getBlock().getBiome().name())) return false;
+        if (world.getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) > location.getBlockY()) return false;
+        return !isTouchingWater(player);
+    }
+
+    private boolean isDryBiome(String biomeName) {
+        return biomeName.contains("DESERT")
+                || biomeName.contains("SAVANNA")
+                || biomeName.contains("BADLANDS")
+                || biomeName.contains("MESA")
+                || biomeName.contains("NETHER")
+                || biomeName.contains("END");
     }
 
     private void playHeatVisionDamageSounds(World world, Location impact, LivingEntity target) {
