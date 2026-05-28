@@ -82,7 +82,7 @@ v_one:
 # ─────────────────────────────────────────────────────────────────────────────
 heat_vision:
   # Entity raytrace hit radius in blocks. 0.05 is the old/default thin beam.
-  hit_radius: 0.05
+  hit_radius: 0.051
   damage_interval: 2
   stages:
     stage_1: { damage_hearts: 1.35, range: 30.0 }

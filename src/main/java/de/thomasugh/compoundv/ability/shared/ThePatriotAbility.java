@@ -55,6 +55,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected int    glowParticles()  { return 1; }
     @Override protected int    impactParticles(){ return isVOne() ? 19 : 17; }
     @Override protected int    entityFireTicks(){ return isVOne() ? 100 : 80; }
+    @Override protected double hitRadius()      { return Math.max(0.01, plugin.getConfig().getDouble(t("heat_vision_hit_radius"), 0.0525)); }
     @Override protected Color  coreColor()      { return Color.fromRGB(255, 20, 8); }
     @Override protected Color  glowColor()      { return Color.fromRGB(255, 65, 35); }
     @Override protected boolean fireParticles() { return false; }

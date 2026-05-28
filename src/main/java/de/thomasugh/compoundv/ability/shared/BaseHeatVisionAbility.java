@@ -133,6 +133,8 @@ public abstract class BaseHeatVisionAbility implements Ability {
         Vector   dir = eye.getDirection().normalize();
         World    w   = player.getWorld();
 
+        playRainSizzleIfWet(player, w);
+
         Vector right = dir.clone().crossProduct(new Vector(0, 1, 0));
         if (right.lengthSquared() < 0.001) right = new Vector(0.12, 0, 0);
         else right.normalize().multiply(0.12);
@@ -328,6 +330,15 @@ public abstract class BaseHeatVisionAbility implements Ability {
         return true;
     }
 
+    private void playRainSizzleIfWet(Player player, World world) {
+        if (!world.hasStorm()) return;
+        Location location = player.getLocation();
+        if (world.getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) > location.getBlockY()) return;
+        if (player.getTicksLived() % 8 != 0) return;
+        world.playSound(location, Sound.BLOCK_FIRE_EXTINGUISH, 0.30f, 1.85f);
+        world.spawnParticle(Particle.SMOKE, location.clone().add(0, 1.35, 0), 3, 0.20, 0.16, 0.20, 0.012);
+    }
+
     private void playHeatVisionDamageSounds(World world, Location impact, LivingEntity target) {
         Sound specific = hurtSoundFor(target);
         world.playSound(impact, specific, 1.00f, 1.0f);
@@ -443,7 +454,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         return until != null && until >= System.currentTimeMillis();
     }
     protected int damageInterval()  { return plugin.getConfig().getInt("heat_vision.damage_interval", 2); }
-    protected double hitRadius()    { return Math.max(0.01, plugin.getConfig().getDouble("heat_vision.hit_radius", 0.05)); }
+    protected double hitRadius()    { return Math.max(0.01, plugin.getConfig().getDouble("heat_vision.hit_radius", 0.051)); }
     protected Color coreColor()     { return Color.fromRGB(45, 210, 255); }
     protected Color glowColor()     { return Color.fromRGB(150, 235, 255); }
     protected boolean fireParticles() { return plugin.getConfig().getBoolean("heat_vision.fire_particles", false); }
