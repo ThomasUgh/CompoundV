@@ -58,6 +58,8 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_cooldown_ms", 3000, 7000);
         changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_min_bolts", 4, 2);
         changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_max_bolts", 4, 2);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_damage_hearts", 1.275, 0.95625);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_tick_damage_hearts", 0.675, 0.54);
 
         return changed;
     }
@@ -684,7 +686,7 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.stormstrike.resistance_level", 3);
         changed |= setIfMissing("abilities.stormstrike.extra_hearts", 10.0);
         changed |= setIfMissing("abilities.stormstrike.beam_range", 35.0);
-        changed |= setIfMissing("abilities.stormstrike.beam_damage_hearts", 3.0);
+        changed |= setIfMissing("abilities.stormstrike.beam_damage_hearts", 0.95625);
         changed |= setIfMissing("abilities.stormstrike.beam_damage_interval_ticks", 10);
         changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 0.55, 1.35);
         changed |= replaceIfNumericEquals("abilities.stormstrike.beam_hit_radius", 0.7, 1.35);
@@ -868,7 +870,7 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.stormstrike.lightning_trace_radius", 1.7);
         changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_hit_radius", 4.0, 7.0);
         changed |= setIfMissing("abilities.stormstrike.lightning_hit_radius", 7.0);
-        changed |= setIfMissing("abilities.stormstrike.lightning_tick_damage_hearts", 1.2);
+        changed |= setIfMissing("abilities.stormstrike.lightning_tick_damage_hearts", 0.54);
         changed |= setIfMissing("abilities.stormstrike.lightning_duration_ticks", 30);
         changed |= setIfMissing("abilities.stormstrike.lightning_damage_interval_ticks", 2);
         changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_spread", 1.4, 1.8);
