@@ -1,0 +1,620 @@
+language_file_version: 21
+prefix: '&8[&b&lCV&r&8] '
+general:
+  no_permission: <prefix>&c你没有权限这么做。
+  player_not_found: <prefix>&c找不到该玩家。
+  reloaded: <prefix>&aCompoundV 已重载。
+  not_a_player: <prefix>&c这条命令只能由玩家使用。
+  only_players: <prefix>&c这条命令只能由玩家使用。
+potion:
+  drinking: <prefix>&7&b血清&7正在生效……
+  drink_temp_v: <prefix>&aTemp V&7正在生效，能力只会持续有限时间。
+  drink_v_one: <prefix>&3V One&7正在生效，撑住。
+  drink_anti_v: <prefix>&cAnti V&7正在移除你当前的能力。
+  no_ability: <prefix>&7你当前没有激活的能力。
+  milk_blocked: <prefix>&c牛奶无法清除 Compound V 能力，请用 Anti V 或 V-Null 机制。
+  no_chances: <prefix>&c这瓶药剂没有配置可用能力，请联系管理员。
+  roll_failed: <prefix>&c血清处理失败，请联系管理员。
+  drink_v_null: <prefix>&2V-Null 病毒&7正在扩散……
+  temp_v_extended: <prefix>&aTemp V&7已延长，同一能力，更久时间。
+  compound_v_after_temp: <prefix>&bCompound V&7已与你临时能力结合，Temp V 结束后会激活永久 Compound V 能力。
+  compound_v_delayed_granted: <prefix>&bCompound V&7现已永久激活。
+  temp_v_blocked_by_compound: <prefix>&aTemp V&7无法覆盖永久 Compound V，只产生轻微副作用。
+  no_effect_compound_active: <prefix>&7你已有永久能力时 Compound V 无效，请先使用 &cAnti V&7。
+  no_effect_v_one_active: <prefix>&7你的 V One 系统拒绝更多 V，什么都没发生。
+  v_one_upgrade: <prefix>&3V One&7已强化你当前的能力。
+  v_one_no_upgrade: <prefix>&7V One 暂时还不能与这个能力反应。
+  only_drinkable: <prefix>&cCompound V 血清只能当普通药水喝，V-Null 病毒可投掷。
+ability:
+  granted_header: <prefix>&8━━━━━━━━ &a能力已解锁 &8━━━━━━━━
+  granted_name: <prefix>&7你通过 &b{potion}&7 解锁了 &a&l{name}&r&7。
+  controls_header: <prefix>&8────── &a操作与效果 &8──────
+  granted_expires: <prefix>&8• &7持续时间：&e{minutes}分 {seconds}秒
+  granted_tip: <prefix>&8• &7随时输入 &f/cv stats&7 查看当前能力与操作。
+  granted_footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  lost_on_death: <prefix>&c你死亡后失去了能力。
+  expired: <prefix>&e你的临时能力已过期。
+  removed_admin: <prefix>&c管理员移除了你的能力。
+  removed_anti_v: <prefix>&cAnti V 移除了你的能力。
+  the_patriot:
+    description:
+    - <prefix>&8• &7风格：类似 &cHomelander&7。
+    - <prefix>&8• &a飞行&7自动开启。
+    - <prefix>&8• &c热视线&7：按 &dF &8(副手交换)&7 开关，默认 &e5 颗心&7、&e44 格&7。
+    - <prefix>&8• &b透视&7：&d潜行 + 左键点空气&7 显示附近实体。
+    - <prefix>&8• &6起跳冲刺&7：&d潜行&7、抬头再跳可弹射。
+    - <prefix>&8• &7被动：&a力量&7、&9抗性&7、&d再生&7、&c额外生命&7。
+  the_patriot_v_one:
+    description:
+    - <prefix>&8• &7风格：类似 &cHomelander&7。
+    - <prefix>&8• &a飞行&7自动开启，V One 加成更强。
+    - <prefix>&8• &c热视线&7：按 &dF &8(副手交换)&7 开关，默认 &e4.725 颗心&7、&e50 格&7。
+    - <prefix>&8• &b透视&7：&d潜行 + 左键点空气&7 显示附近实体。
+    - <prefix>&8• &6起跳冲刺&7：&d潜行&7、抬头再跳可弹射。
+    - <prefix>&8• &7被动：&a力量&7、&9抗性&7、&d再生&7、&6防火&7、&c额外生命&7。
+  sonic_boom:
+    description:
+    - <prefix>&8• &7风格：类似 &3Bombsight&7。
+    - <prefix>&8• &a飞行&7自动开启。
+    - <prefix>&8• &6起跳冲刺&7：&d潜行&7、抬头再跳，比飞行强、比 Patriot 弱一点。
+    - <prefix>&8• &3音爆束&7：&d潜行 + 左键&7 发射监守者式音波，冷却 &e3 秒&7。
+    - <prefix>&8• &c爆炸近战&7：每第 2 击小爆炸，暴击更重。
+    - <prefix>&8• &c爆炸落地&7：高处落下时 &d潜行&7，冷却 &e60 秒&7。
+    - <prefix>&8• &7被动：&a力量 IV&7、&9抗性 IV&7。
+  size_changer:
+    description:
+    - <prefix>&8• &7被动：&a力量 I&7、&9抗性 I&7。
+    - <prefix>&8• &d潜行 + 左键 + 抬头&7：变大 &52 倍&7，加成伤害降低，最长 &e1 分钟&7。
+    - <prefix>&8• &d潜行 + 左键 + 低头&7：缩小约 &53.5 倍&7，最长 &e2 分钟&7。
+    - <prefix>&8• &7变身中 &d潜行 + 左键 + 上/下看&7 可立刻恢复。
+    - <prefix>&8• &7恢复正常后才开始冷却。
+  size_changer_v_one:
+    description:
+    - <prefix>&8• &3V One 升级&7 SizeChanger，被动 &a力量 I&7、&9抗性 I&7。
+    - <prefix>&8• &d潜行 + 左键 + 抬头&7：约 &53 倍&7 大，V One 加成伤害降低。
+    - <prefix>&8• &d潜行 + 左键 + 低头&7：约 &57 倍&7 小。
+    - <prefix>&8• &7需先用 &3V One&7 升级已有 SizeChanger。
+  heat_vision:
+    description:
+    - <prefix>&8• &b热视线&7：按 &dF &8(副手交换)&7 开关光束。
+    - <prefix>&8• &7阶段：&bI&7 = 1.35 心 / 30 格，&aII&7 = 2 心 / 35 格。
+    - <prefix>&8• &7更多：&6III&7 = 2.25 心 / 37 格，&cIV&7 = 2.7 心 / 40 格。
+    - <prefix>&8• &7可融化冰、雪块、薄雪层，并烤熟生肉掉落。
+  the_diver:
+    description:
+    - <prefix>&8• &7风格：类似 &bThe Deep&7。
+    - <prefix>&8• &b水下呼吸&7、&b海豚恩惠 VIII&7、&e水下速度&7、&3潮涌能量 II&7 常驻。
+    - <prefix>&8• &b声呐&7：水下 &d潜行 + 左键点空气&7 显示附近实体。
+    - <prefix>&8• &b激流冲刺&7：水中或雨天按 &dF &8(副手交换)&7，类似激流 IV 且无需三叉戟。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 I&7。
+    - <prefix>&8• &7水下时力量与抗性各 &a+1 级&7。
+  jumper:
+    description:
+    - <prefix>&8• &a力量 I&7 常驻。
+    - <prefix>&8• &a跳跃爆发&7：按 &dF &8(副手交换)&7 获得 &a跳跃提升 V&7，期间无摔伤。
+    - <prefix>&8• &7默认持续 &e10 秒&7，冷却 &e15 秒&7。
+  shockwave:
+    description:
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 I&7。
+    - <prefix>&8• &e冲击波&7：按 &dF &8(副手交换)&7 释放 10 格击退波。
+    - <prefix>&8• &7伤害：玩家 &c3 心&7，生物 &c6 心&7，冷却 &e2 分钟&7。
+  vision:
+    description:
+    - <prefix>&8• &b透视&7：&d潜行 + 左键点空气&7 显示附近实体。
+    - <prefix>&8• &7默认范围 &e35 格&7。
+  the_runner:
+    description:
+    - <prefix>&8• &7风格：类似 &eA-Train&7。
+    - <prefix>&8• &e跑者速度&7：按 &dF &8(副手交换)&7 循环速度 X、XI、XII、XV 与关闭。
+    - <prefix>&8• &e冲撞奔跑&7：速度 X+ 撞实体造成 &c6 心&7，每多一级速度 &c+1 心&7。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 I&7、&c5 颗额外心&7、无近战冷却。
+  teleporter:
+    description:
+    - <prefix>&8• &5闪现&7：按 &dF &8(副手交换)&7 传送最多 &e35 格&7。
+    - <prefix>&8• &7冷却 &e2 秒&7，含 &a力量 I&7、&9抗性 I&7。
+  teleporter_v_one:
+    description:
+    - <prefix>&8• &3V One 升级&7 传送者。
+    - <prefix>&8• &5闪现&7：按 &dF &8(副手交换)&7 传送最多 &e50 格&7。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 III&7。
+  fly:
+    description:
+    - <prefix>&8• &a飞行&7自动开启。
+    - <prefix>&8• &6轻量起跳&7：&d潜行&7、抬头再跳，弹射较弱。
+    - <prefix>&8• &7含 &a力量 I&7、&9抗性 I&7。
+  speedster:
+    description:
+    - <prefix>&8• &e超级速度&7：按 &dF &8(副手交换)&7 开关。
+    - <prefix>&8• &7开启时小幅 &9抗性&7 加成。
+  strength:
+    description:
+    - <prefix>&8• &a力量&7 在此能力下常驻。
+    - <prefix>&8• &7附带小幅 &9抗性&7 加成。
+  the_ghost:
+    description:
+    - <prefix>&8• &5幽灵模式&7：按 &dF &8(副手交换)&7 开关隐身。
+    - <prefix>&8• &7开启时获得 &5隐身 II&7，怪物不会以你为目标。
+    - <prefix>&8• &7幽灵模式期间会清除已有仇恨。
+    - <prefix>&8• &7被动：&9抗性 II&7、&a力量 I&7、&6防火&7。
+    - <prefix>&8• &7热视线对 The Ghost 无效。
+  fire:
+    description:
+    - <prefix>&8• &c火焰光环&7 自动点燃附近敌人。
+    - <prefix>&8• &6防火&7 常驻。
+    - <prefix>&8• &7含 &a力量 I&7、&9抗性 I&7。
+    - <prefix>&8• &7拥有此能力时无法用打火石/火焰弹右键放火。
+  the_worm:
+    description:
+    - <prefix>&8• &7用 &e急迫 IV&7 极快挖掘，偏向泥土、草、沙砾、沙子。
+    - <prefix>&8• &dF &8(副手交换)&7 开关 &b夜视&7。
+    - <prefix>&8• &7被动：&a力量 I&7、&9抗性 I&7。
+  flash_light:
+    description:
+    - <prefix>&8• &7风格：类似 &eStarlight&7，被动 &a力量 II&7、&9抗性 I&7。
+    - <prefix>&8• &dF &8(副手交换)&7 使 &e15 格&7 内玩家/生物失明 &e20 秒&7，冷却 &e2 分钟&7。
+    - <prefix>&8• &d潜行 + 左键&7 发射 15 格光束，&c2 心&7 伤害、轻微燃烧与击退。
+  stormstrike:
+    description:
+    - <prefix>&8• &7风格：类似 &eStormfront&7，&3仅 V One&7，带电起跳、&e2.75 倍&7 飞行速度。
+    - <prefix>&8• &dF &8(副手交换)&7 发射 35 格锯齿闪电束，最长 &e6 秒&7，&c2.55 心&7 与缓慢，用满才过热。
+    - <prefix>&8• &d潜行 + 左键&7 召唤 &e4 道真闪电&7，每第 5 次近战也落雷。
+    - <prefix>&8• &7潜行落地冲击：10 格内 6 道闪电，冷却 &e100 秒&7。
+    - <prefix>&8• &7被动：&a力量 III&7、&9抗性 III&7、&c10 颗额外心&7。
+  fire_sonic:
+    description:
+    - <prefix>&8• &c烈焰光环&7：每次近战造成重度燃烧。
+    - <prefix>&8• &dF &8(副手交换)&7 发射细火焰束，最长 &e2 秒&7，频率接近热视线但更弱，用满才过热。
+  toxic_cloud:
+    description:
+    - <prefix>&8• &7被动：&a力量 I&7、&9抗性 I&7，免疫中毒。
+    - <prefix>&8• &dF &8(副手交换)&7 前方释放毒雾，&2中毒 IV&7，冷却 &e2 分钟&7。
+    - <prefix>&8• &d潜行 + 左键&7 短程毒吐，&c1.5 心&7 与 &2中毒 IV&7，近战附带短暂中毒 I。
+  the_countess:
+    description:
+    - <prefix>&8• &7风格：类似 &cCrimson Countess&7。
+    - <prefix>&8• &dF &8(副手交换)&7 发射火球，冷却 &e5 秒&7，&c2-4 心&7。
+    - <prefix>&8• &7二段跳带小火焰，近战点燃目标。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 I&7、&6防火&7。
+  the_warrior:
+    description:
+    - <prefix>&8• &7风格：类似 &eQueen Maeve&7。
+    - <prefix>&8• &7被动：&a力量 III&7、&9抗性 II&7、&d再生 I&7、&c10 颗额外心&7。
+    - <prefix>&8• &7高摔落保护、强二段跳，&e6 格+&7 高处仅潜行落地有小爆炸。
+  the_headpopper:
+    description:
+    - <prefix>&8• &7风格：类似 &cVictoria Neuman&7。
+    - <prefix>&8• &d潜行 + 左键&7 标记最多 &e30 格&7 目标，&c3 秒&7 倒计时。
+    - <prefix>&8• &7伤害：&c12.5 心&7，生物/动物 &cx2.5&7，冷却 &e20 秒&7。
+    - <prefix>&8• &dF &8(副手交换)&7 对附近生物造成 &c25% 当前生命&7，冷却 &e2 分钟&7。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 II&7、&d再生 I&7，免疫热视线。
+  spider_weaver:
+    description:
+    - <prefix>&8• &7风格：类似 &fWebweaver&7。
+    - <prefix>&8• &dF &8(副手交换)&7 或 &d潜行 + 左键&7 发射蛛网弹，冷却 &e5 秒&7。
+    - <prefix>&8• &7命中造成伤害、减速/定身，大蛛网簇可留 &e1 分钟&7。
+    - <prefix>&8• &7可爬墙且无摔伤，被动 &a力量 I&7、&9抗性 I&7、&d再生 I&7。
+  heal_angel:
+    description:
+    - <prefix>&8• &7风格：类似 &fPrivate Angel&7，&3仅 V One&7。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 II&7、&d再生 II&7、&c5 颗额外心&7。
+    - <prefix>&8• &d潜行 + 近战&7 治疗目标 &a10% 最大生命&7，至少 &a1 心&7，不造成伤害，冷却 &e1 秒&7。
+    - <prefix>&8• &dF &8(副手交换)&7 命令目标生物/动物攻击附近（不含你）&e2 分钟&7，冷却 &e30 秒&7。
+  submarine:
+    description:
+    - <prefix>&8• &7风格：类似 &bTorpedo&7，&3仅 V One&7。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 II&7、水下呼吸、海豚恩惠、潮涌能量。
+    - <prefix>&8• &7水中：&a力量 V&7 与再生。
+    - <prefix>&8• &dF &8(副手交换)&7 双倍强度冲刺，冷却 &e1 秒&7；&d潜行 + 左键&7 开关更强声呐 &e65 格&7。
+  the_detonator:
+    description:
+    - <prefix>&8• &7风格：类似 &cNaqib&7。
+    - <prefix>&8• &d潜行 + 左键&7 开始可取消倒计时，然后以自身为中心大爆炸，冷却 &e10 秒&7。
+    - <prefix>&8• &7被动：&a力量 II&7、&9抗性 I&7、&6防火&7。
+    - <prefix>&8• &7近战点燃目标，每第 3 击小爆炸。
+  the_veteran:
+    description:
+    - <prefix>&8• &7风格：类似 &eSoldier Boy&7。
+    - <prefix>&8• &7高 &a力量&7、&9抗性&7、&6防火&7。
+    - <prefix>&8• &d潜行 + 左键&7：蓄力 &e5 秒&7 后胸束。
+    - <prefix>&8• &7光束：高伤害、烧方块、移除玩家能力。
+    - <prefix>&8• &7释放时近距强爆与蘑菇云。
+toggle:
+  heat_vision_on: '{label} &a已开启'
+  heat_vision_off: '{label} &7已关闭'
+  heat_vision_overheated: '{label} &c冷却中 {seconds} 秒'
+  heat_vision_cooldown: '{label} &c{seconds} 秒后可再用'
+  xray_on: '&b透视 &a已开启'
+  xray_off: '&7透视已关闭'
+  sonar_on: '&b声呐 &a已开启'
+  sonar_off: '&7声呐已关闭'
+  sonar_water_only: '&b声呐 &7仅在水下有效'
+  diver_riptide: '&b激流冲刺 &a已触发'
+  diver_riptide_water_or_rain: '&b激流冲刺 &7仅在水或雨中有效'
+  diver_riptide_cooldown: '&c激流冲刺 {seconds} 秒后可再用'
+  speed_on: '&e超级速度 &a已开启'
+  speed_off: '&7超级速度已关闭'
+  runner_speed_level: '&e跑者速度 &7等级 &a{level}'
+  runner_speed_off: '&7跑者速度已关闭'
+  ghost_on: '&5幽灵模式 &a已开启'
+  ghost_off: '&7幽灵模式已关闭'
+  ghost_cooldown: '&5幽灵模式 &c{seconds} 秒后可再用'
+  worm_night_vision_on: '&6The Worm &b夜视 &a已开启'
+  worm_night_vision_off: '&6The Worm &7夜视已关闭'
+teleporter:
+  used: '&5闪现 &a完成'
+  cooldown: '&c闪现 {seconds} 秒后可再用'
+  no_safe_location: '&c找不到安全传送点。'
+veteran:
+  charge_start: '&eThe Veteran &7正在蓄力 &e胸束&7……'
+  charge_progress: '&e胸爆…… &7还有 &a{seconds} 秒'
+  charge_cancelled: '&c胸束蓄力已取消。'
+  burst_start: '&eThe Veteran &7释放了 &e胸束&7。'
+  burst_end: '&7胸束结束。'
+  cooldown: '&c胸束 {seconds} 秒后可再用'
+  hit_target: <prefix>&7你移除了 &a{target}&7 的能力。
+  hit_by: <prefix>&c{source}&7 移除了你的能力。
+fall_impact: '&c冲击'
+fall_impact_cooldown: '&c爆炸落地 {seconds} 秒后可再用'
+launch_cooldown: '&c起跳冲刺 {seconds} 秒后可再用'
+sonic_boom:
+  ring_cooldown: '&3音爆环 {seconds} 秒后可再用'
+  beam_cooldown: '&3音爆束 {seconds} 秒后可再用'
+stormstrike:
+  released: '&bStormstrike &7已释放'
+  cooldown: '&bStormstrike &c{seconds} 秒后可再用'
+  beam_on: '&f风暴束 &a已开启'
+  beam_off: '&7风暴束已关闭'
+  beam_overheated: '&f风暴束 &7冷却中'
+  beam_cooldown: '&f风暴束 &c{seconds} 秒后可再用'
+  fall_impact: '&f风暴落击 &7已释放'
+  fall_cooldown: '&f风暴落击 &c{seconds} 秒后可再用'
+flash_light:
+  flash_released: '&eFlash Light &7已释放 &8({targets} 个目标)'
+  flash_cooldown: '&eFlash Light &c{seconds} 秒后可再用'
+jumper:
+  activated: '&a跳跃爆发 &a已触发'
+  active: '&a跳跃爆发 &7剩余 {seconds} 秒'
+  cooldown: '&a跳跃爆发 &c{seconds} 秒后可再用'
+shockwave:
+  released: '&e冲击波 &7已释放'
+  cooldown: '&e冲击波 &c{seconds} 秒后可再用'
+fire_sonic:
+  beam_on: '&cFireSonic 光束 &a已开启'
+  beam_off: '&7FireSonic 光束已关闭'
+  beam_overheated: '&cFireSonic 光束 &7冷却中'
+  cooldown: '&cFireSonic 光束 &c{seconds} 秒后可再用'
+toxic_cloud:
+  cloud_released: '&2毒云 &7已释放 &8({targets} 个目标)'
+  cloud_cooldown: '&2毒云 &c{seconds} 秒后可再用'
+  vomit_cooldown: '&2毒吐 &c{seconds} 秒后可再用'
+the_countess:
+  fireball_cooldown: '&c火球 {seconds} 秒后可再用'
+the_headpopper:
+  no_target: '&c没有有效目标。'
+  cooldown: '&c爆头 {seconds} 秒后可再用'
+  countdown: '&c爆头 &7还有 &e{seconds} 秒'
+  countdown_active: '&c爆头 &7已在蓄力'
+  cancelled: '&7爆头已取消'
+  released: '&c爆头 &7已释放'
+  area_cooldown: '&c血脉冲 &c{seconds} 秒后可再用'
+  area_released: '&c血脉冲 &7已释放 &8({targets} 个目标)'
+spider_weaver:
+  cooldown: '&f蛛网弹 &c{seconds} 秒后可再用'
+  hit: '&f蛛网弹 &7命中'
+heal_angel:
+  heal_cooldown: '&a天使治疗 &c{seconds} 秒后可再用'
+  no_target: '&fHeal Angel &7需要生物或动物目标。'
+  command_released: '&fHeal Angel &7命令已下达'
+  command_cooldown: '&f天使号令 &c{seconds} 秒后可再用'
+  healed: '&a天使治疗 &7已释放'
+submarine:
+  sonar_on: '&b潜艇声呐 &a已开启'
+  sonar_off: '&7潜艇声呐已关闭'
+  sonar_water_only: '&b潜艇声呐 &7仅在水下有效'
+  dash: '&b潜艇冲刺 &a已触发'
+  dash_water_or_rain: '&b潜艇冲刺 &7仅在水或雨中有效'
+  dash_cooldown: '&b潜艇冲刺 &c{seconds} 秒后可再用'
+the_detonator:
+  released: '&c引爆 &7已释放'
+  cooldown: '&c引爆 &c{seconds} 秒后可再用'
+  charge_start: '&c引爆蓄力 &7已开始'
+  charge_progress: '&c引爆 &7还有 &e{seconds} 秒'
+  charge_cancelled: '&7引爆 &c已取消'
+size_changer:
+  big_on: '&5体型变化 &a巨大形态已开启'
+  small_on: '&5体型变化 &a缩小形态已开启'
+  normal: '&7体型变化已恢复正常'
+  cooldown: '&5体型变化 &c{seconds} 秒后可再用'
+  already_active: '&5体型变化 &7已在生效'
+  look_up_down: '&5体型变化 &7抬头变大、低头变小'
+command:
+  header: <prefix>&8━━━━━━━━ &aCompoundV 帮助 &8━━━━━━━━
+  give_bottle: <prefix>&8• &7/cv give &a<玩家>&7 bottle &d[compoundv|tempv|vone|antiv|vnull]
+  give_ability: <prefix>&8• &7/cv give &a<玩家>&7 &c<能力>&7 &d[药剂类型]
+  remove: <prefix>&8• &7/cv remove &a<玩家>
+  info_self: <prefix>&8• &7/cv info &d[玩家]
+  stats: <prefix>&8• &7/cv stats &d[玩家] &8- &7查看当前能力与操作
+  tutorial: <prefix>&8• &7/cv tutorial &8- &7领取 Compound V 手册
+  reload: <prefix>&8• &7/cv reload
+  abilities_list: <prefix>&8• &7能力列表：&a{list}
+  footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  give_bottle_ok: <prefix>&7已给予 &a{player}&7 &b{bottle}&7。
+  give_ability_ok: <prefix>&7已为 &a{player}&7 指定 &a{name}&7，并发送使用说明。
+  unknown_ability: <prefix>&c未知能力：&f{ability}
+  remove_ok: <prefix>&7已移除 &a{player}&7 的能力。
+  usage_give: <prefix>&c用法：&7/cv give <玩家> <bottle|ability> [药剂类型]
+  usage_remove: <prefix>&c用法：&7/cv remove <玩家>
+  tutorial_given: <prefix>&a你收到了 Compound V 手册。
+info:
+  plugin_header: <prefix>&8━━━━━━━━ &aCompoundV 信息 &8━━━━━━━━
+  plugin_version: <prefix>&8• &7版本：&a{version}
+  plugin_author: <prefix>&8• &7作者：&aThomas U.
+  plugin_ability_count: <prefix>&8• &7已加载能力：&a{count}
+  plugin_language: <prefix>&8• &7语言：&a{language}
+  help_hint: <prefix>&8• &7帮助：&f/cv help
+  player_header: <prefix>&8────── &a玩家状态 &8──────
+  player_target: <prefix>&8• &7玩家：&a{player}
+  player_none: <prefix>&8• &a{player}&7 没有激活的能力。
+  player_ability: <prefix>&8• &7能力：&a&l{name}
+  player_potion: <prefix>&8• &7来源：&b{potion}
+  player_status_permanent: <prefix>&8• &7状态：&a永久
+  player_status_temporary: <prefix>&8• &7状态：&e临时
+  player_expires: <prefix>&8• &7剩余：&e{minutes}分 {seconds}秒
+  player_controls_header: <prefix>&8────── &a操作与效果 &8──────
+  player_no_target_hint: <prefix>&8• &7用 &f/cv info <玩家>&7 查看他人。
+  plugin_footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stats:
+  header: <prefix>&8━━━━━━━━ &aCompoundV 统计 &8━━━━━━━━
+  player: <prefix>&8• &7玩家：&a{player}
+  ability: <prefix>&8• &7能力：&a&l{name}
+  source: <prefix>&8• &7来源：&b{potion}
+  permanent: <prefix>&8• &7状态：&a永久
+  temporary: <prefix>&8• &7剩余：&e{minutes}分 {seconds}秒
+  description_header: <prefix>&8────── &a能力说明 &8──────
+  none: <prefix>&a{player}&7 没有激活的 CompoundV 能力。
+  footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+bottle:
+  compound_v:
+    name: '&b&lCompound V'
+    lore_1: '&7实验血清，随机能力。'
+    lore_2: '&8喝下解锁能力。'
+  temp_v:
+    name: '&a&lTemp V'
+    lore_1: '&7临时血清，随机能力。'
+    lore_2: '&8按配置时长过期。'
+  v_one:
+    name: '&3&lV One'
+    lore_1: '&7精炼血清，强力能力。'
+    lore_2: '&8谨慎使用。'
+  anti_v:
+    name: '&c&lAnti V'
+    lore_1: '&7移除当前能力。'
+    lore_2: '&8喝下重置能力。'
+  v_null:
+    name: '&2&lV-Null 病毒'
+    lore_1: '&7空中传播的反超病原体。'
+    lore_2: '&8可投掷形态。'
+    lore_3: '&4对 V 能力玩家很危险。'
+serum:
+  default_lore_1: '&7中间酿造血清。'
+  default_lore_2: '&8继续酿造链。'
+  crystalline_serum:
+    name: '&b结晶血清'
+    lore_1: '&7紫水晶稳定基础血清。'
+    lore_2: '&8下一步：回响碎片。'
+  resonant_v_serum:
+    name: '&9共鸣 V 血清'
+    lore_1: '&7回响注入的 V 基础。'
+    lore_2: '&8下一步：荧石粉。'
+  activated_v_serum:
+    name: '&b&l活化 V 血清'
+    lore_1: '&7可分支为 Temp V 或 Compound V。'
+    lore_2: '&8糖 -> Temp V，钻石 -> Compound V。'
+  unstable_temp_v:
+    name: '&a不稳定 Temp V'
+    lore_1: '&7仍不稳定的临时 V。'
+    lore_2: '&8下一步：红石粉。'
+  unstable_v_serum:
+    name: '&b不稳定 V 血清'
+    lore_1: '&7仍不稳定的永久 V。'
+    lore_2: '&8下一步：远古残骸。'
+  draconic_serum:
+    name: '&5龙息血清'
+    lore_1: '&7龙息 V-One 基础。'
+    lore_2: '&8下一步：回响碎片。'
+  echo_charged_serum:
+    name: '&3回响充能血清'
+    lore_1: '&7共鸣 V-One 中间体。'
+    lore_2: '&8下一步：远古残骸。'
+  reinforced_serum:
+    name: '&8强化血清'
+    lore_1: '&7下界合金强化 V-One。'
+    lore_2: '&8下一步：发酵蛛眼。'
+  unstable_v_one_serum:
+    name: '&1不稳定 V-One 血清'
+    lore_1: '&7强力但不稳定的 V-One。'
+    lore_2: '&8下一步：不死图腾。'
+  cleansing_serum:
+    name: '&f净化血清'
+    lore_1: '&7牛奶中和基础。'
+    lore_2: '&8下一步：恶魂之泪。'
+  restorative_serum:
+    name: '&c修复血清'
+    lore_1: '&7Anti V 修复中间体。'
+    lore_2: '&8下一步：发酵蛛眼。'
+  decay_serum:
+    name: '&2腐朽血清'
+    lore_1: '&7凋零玫瑰病原体基础。'
+    lore_2: '&8下一步：发酵蛛眼。'
+  corrupted_serum:
+    name: '&5腐化血清'
+    lore_1: '&7腐化反超病原体。'
+    lore_2: '&8下一步：回响碎片。'
+  resonant_pathogen:
+    name: '&2共鸣病原体'
+    lore_1: '&7回响反应病原体。'
+    lore_2: '&8下一步：龙息。'
+  airborne_v_pathogen:
+    name: '&a空中 V 病原体'
+    lore_1: '&7空中传播载体。'
+    lore_2: '&8下一步：远古残骸。'
+  stabilized_v_null_pathogen:
+    name: '&2稳定 V-Null 病原体'
+    lore_1: '&7稳定的 V-Null 核心。'
+    lore_2: '&8下一步：不死图腾。'
+side_effect:
+  temp_v_lethal: <prefix>&4Temp V 过量&7，你的身体崩溃了。
+  adrenaline_crash: <prefix>&e副作用：&6肾上腺素崩溃&7，身体极度疲惫。
+  overload_sickness: <prefix>&e副作用：&a过载病&7。
+  muscle_failure: <prefix>&e副作用：&7肌肉衰竭&7，移动受阻。
+  internal_damage: <prefix>&e副作用：&c内伤&7。
+  severe_collapse: <prefix>&e副作用：&4严重虚脱&7。
+  failed_transformation: <prefix>&c转化失败&7，身体排斥部分血清。
+  heat_spike: <prefix>&c副作用：&6高热尖峰&7。
+  body_rejection: <prefix>&c副作用：&4身体排斥&7。
+  critical_instability: <prefix>&4临界不稳&7，V One 短时间让身体失控。
+  no_power: <prefix>&7无力&7，V One 不稳但能力仍激活。
+v_null:
+  hit_powered: <prefix>&2V-Null 病毒&7 感染了你的 V 系统，撑 15 分钟否则死亡。
+  hit_v_one: <prefix>&2V-Null 病毒&7 击中你，但 V One 部分抵抗。
+  no_effect: <prefix>&2V-Null 病毒&7 未发现 V 系统，无效。
+  hit_unpowered: <prefix>&2V-Null 病毒&7 对你影响很弱。
+tutorial_book:
+  title: Compound V 指南
+  author: Vought 实验室
+  page_1:
+  - '&1&lCompound V'
+  - '&8工作台实验室'
+  - ''
+  - '&0仅工作台合成。'
+  - '&0始终 2 个物品：'
+  - '&8原料 + 配料'
+  - '&2= 产物'
+  - ''
+  - '&0摆放形状无关。'
+  - '&4酿造台已禁用。'
+  page_2:
+  - '&1&l基础 1/2'
+  - ''
+  - '&01) 水瓶'
+  - '&8+ 下界疣'
+  - '&2= 粗制'
+  - ''
+  - '&02) 粗制'
+  - '&8+ 紫水晶'
+  - '&2= 结晶'
+  page_3:
+  - '&1&l基础 2/2'
+  - ''
+  - '&03) 结晶'
+  - '&8+ 回响碎片'
+  - '&2= 共鸣 V'
+  - ''
+  - '&04) 共鸣 V'
+  - '&8+ 荧石粉'
+  - '&2= 活化 V'
+  page_4:
+  - '&2&lTemp V'
+  - ''
+  - '&0活化 V'
+  - '&8+ 糖'
+  - '&2= 不稳定 Temp'
+  - ''
+  - '&0不稳定 Temp'
+  - '&8+ 红石粉'
+  - '&2= Temp V'
+  - ''
+  - '&4一生最多 5 次'
+  page_5:
+  - '&1&lCompound V'
+  - ''
+  - '&0活化 V'
+  - '&8+ 钻石'
+  - '&2= 不稳定 V'
+  - ''
+  - '&0不稳定 V'
+  - '&8+ 远古残骸'
+  - '&2= Compound V'
+  - ''
+  - '&0永久，除非 Anti V。'
+  page_6:
+  - '&3&lV One 1/2'
+  - ''
+  - '&01) 粗制'
+  - '&8+ 龙息'
+  - '&2= 龙息'
+  - ''
+  - '&02) 龙息'
+  - '&8+ 回响碎片'
+  - '&2= 回响充能'
+  page_7:
+  - '&3&lV One 2/2'
+  - ''
+  - '&03) 回响充能'
+  - '&8+ 远古残骸'
+  - '&2= 强化'
+  - ''
+  - '&04) 强化'
+  - '&8+ 发酵蛛眼'
+  - '&2= 不稳定 V-One'
+  - '&05) + 图腾'
+  - '&2= V One'
+  page_8:
+  - '&2&lAnti V'
+  - ''
+  - '&01) 粗制'
+  - '&8+ 牛奶桶'
+  - '&2= 净化'
+  - ''
+  - '&02) 净化'
+  - '&8+ 恶魂之泪'
+  - '&2= 修复'
+  - '&03) + 发酵蛛眼'
+  - '&2= Anti V'
+  page_9:
+  - '&4&lV-Null 1/2'
+  - ''
+  - '&01) 粗制'
+  - '&8+ 凋零玫瑰'
+  - '&2= 腐朽'
+  - ''
+  - '&02) 腐朽'
+  - '&8+ 发酵蛛眼'
+  - '&2= 腐化'
+  - '&03) + 回响碎片'
+  - '&2= 共鸣'
+  page_10:
+  - '&4&lV-Null 2/2'
+  - ''
+  - '&0共鸣'
+  - '&8+ 龙息'
+  - '&2= 空中'
+  - ''
+  - '&0空中'
+  - '&8+ 远古残骸'
+  - '&2= 稳定'
+  - '&0稳定 + 图腾'
+  - '&2= V-Null'
+  page_11:
+  - '&6&l能力'
+  - ''
+  - '&0Patriot, Diver'
+  - '&0Runner, Worm'
+  - '&0Flash Light'
+  - '&0Veteran, Sonic'
+  - '&0Stormstrike V-One'
+  - ''
+  - '&8/cv info 可看'
+  - '&8你的操作。'
+  page_12:
+  - '&4&l副作用'
+  - ''
+  - '&0Temp V:'
+  - '&8崩溃/生病'
+  - '&8衰竭/虚脱'
+  - ''
+  - '&0CV/V One:'
+  - '&8稀有额外 debuff'
+  - ''
+  - '&4副作用会'
+  - '&4叠加在能力上。'
