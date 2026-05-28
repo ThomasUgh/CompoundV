@@ -128,15 +128,18 @@ public class VisionAbility implements Ability {
 
     @SuppressWarnings("deprecation")
     private Team visionTeam() {
-        var manager = Bukkit.getScoreboardManager();
-        if (manager == null) return null;
-        var sb = manager.getMainScoreboard();
-        Team team = sb.getTeam("cv_vision_glow");
-        if (team == null) {
-            team = sb.registerNewTeam("cv_vision_glow");
+        try {
+            var manager = Bukkit.getScoreboardManager();
+            if (manager == null) return null;
+            var sb = manager.getMainScoreboard();
+            Team team = sb.getTeam("cv_vision_glow");
+            if (team == null) team = sb.registerNewTeam("cv_vision_glow");
             team.setColor(ChatColor.AQUA);
+            return team;
+        } catch (Throwable ignored) {
+            // Folia can reject global scoreboard team changes from region/entity threads.
+            return null;
         }
-        return team;
     }
     private static final class LocationSafe {
         private static void spawnEntityOutline(Player viewer, LivingEntity target, Particle.DustOptions dust) {

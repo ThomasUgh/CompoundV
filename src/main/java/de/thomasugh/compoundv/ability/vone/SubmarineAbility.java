@@ -230,14 +230,17 @@ public class SubmarineAbility implements Ability {
 
     @SuppressWarnings("deprecation")
     private Team sonarTeam() {
-        var manager = Bukkit.getScoreboardManager();
-        if (manager == null) return null;
-        var sb = manager.getMainScoreboard();
-        Team team = sb.getTeam("cv_submarine_sonar");
-        if (team == null) {
-            team = sb.registerNewTeam("cv_submarine_sonar");
+        try {
+            var manager = Bukkit.getScoreboardManager();
+            if (manager == null) return null;
+            var sb = manager.getMainScoreboard();
+            Team team = sb.getTeam("cv_submarine_sonar");
+            if (team == null) team = sb.registerNewTeam("cv_submarine_sonar");
             team.setColor(ChatColor.AQUA);
+            return team;
+        } catch (Throwable ignored) {
+            // Folia can reject global scoreboard team changes from region/entity threads.
+            return null;
         }
-        return team;
     }
 }

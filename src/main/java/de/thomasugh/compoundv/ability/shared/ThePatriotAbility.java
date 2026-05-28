@@ -168,7 +168,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             currentTargets.add(le.getUniqueId());
             le.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
                     45, 0, false, false, false));
-            team.addEntry(e.getUniqueId().toString());
+            if (team != null) team.addEntry(e.getUniqueId().toString());
         }
         clearStaleGlow(p, currentTargets);
         visibleTargets.put(p.getUniqueId(), currentTargets);
@@ -183,7 +183,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -197,7 +197,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -210,10 +210,19 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
 
     @SuppressWarnings("deprecation")
     private Team redTeam() {
-        var sb = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team t = sb.getTeam("cv_red_glow");
-        if (t == null) { t = sb.registerNewTeam("cv_red_glow"); t.setColor(ChatColor.RED); }
-        return t;
+        try {
+            var manager = Bukkit.getScoreboardManager();
+            if (manager == null) return null;
+            var sb = manager.getMainScoreboard();
+            Team t = sb.getTeam("cv_red_glow");
+            if (t == null) t = sb.registerNewTeam("cv_red_glow");
+            t.setColor(ChatColor.RED);
+            return t;
+        } catch (Throwable ignored) {
+            // Folia can reject global scoreboard team changes from region/entity threads.
+            // The glowing potion effect still works; color is optional.
+            return null;
+        }
     }
 
     public boolean isLaunching(Player p) { return launching.contains(p.getUniqueId()); }

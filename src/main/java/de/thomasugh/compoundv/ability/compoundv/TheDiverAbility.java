@@ -210,7 +210,7 @@ public class TheDiverAbility implements Ability {
             currentTargets.add(living.getUniqueId());
             living.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
                     45, 0, false, false, false));
-            team.addEntry(entity.getUniqueId().toString());
+            if (team != null) team.addEntry(entity.getUniqueId().toString());
         }
         clearStaleSonarGlow(player, currentTargets);
         visibleTargets.put(player.getUniqueId(), currentTargets);
@@ -225,7 +225,7 @@ public class TheDiverAbility implements Ability {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -239,7 +239,7 @@ public class TheDiverAbility implements Ability {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -252,12 +252,18 @@ public class TheDiverAbility implements Ability {
 
     @SuppressWarnings("deprecation")
     private Team sonarTeam() {
-        var sb = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team team = sb.getTeam("cv_sonar_glow");
-        if (team == null) {
-            team = sb.registerNewTeam("cv_sonar_glow");
+        try {
+            var manager = Bukkit.getScoreboardManager();
+            if (manager == null) return null;
+            var sb = manager.getMainScoreboard();
+            Team team = sb.getTeam("cv_sonar_glow");
+            if (team == null) team = sb.registerNewTeam("cv_sonar_glow");
             team.setColor(ChatColor.BLUE);
+            return team;
+        } catch (Throwable ignored) {
+            // Folia can reject global scoreboard team changes from region/entity threads.
+            // Sonar still applies glowing; the blue team color is optional.
+            return null;
         }
-        return team;
     }
 }
