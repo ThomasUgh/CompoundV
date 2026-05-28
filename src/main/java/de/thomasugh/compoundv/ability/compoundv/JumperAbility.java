@@ -83,7 +83,7 @@ public class JumperAbility implements Ability {
         player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 0.15, 0), 26, 0.6, 0.08, 0.6, 0.08);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("jumper.activated"));
 
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, player, () -> {
             if (player.isOnline()) {
                 activeUntil.remove(uuid);
                 player.removePotionEffect(PotionEffects.JUMP_BOOST);

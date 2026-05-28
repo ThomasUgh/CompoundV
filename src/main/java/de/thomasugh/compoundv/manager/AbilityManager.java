@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AbilityManager {
 
@@ -28,8 +29,8 @@ public class AbilityManager {
     private final AbilityRegistry    registry;
     private final PersistenceManager persistence;
 
-    private final Map<UUID, Ability>           activeAbility = new HashMap<>();
-    private final Map<UUID, PlayerAbilityData> playerData    = new HashMap<>();
+    private final Map<UUID, Ability>           activeAbility = new ConcurrentHashMap<>();
+    private final Map<UUID, PlayerAbilityData> playerData    = new ConcurrentHashMap<>();
     private TaskHandle tickTask = TaskHandle.NOOP;
 
     public AbilityManager(CompoundV plugin, AbilityRegistry registry, PersistenceManager persistence) {
@@ -146,28 +147,36 @@ public class AbilityManager {
     }
 
     private void tickAbilities() {
-        List<UUID> expired = new ArrayList<>();
-
-        for (Map.Entry<UUID, Ability> entry : activeAbility.entrySet()) {
-            Player player = Bukkit.getPlayer(entry.getKey());
-            if (player == null || !player.isOnline()) continue;
-
-            Ability ability = entry.getValue();
-            if (ability.needsTick()) {
-                ability.onTick(player);
-            }
-
-            PlayerAbilityData data = playerData.get(entry.getKey());
-            if (data != null && data.isExpired()) {
-                expired.add(entry.getKey());
-            }
-        }
-
-        for (UUID uuid : expired) {
+        for (UUID uuid : new ArrayList<>(activeAbility.keySet())) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
 
-            PlayerAbilityData data = playerData.get(uuid);
+            if (SchedulerAdapter.isFolia()) {
+                SchedulerAdapter.runNow(plugin, player, () -> tickSingleAbility(uuid, player));
+            } else {
+                tickSingleAbility(uuid, player);
+            }
+        }
+    }
+
+    private void tickSingleAbility(UUID uuid, Player player) {
+        if (player == null || !player.isOnline()) return;
+
+        Ability ability = activeAbility.get(uuid);
+        if (ability == null) return;
+
+        try {
+            if (ability.needsTick()) {
+                ability.onTick(player);
+            }
+        } catch (Throwable ex) {
+            plugin.getLogger().warning("Ability tick failed for " + ability.getId() + " / " + player.getName()
+                    + ": " + ex.getClass().getSimpleName() + " - " + (ex.getMessage() == null ? "no message" : ex.getMessage()));
+            ex.printStackTrace();
+        }
+
+        PlayerAbilityData data = playerData.get(uuid);
+        if (data != null && data.isExpired()) {
             plugin.getSideEffectManager().handleAbilityExpired(player, data);
             removeAndForget(player);
             player.sendMessage(plugin.getLocaleManager().msg("ability.expired"));

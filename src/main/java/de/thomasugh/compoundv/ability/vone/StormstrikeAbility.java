@@ -299,7 +299,7 @@ public class StormstrikeAbility implements Ability {
         player.setVelocity(new Vector(look.getX() * 0.20, velocity, look.getZ() * 0.20));
 
         int peakTicks = plugin.getConfig().getInt("abilities.stormstrike.launch_peak_ticks", 22);
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, player, () -> {
             launching.remove(uuid);
             if (player.isOnline()) {
                 player.setAllowFlight(true);
@@ -384,7 +384,7 @@ public class StormstrikeAbility implements Ability {
         int durationTicks = Math.max(2, plugin.getConfig().getInt("abilities.stormstrike.lightning_duration_ticks", 30));
         int damageInterval = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.lightning_damage_interval_ticks", 2));
         final TaskHandle[] task = new TaskHandle[1];
-        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+        task[0] = SchedulerAdapter.runTimer(plugin, player, new Runnable() {
             int age = 0;
 
             @Override public void run() {

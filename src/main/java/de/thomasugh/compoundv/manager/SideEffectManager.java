@@ -138,7 +138,7 @@ public class SideEffectManager {
             add(player, PotionEffects.POISON, seconds * 20, 4);
             add(player, PotionEffects.SLOWNESS, seconds * 20, 2);
             player.sendMessage(plugin.getLocaleManager().msg("v_null.hit_powered"));
-            SchedulerAdapter.runLater(plugin, () -> {
+            SchedulerAdapter.runLater(plugin, player, () -> {
                 if (!player.isOnline() || player.isDead()) return;
                 PlayerAbilityData current = plugin.getAbilityManager().getData(player);
                 if (current != null && (current.potionType() == CompoundPotion.COMPOUND_V || current.potionType() == CompoundPotion.TEMP_V)) {

@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.ability.compoundv;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.util.PotionEffects;
+import de.thomasugh.compoundv.util.TeleportUtil;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -86,7 +87,7 @@ public class TeleporterAbility implements Ability {
         World world = player.getWorld();
         world.spawnParticle(Particle.PORTAL, from.clone().add(0, 1, 0), 72, 0.35, 0.65, 0.35, 0.45);
         world.playSound(from, Sound.ENTITY_ENDERMAN_TELEPORT, 0.75f, 1.25f);
-        player.teleport(destination);
+        TeleportUtil.teleportSafely(plugin, player, destination);
         world.spawnParticle(Particle.PORTAL, destination.clone().add(0, 1, 0), 72, 0.35, 0.65, 0.35, 0.45);
         world.playSound(destination, Sound.ENTITY_ENDERMAN_TELEPORT, 0.75f, 1.45f);
     }

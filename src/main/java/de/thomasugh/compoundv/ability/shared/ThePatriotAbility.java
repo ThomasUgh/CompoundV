@@ -249,7 +249,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         int    peak = plugin.getConfig().getInt(s("launch_peak_ticks"), 28);
         double spd  = plugin.getConfig().getDouble(t("launch_fly_speed"),
                 plugin.getConfig().getDouble(s("launch_fly_speed"), 0.375));
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, p, () -> {
             launching.remove(u);
             if (p.isOnline()) {
                 p.setAllowFlight(true); p.setFlying(true);

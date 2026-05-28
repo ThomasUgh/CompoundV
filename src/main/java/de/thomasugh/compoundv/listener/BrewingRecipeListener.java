@@ -83,7 +83,8 @@ public class BrewingRecipeListener implements Listener {
 
     private void scheduleIfBrewer(Inventory inventory) {
         if (!(inventory instanceof BrewerInventory brewer)) return;
-        SchedulerAdapter.runLater(plugin, () -> tryStartBrew(brewer), 1L);
+        Location location = location(brewer);
+        SchedulerAdapter.runLaterAt(plugin, location, () -> tryStartBrew(brewer), 1L);
     }
 
     private void tryStartBrew(BrewerInventory inventory) {
@@ -102,7 +103,8 @@ public class BrewingRecipeListener implements Listener {
         setBrewingTime(inventory, plugin.getConfig().getInt("brewing.custom_brew_time_ticks", 400));
         playStart(inventory);
 
-        TaskHandle handle = SchedulerAdapter.runLater(plugin, () -> finishBrew(inventory, key, recipe),
+        Location brewLocation = location(inventory);
+        TaskHandle handle = SchedulerAdapter.runLaterAt(plugin, brewLocation, () -> finishBrew(inventory, key, recipe),
                 Math.max(1L, plugin.getConfig().getLong("brewing.custom_brew_time_ticks", 400)));
         activeBrews.put(key, handle);
     }
@@ -135,7 +137,7 @@ public class BrewingRecipeListener implements Listener {
 
         setBrewingTime(inventory, 0);
         if (changed) playFinish(inventory);
-        SchedulerAdapter.runLater(plugin, () -> tryStartBrew(inventory), 2L);
+        SchedulerAdapter.runLaterAt(plugin, location(inventory), () -> tryStartBrew(inventory), 2L);
     }
 
     private boolean consumeFuelIfRequired(BrewerInventory inventory) {

@@ -97,7 +97,7 @@ public class TheVeteranAbility implements Ability {
         TaskHandle previous = strengthRecoveryTasks.remove(uuid);
         if (previous != null) previous.cancel();
 
-        TaskHandle handle = SchedulerAdapter.runLater(plugin, () -> {
+        TaskHandle handle = SchedulerAdapter.runLater(plugin, player, () -> {
             strengthRecoveryTasks.remove(uuid);
             if (player.isOnline() && plugin.getAbilityManager().getAbility(player) == this) {
                 applyStrength(player, plugin.getConfig().getInt("abilities.the_veteran.strength_level", 5));
@@ -172,7 +172,7 @@ public class TheVeteranAbility implements Ability {
         long cooldownMs = plugin.getConfig().getLong("abilities.the_veteran.burst_cooldown_ms", 300_000L);
 
         final TaskHandle[] task = new TaskHandle[1];
-        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+        task[0] = SchedulerAdapter.runTimer(plugin, shooter, new Runnable() {
             int age = 0;
             int lastShownSecond = -1;
 
@@ -319,7 +319,7 @@ public class TheVeteranAbility implements Ability {
         int soundIntervalTicks = Math.max(periodTicks, Math.max(1, Math.round(40.0f / periodTicks)) * periodTicks);
 
         final TaskHandle[] task = new TaskHandle[1];
-        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+        task[0] = SchedulerAdapter.runTimerAt(plugin, base, new Runnable() {
             int age = 0;
 
             @Override public void run() {
@@ -438,7 +438,7 @@ public class TheVeteranAbility implements Ability {
         boolean surfaceOnly = plugin.getConfig().getBoolean("abilities.the_veteran.beam_surface_only", true);
 
         final TaskHandle[] task = new TaskHandle[1];
-        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+        task[0] = SchedulerAdapter.runTimer(plugin, shooter, new Runnable() {
             int age = 0;
             final Map<Block, Integer> weakenedBlocks = new HashMap<>();
             final Map<UUID, Double> playerDamageTaken = new HashMap<>();
@@ -456,7 +456,7 @@ public class TheVeteranAbility implements Ability {
                     beamTasks.remove(uuid);
                     int cloudDelayTicks = Math.max(20, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_delay_after_beam_ticks", 30));
                     Location cloudBase = shooter.getLocation().clone();
-                    SchedulerAdapter.runLater(plugin, () -> animateAtomicMushroom(cloudBase), cloudDelayTicks);
+                    SchedulerAdapter.runLaterAt(plugin, cloudBase, () -> animateAtomicMushroom(cloudBase), cloudDelayTicks);
                     if (task[0] != null) task[0].cancel();
                     return;
                 }

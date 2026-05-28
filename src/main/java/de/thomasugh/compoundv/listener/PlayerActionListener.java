@@ -31,7 +31,11 @@ import de.thomasugh.compoundv.manager.PotionRollManager;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.server.TaskHandle;
 import de.thomasugh.compoundv.util.ItemUtil;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.Particle;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
@@ -221,7 +225,7 @@ public class PlayerActionListener implements Listener {
         String tempAbilityId = tempData.abilityId();
         long tempExpiresAt = tempData.expiresAt();
 
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, player, () -> {
             Player p = Bukkit.getPlayer(uuid);
             if (p == null || !p.isOnline()) return;
 
@@ -319,7 +323,7 @@ public class PlayerActionListener implements Listener {
         potion.getWorld().playSound(potion.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 0.9f, 0.55f);
         final Location origin = potion.getLocation().clone();
         final TaskHandle[] task = new TaskHandle[1];
-        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+        task[0] = SchedulerAdapter.runTimerAt(plugin, origin, new Runnable() {
             int age = 0;
             @Override public void run() {
                 if (age >= durationTicks) {
@@ -485,7 +489,7 @@ public class PlayerActionListener implements Listener {
                 || ability instanceof TheWarriorAbility;
         if (!flightAbility) return;
 
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, player, () -> {
             Ability current = manager.getAbility(player);
             if (!player.isOnline() || current == null) return;
             if (!current.getId().equalsIgnoreCase(ability.getId())) return;

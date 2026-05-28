@@ -170,7 +170,7 @@ public class SubmarineAbility implements Ability {
             if (!(entity instanceof LivingEntity living) || entity.equals(player)) continue;
             currentTargets.add(living.getUniqueId());
             living.addPotionEffect(new PotionEffect(PotionEffects.GLOWING, 45, 0, false, false, false));
-            team.addEntry(entity.getUniqueId().toString());
+            if (team != null) team.addEntry(entity.getUniqueId().toString());
             Location loc = living.getLocation().add(0, Math.min(1.3, Math.max(0.7, living.getEyeHeight())), 0);
             player.spawnParticle(Particle.DUST, loc, 8, 0.28, 0.42, 0.28, 0, dust);
             player.spawnParticle(Particle.BUBBLE_POP, loc, 6, 0.20, 0.24, 0.20, 0.01);
@@ -186,7 +186,7 @@ public class SubmarineAbility implements Ability {
         for (UUID targetId : oldTargets) {
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) living.removePotionEffect(PotionEffects.GLOWING);
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -198,7 +198,7 @@ public class SubmarineAbility implements Ability {
             if (currentTargets.contains(targetId)) continue;
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) living.removePotionEffect(PotionEffects.GLOWING);
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -230,7 +230,9 @@ public class SubmarineAbility implements Ability {
 
     @SuppressWarnings("deprecation")
     private Team sonarTeam() {
-        var sb = Bukkit.getScoreboardManager().getMainScoreboard();
+        var manager = Bukkit.getScoreboardManager();
+        if (manager == null) return null;
+        var sb = manager.getMainScoreboard();
         Team team = sb.getTeam("cv_submarine_sonar");
         if (team == null) {
             team = sb.registerNewTeam("cv_submarine_sonar");

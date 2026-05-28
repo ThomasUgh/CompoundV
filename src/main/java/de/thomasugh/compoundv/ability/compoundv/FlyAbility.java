@@ -95,7 +95,7 @@ public class FlyAbility implements Ability {
 
         int peakTicks = plugin.getConfig().getInt("abilities.fly.launch_peak_ticks", 14);
         double flySpeed = plugin.getConfig().getDouble("abilities.fly.launch_fly_speed", 0.15);
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, player, () -> {
             launching.remove(uuid);
             if (player.isOnline()) {
                 player.setAllowFlight(true);

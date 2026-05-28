@@ -89,7 +89,7 @@ public class VisionAbility implements Ability {
             currentTargets.add(living.getUniqueId());
             living.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
                     45, 0, false, false, false));
-            team.addEntry(entity.getUniqueId().toString());
+            if (team != null) team.addEntry(entity.getUniqueId().toString());
         }
         clearStaleGlow(player, currentTargets);
         visibleTargets.put(player.getUniqueId(), currentTargets);
@@ -104,7 +104,7 @@ public class VisionAbility implements Ability {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -118,7 +118,7 @@ public class VisionAbility implements Ability {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            team.removeEntry(targetId.toString());
+            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -128,7 +128,9 @@ public class VisionAbility implements Ability {
 
     @SuppressWarnings("deprecation")
     private Team visionTeam() {
-        var sb = Bukkit.getScoreboardManager().getMainScoreboard();
+        var manager = Bukkit.getScoreboardManager();
+        if (manager == null) return null;
+        var sb = manager.getMainScoreboard();
         Team team = sb.getTeam("cv_vision_glow");
         if (team == null) {
             team = sb.registerNewTeam("cv_vision_glow");

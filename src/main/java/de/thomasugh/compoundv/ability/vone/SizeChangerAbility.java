@@ -142,7 +142,7 @@ public class SizeChangerAbility implements Ability {
                     (int) Math.min(Integer.MAX_VALUE, durationTicks + 20L),
                     Math.max(0, jumpBoostLevel - 1), false, false, true));
         }
-        revertTasks.put(uuid, SchedulerAdapter.runLater(plugin, () -> {
+        revertTasks.put(uuid, SchedulerAdapter.runLater(plugin, player, () -> {
             if (player.isOnline() && getMode(player) == Mode.BIG) {
                 revertToNormal(player, true, true);
             }
@@ -165,7 +165,7 @@ public class SizeChangerAbility implements Ability {
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0);
 
         long durationTicks = plugin.getConfig().getLong(path("small_duration_ticks"), 2400L);
-        revertTasks.put(uuid, SchedulerAdapter.runLater(plugin, () -> {
+        revertTasks.put(uuid, SchedulerAdapter.runLater(plugin, player, () -> {
             if (player.isOnline() && getMode(player) == Mode.SMALL) {
                 revertToNormal(player, true, true);
             }

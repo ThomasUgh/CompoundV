@@ -131,7 +131,7 @@ public class SonicBoomAbility implements Ability {
 
         int peakTicks = plugin.getConfig().getInt("abilities.sonic_boom.launch_peak_ticks", 24);
         double flySpeed = plugin.getConfig().getDouble("abilities.sonic_boom.launch_fly_speed", 0.30);
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLater(plugin, player, () -> {
             launching.remove(uuid);
             if (player.isOnline()) {
                 player.setAllowFlight(true);

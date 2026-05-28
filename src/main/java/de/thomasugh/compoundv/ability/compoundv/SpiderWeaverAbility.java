@@ -153,7 +153,7 @@ public class SpiderWeaverAbility implements Ability {
             placed.add(block);
         }
         if (placed.isEmpty()) return;
-        SchedulerAdapter.runLater(plugin, () -> {
+        SchedulerAdapter.runLaterAt(plugin, base.getLocation(), () -> {
             for (Block block : placed) {
                 if (block.getType() == Material.COBWEB) block.setType(Material.AIR, false);
             }

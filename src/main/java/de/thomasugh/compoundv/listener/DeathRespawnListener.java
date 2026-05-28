@@ -31,12 +31,12 @@ public final class DeathRespawnListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        SchedulerAdapter.runLater(plugin, () -> manager.handleRespawn(player), 5L);
+        SchedulerAdapter.runLater(plugin, player, () -> manager.handleRespawn(player), 5L);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        SchedulerAdapter.runLater(plugin, () -> manager.handleJoin(player), 10L);
+        SchedulerAdapter.runLater(plugin, player, () -> manager.handleJoin(player), 10L);
     }
 }

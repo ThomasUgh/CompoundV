@@ -94,7 +94,7 @@ public class TheDetonatorAbility implements Ability {
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.75f, 0.45f);
 
         final TaskHandle[] task = new TaskHandle[1];
-        task[0] = SchedulerAdapter.runTimer(plugin, new Runnable() {
+        task[0] = SchedulerAdapter.runTimer(plugin, player, new Runnable() {
             int age = 0;
             int lastSecond = -1;
 

@@ -151,7 +151,7 @@ public class TheHeadpopperAbility implements Ability {
 
         for (int i = 0; i < seconds; i++) {
             final int remaining = seconds - i;
-            SchedulerAdapter.runLater(plugin, () -> {
+            SchedulerAdapter.runLater(plugin, player, () -> {
                 if (!isValidMarkedTarget(player, target)) {
                     cancelCountdown(player, target);
                     return;
@@ -161,7 +161,7 @@ public class TheHeadpopperAbility implements Ability {
             }, i * 20L);
         }
 
-        SchedulerAdapter.runLater(plugin, () -> pop(player, target), seconds * 20L);
+        SchedulerAdapter.runLater(plugin, player, () -> pop(player, target), seconds * 20L);
     }
 
     private void pop(Player player, LivingEntity target) {

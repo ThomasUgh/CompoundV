@@ -130,7 +130,7 @@ public class ShockwaveAbility implements Ability {
 
         for (int i = 1; i <= Math.ceil(maxRadius / step); i++) {
             final double radius = Math.min(maxRadius, i * step);
-            SchedulerAdapter.runLater(plugin, () -> animateAndDamage(player, center, radius, maxRadius, hit), period * i);
+            SchedulerAdapter.runLater(plugin, player, () -> animateAndDamage(player, center, radius, maxRadius, hit), period * i);
         }
     }
 
