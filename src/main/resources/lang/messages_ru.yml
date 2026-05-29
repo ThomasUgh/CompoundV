@@ -620,9 +620,10 @@ stats:
   footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 death_messages:
-  heat_vision: "&c{victim}&7 got laser-cooked by &c{killer}&7."
-  the_patriot_heat_vision: "&4{victim}&7 was erased by &4{killer}'s&7 Heat Vision."
-  the_veteran_beam: "&e{victim}&7 got caught in &6{killer}'s&7 reactor beam."
-  the_veteran_ground_zero: "&6{victim}&7 stood too close to &e{killer}'s&7 Ground Zero."
-  stormstrike: "&b{victim}&7 was overcharged by &d{killer}&7."
-  the_headpopper: "&5{victim}&7 had a very bad thought near &5{killer}&7."
+  heat_vision: "{victim} был прожарен лазером от {killer}."
+  the_patriot_heat_vision: "{victim} был стёрт Heat Vision игрока {killer}."
+  the_veteran_beam: "{victim} попал под реакторный луч игрока {killer}."
+  the_veteran_ground_zero: "{victim} стоял слишком близко к Ground Zero игрока {killer}."
+  stormstrike: "{victim} был перегружен игроком {killer}."
+  the_headpopper: "{victim} подумал об очень плохом рядом с {killer}."
+  ice_cube: "{victim} был заморожен игроком {killer}."

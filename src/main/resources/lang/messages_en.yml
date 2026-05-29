@@ -660,9 +660,10 @@ tutorial_book:
     - "&4added to powers."
 
 death_messages:
-  heat_vision: "&c{victim}&7 got laser-cooked by &c{killer}&7."
-  the_patriot_heat_vision: "&4{victim}&7 was erased by &4{killer}'s&7 Heat Vision."
-  the_veteran_beam: "&e{victim}&7 got caught in &6{killer}'s&7 reactor beam."
-  the_veteran_ground_zero: "&6{victim}&7 stood too close to &e{killer}'s&7 Ground Zero."
-  stormstrike: "&b{victim}&7 was overcharged by &d{killer}&7."
-  the_headpopper: "&5{victim}&7 had a very bad thought near &5{killer}&7."
+  heat_vision: "{victim} got laser-cooked by {killer}."
+  the_patriot_heat_vision: "{victim} was erased by {killer}'s Heat Vision."
+  the_veteran_beam: "{victim} got caught in {killer}'s reactor beam."
+  the_veteran_ground_zero: "{victim} stood too close to {killer}'s Ground Zero."
+  stormstrike: "{victim} was overcharged by {killer}."
+  the_headpopper: "{victim} had a very bad thought near {killer}."
+  ice_cube: "{victim} was frozen out by {killer}."
