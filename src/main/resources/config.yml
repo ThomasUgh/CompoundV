@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # General
 # ─────────────────────────────────────────────────────────────────────────────
-# Available languages: en, de, es, fr, hi, ru, zh
+# Available languages: en, de, es, fr, hi, ru, zh, tr
 language: en
 
 updates:

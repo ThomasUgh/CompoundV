@@ -1,668 +1,672 @@
-language_file_version: 22
-prefix: "&8[&b&lBV&r&8] "
-
-general:
-  no_permission: "<prefix>Bunu yapmak için yetkin yok."
-  player_not_found: "<prefix>&cOyuncu bulunamadı."
-  reloaded: "<prefix>&aBileşikV Eklentisi yenilendi!."
-  not_a_player: "<prefix>&cBu komut sadece oyuncular tarafından kullanılabilir."
-  only_players: "<prefix>&cBu komut sadece oyuncular tarafından kullanılabilir."
-
-potion:
-  drinking: "<prefix>&7&bSerum&7 Aktifleştiriliyor..."
-  drink_temp_v: "<prefix>&aGeçici V&7 Aktifleştiriliyor. Gücün sınırlı süre için geçerli olacak."
-  drink_v_one: "<prefix>&3V One&7 Aktifleştiriliyor. Hazırla kendini."
-  drink_anti_v: "<prefix>&cEksi V&7 Aktif gücünü kaldırıyor."
-  no_ability: "<prefix>&7Aktif gücün yok."
-  milk_blocked: "<prefix>&7 Süt senin Bileşik V gücünü kaldıramaz. kaldırmak için Sıfırlayıcı Virüs veya EksiV kullan."
-  no_chances: "<prefix>&cBu potun yeterli güç verisi yok. Lütfen admin ile görüş."
-  roll_failed: "<prefix>&cBu serum belirlenemez. Lütfen admin ile görüş."
-
-  drink_v_null: "<prefix>&2Sıfırlayıcı Virüs&7 yayılıyor..."
-  temp_v_extended: "<prefix>&aGeçici V&7 Gücünün süresini uzattı. Aynı güçler daha fazla süre."
-  compound_v_after_temp: "<prefix>&bBileşik V&7 Geçici gücüne karıştı. Geçici V etkisi bitince gücü yerini alacak."
-  compound_v_delayed_granted: "<prefix>&bBileşik V&7 artık kalıcı olarak aktifleştirildi."
-  temp_v_blocked_by_compound: "<prefix>&aGeçici V&7 Kalıcı Bileşik V'nin yerini alamaz. Sadece yan efektlerini aldın."
-  no_effect_compound_active: "<prefix>&7Bileşik V Kalıcı gücün var etki veremez. İlk önce &cSıfırlayıcı Virüs&7'ü kullan."
-  no_effect_v_one_active: "<prefix>&7Kanındaki V One Daha fazla Bileşik almayı reddediyor. Hiçbir şey olmadı."
-  v_one_upgrade: "<prefix>&3V One&7 Gücünü yükseltti."
-  v_one_no_upgrade: "<prefix>&7V One Daha bu güc'ü yükseltmedi."
-
-  only_drinkable: "<prefix>&cBileşik V Serumu sadece kendine kullanılabilir. Eksi V Virüsü yere atılabilir."
-
-ability:
-  granted_header: "<prefix>&8━━━━━━━━ &aGüç Açıldı &8━━━━━━━━"
-  granted_name: "<prefix>&7&a&l{name}&r&7 İsimli gücü &b{potion}&7 ile açtın."
-  controls_header: "<prefix>&8────── &aKontroller & Efektleri &8──────"
-  granted_expires: "<prefix>&8• &7Süresi: &e{minutes}dk {seconds}sn"
-  granted_tip: "<prefix>&8• &7&f/cv stats&7 Komutunu kullanımı ve efektlerini görmek için istediğin zaman kullan."
-  granted_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-  lost_on_death: "<prefix>&cÖldükten sonra gücünü kaybettin."
-  expired: "<prefix>&eGeçici gücünün etkisi geçti."
-  removed_admin: "<prefix>&cAdmin tarafından gücün kaldırıldı."
-  removed_anti_v: "<prefix>&cSıfırlayıcı Virüs Gücünü kaldırdı."
-
-  the_patriot:
-    description:
-      - "<prefix>&8• &7Stil:&cYurtsever&7."
-      - "<prefix>&8• &aUçma&7 otomatik olarak açık."
-      - "<prefix>&8• &cLazer gözler&7: tuşa basımda &dF &8(Elindeki eşyayı değişme tuşu)&7 açıp kapatır. Varsayılan: &e5 Kalp&7, &e44 Blok&7."
-      - "<prefix>&8• &bXRay&7: &dEğil + Sol-tuş Havaya doğru&7 basarsan yakındaki canlıları görürsün."
-      - "<prefix>&8• &6Ani Kalkış&7: &dEğilip&7, yukarı bakarak zıplarsan ani kalkış gerçekleştirirsin."
-      - "<prefix>&8• &7Pasif güçler: &aGüç&7, &9Dayanıklılık&7, &dYenilenme&7 and &cBonus Can&7."
-  the_patriot_v_one:
-    description:
-      - "<prefix>&8• &7Stil:&cYurtsever&7."
-      - "<prefix>&8• &aUçma&7 daha güçlü V One takviyeleriyle otomatik olarak açık."
-      - "<prefix>&8• &cLazer gözler&7: tuşa basımda &dF &8(Elindeki eşyayı değişme tuşu)&7 açıp kapatır. Varsayılan: &e4.725 Kalp&7, &e50 Blok&7."
-      - "<prefix>&8• &bXRay&7: &dEğil + Sol-tuş Havaya doğru&7 basarsan yakındaki canlıları görürsün."
-      - "<prefix>&8• &6Ani Kalkış&7: &dEğilip&7, yukarı bakarak zıplarsan ani kalkış gerçekleştirirsin."
-      - "<prefix>&8• &7Pasif güçler: &aGüç&7, &9Dayanıklılık&7, &dYenilenme&7, &6Ateş Direnci&7 and &cBonus Can&7."
-  sonic_boom:
-    description:
-      - "<prefix>&8• &7Stil: &3Bombsight&7 gibi."
-      - "<prefix>&8• &aUçma&7 otomatik olarak açık."
-      - "<prefix>&8• &6Ani Kalkış&7: &dEğilip&7, yukarı bakarak zıplarsan ani kalkış gerçekleştirirsin. Uçmadan daha güçlü, Yurtsever'den biraz daha zayıftır."
-      - "<prefix>&8• &3Sonik Dalga&7: Warden benzeri sonik ışın fırlatmak için &dEğil + Sol Tıkla&7. Bekleme süresi: &e3sn&7."
-      - "<prefix>&8• &cPatlamalı Dövüş&7: Her 2. vuruşta küçük bir patlama tetiklenir; kritik vuruşlar daha fazla hasar verir."
-      - "<prefix>&8• &cPatlamalı İniş&7: Yüksekten düşerken yere indiğinde &dEğil&7. Bekleme süresi: &e60sn&7."
-      - "<prefix>&8• &7Pasif güçler: &aGüç IV&7 ve &9Dayanıklılık IV&7."
-  size_changer:
-    description:
-      - "<prefix>&8• &7Pasif güçler: &aGüç I&7 ve &9Dayanıklılık I&7."
-      - "<prefix>&8• &dEğil + Sol Tık + Yukarı bak&7: En fazla &e1dk&7 boyunca daha az ekstra hasarla &52 kat daha büyük&7 olursun."
-      - "<prefix>&8• &dEğil + Sol Tık + Aşağı bak&7: En fazla &e2dk&7 boyunca &53.5 kat daha küçük&7 olursun."
-      - "<prefix>&8• &7Boyut değişmişken &dEğil + Sol Tık + Yukarı/Aşağı bak&7 anında normal boyutuna döndürür."
-      - "<prefix>&8• &7Bekleme süresi normal boyuta döndükten sonra başlar."
-  size_changer_v_one:
-    description:
-      - "<prefix>&8• &3Boyut Değiştirici için V One Yükseltmesi&7. Pasif: &aGüç I&7 ve &9Dayanıklılık I&7."
-      - "<prefix>&8• &dEğil + Sol Tık + Yukarı bak&7: Azaltılmış V-One bonus hasarıyla yaklaşık &53 kat daha büyük&7 olursun."
-      - "<prefix>&8• &dEğil + Sol Tık + Aşağı bak&7: Yaklaşık &57 kat daha küçük&7 olursun."
-      - "<prefix>&8• &7Sadece aktif bir Boyut Değiştirici gücünü &3V One&7 ile yükselterek elde edilebilir."
-  heat_vision:
-    description:
-      - "<prefix>&8• &bLazer Gözler&7: Işını açıp kapatmak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &7Aşamalar: &bI&7 = 1.35 Kalp / 30 Blok, &aII&7 = 2 Kalp / 35 Blok."
-      - "<prefix>&8• &7Diğer aşamalar: &6III&7 = 2.25 Kalp / 37 Blok, &cIV&7 = 2.7 Kalp / 40 Blok."
-      - "<prefix>&8• &7Buzları/karları eritebilir ve öldürdüğün yaratıkların etlerini pişmiş düşürür."
-  the_diver:
-    description:
-      - "<prefix>&8• &7Stil: &bDerin&7 gibi."
-      - "<prefix>&8• &bSualtı Nefesi&7, &bYunus Lütfu VIII&7, &esualtında hız&7 ve &3Kanal Gücü II&7 kalıcı olarak aktiftir."
-      - "<prefix>&8• &bSonar&7: Yakındaki canlıları görmek için sualtındayken &dEğil + Sol Tıkla Havaya doğru&7 bas."
-      - "<prefix>&8• &bGirdap Atılışı&7: Suda veya yağmurda &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas, üç çatallı mızrak tut olmadan Girdap IV gibi atılırsın."
-      - "<prefix>&8• &7Pasif güçler: &aGüç II&7 ve &9Dayanıklılık I&7."
-      - "<prefix>&8• &7Sualtındayken, Güç ve Dayanıklılık &a+1 seviye&7 artar."
-  jumper:
-    description:
-      - "<prefix>&8• &aGüç I&7 kalıcı olarak aktiftir."
-      - "<prefix>&8• &aZıplama Patlaması&7: &aZıplama Desteği V&7 ve etkinken düşüş hasarı almamak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &7Varsayılan aktif süre: &e10sn&7. Bekleme süresi: &e15sn&7."
-  shockwave:
-    description:
-      - "<prefix>&8• &7Pasif güçler: &aGüç II&7 ve &9Dayanıklılık I&7."
-      - "<prefix>&8• &eŞok Dalgası&7: 10 blok geriye iten bir dalga yaymak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &7Hasar: Oyunculara &c3 Kalp&7, yaratıklara &c6 Kalp&7. Bekleme süresi: &e2dk&7."
-  vision:
-    description:
-      - "<prefix>&8• &bXRay&7: Yakındaki canlıları görmek için &dEğil + Sol Tıkla Havaya doğru&7 bas."
-      - "<prefix>&8• &7Varsayılan menzil: &e35 Blok&7."
-  the_runner:
-    description:
-      - "<prefix>&8• &7Stil: &eA-Tren&7 gibi."
-      - "<prefix>&8• &eKoşucu Hızı&7: Hız X, XI, XII, XV ve kapalı arasında geçiş yapmak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &eÇarpışma Koşusu&7: Canlıların içinden Hız X+ ile geçmek &c6 Kalp&7 hasar verir, artı her ekstra hız seviyesi için &c+1 Kalp&7 ekler."
-      - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık I&7, &c5 Ekstra Kalp&7 ve yakın dövüş bekleme süresi yok."
-  teleporter:
-    description:
-      - "<prefix>&8• &5Işınlanma&7: En fazla &e35 Blok&7 öteye ışınlanmak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &7Bekleme süresi: &e2 saniye&7. &aGüç I&7 ve &9Dayanıklılık I&7 pasiflerini içerir."
-  teleporter_v_one:
-    description:
-      - "<prefix>&8• &3Teleporter için V One Yükseltmesi&7."
-      - "<prefix>&8• &5Işınlanma&7: En fazla &e50 Blok&7 öteye ışınlanmak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &7Pasif güçler: &aGüç II&7 ve &9Dayanıklılık III&7."
-  fly:
-    description:
-      - "<prefix>&8• &aUçma&7 otomatik olarak açık."
-      - "<prefix>&8• &6Hafif Ani Kalkış&7: Daha zayıf bir kalkış için &dEğil&7, yukarı bak ve zıpla."
-      - "<prefix>&8• &7&aGüç I&7 ve &9Dayanıklılık I&7 içerir."
-  speedster:
-    description:
-      - "<prefix>&8• &eSüper Hız&7: Açıp kapatmak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &7Aktifken küçük bir &9Dayanıklılık&7 bonusu içerir."
-  strength:
-    description:
-      - "<prefix>&8• &aGüç&7 bu yeteneğe sahip olduğun sürece kalıcı olarak aktiftir."
-      - "<prefix>&8• &7Küçük bir &9Dayanıklılık&7 bonusu içerir."
-  the_ghost:
-    description:
-      - "<prefix>&8• &5Hayalet Modu&7: Görünmezliği açıp kapatmak için &dF &8(Elindeki eşyayı değişme tuşu)&7 tuşuna bas."
-      - "<prefix>&8• &7Etkinleştirildiğinde &5Görünmezlik II&7 alırsın ve yaratıklar seni hedef almaz."
-      - "<prefix>&8• &7Hayalet Modu aktifken sana odaklanmış yaratıkların odağı dağılır."
-      - "<prefix>&8• &7Pasif güçler: &9Dayanıklılık II&7, &aGüç I&7 ve &6Ateş Direnci&7."
-      - "<prefix>&8• &7Lazer Gözler Hayalet'e hasar vermez."
-  fire:
-    description:
-      - "<prefix>&8• &cAteş Aurası&7 yakındaki düşmanları otomatik olarak tutuşturur."
-      - "<prefix>&8• &6Ateş Direnci&7 etkindir."
-      - "<prefix>&8• &7&aGüç I&7 ve &9Dayanıklılık I&7 içerir."
-      - "<prefix>&8• &7Bu yeteneğe sahipken Çakmak veya Ateş Topu ile yere ateş yakman engellenir."
-  the_worm:
-    description:
-      - "<prefix>&8• &eAcele IV&7 efektiyle toprak, çimen, çakıl ve kumları aşırı hızlı kazar."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 &bGece Görüşünü&7 açıp kapatır."
-      - "<prefix>&8• &7Pasif güçler: &aGüç I&7 ve &9Dayanıklılık I&7."
-  flash_light:
-    description:
-      - "<prefix>&8• &7Stil: &eYıldız Işığı&7 gibi. Pasif: &aGüç II&7 ve &9Dayanıklılık I&7."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 çevredeki oyuncuları, yaratıkları ve hayvanları &e15 Blok&7 içinde &e20sn&7 boyunca kör eder. Bekleme süresi: &e2dk&7."
-      - "<prefix>&8• &dEğil + Sol Tık&7 ile &c2 Kalp&7 hasar veren, hafif yakan ve geriye iten 15 blokluk bir ışık ışını fırlat."
-  stormstrike:
-    description:
-      - "<prefix>&8• &7Stil: &eFırtına Cephesi&7 gibi. Elektrikli ani kalkışlı ve &e2.75 kat&7 uçuş hızlı &3Sadece V One&7 sürümüdür."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 en fazla &e6sn&7 boyunca 35 blokluk zikzaklı bir şimşek ışını fırlatır. Hasar: &c2.55 Kalp&7 ve Yavaşlık. Sadece tamamen kullanıldığında aşırı ısınma yapar."
-      - "<prefix>&8• &dEğil + Sol Tık&7 ile &e4 adet gerçek şimşek&7 çağır. Her 5. yakın dövüş vuruşu bir şimşek düşürür."
-      - "<prefix>&8• &7Eğilerek yere düşme etkisi: 10 blokluk yarıçapta 6 adet şimşek çakar. Bekleme süresi: &e100sn&7."
-      - "<prefix>&8• &7Pasif güçler: &aGüç III&7, &9Dayanıklılık III&7 ve &c10 Ekstra Kalp&7."
-  fire_sonic:
-    description:
-      - "<prefix>&8• &cAlev Aurası&7: Her yakın dövüş vuruşu ağır yanma uygular."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 en fazla &e2sn&7 boyunca ince bir alev ışını fırlatır. Hasar sıklığı Lazer Gözler hızına yakındır ancak daha zayıftır ve sadece tamamen kullanıldığında aşırı ısınır."
-  toxic_cloud:
-    description:
-      - "<prefix>&8• &7Pasif güçler: &aGüç I&7 ve &9Dayanıklılık I&7. Zehre karşı bağışıklık."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 önüne zehirli gaz salarak &2Zehir IV&7 uygular. Bekleme süresi: &e2dk&7."
-      - "<prefix>&8• &dEğil + Sol Tık&7 ile &c1.5 Kalp&7 hasar veren ve &2Zehir IV&7 uygulayan kısa bir zehirli kusmuk fırlatır. Yakın dövüş vuruşları kısa süreli Zehir I uygular."
-  the_countess:
-    description:
-      - "<prefix>&8• &7Stil: &cCrimson Countess&7 gibi."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 alev topu fırlatır. Bekleme süresi: &e5sn&7. Hasar: &c2-4 Kalp&7."
-      - "<prefix>&8• &7Küçük bir ateş animasyonuyla çift zıplama. Yakın dövüş vuruşları yanma uygular."
-      - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık I&7 ve &6Ateş Direnci&7."
-  the_warrior:
-    description:
-      - "<prefix>&8• &7Stil: &eKraliçe Maeve&7 gibi."
-      - "<prefix>&8• &7Pasif güçler: &aGüç III&7, &9Dayanıklılık II&7, &dYenilenme I&7 ve &c10 Ekstra Kalp&7."
-      - "<prefix>&8• &7Yüksekten düşüş koruması, güçlü çift zıplama ve sadece eğilirken &e6+ bloktan&7 patlayarak küçük iniş yapma."
-  the_headpopper:
-    description:
-      - "<prefix>&8• &7Stil: &cVictoria Neuman&7 gibi."
-      - "<prefix>&8• &dEğil + Sol Tık&7 ile &e30 Blok&7 mesafeye kadar olan bir hedefi &c3 saniyelik&7 geri sayım için işaretler."
-      - "<prefix>&8• &7Hasar: &c12.5 Kalp&7, yaratıklar/hayvanlar &cx2.5&7 hasar alır. Bekleme süresi: &e20sn&7."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 yakındaki tüm canlı hedeflere mevcut canlarının %25'i kadar hasar verir. Bekleme süresi: &e2dk&7."
-      - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık II&7, &dYenilenme I&7 ve Lazer Gözler bağışıklığı."
-  spider_weaver:
-    description:
-      - "<prefix>&8• &7Stil: &fAğ Örücü&7 gibi."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 veya &dEğil + Sol Tık&7 ile bir ağ fırlat. Bekleme süresi: &e5sn&7."
-      - "<prefix>&8• &7Hedefler hasar alır, yavaşlar/sabitlenir ve daha büyük örümcek ağı kümeleri en fazla &e1dk&7 kalabilir."
-      - "<prefix>&8• &7Duvarlara tırmanabilir ve düşüş hasarı almaz. Pasif: &aGüç I&7, &9Dayanıklılık I&7 ve &dYenilenme I&7."
-  heal_angel:
-    description:
-      - "<prefix>&8• &7Stil: &fPrivate Angel&7 gibi. &3Sadece V One&7."
-      - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık II&7, &dYenilenme II&7 ve &c5 Ekstra Kalp&7."
-      - "<prefix>&8• &dEğil + yakın dövüş vuruşu&7 hedefi &aazami canının %10'u&7 kadar iyileştirir (en az &a1 Kalp&7) ve hasar vermez. Bekleme süresi: &e1sn&7."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 hedeflediğin yaratığı/hayvanı 2 dakikalığına kendi tarafına çekip etraftakilere saldırtırsın (sen hariç). Bekleme süresi: &e30sn&7."
-  submarine:
-    description:
-      - "<prefix>&8• &7Stil: &bTorpido&7 gibi. &3Sadece V One&7."
-      - "<prefix>&8• &7Pasif: &aGüç II&7, &9Dayanıklılık II&7, Sualtı Nefesi, Yunus Lütfu ve Kanal Gücü."
-      - "<prefix>&8• &7Suda: &aGüç V&7 ve Yenilenme."
-      - "<prefix>&8• &dF &8(Elindeki eşyayı değişme tuşu)&7 &e1sn bekleme süreli&7 çift güçte atılış kullanır. &dEğil + Sol Tık&7 ile &e65 Blok&7 menzilli daha güçlü sonarı açıp kapatır."
-  the_detonator:
-    description:
-      - "<prefix>&8• &7Stil: &cNaqib&7 gibi."
-      - "<prefix>&8• &dEğil + Sol Tık&7 iptal edilebilir bir geri sayım başlatır, ardından kendi merkezli büyük bir patlama yayar. Bekleme süresi: &e10sn&7."
-      - "<prefix>&8• &7Pasif: &aGüç II&7, &9Dayanıklılık I&7 ve &6Ateş Direnci&7."
-      - "<prefix>&8• &7Yakın dövüş vuruşları hedefleri yakar. Her 3. vuruş küçük bir patlamalı vuruş tetikler."
-  the_veteran:
-    description:
-      - "<prefix>&8• &7Stil: &eAsker Çocuk&7 gibi."
-      - "<prefix>&8• &7Yüksek &aGüç&7, &9Dayanıklılık&7 ve &6Ateş Direnci&7."
-      - "<prefix>&8• &dEğil + Sol Tık&7: &e5sn şarj&7, ardından Göğüs Patlaması."
-      - "<prefix>&8• &7Göğüs Patlaması: Yüksek hasar, blok yakma ve oyuncuların gücünü kaldırma."
-      - "<prefix>&8• &7Çok yakın mesafeden güçlü bir patlama ve mantar bulutu ile başlar."
-
-toggle:
-  heat_vision_on: "{label} &aaktif"
-  heat_vision_off: "{label} &7deaktif"
-  heat_vision_overheated: "{label} &c{seconds}sn boyunca soğuyor"
-  heat_vision_cooldown: "{label} &c{seconds}sn içinde hazır"
-  xray_on: "&bXRay &aaktif"
-  xray_off: "&7XRay devre dışı"
-  sonar_on: "&bSonar &aaktif"
-  sonar_off: "&7Sonar devre dışı"
-  sonar_water_only: "&bSonar &7sadece sualtında çalışır"
-  diver_riptide: "&bGirdap Atılışı &aaktif"
-  diver_riptide_water_or_rain: "&bGirdap Atılışı &7sadece suda veya yağmurda çalışır"
-  diver_riptide_cooldown: "&cGirdap Atılışı {seconds}sn içinde hazır"
-  speed_on: "&eSüper Hız &aaktif"
-  speed_off: "&7Süper Hız devre dışı"
-  runner_speed_level: "&eKoşucu Hızı &7Seviye &a{level}"
-  runner_speed_off: "&7Koşucu Hızı devre dışı"
-  ghost_on: "&5Hayalet Modu &aaktif"
-  ghost_off: "&7Hayalet Modu devre dışı"
-  ghost_cooldown: "&5Hayalet Modu &c{seconds}sn içinde hazır"
-  worm_night_vision_on: "&6Solucan &bGece Görüşü &aaktif"
-  worm_night_vision_off: "&6Solucan &7Gece Görüşü devre dışı"
-
-teleporter:
-  used: "&5Işınlanma &atamamlandı"
-  cooldown: "&cIşınlanma {seconds}sn içinde hazır"
-  no_safe_location: "&cGüvenli ışınlanma noktası bulunamadı."
-
-veteran:
-  charge_start: "&eAsker Çocuk &7göğüs patlamasını dolduruyor..."
-  charge_progress: "&eGöğüs Patlaması... &7{seconds}sn içinde patlayacak"
-  charge_cancelled: "&cGöğüs Patlaması şarj süresi iptal edildi."
-  burst_start: "&eAsker Çocuk &7göğüs patlamasını serbest bıraktı."
-  burst_end: "&7Göğüs Patlaması bitti."
-  cooldown: "&cGöğüs Patlaması {seconds}sn içinde hazır"
-  hit_target: "<prefix>&7&a{target}&7 isimli oyuncunun gücünü kaldırdın."
-  hit_by: "<prefix>&c{source}&7 senin gücünü kaldırdı."
-
-fall_impact: "&cEtki"
-fall_impact_cooldown: "&cPatlamalı İniş {seconds}sn içinde hazır"
-launch_cooldown: "&cAni Kalkış {seconds}sn içinde hazır"
-
-sonic_boom:
-  ring_cooldown: "&3Sonik Halka &c{seconds}sn içinde hazır"
-  beam_cooldown: "&3Sonik Dalga &c{seconds}sn içinde hazır"
-
-stormstrike:
-  released: "&bFırtına Vuruşu &7bırakıldı"
-  cooldown: "&bFırtına Vuruşu &c{seconds}sn içinde hazır"
-  beam_on: "&fŞimşek Işını &aaktif"
-  beam_off: "&7Şimşek Işını devre dışı"
-  beam_overheated: "&fŞimşek Işını &7soğuyor"
-  beam_cooldown: "&fŞimşek Işını &c{seconds}sn içinde hazır"
-  fall_impact: "&fFırtına Düşüşü &7serbest bırakıldı"
-  fall_cooldown: "&fFırtına Düşüşü &c{seconds}sn içinde hazır"
-
-flash_light:
-  flash_released: "&eYıldız Işığı &7salındı &8({targets} hedef)"
-  flash_cooldown: "&eYıldız Işığı &c{seconds}sn içinde hazır"
-
-jumper:
-  activated: "&aZıplama Patlaması &aaktif"
-  active: "&aZıplama Patlaması &7{seconds}sn boyunca aktif"
-  cooldown: "&aZıplama Patlaması &c{seconds}sn içinde hazır"
-
-shockwave:
-  released: "&eŞok Dalgası &7salındı"
-  cooldown: "&eŞok Dalgası &c{seconds}sn içinde hazır"
-
-fire_sonic:
-  beam_on: "&cAlev Işını &aaktif"
-  beam_off: "&7Alev Işını devre dışı"
-  beam_overheated: "&cAlev Işını &7soğuyor"
-  cooldown: "&cAlev Işını &c{seconds}sn içinde hazır"
-
-toxic_cloud:
-  cloud_released: "&2Zehirli Bulut &7salındı &8({targets} hedef)"
-  cloud_cooldown: "&2Zehirli Bulut &c{seconds}sn içinde hazır"
-  vomit_cooldown: "&2Zehirli Kusmuk &c{seconds}sn içinde hazır"
-
-the_countess:
-  fireball_cooldown: "&cAlev Topu &c{seconds}sn içinde hazır"
-
-the_headpopper:
-  no_target: "&cGeçerli bir hedef yok."
-  cooldown: "&cKafa Patlatma {seconds}sn içinde hazır"
-  countdown: "&cKafa Patlatma &7{seconds}sn içinde gerçekleşecek"
-  countdown_active: "&cKafa Patlatma &7zaten şarj ediliyor"
-  cancelled: "&7Kafa Patlatma iptal edildi"
-  released: "&cKafa Patlatma &7gerçekleşti"
-  area_cooldown: "&cKan Nabzı {seconds}sn içinde hazır"
-  area_released: "&cKan Nabzı &7salındı &8({targets} hedef)"
-
-spider_weaver:
-  cooldown: "&fAğ Atışı &c{seconds}sn içinde hazır"
-  hit: "&fAğ Atışı &7isabet etti"
-
-heal_angel:
-  heal_cooldown: "&aMelek İyileştirmesi &c{seconds}sn içinde hazır"
-  no_target: "&fŞifa Meleği &7bir yaratık veya hayvan hedefi gerektirir."
-  command_released: "&fŞifa Meleği &7komutu verildi"
-  command_cooldown: "&fMelek Komutu &c{seconds}sn içinde hazır"
-  healed: "&aMelek İyileştirmesi &7salındı"
-
-submarine:
-  sonar_on: "&bDenizaltı Sonarı &aaktif"
-  sonar_off: "&7Denizaltı Sonarı devre dışı"
-  sonar_water_only: "&bDenizaltı Sonarı &7sadece sualtında çalışır"
-  dash: "&bDenizaltı Atılışı &aaktif"
-  dash_water_or_rain: "&bDenizaltı Atılışı &7sadece suda veya yağmurda çalışır"
-  dash_cooldown: "&bDenizaltı Atılışı &c{seconds}sn içinde hazır"
-
-the_detonator:
-  released: "&cKendi Kendini Patlatma &7gerçekleşti"
-  cooldown: "&cKendi Kendini Patlatma &c{seconds}sn içinde hazır"
-  charge_start: "&cPatlama hazırlığı &7başladı"
-  charge_progress: "&cPatlamaya &7{seconds}sn kaldı"
-  charge_cancelled: "&7Patlama hazırlığı iptal edildi"
-
-
-size_changer:
-  big_on: "&5Boyut Değiştirici &abüyük form aktif"
-  small_on: "&5Boyut Değiştirici &aküçük form aktif"
-  normal: "&7Boyut Değiştirici normal boyutuna döndü"
-  cooldown: "&5Boyut Değiştirici &c{seconds}sn içinde hazır"
-  already_active: "&5Boyut Değiştirici &7zaten aktif"
-  look_up_down: "&5Boyut Değiştirici &7büyük form için yukarı, küçük form için aşağı bak"
-
-command:
-  header: "<prefix>&8━━━━━━━━ &aCompoundV Yardım &8━━━━━━━━"
-  give_bottle: "<prefix>&8• &7/cv give &a<oyuncu>&7 bottle &d[compoundv|tempv|vone|antiv|vnull]"
-  give_ability: "<prefix>&8• &7/cv give &a<oyuncu>&7 &c<yetenek>&7 &d[iksirTürü]"
-  remove: "<prefix>&8• &7/cv remove &a<oyuncu>"
-  info_self: "<prefix>&8• &7/cv info &d[oyuncu]"
-  stats: "<prefix>&8• &7/cv stats &d[oyuncu] &8- &7aktif yeteneği ve kontrolleri gösterir"
-  tutorial: "<prefix>&8• &7/cv tutorial &8- &7sana Bileşik V el kitabını verir"
-  reload: "<prefix>&8• &7/cv reload"
-  abilities_list: "<prefix>&8• &7Yetenekler: &a{list}"
-  footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-  give_bottle_ok: "<prefix>&a{player}&7 adlı oyuncuya &b{bottle}&7 verildi."
-  give_ability_ok: "<prefix>&a{player}&7 adlı oyuncuya &a{name}&7 yeteneği atandı. Kullanım kılavuzu gönderildi."
-  unknown_ability: "<prefix>&cBilinmeyen yetenek: &f{ability}"
-  remove_ok: "<prefix>&a{player}&7 adlı oyuncunun yeteneği kaldırıldı."
-  usage_give: "<prefix>&cKullanım: &7/cv give <oyuncu> <bottle|ability> [iksirTürü]"
-  usage_remove: "<prefix>&cKullanım: &7/cv remove <oyuncu>"
-  tutorial_given: "<prefix>&aSana Bileşik V rehberi verildi."
-
-info:
-  plugin_header: "<prefix>&8━━━━━━━━ &aCompoundV Bilgi &8━━━━━━━━"
-  plugin_version: "<prefix>&8• &7Sürüm: &a{version}"
-  plugin_author: "<prefix>&8• &7Yazar: &aThomas U."
-  plugin_ability_count: "<prefix>&8• &7Yüklü Yetenekler: &a{count}"
-  plugin_language: "<prefix>&8• &7Dil: &a{language}"
-  help_hint: "<prefix>&8• &7Yardım: &f/cv help"
-  player_header: "<prefix>&8────── &aOyuncu Durumu &8──────"
-  player_target: "<prefix>&8• &7Oyuncu: &a{player}"
-  player_none: "<prefix>&8• &a{player}&7 adlı oyuncunun aktif yeteneği yok."
-  player_ability: "<prefix>&8• &7Yetenek: &a&l{name}"
-  player_potion: "<prefix>&8• &7Alınan Serum: &b{potion}"
-  player_status_permanent: "<prefix>&8• &7Durum: &aKalıcı"
-  player_status_temporary: "<prefix>&8• &7Durum: &eGeçici"
-  player_expires: "<prefix>&8• &7Süre bitimi: &e{minutes}dk {seconds}sn"
-  player_controls_header: "<prefix>&8────── &aKontroller & Efektler &8──────"
-  player_no_target_hint: "<prefix>&8• &7Bir oyuncuyu incelemek için &f/cv info <oyuncu>&7 kullan."
-  plugin_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-stats:
-  header: "<prefix>&8━━━━━━━━ &aCompoundV İstatistikleri &8━━━━━━━━"
-  player: "<prefix>&8• &7Oyuncu: &a{player}"
-  ability: "<prefix>&8• &7Yetenek: &a&l{name}"
-  source: "<prefix>&8• &7Alınan Serum: &b{potion}"
-  permanent: "<prefix>&8• &7Durum: &aKalıcı"
-  temporary: "<prefix>&8• &7Süre bitimi: &e{minutes}dk {seconds}sn"
-  description_header: "<prefix>&8────── &aYetenek Açıklaması &8──────"
-  none: "<prefix>&a{player}&7 adlı oyuncunun aktif bir CompoundV yeteneği yok."
-  footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-bottle:
-  compound_v:
-    name: "&b&lBileşik V"
-    lore_1: "&7Rastgele bir güç kazandıran deneysel serum."
-    lore_2: "&8Gücünü açığa çıkarmak için iç."
-  temp_v:
-    name: "&a&lGeçici V"
-    lore_1: "&7Rastgele bir güç kazandıran geçici serum."
-    lore_2: "&8Ayarlanan süre sonunda etkisi geçer."
-  v_one:
-    name: "&3&lV One"
-    lore_1: "&7Güçlü yeteneklere sahip rafine serum."
-    lore_2: "&8Dikkatli kullanın."
-  anti_v:
-    name: "&c&lSıfırlayıcı Virüs"
-    lore_1: "&7Aktif yeteneğinizi kaldırır."
-    lore_2: "&8Gücünü sıfırlamak için iç."
-
-
-  v_null:
-    name: "&2&lEksi V Virüsü"
-    lore_1: "&7Havadan bulaşan süper-karşıtı patojen."
-    lore_2: "&8Fırlatılabilir formlarına izin verilir."
-    lore_3: "&4V-güçlü oyunculara karşı tehlikelidir."
-
-serum:
-  default_lore_1: "&7Ara simya serumu."
-  default_lore_2: "&8Simya zincirine devam et."
-  crystalline_serum:
-    name: "&bKristalize Serum"
-    lore_1: "&7Ametist ile stabilize edilmiş temel serum."
-    lore_2: "&8Sonraki: Yankı Parçacığı."
-  resonant_v_serum:
-    name: "&9Rezonant V Serumu"
-    lore_1: "&7Yankı ile aşılanmış V temeli."
-    lore_2: "&8Sonraki: Işık Taşı Tozu."
-  activated_v_serum:
-    name: "&b&lAktive Edilmiş V Serumu"
-    lore_1: "&7Geçici V veya Bileşik V'ye ayrılmaya hazır."
-    lore_2: "&8Şeker -> Geçici V, Elmas -> Bileşik V."
-  unstable_temp_v:
-    name: "&aKararsız Geçici V"
-    lore_1: "&7Hâlâ kararsız olan geçici V serumu."
-    lore_2: "&8Sonraki: Kızıltaş Tozu."
-  unstable_v_serum:
-    name: "&bKararsız V Serumu"
-    lore_1: "&7Hâlâ kararsız olan kalıcı V serumu."
-    lore_2: "&8Sonraki: Antik Kalıntı."
-  draconic_serum:
-    name: "&5Ejder Serumu"
-    lore_1: "&7Ejderha nefesi ile üretilmiş V-One temeli."
-    lore_2: "&8Sonraki: Yankı Parçacığı."
-  echo_charged_serum:
-    name: "&3Yankıyla Yüklenmiş Serum"
-    lore_1: "&7Tınlayan V-One ara serumu."
-    lore_2: "&8Sonraki: Antik Kalıntı."
-  reinforced_serum:
-    name: "&8Güçlendirilmiş Serum"
-    lore_1: "&7Netherite ile güçlendirilmiş V-One serumu."
-    lore_2: "&8Sonraki: Mayalı Örümcek Gözü."
-  unstable_v_one_serum:
-    name: "&1Kararsız V-One Serumu"
-    lore_1: "&7Güçlü ama kararsız V-One serumu."
-    lore_2: "&8Sonraki: Ölümsüzlük Totemi."
-  cleansing_serum:
-    name: "&fArındırıcı Serum"
-    lore_1: "&7Süt bazlı nötrleştirici temel."
-    lore_2: "&8Sonraki: Ghast Gözyaşı."
-  restorative_serum:
-    name: "&cYenileyici Serum"
-    lore_1: "&7Yenileyici Sıfırlayıcı Virüs ara serumu."
-    lore_2: "&8Sonraki: Mayalı Örümcek Gözü."
-  decay_serum:
-    name: "&2Çürüme Serumu"
-    lore_1: "&7Wither Gülü patojen temeli."
-    lore_2: "&8Sonraki: Mayalı Örümcek Gözü."
-  corrupted_serum:
-    name: "&5Yozlaşmış Serum"
-    lore_1: "&7Yozlaşmış süper-karşıtı patojen."
-    lore_2: "&8Sonraki: Yankı Parçacığı."
-  resonant_pathogen:
-    name: "&2Rezonant Patojen"
-    lore_1: "&7Yankıya duyarlı patojen."
-    lore_2: "&8Sonraki: Ejderha Nefesi."
-  airborne_v_pathogen:
-    name: "&aHavadan Bulaşan V-Patojeni"
-    lore_1: "&7Havadan yayılan patojen taşıyıcı."
-    lore_2: "&8Sonraki: Antik Kalıntı."
-  stabilized_v_null_pathogen:
-    name: "&2Stabilize Eksi V Patojeni"
-    lore_1: "&7Stabilize edilmiş Eksi V çekirdeği."
-    lore_2: "&8Sonraki: Ölümsüzlük Totemi."
-
-side_effect:
-  temp_v_lethal: "<prefix>&4Geçici V Aşırı Doz Aşımı Sonucu&7. Vücudun çöküyor."
-
-  adrenaline_crash: "<prefix>&eYan etki: &6Adrenalin Çöküşü&7. Bedenin bitkin düşüyor."
-  overload_sickness: "<prefix>&eYan etki: &aAşırı Yükleme Hastalığı&7."
-  muscle_failure: "<prefix>&eYan etki: &7Kas Yetmezliği&7. Hareket kabiliyetin engelleniyor."
-  internal_damage: "<prefix>&eYan etki: &cİç Hasar&7."
-  severe_collapse: "<prefix>&eYan etki: &4Şiddetli Çöküş&7."
-  failed_transformation: "<prefix>&cDönüşüm Başarısız&7. Bedenin serumun bir kısmını reddediyor."
-  heat_spike: "<prefix>&cYan etki: &6Ani Ateş Yükselmesi&7."
-  body_rejection: "<prefix>&cYan etki: &4Beden Reddi&7."
-  critical_instability: "<prefix>&4Kritik Kararsızlık&7. V One kısa süreliğine bedenini dengesizleştiriyor."
-  no_power: "<prefix>&7Güç Yok&7. V One kararsız ancak yetenek aktif kalmaya devam ediyor."
-
-v_null:
-  hit_powered: "<prefix>&2Eksi V Virüsü&7 V sistemini enfekte etti. 15 dakika hayatta kal yoksa öleceksin!"
-  hit_v_one: "<prefix>&2Eksi V Virüsü&7 sana isabet etti ancak V One buna kısmen direniyor."
-  no_effect: "<prefix>&2Eksi V Virüsü&7 herhangi bir V-sistemi bulamadı. Etki etmedi."
-
-  hit_unpowered: "<prefix>&2Eksi V Virüsü&7 seni hafifçe etkiledi."
-
-
-tutorial_book:
-  title: "Bileşik V Rehberi"
-  author: "Vought Laboratuvarı"
-  page_1:
-    - "&1&lBileşik V"
-    - "&8Vought Laboratuvarı"
-    - ""
-    - "&0Sadece Çalışma Masasında yapılır."
-    - "&0Her zaman 2 eşya:"
-    - "&8Kaynak + Malzeme"
-    - "&2= Sonuç"
-    - ""
-    - "&0Eşyaların sırası ve şekli fark etmez."
-    - "&4Simya standı kapalı!"
-  page_2:
-    - "&1&lTemel 1/2"
-    - ""
-    - "&01) Su Şişesi"
-    - "&8+ Nether Yumrusu"
-    - "&2= Tuhaf İksir"
-    - ""
-    - "&02) Tuhaf İksir"
-    - "&8+ Ametist"
-    - "&2= Kristalize"
-  page_3:
-    - "&1&lTemel 2/2"
-    - ""
-    - "&03) Kristalize"
-    - "&8+ Yankı Parçacığı"
-    - "&2= Rezonant V"
-    - ""
-    - "&04) Rezonant V"
-    - "&8+ Işık Taşı"
-    - "&2= Aktive Edilmiş V"
-  page_4:
-    - "&2&lGeçici V"
-    - ""
-    - "&0Aktive Edilmiş V"
-    - "&8+ Şeker"
-    - "&2= Kararsız Geçici V"
-    - ""
-    - "&0Kararsız Geçici V"
-    - "&8+ Kızıltaş"
-    - "&2= Geçici V"
-    - ""
-    - "&4Can başına en fazla 5 doz"
-  page_5:
-    - "&1&lBileşik V"
-    - ""
-    - "&0Aktive Edilmiş V"
-    - "&8+ Elmas"
-    - "&2= Kararsız V"
-    - ""
-    - "&0Kararsız V"
-    - "&8+ Antik Kalıntı"
-    - "&2= Bileşik V"
-    - ""
-    - "&0Sıfırlayıcı Virüs kullanılana kadar kalıcıdır."
-  page_6:
-    - "&3&lV One 1/2"
-    - ""
-    - "&01) Tuhaf İksir"
-    - "&8+ Ejderha Nefesi"
-    - "&2= Ejder Serumu"
-    - ""
-    - "&02) Ejder Serumu"
-    - "&8+ Yankı Parçacığı"
-    - "&2= Yankıyla Yüklenmiş"
-  page_7:
-    - "&3&lV One 2/2"
-    - ""
-    - "&03) Yankıyla Yüklenmiş"
-    - "&8+ Antik Kalıntı"
-    - "&2= Güçlendirilmiş"
-    - ""
-    - "&04) Güçlendirilmiş"
-    - "&8+ Mayalı Göz"
-    - "&2= Kararsız V-One"
-    - "&05) + Totem"
-    - "&2= V One"
-  page_8:
-    - "&2&lSıfırlayıcı Virüs"
-    - ""
-    - "&01) Tuhaf İksir"
-    - "&8+ Süt Kovası"
-    - "&2= Arındırıcı"
-    - ""
-    - "&02) Arındırıcı"
-    - "&8+ Ghast Gözyaşı"
-    - "&2= Yenileyici"
-    - "&03) + Mayalı Göz"
-    - "&2= Sıfırlayıcı Virüs"
-  page_9:
-    - "&4&lEksi V 1/2"
-    - ""
-    - "&01) Tuhaf İksir"
-    - "&8+ Wither Gülü"
-    - "&2= Çürüme"
-    - ""
-    - "&02) Çürüme"
-    - "&8+ Mayalı Göz"
-    - "&2= Yozlaşmış"
-    - "&03) + Yankı Parçacığı"
-    - "&2= Rezonant Patojen"
-  page_10:
-    - "&4&lEksi V 2/2"
-    - ""
-    - "&0Rezonant Patojen"
-    - "&8+ Ejderha Nefesi"
-    - "&2= Havadan Bulaşan"
-    - ""
-    - "&0Havadan Bulaşan"
-    - "&8+ Antik Kalıntı"
-    - "&2= Stabilize"
-    - "&0Stabilize + Totem"
-    - "&2= Eksi V"
-  page_11:
-    - "&6&lYetenekler"
-    - ""
-    - "&0Patriot, Diver"
-    - "&0Runner, Worm"
-    - "&0Flash Light"
-    - "&0Veteran, Sonic"
-    - "&0Fırtına Vuruşu V-One"
-    - ""
-    - "&8/cv info yazarak"
-    - "&8kontrolleri gör."
-  page_12:
-    - "&4&lYan Etkiler"
-    - ""
-    - "&0Geçici V:"
-    - "&8Çöküş/Hastalık"
-    - "&8Yetmezlik/Yorulma"
-    - ""
-    - "&0CV/V One:"
-    - "&8nadir ekstra"
-    - "&8yan etkiler"
-    - "&4Güçlerinize"
-    - "&4eklenir."
-
-death_messages:
-  heat_vision: "&c{killer}&7 lazer ile &c{victim}&7 isimli oyuncunun beynini kızarttı."
-  the_patriot_heat_vision: "&4{killer}&7 lazer ile &4{victim}&7 isimli oyuncunun beynini dağıttı."
-  the_veteran_beam: "&6{killer}&7 göğüs patlaması ile &e{victim}&7 isimli oyuncunun DNA'sını yok etti."
-  the_veteran_ground_zero: "&e{killer}&7 göğüs patlaması ile &6{victim}&7 isimli oyuncunun varlığını sildi."
-  stormstrike: "&d{killer}&7 elektrik ile &b{victim}&7 isimli oyuncuyu aşırı elektrikle yükledi."
-  the_headpopper: "&5{killer}&7 telekinezi ile &5{victim}&7 isimli oyuncunun kafasını patlattı."
+"language_file_version": 28
+"prefix": "&8[&b&lCV&r&8] "
+"general":
+  "no_permission": "<prefix>&cBunu yapmak için yetkin yok."
+  "player_not_found": "<prefix>&cOyuncu bulunamadı."
+  "reloaded": "<prefix>&aCompoundV yeniden yüklendi."
+  "not_a_player": "<prefix>&cBu komut sadece oyuncular tarafından kullanılabilir."
+  "only_players": "<prefix>&cBu komut sadece oyuncular tarafından kullanılabilir."
+"potion":
+  "drinking": "<prefix>&7&bSerum&7 aktifleşiyor..."
+  "drink_temp_v": "<prefix>&aTemp V&7 aktifleşiyor. Yeteneğin sadece sınırlı süre geçerli olacak."
+  "drink_v_one": "<prefix>&3V One&7 aktifleşiyor. Kendini hazırla."
+  "drink_anti_v": "<prefix>&cAnti V&7 aktif yeteneğini kaldırıyor."
+  "no_ability": "<prefix>&7Aktif bir yeteneğin yok."
+  "milk_blocked": "<prefix>&cSüt Compound V güçlerini kaldıramaz. Bunun için Anti V veya V-Null kullan."
+  "no_chances": "<prefix>&cBu iksir için geçerli yetenek yapılandırılmamış. Lütfen bir admin ile iletişime geç."
+  "roll_failed": "<prefix>&cSerum işlenemedi. Lütfen bir admin ile iletişime geç."
+  "drink_v_null": "<prefix>&2V-Null Virüsü&7 yayılıyor..."
+  "temp_v_extended": "<prefix>&aTemp V&7 uzatıldı. Aynı yetenek, daha uzun süre."
+  "compound_v_after_temp": "<prefix>&bCompound V&7 geçici yeteneğinle bağlandı. Temp V bitince kalıcı Compound V yeteneği\
+    \ aktifleşecek."
+  "compound_v_delayed_granted": "<prefix>&bCompound V&7 artık kalıcı olarak aktifleşti."
+  "temp_v_blocked_by_compound": "<prefix>&aTemp V&7 kalıcı Compound V gücünün üzerine yazamaz. Sadece küçük yan etkiler oluştu."
+  "no_effect_compound_active": "<prefix>&7Zaten kalıcı bir yeteneğin varken Compound V etki etmez. Önce &cAnti V&7 kullan."
+  "no_effect_v_one_active": "<prefix>&7V One sistemin daha fazla V maddesini reddediyor. Hiçbir şey olmadı."
+  "v_one_upgrade": "<prefix>&3V One&7 mevcut gücünü yükseltti."
+  "v_one_no_upgrade": "<prefix>&7V One bu yetenekle henüz tepki vermedi."
+  "only_drinkable": "<prefix>&cCompound V serumları sadece normal içilebilir iksir olarak kullanılabilir. V-Null Virüsü fırlatılabilir."
+"ability":
+  "granted_header": "<prefix>&8━━━━━━━━ &aYetenek Açıldı &8━━━━━━━━"
+  "granted_name": "<prefix>&b{potion}&7 ile &a&l{name}&r&7 yeteneğini açtın."
+  "controls_header": "<prefix>&8────── &aKontroller & Etkiler &8──────"
+  "granted_expires": "<prefix>&8• &7Süre: &e{minutes}dk {seconds}sn"
+  "granted_tip": "<prefix>&8• &7Mevcut yeteneğini ve kontrollerini görmek için istediğin zaman &f/cv stats&7 kullan."
+  "granted_footer": "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  "lost_on_death": "<prefix>&cÖlünce yeteneğini kaybettin."
+  "expired": "<prefix>&eGeçici yeteneğinin süresi doldu."
+  "removed_admin": "<prefix>&cYeteneğin bir admin tarafından kaldırıldı."
+  "removed_anti_v": "<prefix>&cAnti V yeteneğini kaldırdı."
+  "the_patriot":
+    "description":
+    - "<prefix>&8• &7Stil: &cHomelander&7 gibi."
+    - "<prefix>&8• &aUçuş&7 otomatik olarak aktiftir."
+    - "<prefix>&8• &cLazer Gözler&7: açıp kapatmak için &dF &8(Elindeki eşyayı değiştirme tuşu)&7 bas. Varsayılan: &e5 kalp&7,\
+      \ &e44 blok&7."
+    - "<prefix>&8• &bXRay&7: yakındaki canlıları görmek için &dEğil + Havaya Sol Tık&7."
+    - "<prefix>&8• &6Ani Kalkış&7: fırlamak için &dEğil&7, yukarı bak ve zıpla."
+    - "<prefix>&8• &cHız Atılışı&7: &dEğil + hotbar kaydır&7 ile &e25 bloğa&7 kadar ileri atıl."
+    - "<prefix>&8• &cİleri Sıçrama&7: &dEğil + zıpla + ileri hareket et&7 ile düz 10-15 blokluk atılış."
+    - "<prefix>&8• &7Pasif güçler: &aGüç&7, &9Dayanıklılık&7, &dYenilenme&7 ve &cBonus Can&7."
+  "the_patriot_v_one":
+    "description":
+    - "<prefix>&8• &7Stil: &cHomelander&7 gibi."
+    - "<prefix>&8• &aUçuş&7 daha güçlü V One destekleriyle otomatik olarak aktiftir."
+    - "<prefix>&8• &cLazer Gözler&7: açıp kapatmak için &dF &8(Elindeki eşyayı değiştirme tuşu)&7 bas. Varsayılan: &e4.725\
+      \ kalp&7, &e50 blok&7."
+    - "<prefix>&8• &bXRay&7: yakındaki canlıları görmek için &dEğil + Havaya Sol Tık&7."
+    - "<prefix>&8• &6Ani Kalkış&7: fırlamak için &dEğil&7, yukarı bak ve zıpla."
+    - "<prefix>&8• &cHız Atılışı&7: &dEğil + hotbar kaydır&7 ile &e25 bloğa&7 kadar ileri atıl."
+    - "<prefix>&8• &cİleri Sıçrama&7: &dEğil + zıpla + ileri hareket et&7 ile düz 10-15 blokluk atılış."
+    - "<prefix>&8• &7Pasif güçler: &aGüç&7, &9Dayanıklılık&7, &dYenilenme&7, &6Ateş Direnci&7 ve &cBonus Can&7."
+  "sonic_boom":
+    "description":
+    - "<prefix>&8• &7Stil: &3Bombsight&7."
+    - "<prefix>&8• &aUçuş&7 is aktif auhedefinematically."
+    - "<prefix>&8• &6Ani Kalkış&7: &dEğil&7, yukarı bak ve zıpla. Stronger than Uçuş, slightly weaker than Patriot."
+    - "<prefix>&8• &3Sonik Işın&7: &dEğil + Sol Tık&7 hedefine fire a Warden-gibi sonic beam. Bekleme süresi: &e3s&7."
+    - "<prefix>&8• &cPatlamalı Yakın Dövüş&7: her 2. vuruş küçük bir patlama ekler; kritikler daha sert vurur."
+    - "<prefix>&8• &cPatlamalı İniş&7: &dEğil&7 yüksekten düştükten sonra yere inerken. Bekleme süresi: &e60s&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç IV&7 and &9Dayanıklılık IV&7."
+  "size_changer":
+    "description":
+    - "<prefix>&8• &7Pasif güçler: &aGüç I&7 and &9Dayanıklılık I&7."
+    - "<prefix>&8• &dEğil + Sol Tık + look up&7: olursun &52x daha büyük&7 azaltılmış bonus hasarla for en fazla &e1dk&7."
+    - "<prefix>&8• &dEğil + Sol Tık + look down&7: olursun &53.5x daha küçük&7 for en fazla &e2dk&7."
+    - "<prefix>&8• &7Dönüşmüşken, &dEğil + Sol Tık + look up/down&7 returns you hedefine normal instantly."
+    - "<prefix>&8• &7Bekleme süresi starts after returning hedefine normal."
+  "size_changer_v_one":
+    "description":
+    - "<prefix>&8• &3V One Yükseltmesi&7 for Boyut Değiştirici. Passive: &aGüç I&7 and &9Dayanıklılık I&7."
+    - "<prefix>&8• &dEğil + Sol Tık + look up&7: about &53x daha büyük&7 with reduced V-One bonus damage."
+    - "<prefix>&8• &dEğil + Sol Tık + look down&7: about &57x daha küçük&7."
+    - "<prefix>&8• &7Sadece aktif bir Boyut Değiştirici &3V One&7 ile yükseltilerek elde edilir."
+  "heat_vision":
+    "description":
+    - "<prefix>&8• &bLazer Gözler&7: ışını açıp kapatmak için &dF &8(Elindeki eşyayı değiştirme tuşu)&7 bas."
+    - "<prefix>&8• &7Aşamalar: &bI&7 = 1.35 kalp / 30 blok, &aII&7 = 2 kalp / 35 blok."
+    - "<prefix>&8• &7Diğer aşamalar: &6III&7 = 2.25 kalp / 37 blok, &cIV&7 = 2.7 kalp / 40 blok."
+    - "<prefix>&8• &7Buzları, kar bloklarını, ince kar katmanlarını eritebilir, bambuyu kesebilir ve çiğ yaratık düşüşlerini\
+      \ pişirebilir."
+  "ice_cube":
+    "description":
+    - "<prefix>&8• &bBuzda Yürüyüş&7: hareket ederken altındaki su donar."
+    - "<prefix>&8• &bBuz Kayışı&7: her blok kaygan hissedilir; buz üstünde alırsın &eSpeed II&7."
+    - "<prefix>&8• &bBuz Dikenı&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefine küçük bir buz dikeni fırlatmak için.\
+      \ Bekleme süresi: &e3s&7."
+    - "<prefix>&8• &7Buz dikenleri uygular &bYavaşlık III&7 for &e5s&7 and &7Zayıflık II&7 for &e10s&7."
+    - "<prefix>&8• &7Yakın dövüş vuruşları uygular &bYavaşlık I&7 for &e5s&7."
+    - "<prefix>&8• &bBuz Duvarı&7: &dEğil + Sol Tık&7 yaklaşık geçici bir duvar oluşturur &e4 blok&7 ileride. Bekleme süresi:\
+      \ &e60s&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç I&7 and &9Dayanıklılık I&7."
+  "the_diver":
+    "description":
+    - "<prefix>&8• &7Stil: &bThe Deep&7."
+    - "<prefix>&8• &bSuda Nefes&7, &bYunusun Lütfu VIII&7, &esualtında hız&7 and &3Kanal Gücü II&7 kalıcı olarak aktiftir."
+    - "<prefix>&8• &bSonar&7: &dEğil + Havaya Sol Tık&7 sualtındayken hedefine reveal nearby entities."
+    - "<prefix>&8• &bGirdap Atılışı&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 suda veya yağmurda, similar hedefine\
+      \ Riptide IV without holding a trident."
+    - "<prefix>&8• &7Pasif güçler: &aGüç II&7 and &9Dayanıklılık I&7."
+    - "<prefix>&8• &7Sualtındayken, Güç and Dayanıklılık artar &a+1 level&7."
+  "jumper":
+    "description":
+    - "<prefix>&8• &aGüç I&7 is active permanently."
+    - "<prefix>&8• &aZıplama Patlaması&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 for &aZıplama Desteği V&7 ve aktifken\
+      \ düşme hasarı yok."
+    - "<prefix>&8• &7Varsayılan aktif süre: &e10s&7. Bekleme süresi: &e15s&7."
+  "shockwave":
+    "description":
+    - "<prefix>&8• &7Pasif güçler: &aGüç II&7 and &9Dayanıklılık I&7."
+    - "<prefix>&8• &eŞok Dalgası&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefine 10 blokluk geri itme dalgası yaymak\
+      \ için."
+    - "<prefix>&8• &7Hasar: &c3 kalp&7 hedefine oyuncular, &c6 kalp&7 hedefine yaratıklar. Bekleme süresi: &e2dk&7."
+  "vision":
+    "description":
+    - "<prefix>&8• &bXRay&7: &dEğil + Havaya Sol Tık&7 hedefine reveal nearby entities."
+    - "<prefix>&8• &7Varsayılan menzil: &e35 blok&7."
+  "the_runner":
+    "description":
+    - "<prefix>&8• &7Stil: &eA-Train&7."
+    - "<prefix>&8• &eKoşucu Hızı&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefine arasında geçiş yap Speed X, XI,\
+      \ XII, XV ve kapalı."
+    - "<prefix>&8• &eÇarpışma Koşusu&7: canlıların içinden koşmak at Speed X+ hasar verir &c6 kalp&7, artı &c+1 heart&7 her\
+      \ ek hız seviyesi için."
+    - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık I&7, &c5 extra kalp&7 and yakın dövüş bekleme süresi yok."
+  "teleporter":
+    "description":
+    - "<prefix>&8• &5Işınlanma&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefine teleport up hedefine &e35 blok&7."
+    - "<prefix>&8• &7Bekleme süresi: &e2 saniye&7. İçerir &aGüç I&7 and &9Dayanıklılık I&7."
+  "teleporter_v_one":
+    "description":
+    - "<prefix>&8• &3V One Yükseltmesi&7 for Teleporter."
+    - "<prefix>&8• &5Işınlanma&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefine teleport up hedefine &e50 blok&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç II&7 and &9Dayanıklılık III&7."
+  "fly":
+    "description":
+    - "<prefix>&8• &aUçuş&7 is aktif auhedefinematically."
+    - "<prefix>&8• &6Light Ani Kalkış&7: &dEğil&7, yukarı bak ve zıpla for a weaker launch."
+    - "<prefix>&8• &7İçerir &aGüç I&7 and &9Dayanıklılık I&7."
+  "speedster":
+    "description":
+    - "<prefix>&8• &eSüper Hız&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefine hedefineggle it on/off."
+    - "<prefix>&8• &7İçerir a small &9Dayanıklılık&7 bonus while active."
+  "strength":
+    "description":
+    - "<prefix>&8• &aGüç&7 is active permanently while you own this ability."
+    - "<prefix>&8• &7İçerir a small &9Dayanıklılık&7 bonus."
+  "the_ghost":
+    "description":
+    - "<prefix>&8• &5Ghost Mode&7: bas &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefine hedefineggle invisibility."
+    - "<prefix>&8• &7When aktif you receive &5Görünmezlik II&7 and yaratıklar will not target you."
+    - "<prefix>&8• &7Existing mob targets are cleared while Ghost Mode is active."
+    - "<prefix>&8• &7Pasif güçler: &9Dayanıklılık II&7, &aGüç I&7 and &6Fire Dayanıklılık&7."
+    - "<prefix>&8• &7Lazer Gözler hasar verir no damage hedefine The Ghost."
+  "fire":
+    "description":
+    - "<prefix>&8• &cAteş Aurası&7 ignites nearby enemies auhedefinematically."
+    - "<prefix>&8• &6Fire Dayanıklılık&7 is aktif."
+    - "<prefix>&8• &7İçerir &aGüç I&7 and &9Dayanıklılık I&7."
+    - "<prefix>&8• &7Vanilla right-click fire placement with &6Flint and Steel&7 or &6Fire Charges&7 is blocked while you\
+      \ own this ability."
+  "the_worm":
+    "description":
+    - "<prefix>&8• &7Very fast digging with &eAcele IV&7, focused on dirt, grass, gravel and sand gameplay."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 hedefineggles &bGece Görüşü&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç I&7 and &9Dayanıklılık I&7."
+  "flash_light":
+    "description":
+    - "<prefix>&8• &7Stil: &eStarlight&7. Passive: &aGüç II&7 and &9Dayanıklılık I&7."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 blinds oyuncular, yaratıklar and animals in &e15 blok&7 for &e20s&7.\
+      \ Bekleme süresi: &e2dk&7."
+    - "<prefix>&8• &dEğil + Sol Tık&7 fires a 15-block light beam with &c2 kalp&7, tiny burn and knockback."
+  "stormstrike":
+    "description":
+    - "<prefix>&8• &7Stil: &eShedefinermfront&7. &3V One only&7 with electric jump start and &e2.75x&7 fly speed."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 fires a jagged 35-block lightning beam for en fazla &e6s&7. Hasar:\
+      \ &c2.55 kalp&7 and Yavaşlık. Only overheats after full use."
+    - "<prefix>&8• &dEğil + Sol Tık&7 summons &e4 real lightning strikes&7. Every 5th melee hit calls a lightning strike."
+    - "<prefix>&8• &7Eğil fall impact: 6 lightning strikes in a 10-block radius. Bekleme süresi: &e100s&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç III&7, &9Dayanıklılık III&7 and &c10 extra kalp&7."
+  "fire_sonic":
+    "description":
+    - "<prefix>&8• &cFlame Aura&7: every melee hit applies heavy burn."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 fires a thin flame beam for en fazla &e2s&7. Hasar ticks are\
+      \ close hedefine Lazer Gözler speed but weaker and only overheat after full use."
+  "toxic_cloud":
+    "description":
+    - "<prefix>&8• &7Pasif güçler: &aGüç I&7 and &9Dayanıklılık I&7. Immune hedefine poison."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 releases poison gas in front of you, applying &2Poison IV&7.\
+      \ Bekleme süresi: &e2dk&7."
+    - "<prefix>&8• &dEğil + Sol Tık&7 shoots short poison vomit for &c1.5 kalp&7 and &2Poison IV&7. Yakın dövüş vuruşları\
+      \ uygular short Poison I."
+  "the_countess":
+    "description":
+    - "<prefix>&8• &7Stil: &cCrimson Countess&7."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 launches a fireball. Bekleme süresi: &e5s&7. Hasar: &c2-4 kalp&7."
+    - "<prefix>&8• &7Double-jump with small fire animation. Yakın dövüş vuruşları uygular burn."
+    - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık I&7 and &6Fire Dayanıklılık&7."
+  "the_warrior":
+    "description":
+    - "<prefix>&8• &7Stil: &eQueen Maeve&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç III&7, &9Dayanıklılık II&7, &dYenilenme I&7 and &c10 extra kalp&7."
+    - "<prefix>&8• &7High fall protection, strong double-jump and small explosive landing from &e6+ blok&7 only while sneaking."
+  "the_headpopper":
+    "description":
+    - "<prefix>&8• &7Stil: &cVichedefineria Neuman&7."
+    - "<prefix>&8• &dEğil + Sol Tık&7 marks a target up hedefine &e30 blok&7 for a &c3s&7 countdown."
+    - "<prefix>&8• &7Hasar: &c12.5 kalp&7, yaratıklar/animals take &cx2.5&7. Bekleme süresi: &e20s&7."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 damages all nearby living targets for &c25% current health&7.\
+      \ Bekleme süresi: &e2dk&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık II&7, &dYenilenme I&7 and Lazer Gözler immunity."
+  "spider_weaver":
+    "description":
+    - "<prefix>&8• &7Stil: &fWebweaver&7."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 or &dEğil + Sol Tık&7 shoots a web projectile. Bekleme süresi:\
+      \ &e5s&7."
+    - "<prefix>&8• &7Targets take damage, are slowed/fixed and larger cobweb clusters can stay up hedefine &e1dk&7."
+    - "<prefix>&8• &7Can climb walls and takes no fall damage. Passive: &aGüç I&7, &9Dayanıklılık I&7 and &dYenilenme I&7."
+  "heal_angel":
+    "description":
+    - "<prefix>&8• &7Stil: &fPrivate Angel&7. &3V One only&7."
+    - "<prefix>&8• &7Pasif güçler: &aGüç II&7, &9Dayanıklılık II&7, &dYenilenme II&7 and &c5 extra kalp&7."
+    - "<prefix>&8• &dEğil + melee hit&7 heals the target for &a10% en fazla health&7, at least &a1 heart&7, and hasar verir\
+      \ no damage. Bekleme süresi: &e1s&7."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 commands a targeted mob/animal hedefine attack nearby targets\
+      \ except you for &e2dk&7. Bekleme süresi: &e30s&7."
+  "submarine":
+    "description":
+    - "<prefix>&8• &7Stil: &bTorpedo&7. &3V One only&7."
+    - "<prefix>&8• &7Passive: &aGüç II&7, &9Dayanıklılık II&7, Suda Nefes, Yunusun Lütfu and Kanal Gücü."
+    - "<prefix>&8• &7In water: &aGüç V&7 and Yenilenme."
+    - "<prefix>&8• &dF &8(Elindeki eşyayı değiştirme tuşu)&7 uses a double-strength atılışı with &e1s bekleme süresi&7. &dEğil\
+      \ + Sol Tık&7 hedefineggles stronger sonar with &e65 blok&7 range."
+  "the_detonator":
+    "description":
+    - "<prefix>&8• &7Stil: &cNaqib&7."
+    - "<prefix>&8• &dEğil + Sol Tık&7 starts a cancellable countdown, then releases a huge self-centered explosion. Bekleme\
+      \ süresi: &e10s&7."
+    - "<prefix>&8• &7Passive: &aGüç II&7, &9Dayanıklılık I&7 and &6Fire Dayanıklılık&7."
+    - "<prefix>&8• &7Melee hits burn targets. Every 3rd hit triggers a small explosive hit."
+  "the_veteran":
+    "description":
+    - "<prefix>&8• &7Stil: &eSoldier Boy&7."
+    - "<prefix>&8• &7High &aGüç&7, &9Dayanıklılık&7 and &6Fire Dayanıklılık&7."
+    - "<prefix>&8• &dEğil + Sol Tık&7: &e5s charge&7, then Chest Beam."
+    - "<prefix>&8• &7Beam: high damage, block burn and player ability removal."
+    - "<prefix>&8• &7Starts with a strong point-blank blast and mushroom cloud."
+"toggle":
+  "heat_vision_on": "{label} &aactivated"
+  "heat_vision_off": "{label} &7deactivated"
+  "heat_vision_overheated": "{label} &csoğuyor for {seconds}sn"
+  "heat_vision_cooldown": "{label} &chazır olmasına {seconds}sn"
+  "xray_on": "&bXRay &aaktif"
+  "xray_off": "&7XRay devre dışı"
+  "sonar_on": "&bSonar &aaktif"
+  "sonar_off": "&7Sonar devre dışı"
+  "sonar_water_only": "&bSonar &7sadece sualtında çalışır"
+  "diver_riptide": "&bGirdap Atılışı &aactivated"
+  "diver_riptide_water_or_rain": "&bGirdap Atılışı &7only works suda veya yağmurda"
+  "diver_riptide_cooldown": "&cGirdap Atılışı hazır olmasına {seconds}sn"
+  "speed_on": "&eSüper Hız &aaktif"
+  "speed_off": "&7Süper Hız devre dışı"
+  "runner_speed_level": "&eKoşucu Hızı &7Level &a{level}"
+  "runner_speed_off": "&7Koşucu Hızı devre dışı"
+  "ghost_on": "&5Ghost Mode &aaktif"
+  "ghost_off": "&7Ghost Mode devre dışı"
+  "ghost_cooldown": "&5Ghost Mode &chazır olmasına {seconds}sn"
+  "worm_night_vision_on": "&6The Worm &bGece Görüşü &aaktif"
+  "worm_night_vision_off": "&6The Worm &7Gece Görüşü devre dışı"
+"teleporter":
+  "used": "&5Işınlanma &atamamlandı"
+  "cooldown": "&cIşınlanma hazır olmasına {seconds}sn"
+  "no_safe_location": "&cGüvenli ışınlanma noktası bulunamadı."
+"veteran":
+  "charge_start": "&eThe Veteran &7is charging the &eChest Beam&7..."
+  "charge_progress": "&eChest Blast... &7fires in &a{seconds}sn"
+  "charge_cancelled": "&cChest Beam charge cancelled."
+  "burst_start": "&eThe Veteran &7salındı the &eChest Beam&7."
+  "burst_end": "&7Chest Beam finished."
+  "cooldown": "&cChest Beam hazır olmasına {seconds}sn"
+  "hit_target": "<prefix>&7You removed the ability from &a{target}&7."
+  "hit_by": "<prefix>&c{source}&7 removed your ability."
+"fall_impact": "&cImpact"
+"fall_impact_cooldown": "&cPatlamalı İniş hazır olmasına {seconds}sn"
+"launch_cooldown": "&cAni Kalkış hazır olmasına {seconds}sn"
+"sonic_boom":
+  "ring_cooldown": "&3Sonic Ring &chazır olmasına {seconds}sn"
+  "beam_cooldown": "&3Sonik Işın &chazır olmasına {seconds}sn"
+"stormstrike":
+  "released": "&bShedefinermstrike &7salındı"
+  "cooldown": "&bShedefinermstrike &chazır olmasına {seconds}sn"
+  "beam_on": "&fShedefinerm Beam &aactivated"
+  "beam_off": "&7Shedefinerm Beam devre dışı"
+  "beam_overheated": "&fShedefinerm Beam &7soğuyor"
+  "beam_cooldown": "&fShedefinerm Beam &chazır olmasına {seconds}sn"
+  "fall_impact": "&fShedefinermfall &7salındı"
+  "fall_cooldown": "&fShedefinermfall &chazır olmasına {seconds}sn"
+"flash_light":
+  "flash_released": "&eFlash Light &7salındı &8({targets} targets)"
+  "flash_cooldown": "&eFlash Light &chazır olmasına {seconds}sn"
+"jumper":
+  "activated": "&aZıplama Patlaması &aactivated"
+  "active": "&aZıplama Patlaması &7active for {seconds}sn"
+  "cooldown": "&aZıplama Patlaması &chazır olmasına {seconds}sn"
+"shockwave":
+  "released": "&eŞok Dalgası &7salındı"
+  "cooldown": "&eŞok Dalgası &chazır olmasına {seconds}sn"
+"fire_sonic":
+  "beam_on": "&cFireSonik Işın &aactivated"
+  "beam_off": "&7FireSonik Işın devre dışı"
+  "beam_overheated": "&cFireSonik Işın &7soğuyor"
+  "cooldown": "&cFireSonik Işın &chazır olmasına {seconds}sn"
+"toxic_cloud":
+  "cloud_released": "&2Toxic Cloud &7salındı &8({targets} targets)"
+  "cloud_cooldown": "&2Toxic Cloud &chazır olmasına {seconds}sn"
+  "vomit_cooldown": "&2Zehirli Kusmuk &chazır olmasına {seconds}sn"
+"the_countess":
+  "fireball_cooldown": "&cAteş Topu &chazır olmasına {seconds}sn"
+"the_headpopper":
+  "no_target": "&cNo valid target."
+  "cooldown": "&cHeadpop hazır olmasına {seconds}sn"
+  "countdown": "&cHeadpop &7in &e{seconds}sn"
+  "countdown_active": "&cHeadpop &7is alhazır charging"
+  "cancelled": "&7Headpop cancelled"
+  "released": "&cHeadpop &7salındı"
+  "area_cooldown": "&cKan Nabzı hazır olmasına {seconds}sn"
+  "area_released": "&cKan Nabzı &7salındı &8({targets} targets)"
+"spider_weaver":
+  "cooldown": "&fAğ Atışı &chazır olmasına {seconds}sn"
+  "hit": "&fAğ Atışı &7hit"
+"heal_angel":
+  "heal_cooldown": "&aAngel Heal &chazır olmasına {seconds}sn"
+  "no_target": "&fŞifa Meleği &7needs a mob or animal target."
+  "command_released": "&fŞifa Meleği &7command salındı"
+  "command_cooldown": "&fMelek Komutu &chazır olmasına {seconds}sn"
+  "healed": "&aAngel Heal &7salındı"
+"submarine":
+  "sonar_on": "&bDenizaltı Sonarı &aaktif"
+  "sonar_off": "&7Denizaltı Sonarı devre dışı"
+  "sonar_water_only": "&bDenizaltı Sonarı &7sadece sualtında çalışır"
+  "dash": "&bDenizaltı Atılışı &aactivated"
+  "dash_water_or_rain": "&bDenizaltı Atılışı &7only works suda veya yağmurda"
+  "dash_cooldown": "&bDenizaltı Atılışı &chazır olmasına {seconds}sn"
+"the_detonator":
+  "released": "&cDehedefinenation &7salındı"
+  "cooldown": "&cDehedefinenation &chazır olmasına {seconds}sn"
+  "charge_start": "&cDehedefinenation charge &7started"
+  "charge_progress": "&cDehedefinenation &7in &e{seconds}sn"
+  "charge_cancelled": "&7Dehedefinenation &ccancelled"
+"size_changer":
+  "big_on": "&5Boyut Değiştirici &abig form aktif"
+  "small_on": "&5Boyut Değiştirici &asmall form aktif"
+  "normal": "&7Boyut Değiştirici returned hedefine normal size"
+  "cooldown": "&5Boyut Değiştirici &chazır olmasına {seconds}sn"
+  "already_active": "&5Boyut Değiştirici &7is alhazır active"
+  "look_up_down": "&5Boyut Değiştirici &7look up for big form or down for small form"
+"command":
+  "header": "<prefix>&8━━━━━━━━ &aCompoundV Yardım &8━━━━━━━━"
+  "give_bottle": "<prefix>&8• &7/cv give &a<player>&7 bottle &d[compoundv|tempv|vone|antiv|vnull]"
+  "give_ability": "<prefix>&8• &7/cv give &a<player>&7 &c<ability>&7 &d[potionType]"
+  "remove": "<prefix>&8• &7/cv remove &a<player>"
+  "info_self": "<prefix>&8• &7/cv info &d[player]"
+  "stats": "<prefix>&8• &7/cv stats &d[player] &8- &7gösterir the active ability and controls"
+  "tutorial": "<prefix>&8• &7/cv tuhedefinerial &8- &7gives you the Compound V handbook"
+  "reload": "<prefix>&8• &7/cv reload"
+  "abilities_list": "<prefix>&8• &7Yetenekler: &a{list}"
+  "footer": "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  "give_bottle_ok": "<prefix>&7Verildi &b{bottle}&7 hedefine &a{player}&7."
+  "give_ability_ok": "<prefix>&a{name}&7 was assigned hedefine &a{player}&7. Oyuncu kullanım rehberini aldı."
+  "unknown_ability": "<prefix>&cBilinmeyen yetenek: &f{ability}"
+  "remove_ok": "<prefix>&7Yeteneği kaldırıldı: &a{player}&7."
+  "usage_give": "<prefix>&cKullanım: &7/cv give <player> <bottle|ability> [potionType]"
+  "usage_remove": "<prefix>&cKullanım: &7/cv remove <player>"
+  "tutorial_given": "<prefix>&aCompound V el kitabını aldın."
+"info":
+  "plugin_header": "<prefix>&8━━━━━━━━ &aCompoundV Bilgi &8━━━━━━━━"
+  "plugin_version": "<prefix>&8• &7Sürüm: &a{version}"
+  "plugin_author": "<prefix>&8• &7Yazar: &aThomas U."
+  "plugin_ability_count": "<prefix>&8• &7Yüklü yetenekler: &a{count}"
+  "plugin_language": "<prefix>&8• &7Dil: &a{language}"
+  "help_hint": "<prefix>&8• &7Yardım: &f/cv help"
+  "player_header": "<prefix>&8────── &aOyuncu Durumu &8──────"
+  "player_target": "<prefix>&8• &7Oyuncu: &a{player}"
+  "player_none": "<prefix>&8• &a{player}&7 aktif yeteneği yok."
+  "player_ability": "<prefix>&8• &7Yetenek: &a&l{name}"
+  "player_potion": "<prefix>&8• &7Kaynak: &b{potion}"
+  "player_status_permanent": "<prefix>&8• &7Durum: &aKalıcı"
+  "player_status_temporary": "<prefix>&8• &7Durum: &eGeçici"
+  "player_expires": "<prefix>&8• &7Süre bitimi: &e{dkutes}dk {seconds}sn"
+  "player_controls_header": "<prefix>&8────── &aKontroller & Etkiler &8──────"
+  "player_no_target_hint": "<prefix>&8• &7Kullan &f/cv info <player>&7 bir oyuncuyu incelemek için."
+  "plugin_footer": "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+"stats":
+  "header": "<prefix>&8━━━━━━━━ &aCompoundV İstatistikleri &8━━━━━━━━"
+  "player": "<prefix>&8• &7Oyuncu: &a{player}"
+  "ability": "<prefix>&8• &7Yetenek: &a&l{name}"
+  "source": "<prefix>&8• &7Kaynak: &b{potion}"
+  "permanent": "<prefix>&8• &7Durum: &aKalıcı"
+  "temporary": "<prefix>&8• &7Süre bitimi: &e{dkutes}dk {seconds}sn"
+  "description_header": "<prefix>&8────── &aYetenek Açıklaması &8──────"
+  "none": "<prefix>&a{player}&7 aktif CompoundV yeteneği yok."
+  "footer": "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+"bottle":
+  "compound_v":
+    "name": "&b&lCompound V"
+    "lore_1": "&7Rastgele yetenek veren deneysel serum."
+    "lore_2": "&8Drink hedefine unlock your power."
+  "temp_v":
+    "name": "&a&lTemp V"
+    "lore_1": "&7Geçici serum with a random ability."
+    "lore_2": "&8Ayarlanan süre sonunda biter."
+  "v_one":
+    "name": "&3&lV One"
+    "lore_1": "&7Güçlü yeteneklere sahip rafine serum."
+    "lore_2": "&8Kullan with care."
+  "anti_v":
+    "name": "&c&lAnti V"
+    "lore_1": "&7Aktif yeteneğini kaldırır."
+    "lore_2": "&8Drink hedefine reset your power."
+  "v_null":
+    "name": "&2&lV-Null Virus"
+    "lore_1": "&7Havadan bulaşan anti-süper patojen."
+    "lore_2": "&8Fırlatılabilir formlar kullanılabilir."
+    "lore_3": "&4Dangerous against V-powered oyuncular."
+"serum":
+  "default_lore_1": "&7Ara simya serumu."
+  "default_lore_2": "&8Simya zincirine devam et."
+  "crystalline_serum":
+    "name": "&bKristalize Serum"
+    "lore_1": "&7Ametist-stabilized base serum."
+    "lore_2": "&8Sıradaki: Echo Parçası."
+  "resonant_v_serum":
+    "name": "&9Rezonant V Serum"
+    "lore_1": "&7Echo-infused V base."
+    "lore_2": "&8Sıradaki: Glowshedefinene Dust."
+  "activated_v_serum":
+    "name": "&b&lActivated V Serum"
+    "lore_1": "&7Ready hedefine branch inhedefine Temp V or Compound V."
+    "lore_2": "&8Şeker -> Temp V, Elmas -> Compound V."
+  "unstable_temp_v":
+    "name": "&aKararsız Temp V"
+    "lore_1": "&7Geçici V serum still unstable."
+    "lore_2": "&8Sıradaki: Redshedefinene Dust."
+  "unstable_v_serum":
+    "name": "&bKararsız V Serum"
+    "lore_1": "&7Kalıcı V serum still unstable."
+    "lore_2": "&8Sıradaki: Antik Kalıntı."
+  "draconic_serum":
+    "name": "&5Ejder Serum"
+    "lore_1": "&7Dragon-breath V-One base."
+    "lore_2": "&8Sıradaki: Echo Parçası."
+  "echo_charged_serum":
+    "name": "&3Echo Yüklü Serum"
+    "lore_1": "&7Resonating V-One intermediate."
+    "lore_2": "&8Sıradaki: Antik Kalıntı."
+  "reinforced_serum":
+    "name": "&8Güçlendirilmiş Serum"
+    "lore_1": "&7Netherite-reinforced V-One serum."
+    "lore_2": "&8Sıradaki: Fermented Spider Eye."
+  "unstable_v_one_serum":
+    "name": "&1Kararsız V-One Serum"
+    "lore_1": "&7Güçlü ama kararsız V-One serumu."
+    "lore_2": "&8Sıradaki: Totem of Undying."
+  "cleansing_serum":
+    "name": "&fCleansing Serum"
+    "lore_1": "&7Süt bazlı nötrleştirici temel."
+    "lore_2": "&8Sıradaki: Ghast Gözyaşı."
+  "restorative_serum":
+    "name": "&cReshedefinerative Serum"
+    "lore_1": "&7Reshedefinerative Anti V intermediate."
+    "lore_2": "&8Sıradaki: Fermented Spider Eye."
+  "decay_serum":
+    "name": "&2Çürüme Serum"
+    "lore_1": "&7Wither Gülü pathogen base."
+    "lore_2": "&8Sıradaki: Fermented Spider Eye."
+  "corrupted_serum":
+    "name": "&5Bozulmuş Serum"
+    "lore_1": "&7Bozulmuş anti-süper patojen."
+    "lore_2": "&8Sıradaki: Echo Parçası."
+  "resonant_pathogen":
+    "name": "&2Rezonant Pathogen"
+    "lore_1": "&7Echo duyarlı patojen."
+    "lore_2": "&8Sıradaki: Dragon's Breath."
+  "airborne_v_pathogen":
+    "name": "&aHavadan Bulaşan V-Pathogen"
+    "lore_1": "&7Havadan bulaşan patojen taşıyıcı."
+    "lore_2": "&8Sıradaki: Antik Kalıntı."
+  "stabilized_v_null_pathogen":
+    "name": "&2Stabilize V-Null Pathogen"
+    "lore_1": "&7Stabilize V-Null çekirdeği."
+    "lore_2": "&8Sıradaki: Totem of Undying."
+"side_effect":
+  "temp_v_lethal": "<prefix>&4Temp V Overdose&7. Vücudun çöküyor."
+  "adrenaline_crash": "<prefix>&eYan etki: &6Adrenaline Crash&7. Vücudun bitkin düşüyor."
+  "overload_sickness": "<prefix>&eYan etki: &aOverload Sickness&7."
+  "muscle_failure": "<prefix>&eYan etki: &7Muscle Failure&7. Hareketin engelleniyor."
+  "internal_damage": "<prefix>&eYan etki: &cInternal Hasar&7."
+  "severe_collapse": "<prefix>&eYan etki: &4Severe Collapse&7."
+  "failed_transformation": "<prefix>&cFailed Transformation&7. Vücudun serumun bir kısmını reddediyor."
+  "heat_spike": "<prefix>&cYan etki: &6Heat Spike&7."
+  "body_rejection": "<prefix>&cYan etki: &4Body Rejection&7."
+  "critical_instability": "<prefix>&4Critical Instability&7. V One vücudunu kısa süreliğine dengesizleştiriyor."
+  "no_power": "<prefix>&7No Power&7. V One is unstable, ama yetenek aktif kalır."
+"v_null":
+  "hit_powered": "<prefix>&2V-Null Virus&7 V sistedki enfekte etti. 15 dakika hayatta kal yoksa ölürsün."
+  "hit_v_one": "<prefix>&2V-Null Virus&7 sana isabet etti ama V One buna kısmen direniyor."
+  "no_effect": "<prefix>&2V-Null Virus&7 V sistemi bulamadı. Etki yok."
+  "hit_unpowered": "<prefix>&2V-Null Virus&7 seni hafifçe etkiledi."
+"tutorial_book":
+  "title": "Compound V Rehberi"
+  "author": "Vought Laboratuvarı"
+  "page_1":
+  - "&1&lCompound V"
+  - "&8Workbench Lab"
+  - ""
+  - "&0Sadece çalışma masası."
+  - "&0Her zaman 2 eşya:"
+  - "&8Kaynak + Malzeme"
+  - "&2= Sonuç"
+  - ""
+  - "&0Şekil fark etmez."
+  - "&4Brewing stve kapalı."
+  "page_2":
+  - "&1&lBase 1/2"
+  - ""
+  - "&01) Su Şişesi"
+  - "&8+ Nether Yumrusu"
+  - "&2= Tuhaf"
+  - ""
+  - "&02) Tuhaf"
+  - "&8+ Ametist"
+  - "&2= Kristalize"
+  "page_3":
+  - "&1&lBase 2/2"
+  - ""
+  - "&03) Kristalize"
+  - "&8+ Echo Parçası"
+  - "&2= Rezonant V"
+  - ""
+  - "&04) Rezonant V"
+  - "&8+ Glowshedefinene"
+  - "&2= Activated V"
+  "page_4":
+  - "&2&lTemp V"
+  - ""
+  - "&0Activated V"
+  - "&8+ Şeker"
+  - "&2= Kararsız Temp"
+  - ""
+  - "&0Kararsız Temp"
+  - "&8+ Redshedefinene"
+  - "&2= Temp V"
+  - ""
+  - "&4Can başına en fazla 5 doz"
+  "page_5":
+  - "&1&lCompound V"
+  - ""
+  - "&0Activated V"
+  - "&8+ Elmas"
+  - "&2= Kararsız V"
+  - ""
+  - "&0Kararsız V"
+  - "&8+ Antik Kalıntı"
+  - "&2= Compound V"
+  - ""
+  - "&0Kalıcı until Anti V."
+  "page_6":
+  - "&3&lV One 1/2"
+  - ""
+  - "&01) Tuhaf"
+  - "&8+ Ejderha Nefesi"
+  - "&2= Ejder"
+  - ""
+  - "&02) Ejder"
+  - "&8+ Echo Parçası"
+  - "&2= Echo Yüklü"
+  "page_7":
+  - "&3&lV One 2/2"
+  - ""
+  - "&03) Echo Yüklü"
+  - "&8+ Antik Kalıntı"
+  - "&2= Güçlendirilmiş"
+  - ""
+  - "&04) Güçlendirilmiş"
+  - "&8+ Mayalı Göz"
+  - "&2= Kararsız V-One"
+  - "&05) + Totem"
+  - "&2= V One"
+  "page_8":
+  - "&2&lAnti V"
+  - ""
+  - "&01) Tuhaf"
+  - "&8+ Süt Kovası"
+  - "&2= Cleansing"
+  - ""
+  - "&02) Cleansing"
+  - "&8+ Ghast Gözyaşı"
+  - "&2= Reshedefinerative"
+  - "&03) + Mayalı Göz"
+  - "&2= Anti V"
+  "page_9":
+  - "&4&lV-Null 1/2"
+  - ""
+  - "&01) Tuhaf"
+  - "&8+ Wither Gülü"
+  - "&2= Çürüme"
+  - ""
+  - "&02) Çürüme"
+  - "&8+ Mayalı Göz"
+  - "&2= Bozulmuş"
+  - "&03) + Echo Parçası"
+  - "&2= Rezonant"
+  "page_10":
+  - "&4&lV-Null 2/2"
+  - ""
+  - "&0Rezonant"
+  - "&8+ Ejderha Nefesi"
+  - "&2= Havadan Bulaşan"
+  - ""
+  - "&0Havadan Bulaşan"
+  - "&8+ Antik Kalıntı"
+  - "&2= Stabilize"
+  - "&0Stabilize + Totem"
+  - "&2= V-Null"
+  "page_11":
+  - "&6&lYetenekler"
+  - ""
+  - "&0Patriot, Diver"
+  - "&0Runner, Worm"
+  - "&0Flash Light"
+  - "&0Veteran, Sonic"
+  - "&0Shedefinermstrike V-One"
+  - ""
+  - "&8/cv info gösterir"
+  - "&8kontrollerini."
+  "page_12":
+  - "&4&lYan Etkiler"
+  - ""
+  - "&0Temp V:"
+  - "&8Çöküş/Hastalık"
+  - "&8Başarısızlık/Çöküş"
+  - ""
+  - "&0CV/V One:"
+  - "&8nadir ekstra zayıflatmalar"
+  - ""
+  - "&4Yan etkis are"
+  - "&4added hedefine powers."
+"patriot":
+  "speed_dash": "&cThe Patriot &7atılışı."
+  "speed_dash_cooldown": "&7Atılış &c{seconds}sn&7 içinde hazır."
+"ice_cube":
+  "spike_fired": "<prefix>&bBuz dikeni fırlatıldı."
+  "spike_cooldown": "<prefix>&7Buz dikeni bekleme süresi: &e{seconds}sn&7."
+  "wall_created": "<prefix>&bBuz duvarı oluşturuldu."
+  "wall_cooldown": "<prefix>&7Buz duvarı bekleme süresi: &e{seconds}sn&7."
+"death_messages":
+  "heat_vision": "{victim}, {killer} tarafından lazerle pişirildi."
+  "the_patriot_heat_vision": "{victim}, {killer} adlı oyuncunun Lazer Gözleri tarafından silindi."
+  "the_veteran_beam": "{victim}, {killer} adlı oyuncunun reaktör ışınına yakalandı."
+  "the_veteran_ground_zero": "{victim}, {killer} adlı oyuncunun sıfır noktasına fazla yaklaştı."
+  "stormstrike": "{victim}, {killer} tarafından aşırı elektrikle yüklendi."
+  "the_headpopper": "{victim}, {killer} yakınında çok kötü bir düşünce yaşadı."
+  "ice_cube": "{victim}, {killer} tarafından donduruldu."
