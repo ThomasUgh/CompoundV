@@ -69,7 +69,6 @@ public abstract class BaseHeatVisionAbility implements Ability {
             activeTicks.put(uuid, 0);
             damageCounter.remove(uuid);
             MessageUtil.sendActionBar(p, heatVisionActionMessage("toggle.heat_vision_on"));
-            p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5f, 0.6f);
             return;
         }
 
@@ -300,7 +299,8 @@ public abstract class BaseHeatVisionAbility implements Ability {
         for (double d = 0.5; d <= range; d += 0.35) {
             Block block = origin.clone().add(dir.clone().multiply(d)).getBlock();
             if (block.equals(standOn) || block.equals(playerBlock)) continue;
-            if (block.getType() == Material.SNOW) {
+            Material type = block.getType();
+            if (type == Material.SNOW || type == Material.POWDER_SNOW) {
                 tryMeltSnowOrIce(block, world);
                 return;
             }
