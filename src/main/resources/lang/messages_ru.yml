@@ -79,6 +79,14 @@ ability:
     - '<prefix>&8• &7Stages: &bI&7 = 1.35 сердец / 30 блоков, &aII&7 = 2 сердец / 35 блоков.'
     - '<prefix>&8• &7More stages: &6III&7 = 2.25 сердец / 37 блоков, &cIV&7 = 2.7 сердец / 40 блоков.'
     - <prefix>&8• &7Can melt ice, snow блоков, flat snow layers, и cook raw mob drops.
+  ice_cube:
+    description:
+      - "<prefix>&8• &bFrost Walker&7: вода замерзает под тобой во время движения."
+      - "<prefix>&8• &bIce Slide&7: каждый блок становится скользким; на льду ты получаешь &eSpeed II&7."
+      - "<prefix>&8• &bЛедяной шип&7: нажми &dF &8(Swap Item with Offhand)&7, чтобы выпустить маленький ледяной шип. Перезарядка: &e3s&7."
+      - "<prefix>&8• &7Шипы накладывают &bSlowness III&7 на &e5s&7 и &7Weakness II&7 на &e10s&7."
+      - "<prefix>&8• &7Удары в ближнем бою накладывают &bSlowness I&7 на &e5s&7."
+      - "<prefix>&8• &7Пассивные эффекты: &aStrength I&7 и &9Resistance I&7."
   the_diver:
     description:
     - '<prefix>&8• &7Стиль: как &bThe Deep&7.'

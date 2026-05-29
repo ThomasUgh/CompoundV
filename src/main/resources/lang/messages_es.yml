@@ -79,6 +79,14 @@ ability:
     - '<prefix>&8• &7Stages: &bI&7 = 1.35 corazones / 30 bloques, &aII&7 = 2 corazones / 35 bloques.'
     - '<prefix>&8• &7More stages: &6III&7 = 2.25 corazones / 37 bloques, &cIV&7 = 2.7 corazones / 40 bloques.'
     - <prefix>&8• &7Can melt ice, snow bloques, flat snow layers, y cook raw mob drops.
+  ice_cube:
+    description:
+      - "<prefix>&8• &bFrost Walker&7: el agua se congela bajo tus pies al moverte."
+      - "<prefix>&8• &bIce Slide&7: todos los bloques se sienten resbaladizos; sobre hielo obtienes &eSpeed II&7."
+      - "<prefix>&8• &bPúa de hielo&7: pulsa &dF &8(Swap Item with Offhand)&7 para disparar una púa helada. Cooldown: &e3s&7."
+      - "<prefix>&8• &7Las púas aplican &bSlowness III&7 por &e5s&7 y &7Weakness II&7 por &e10s&7."
+      - "<prefix>&8• &7Los golpes cuerpo a cuerpo aplican &bSlowness I&7 por &e5s&7."
+      - "<prefix>&8• &7Efectos pasivos: &aStrength I&7 y &9Resistance I&7."
   the_diver:
     description:
     - '<prefix>&8• &7Estilo: como &bThe Deep&7.'

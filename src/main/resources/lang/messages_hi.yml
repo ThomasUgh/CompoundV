@@ -79,6 +79,14 @@ ability:
     - '<prefix>&8• &7Stages: &bI&7 = 1.35 दिल / 30 ब्लॉक, &aII&7 = 2 दिल / 35 ब्लॉक.'
     - '<prefix>&8• &7More stages: &6III&7 = 2.25 दिल / 37 ब्लॉक, &cIV&7 = 2.7 दिल / 40 ब्लॉक.'
     - <prefix>&8• &7Can melt ice, snow ब्लॉक, flat snow layers, और cook raw mob drops.
+  ice_cube:
+    description:
+      - "<prefix>&8• &bFrost Walker&7: चलते समय पानी तुम्हारे नीचे जमता है."
+      - "<prefix>&8• &bIce Slide&7: हर ब्लॉक फिसलन जैसा लगता है; बर्फ पर तुम्हें &eSpeed II&7 मिलता है."
+      - "<prefix>&8• &bIce Spike&7: &dF &8(Swap Item with Offhand)&7 दबाकर छोटी बर्फीली नोक दागो. Cooldown: &e3s&7."
+      - "<prefix>&8• &7Ice spikes &bSlowness III&7 को &e5s&7 और &7Weakness II&7 को &e10s&7 के लिए लगाती हैं."
+      - "<prefix>&8• &7Melee hits &bSlowness I&7 को &e5s&7 के लिए लगाते हैं."
+      - "<prefix>&8• &7Passive boosts: &aStrength I&7 और &9Resistance I&7."
   the_diver:
     description:
     - '<prefix>&8• &7स्टाइल: जैसा &bThe Deep&7.'

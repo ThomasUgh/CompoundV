@@ -80,6 +80,14 @@ ability:
     - <prefix>&8• &7阶段：&bI&7 = 1.35 心 / 30 格，&aII&7 = 2 心 / 35 格。
     - <prefix>&8• &7更多：&6III&7 = 2.25 心 / 37 格，&cIV&7 = 2.7 心 / 40 格。
     - <prefix>&8• &7可融化冰、雪块、薄雪层，并烤熟生肉掉落。
+  ice_cube:
+    description:
+      - "<prefix>&8• &bFrost Walker&7：移动时脚下的水会结冰。"
+      - "<prefix>&8• &bIce Slide&7：所有方块都像冰一样滑；在冰上获得 &eSpeed II&7。"
+      - "<prefix>&8• &b冰刺&7：按 &dF &8(Swap Item with Offhand)&7 发射小型冰刺。冷却：&e3s&7。"
+      - "<prefix>&8• &7冰刺造成 &bSlowness III&7 &e5s&7，并造成 &7Weakness II&7 &e10s&7。"
+      - "<prefix>&8• &7近战命中造成 &bSlowness I&7 &e5s&7。"
+      - "<prefix>&8• &7被动增益：&aStrength I&7 和 &9Resistance I&7。"
   the_diver:
     description:
     - <prefix>&8• &7风格：类似 &bThe Deep&7。

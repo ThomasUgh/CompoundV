@@ -87,6 +87,14 @@ ability:
       - "<prefix>&8• &7Stages: &bI&7 = 1.35 hearts / 30 blocks, &aII&7 = 2 hearts / 35 blocks."
       - "<prefix>&8• &7More stages: &6III&7 = 2.25 hearts / 37 blocks, &cIV&7 = 2.7 hearts / 40 blocks."
       - "<prefix>&8• &7Can melt ice, snow blocks, flat snow layers, and cook raw mob drops."
+  ice_cube:
+    description:
+      - "<prefix>&8• &bFrost Walker&7: water freezes under you while moving."
+      - "<prefix>&8• &bIce Slide&7: every block feels slippery; on ice you get &eSpeed II&7."
+      - "<prefix>&8• &bIce Spike&7: press &dF &8(Swap Item with Offhand)&7 to shoot a small frozen spike. Cooldown: &e3s&7."
+      - "<prefix>&8• &7Ice spikes apply &bSlowness III&7 for &e5s&7 and &7Weakness II&7 for &e10s&7."
+      - "<prefix>&8• &7Melee hits apply &bSlowness I&7 for &e5s&7."
+      - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7."
   the_diver:
     description:
       - "<prefix>&8• &7Style: like &bThe Deep&7."
