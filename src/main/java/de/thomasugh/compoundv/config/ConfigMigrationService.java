@@ -68,7 +68,8 @@ public final class ConfigMigrationService {
         boolean changed = false;
         String[] obsolete = {
                 "compound_v.chances.invisibility",
-                "temp_v.chances.invisibility"
+                "temp_v.chances.invisibility",
+                "metrics"
         };
         for (String path : obsolete) {
             if (plugin.getConfig().contains(path)) {

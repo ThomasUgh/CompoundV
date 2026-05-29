@@ -17,11 +17,6 @@ public final class MetricsService {
     }
 
     public void start() {
-        if (!plugin.getConfig().getBoolean("metrics.enabled", true)) {
-            plugin.getLogger().info("bStats metrics are disabled in config.yml.");
-            return;
-        }
-
         try {
             metrics = new Metrics(plugin, BSTATS_PLUGIN_ID);
             plugin.getLogger().info("bStats metrics enabled.");
