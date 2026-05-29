@@ -423,7 +423,7 @@ Yes. Set any ability's chance to `0` in `config.yml` to disable it, or adjust th
 <summary><b>🌍 What languages are supported?</b></summary>
 <br>
 
-English, German, Spanish, French, Hindi, Russian and Simplified Chinese ship out of the box. Set `language: en` (or `de`, `es`, `fr`, `hi`, `ru`, `zh`) in `config.yml`. Drop a custom file into `plugins/CompoundV/lang/` to add more.
+English, German, Spanish, French, Hindi, Turkish, Russian and Simplified Chinese ship out of the box. Set `language: en` (or `de`, `es`, `fr`, `hi`, `ru`, `zh`) in `config.yml`. Drop a custom file into `plugins/CompoundV/lang/` to add more.
 
 </details>
 
