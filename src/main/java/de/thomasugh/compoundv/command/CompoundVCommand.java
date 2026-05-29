@@ -42,7 +42,11 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length == 0) { help(sender); return true; }
+        if (args.length == 0) {
+            if (!requirePermission(sender, "compoundv.command.help")) return true;
+            help(sender);
+            return true;
+        }
         switch (args[0].toLowerCase(Locale.ROOT)) {
             case "give"   -> handleGive(sender, args);
             case "remove" -> handleRemove(sender, args);
@@ -50,15 +54,26 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             case "stats"  -> handleStats(sender, args);
             case "tutorial", "guide", "book" -> handleTutorial(sender);
             case "reload" -> handleReload(sender);
-            case "help"   -> help(sender);
-            default       -> help(sender);
+            case "help"   -> { if (requirePermission(sender, "compoundv.command.help")) help(sender); }
+            default       -> { if (requirePermission(sender, "compoundv.command.help")) help(sender); }
         }
         return true;
     }
 
+    private boolean requirePermission(CommandSender sender, String permission) {
+        if (sender.hasPermission(permission) || sender.hasPermission("compoundv.admin")) {
+            return true;
+        }
+        sender.sendMessage(loc().msg("general.no_permission"));
+        return false;
+    }
+
+    private boolean hasCommandPermission(CommandSender sender, String permission) {
+        return sender.hasPermission(permission) || sender.hasPermission("compoundv.admin");
+    }
+
     private void handleGive(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("compoundv.admin")) {
-            sender.sendMessage(loc().msg("general.no_permission"));
+        if (!requirePermission(sender, "compoundv.command.give")) {
             return;
         }
         if (args.length < 3) {
@@ -111,8 +126,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
     }
 
     private void handleRemove(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("compoundv.admin")) {
-            sender.sendMessage(loc().msg("general.no_permission"));
+        if (!requirePermission(sender, "compoundv.command.remove")) {
             return;
         }
         if (args.length < 2) {
@@ -130,10 +144,12 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
     }
 
     private void handleInfo(CommandSender sender, String[] args) {
+        if (!requirePermission(sender, "compoundv.command.info")) {
+            return;
+        }
         Player target = null;
         if (args.length >= 2) {
-            if (!sender.hasPermission("compoundv.admin")) {
-                sender.sendMessage(loc().msg("general.no_permission"));
+            if (!requirePermission(sender, "compoundv.command.info.others")) {
                 return;
             }
             target = Bukkit.getPlayer(args[1]);
@@ -201,10 +217,12 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
 
 
     private void handleStats(CommandSender sender, String[] args) {
+        if (!requirePermission(sender, "compoundv.command.stats")) {
+            return;
+        }
         Player target = null;
         if (args.length >= 2) {
-            if (!sender.hasPermission("compoundv.admin")) {
-                sender.sendMessage(loc().msg("general.no_permission"));
+            if (!requirePermission(sender, "compoundv.command.stats.others")) {
                 return;
             }
             target = Bukkit.getPlayer(args[1]);
@@ -257,6 +275,9 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
     }
 
     private void handleTutorial(CommandSender sender) {
+        if (!requirePermission(sender, "compoundv.command.tutorial")) {
+            return;
+        }
         if (!(sender instanceof Player player)) {
             sender.sendMessage(loc().msg("general.only_players"));
             return;
@@ -266,8 +287,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
     }
 
     private void handleReload(CommandSender sender) {
-        if (!sender.hasPermission("compoundv.admin")) {
-            sender.sendMessage(loc().msg("general.no_permission"));
+        if (!requirePermission(sender, "compoundv.command.reload")) {
             return;
         }
         plugin.reloadConfig();
@@ -304,7 +324,13 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender s, Command c, String a, String[] args) {
         List<String> out = new ArrayList<>();
         if (args.length == 1) {
-            out.addAll(List.of("give", "remove", "info", "stats", "tutorial", "reload", "help"));
+            if (hasCommandPermission(s, "compoundv.command.give")) out.add("give");
+            if (hasCommandPermission(s, "compoundv.command.remove")) out.add("remove");
+            if (hasCommandPermission(s, "compoundv.command.info")) out.add("info");
+            if (hasCommandPermission(s, "compoundv.command.stats")) out.add("stats");
+            if (hasCommandPermission(s, "compoundv.command.tutorial")) out.add("tutorial");
+            if (hasCommandPermission(s, "compoundv.command.reload")) out.add("reload");
+            if (hasCommandPermission(s, "compoundv.command.help")) out.add("help");
         } else if (args.length == 2) {
             Bukkit.getOnlinePlayers().stream().map(Player::getName).forEach(out::add);
         } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {

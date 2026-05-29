@@ -17,8 +17,44 @@ permissions:
   compoundv.use:
     description: Allows drinking CompoundV potions and using abilities
     default: true
+
   compoundv.admin:
-    description: Allows /cv give, /cv remove and /cv reload
+    description: Allows all CompoundV admin commands and bypass actions
+    default: op
+    children:
+      compoundv.command.give: true
+      compoundv.command.remove: true
+      compoundv.command.reload: true
+      compoundv.command.info.others: true
+      compoundv.command.stats.others: true
+      compoundv.damage-bypass: true
+
+  compoundv.command.help:
+    description: Allows /cv help
+    default: true
+  compoundv.command.info:
+    description: Allows /cv info for yourself
+    default: true
+  compoundv.command.stats:
+    description: Allows /cv stats for yourself
+    default: true
+  compoundv.command.tutorial:
+    description: Allows /cv tutorial
+    default: true
+  compoundv.command.give:
+    description: Allows /cv give
+    default: op
+  compoundv.command.remove:
+    description: Allows /cv remove
+    default: op
+  compoundv.command.reload:
+    description: Allows /cv reload
+    default: op
+  compoundv.command.info.others:
+    description: Allows /cv info <player>
+    default: op
+  compoundv.command.stats.others:
+    description: Allows /cv stats <player>
     default: op
 
   compoundv.damage-bypass:
