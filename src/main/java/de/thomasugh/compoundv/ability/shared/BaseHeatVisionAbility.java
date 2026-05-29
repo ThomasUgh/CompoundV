@@ -155,6 +155,8 @@ public abstract class BaseHeatVisionAbility implements Ability {
         strand(w, rEye, dir, dR, core, glow, fireParticles());
         meltPassableSnowAlongBeam(player, lEye, dir, dL, w);
         meltPassableSnowAlongBeam(player, rEye, dir, dR, w);
+        sizzleWaterImpactAlongBeam(player, lEye, dir, dL, w);
+        sizzleWaterImpactAlongBeam(player, rEye, dir, dR, w);
         clearPassableVegetationAlongBeam(player, lEye, dir, dL, w);
         clearPassableVegetationAlongBeam(player, rEye, dir, dR, w);
 
@@ -292,6 +294,19 @@ public abstract class BaseHeatVisionAbility implements Ability {
                 || name.endsWith("_PETALS");
     }
 
+    private void sizzleWaterImpactAlongBeam(Player player, Location origin, Vector dir, double range, World world) {
+        if (player.getTicksLived() % 4 != 0) return;
+        for (double d = 0.5; d <= range; d += 0.45) {
+            Block block = origin.clone().add(dir.clone().multiply(d)).getBlock();
+            if (!isWaterLike(block.getType())) continue;
+            Location loc = block.getLocation().add(0.5, 0.65, 0.5);
+            world.spawnParticle(Particle.CLOUD, loc, 8, 0.18, 0.12, 0.18, 0.02);
+            world.spawnParticle(Particle.SMOKE, loc, 5, 0.14, 0.10, 0.14, 0.01);
+            world.playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 0.28f, 1.75f);
+            return;
+        }
+    }
+
     private void meltPassableSnowAlongBeam(Player player, Location origin, Vector dir, double range, World world) {
         Block standOn = player.getLocation().getBlock().getRelative(org.bukkit.block.BlockFace.DOWN);
         Block playerBlock = player.getLocation().getBlock();
@@ -373,9 +388,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     private void playHeatVisionDamageSounds(World world, Location impact, LivingEntity target) {
         Sound specific = hurtSoundFor(target);
-        world.playSound(impact, specific, 1.00f, 1.0f);
-        world.playSound(impact, specific, 0.55f, 1.18f);
-        world.playSound(impact, Sound.ENTITY_GENERIC_HURT, 0.38f, 1.28f);
+        world.playSound(impact, specific, 0.95f, 1.0f);
     }
 
     private Sound hurtSoundFor(LivingEntity target) {

@@ -96,7 +96,7 @@ heat_vision:
     enabled: true
     repeat_interval_ticks: 2
     sound: entity.blaze.shoot
-    volume: 0.04
+    volume: 0.05
     pitch: 0.75
   particles:
     core_particles: 2
@@ -151,13 +151,14 @@ abilities:
       heat_vision_core_size: 0.67
       heat_vision_impact_particles: 19
       heat_vision_active_sound:
+        volume: 0.06
         pitch: 1.95
 
   # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:
-    beam_damage_hearts: 0.95625   # Reduced Stormstrike F-beam damage
+    beam_damage_hearts: 0.95625
     beam_hit_radius: 6.5         # Damage radius around the visible beam particles
-    lightning_tick_damage_hearts: 0.54 # Reduced Sneak + Left-Click strike tick damage
+    lightning_tick_damage_hearts: 0.54
     lightning_hit_radius: 7.0
     lightning_cooldown_ms: 7000
     lightning_min_bolts: 2
@@ -176,6 +177,11 @@ abilities:
     spike_weakness_level: 2
     melee_slowness_ticks: 100
     melee_slowness_level: 1
+    wall_cooldown_ms: 60000
+    wall_duration_ticks: 500
+    wall_distance: 4.0
+    wall_width: 5
+    wall_height: 3
     slide:
       enabled: true
       multiplier: 1.045
