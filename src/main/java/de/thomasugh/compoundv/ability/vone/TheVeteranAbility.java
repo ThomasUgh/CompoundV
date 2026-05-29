@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.ability.vone;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -292,7 +293,7 @@ public class TheVeteranAbility implements Ability {
                 damage *= pveDamageMultiplier;
             }
             if (damage > 0.0) {
-                target.damage(damage, shooter);
+                AbilityKillTracker.damage(plugin, target, shooter, damage, "death_messages.the_veteran_ground_zero", false);
             }
             if (setFire && !(target instanceof Player)) target.setFireTicks(220);
 
@@ -545,7 +546,7 @@ public class TheVeteranAbility implements Ability {
                 targetDamage = capPlayerDamage(playerTarget, targetDamage, capFraction, playerDamageTaken);
             }
             if (targetDamage > 0.0) {
-                target.damage(targetDamage, shooter);
+                AbilityKillTracker.damage(plugin, target, shooter, targetDamage, "death_messages.the_veteran_beam", false);
             }
             if (!(target instanceof Player)) target.setFireTicks(160);
             double hitKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_knockback", 0.025);

@@ -80,6 +80,10 @@ v_one:
 # ─────────────────────────────────────────────────────────────────────────────
 # Core combat tuning
 # ─────────────────────────────────────────────────────────────────────────────
+combat:
+  custom_kill_messages:
+    # Uses language files for The-Boys-like ability death messages.
+    enabled: true
 heat_vision:
   # Entity raytrace hit radius in blocks. 0.05 is the old/default thin beam.
   hit_radius: 0.051

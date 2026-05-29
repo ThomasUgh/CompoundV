@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.ability.shared;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -461,6 +462,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
     protected double range()        { return plugin.getConfig().getDouble("heat_vision.range", 43); }
     protected double damageAmount() { return plugin.getConfig().getDouble("heat_vision.damage_amount", 2.0); }
     protected boolean cooksMeatDrops() { return false; }
+    protected String killMessageKey() { return "death_messages.heat_vision"; }
 
     protected double adjustedDamageForTarget(LivingEntity target, double damage) {
         if (target instanceof Player targetPlayer) {

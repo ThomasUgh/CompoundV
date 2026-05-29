@@ -6,6 +6,7 @@ import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.server.TaskHandle;
 import de.thomasugh.compoundv.util.AttributeUtil;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
@@ -183,7 +184,7 @@ public class StormstrikeAbility implements Ability {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
             if (!isNearBeamTarget(eye, dir, effectiveRange, hitRadius, target)) continue;
             target.setNoDamageTicks(0);
-            target.damage(Math.max(0.0, damage), player);
+            AbilityKillTracker.damage(plugin, target, player, Math.max(0.0, damage), "death_messages.stormstrike", false);
             target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS,
                     Math.max(20, slownessTicks), Math.max(0, slownessAmplifier), false, true, true));
             world.spawnParticle(Particle.ELECTRIC_SPARK, target.getLocation().add(0, 1, 0), 24, 0.28, 0.40, 0.28, 0.10);
@@ -491,7 +492,7 @@ public class StormstrikeAbility implements Ability {
             double distance = Math.max(0.35, target.getLocation().distance(center));
             if (distance > radius) continue;
             double factor = Math.max(0.2, 1.0 - (distance / radius));
-            target.damage(damage * factor, player);
+            AbilityKillTracker.damage(plugin, target, player, damage * factor, "death_messages.stormstrike", false);
             target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS, 80, 1, false, true, true));
             Vector push = target.getLocation().toVector().subtract(center.toVector());
             if (push.lengthSquared() < 0.0001) push = player.getLocation().getDirection().clone();
@@ -515,7 +516,7 @@ public class StormstrikeAbility implements Ability {
             if (!damagedThisTick.add(target.getUniqueId())) continue;
             target.setNoDamageTicks(0);
             target.setNoDamageTicks(0);
-            target.damage(Math.max(0.0, damage), player);
+            AbilityKillTracker.damage(plugin, target, player, Math.max(0.0, damage), "death_messages.stormstrike", false);
             target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS,
                     Math.max(20, slownessTicks), Math.max(0, slownessAmplifier), false, true, true));
             target.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,

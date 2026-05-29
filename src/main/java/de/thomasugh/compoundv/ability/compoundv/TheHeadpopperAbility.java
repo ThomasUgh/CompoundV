@@ -4,6 +4,7 @@ import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
@@ -127,7 +128,7 @@ public class TheHeadpopperAbility implements Ability {
             if (target.getLocation().distanceSquared(center) > radius * radius) continue;
             double damage = Math.max(0.0, target.getHealth() * Math.max(0.0, ratio));
             Location loc = target.getLocation().add(0, Math.min(1.4, Math.max(0.8, target.getEyeHeight())), 0);
-            target.damage(damage, player);
+            AbilityKillTracker.damage(plugin, target, player, damage, "death_messages.the_headpopper", false);
             world.spawnParticle(Particle.DUST, loc, 22, 0.25, 0.28, 0.25, 0,
                     new Particle.DustOptions(Color.fromRGB(190, 0, 32), 1.05f));
             world.spawnParticle(Particle.DAMAGE_INDICATOR, loc, 8, 0.18, 0.20, 0.18, 0.08);
@@ -181,7 +182,7 @@ public class TheHeadpopperAbility implements Ability {
                 new Particle.DustOptions(Color.fromRGB(180, 0, 32), 1.35f));
         world.spawnParticle(Particle.DAMAGE_INDICATOR, loc, 18, 0.24, 0.22, 0.24, 0.08);
         world.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 0.72f, 1.65f);
-        target.damage(Math.max(0.0, damage), player);
+        AbilityKillTracker.damage(plugin, target, player, Math.max(0.0, damage), "death_messages.the_headpopper", false);
         target.removePotionEffect(PotionEffects.GLOWING);
         target.removePotionEffect(PotionEffects.SLOWNESS);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_headpopper.released"));
