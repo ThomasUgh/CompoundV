@@ -2,6 +2,7 @@ package de.thomasugh.compoundv;
 
 import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
+import de.thomasugh.compoundv.ability.compoundv.IceCubeAbility;
 import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDetonatorAbility;
 import de.thomasugh.compoundv.ability.compoundv.ToxicCloudAbility;
@@ -138,6 +139,7 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new TheHeadpopperAbility(this));
         registry.register(new SpiderWeaverAbility(this));
         registry.register(new TheDetonatorAbility(this));
+        registry.register(new IceCubeAbility(this));
         registry.register(new SizeChangerAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one", 0xFF5252));
         registry.register(new TeleporterAbility(this, "teleporter_v_one", "Teleporter V One", "abilities.teleporter_v_one", 0xCE6BFF));

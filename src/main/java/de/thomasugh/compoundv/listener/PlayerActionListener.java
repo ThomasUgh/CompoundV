@@ -4,6 +4,7 @@ import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
+import de.thomasugh.compoundv.ability.compoundv.IceCubeAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDetonatorAbility;
 import de.thomasugh.compoundv.ability.compoundv.ToxicCloudAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheCountessAbility;
@@ -344,6 +345,11 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onSwapHands(PlayerSwapHandItemsEvent e) {
         Ability ab = manager.getAbility(e.getPlayer());
+        if (ab instanceof IceCubeAbility iceCube) {
+            e.setCancelled(true);
+            iceCube.shootIceSpike(e.getPlayer());
+            return;
+        }
         if (ab instanceof SonicBoomAbility sonic) {
             e.setCancelled(true);
             sonic.triggerSonicRing(e.getPlayer());
@@ -683,6 +689,11 @@ public class PlayerActionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
         for (Ability ability : plugin.getRegistry().all()) {
+            if (ability instanceof IceCubeAbility iceCube && iceCube.handleProjectileHit(event)) {
+                return;
+            }
+        }
+        for (Ability ability : plugin.getRegistry().all()) {
             if (ability instanceof TheCountessAbility countess && countess.isOwnedFireball(event.getEntity().getUniqueId())) {
                 countess.handleProjectileHit(event);
                 return;
@@ -791,6 +802,9 @@ public class PlayerActionListener implements Listener {
             countess.handleMeleeHit(attacker, target);
         } else if (ability instanceof TheDetonatorAbility detonator) {
             detonator.handleMeleeHit(attacker, target);
+        }
+        if (ability instanceof IceCubeAbility iceCube) {
+            iceCube.handleMeleeHit(attacker, target);
         }
         if (ability instanceof ToxicCloudAbility toxicCloud) {
             toxicCloud.handleMeleeHit(attacker, target);

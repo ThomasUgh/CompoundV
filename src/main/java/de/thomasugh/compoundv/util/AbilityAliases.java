@@ -158,6 +158,11 @@ public final class AbilityAliases {
             Map.entry("submarine", "submarine"),
             Map.entry("torpedo", "submarine"),
 
+            Map.entry("icecube", "ice_cube"),
+            Map.entry("ice_cube", "ice_cube"),
+            Map.entry("ice-cube", "ice_cube"),
+            Map.entry("frost", "ice_cube"),
+
             Map.entry("the_detonator", "the_detonator"),
             Map.entry("detonator", "the_detonator"),
             Map.entry("naqib", "the_detonator")

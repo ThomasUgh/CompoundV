@@ -28,6 +28,7 @@ compound_v:
     heat_vision_2: 7
     heat_vision_3: 6
     heat_vision_4: 5
+    ice_cube: 8
     speedster: 10
     strength: 18
     the_ghost: 7
@@ -161,6 +162,25 @@ abilities:
     lightning_cooldown_ms: 7000
     lightning_min_bolts: 2
     lightning_max_bolts: 2
+
+  # IceCube: Frost Walker, slippery movement and F ice spikes.
+  ice_cube:
+    frost_walker_radius: 2
+    frosted_ice_keep_ms: 4500
+    spike_cooldown_ms: 3000
+    spike_velocity: 2.15
+    spike_damage_hearts: 0.0
+    spike_slowness_ticks: 100
+    spike_slowness_level: 3
+    spike_weakness_ticks: 200
+    spike_weakness_level: 2
+    melee_slowness_ticks: 100
+    melee_slowness_level: 1
+    slide:
+      enabled: true
+      multiplier: 1.045
+      max_horizontal_speed: 0.64
+      sneak_brakes: true
 
   # FireSonic is intentionally weaker than Heat Vision but ticks at a similar speed.
   fire_sonic:
