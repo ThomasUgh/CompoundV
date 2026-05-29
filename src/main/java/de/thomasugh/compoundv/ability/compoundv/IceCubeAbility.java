@@ -13,6 +13,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,7 +34,9 @@ public class IceCubeAbility implements Ability {
     private final CompoundV plugin;
     private final Set<UUID> iceSpikes = new HashSet<>();
     private final Map<UUID, Long> spikeCooldown = new HashMap<>();
+    private final Map<UUID, Long> wallCooldown = new HashMap<>();
     private final Map<String, Long> frostedBlocks = new HashMap<>();
+    private final Map<String, TemporaryWallBlock> temporaryWallBlocks = new HashMap<>();
 
     public IceCubeAbility(CompoundV plugin) {
         this.plugin = plugin;
@@ -55,6 +58,7 @@ public class IceCubeAbility implements Ability {
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.SPEED);
         spikeCooldown.remove(player.getUniqueId());
+        wallCooldown.remove(player.getUniqueId());
     }
 
     @Override
@@ -115,6 +119,104 @@ public class IceCubeAbility implements Ability {
             }
         }
         return true;
+    }
+
+    public void createIceWall(Player player) {
+        UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        long cooldownMs = plugin.getConfig().getLong("abilities.ice_cube.wall_cooldown_ms", 60000L);
+        long readyAt = wallCooldown.getOrDefault(uuid, 0L);
+        if (readyAt > now) {
+            long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("ice_cube.wall_cooldown",
+                    "seconds", Long.toString(seconds)));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.35f, 1.25f);
+            return;
+        }
+
+        int width = Math.max(1, plugin.getConfig().getInt("abilities.ice_cube.wall_width", 5));
+        int height = Math.max(1, plugin.getConfig().getInt("abilities.ice_cube.wall_height", 3));
+        double distance = Math.max(1.0, plugin.getConfig().getDouble("abilities.ice_cube.wall_distance", 4.0));
+        long durationTicks = Math.max(20L, plugin.getConfig().getLong("abilities.ice_cube.wall_duration_ticks", 500L));
+
+        Vector forward = player.getLocation().getDirection();
+        forward.setY(0.0);
+        if (forward.lengthSquared() < 0.001) forward = new Vector(0, 0, 1);
+        forward.normalize();
+        Vector right = new Vector(-forward.getZ(), 0, forward.getX()).normalize();
+
+        Location center = player.getLocation().clone().add(forward.clone().multiply(distance));
+        World world = center.getWorld();
+        if (world == null) return;
+
+        int placed = 0;
+        int half = width / 2;
+        long expiresAt = now + durationTicks * 50L;
+        for (int x = -half; x <= half; x++) {
+            for (int y = 0; y < height; y++) {
+                Location target = center.clone().add(right.clone().multiply(x)).add(0, y, 0);
+                Block block = target.getBlock();
+                if (!isWallReplaceable(block.getType())) continue;
+                if (block.getLocation().distanceSquared(player.getLocation()) < 1.25) continue;
+
+                String key = blockKey(block.getLocation());
+                if (temporaryWallBlocks.containsKey(key)) continue;
+
+                BlockData original = block.getBlockData();
+                Material wallMaterial = wallMaterialFor(x, y, half, height);
+                block.setType(wallMaterial, false);
+                temporaryWallBlocks.put(key, new TemporaryWallBlock(block.getLocation(), original, wallMaterial, expiresAt));
+                placed++;
+                SchedulerAdapter.runLaterAt(plugin, block.getLocation(), () -> expireWallBlock(key, expiresAt), durationTicks);
+            }
+        }
+
+        if (placed <= 0) {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.35f, 0.85f);
+            return;
+        }
+
+        wallCooldown.put(uuid, now + Math.max(0L, cooldownMs));
+        Location effect = center.clone().add(0, Math.max(1.0, height / 2.0), 0);
+        world.playSound(effect, Sound.BLOCK_GLASS_PLACE, 1.0f, 0.75f);
+        world.playSound(effect, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.65f, 1.25f);
+        world.spawnParticle(Particle.SNOWFLAKE, effect, 55, width * 0.35, height * 0.25, 0.22, 0.08);
+        world.spawnParticle(Particle.CLOUD, effect, 22, width * 0.22, height * 0.18, 0.14, 0.025);
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("ice_cube.wall_created"));
+    }
+
+    private Material wallMaterialFor(int x, int y, int halfWidth, int height) {
+        if (y == 0 || Math.abs(x) >= halfWidth) return Material.PACKED_ICE;
+        if (y == height - 1 && Math.abs(x) <= 1) return Material.SNOW_BLOCK;
+        if ((x + y) % 5 == 0) return Material.BLUE_ICE;
+        return Material.ICE;
+    }
+
+    private boolean isWallReplaceable(Material material) {
+        String name = material.name();
+        return material.isAir()
+                || material == Material.WATER
+                || material == Material.SNOW
+                || material == Material.POWDER_SNOW
+                || name.equals("GRASS")
+                || name.equals("SHORT_GRASS")
+                || name.equals("TALL_GRASS")
+                || name.equals("FERN")
+                || name.equals("LARGE_FERN")
+                || name.equals("VINE")
+                || name.endsWith("_VINES")
+                || name.endsWith("_CARPET");
+    }
+
+    private void expireWallBlock(String key, long expiresAt) {
+        TemporaryWallBlock temporary = temporaryWallBlocks.get(key);
+        if (temporary == null || temporary.expiresAt() != expiresAt) return;
+        Block block = temporary.location().getBlock();
+        if (block.getType() == temporary.wallMaterial()) {
+            block.setBlockData(temporary.originalData(), false);
+            block.getWorld().spawnParticle(Particle.CLOUD, block.getLocation().add(0.5, 0.5, 0.5), 4, 0.12, 0.12, 0.12, 0.01);
+        }
+        temporaryWallBlocks.remove(key);
     }
 
     public void handleMeleeHit(Player attacker, LivingEntity target) {
@@ -224,4 +326,6 @@ public class IceCubeAbility implements Ability {
                 || name.equals("BLUE_ICE")
                 || name.equals("FROSTED_ICE");
     }
+
+    private record TemporaryWallBlock(Location location, BlockData originalData, Material wallMaterial, long expiresAt) { }
 }

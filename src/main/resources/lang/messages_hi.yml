@@ -86,6 +86,7 @@ ability:
       - "<prefix>&8• &bIce Spike&7: &dF &8(Swap Item with Offhand)&7 दबाकर छोटी बर्फीली नोक दागो. Cooldown: &e3s&7."
       - "<prefix>&8• &7Ice spikes &bSlowness III&7 को &e5s&7 और &7Weakness II&7 को &e10s&7 के लिए लगाती हैं."
       - "<prefix>&8• &7Melee hits &bSlowness I&7 को &e5s&7 के लिए लगाते हैं."
+      - "<prefix>&8• &bIce Wall&7: &dSneak + Left-Click&7 से लगभग &e4 blocks&7 आगे temporary wall बनती है. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength I&7 और &9Resistance I&7."
   the_diver:
     description:
@@ -626,6 +627,12 @@ stats:
   description_header: <prefix>&8────── &aAbility Description &8──────
   none: <prefix>&a{player}&7 has no active CompoundV ability.
   footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ice_cube:
+  spike_fired: "<prefix>&bIce Spike दागी गई."
+  spike_cooldown: "<prefix>&7Ice Spike cooldown: &e{seconds}s&7."
+  wall_created: "<prefix>&bIce wall बना दी गई."
+  wall_cooldown: "<prefix>&7Ice wall cooldown: &e{seconds}s&7."
 
 death_messages:
   heat_vision: "{victim} को {killer} ने लेज़र से भून दिया."

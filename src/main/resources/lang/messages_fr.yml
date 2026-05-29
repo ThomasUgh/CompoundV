@@ -86,6 +86,7 @@ ability:
       - "<prefix>&8• &bPic de glace&7 : appuie sur &dF &8(Swap Item with Offhand)&7 pour tirer un petit pic gelé. Cooldown : &e3s&7."
       - "<prefix>&8• &7Les pics appliquent &bSlowness III&7 pendant &e5s&7 et &7Weakness II&7 pendant &e10s&7."
       - "<prefix>&8• &7Les coups au corps à corps appliquent &bSlowness I&7 pendant &e5s&7."
+      - "<prefix>&8• &bMur de glace&7: &dSneak + clic gauche&7 crée un mur temporaire à environ &e4 blocs&7 devant toi. Cooldown : &e60s&7."
       - "<prefix>&8• &7Effets passifs : &aStrength I&7 et &9Resistance I&7."
   the_diver:
     description:
@@ -626,6 +627,12 @@ stats:
   description_header: <prefix>&8────── &aAbility Description &8──────
   none: <prefix>&a{player}&7 has no active CompoundV ability.
   footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ice_cube:
+  spike_fired: "<prefix>&bPic de glace tiré."
+  spike_cooldown: "<prefix>&7Cooldown du pic de glace : &e{seconds}s&7."
+  wall_created: "<prefix>&bMur de glace créé."
+  wall_cooldown: "<prefix>&7Cooldown du mur de glace : &e{seconds}s&7."
 
 death_messages:
   heat_vision: "{victim} a été grillé au laser par {killer}."

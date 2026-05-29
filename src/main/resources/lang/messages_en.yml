@@ -94,6 +94,7 @@ ability:
       - "<prefix>&8• &bIce Spike&7: press &dF &8(Swap Item with Offhand)&7 to shoot a small frozen spike. Cooldown: &e3s&7."
       - "<prefix>&8• &7Ice spikes apply &bSlowness III&7 for &e5s&7 and &7Weakness II&7 for &e10s&7."
       - "<prefix>&8• &7Melee hits apply &bSlowness I&7 for &e5s&7."
+      - "<prefix>&8• &bIce Wall&7: &dSneak + Left-Click&7 creates a temporary wall about &e4 blocks&7 ahead. Cooldown: &e60s&7."
       - "<prefix>&8• &7Passive boosts: &aStrength I&7 and &9Resistance I&7."
   the_diver:
     description:
@@ -666,6 +667,12 @@ tutorial_book:
     - ""
     - "&4Side effects are"
     - "&4added to powers."
+
+ice_cube:
+  spike_fired: "<prefix>&bIce Spike fired."
+  spike_cooldown: "<prefix>&7Ice Spike cooldown: &e{seconds}s&7."
+  wall_created: "<prefix>&bIce wall raised."
+  wall_cooldown: "<prefix>&7Ice wall cooldown: &e{seconds}s&7."
 
 death_messages:
   heat_vision: "{victim} got laser-cooked by {killer}."

@@ -86,6 +86,7 @@ ability:
       - "<prefix>&8• &bPúa de hielo&7: pulsa &dF &8(Swap Item with Offhand)&7 para disparar una púa helada. Cooldown: &e3s&7."
       - "<prefix>&8• &7Las púas aplican &bSlowness III&7 por &e5s&7 y &7Weakness II&7 por &e10s&7."
       - "<prefix>&8• &7Los golpes cuerpo a cuerpo aplican &bSlowness I&7 por &e5s&7."
+      - "<prefix>&8• &bMuro de hielo&7: &dAgáchate + clic izquierdo&7 crea un muro temporal a unos &e4 bloques&7 delante. Enfriamiento: &e60s&7."
       - "<prefix>&8• &7Efectos pasivos: &aStrength I&7 y &9Resistance I&7."
   the_diver:
     description:
@@ -626,6 +627,12 @@ stats:
   description_header: <prefix>&8────── &aAbility Description &8──────
   none: <prefix>&a{player}&7 has no active CompoundV ability.
   footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ice_cube:
+  spike_fired: "<prefix>&bPúa de hielo disparada."
+  spike_cooldown: "<prefix>&7Cooldown de púa de hielo: &e{seconds}s&7."
+  wall_created: "<prefix>&bMuro de hielo creado."
+  wall_cooldown: "<prefix>&7Enfriamiento del muro de hielo: &e{seconds}s&7."
 
 death_messages:
   heat_vision: "{victim} fue cocinado con láser por {killer}."

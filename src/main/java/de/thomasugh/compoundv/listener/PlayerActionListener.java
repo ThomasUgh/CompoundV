@@ -389,6 +389,12 @@ public class PlayerActionListener implements Listener {
 
         if (e.getHand() != EquipmentSlot.HAND) return;
 
+        if (ab instanceof IceCubeAbility iceCube && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            iceCube.createIceWall(p);
+            return;
+        }
+
         if (ab instanceof ThePatriotAbility ha) {
             if (canUseSneakLeftClick(p, a)) {
                 cancelAbilityInteraction(e);

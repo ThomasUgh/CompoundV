@@ -87,6 +87,7 @@ ability:
       - "<prefix>&8• &b冰刺&7：按 &dF &8(Swap Item with Offhand)&7 发射小型冰刺。冷却：&e3s&7。"
       - "<prefix>&8• &7冰刺造成 &bSlowness III&7 &e5s&7，并造成 &7Weakness II&7 &e10s&7。"
       - "<prefix>&8• &7近战命中造成 &bSlowness I&7 &e5s&7。"
+      - "<prefix>&8• &b冰墙&7：&d潜行 + 左键&7 会在前方约 &e4 格&7 生成临时冰墙。冷却：&e60秒&7。"
       - "<prefix>&8• &7被动增益：&aStrength I&7 和 &9Resistance I&7。"
   the_diver:
     description:
@@ -626,6 +627,12 @@ tutorial_book:
   - ''
   - '&4副作用会'
   - '&4叠加在能力上。'
+
+ice_cube:
+  spike_fired: "<prefix>&b冰刺已发射。"
+  spike_cooldown: "<prefix>&7冰刺冷却：&e{seconds}s&7。"
+  wall_created: "<prefix>&b冰墙已生成。"
+  wall_cooldown: "<prefix>&7冰墙冷却：&e{seconds}秒&7。"
 
 death_messages:
   heat_vision: "{victim} 被 {killer} 用激光烤熟了。"

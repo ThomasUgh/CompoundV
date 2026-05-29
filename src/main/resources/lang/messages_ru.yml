@@ -86,6 +86,7 @@ ability:
       - "<prefix>&8• &bЛедяной шип&7: нажми &dF &8(Swap Item with Offhand)&7, чтобы выпустить маленький ледяной шип. Перезарядка: &e3s&7."
       - "<prefix>&8• &7Шипы накладывают &bSlowness III&7 на &e5s&7 и &7Weakness II&7 на &e10s&7."
       - "<prefix>&8• &7Удары в ближнем бою накладывают &bSlowness I&7 на &e5s&7."
+      - "<prefix>&8• &bЛедяная стена&7: &dShift + ЛКМ&7 создаёт временную стену примерно в &e4 блоках&7 перед тобой. Кулдаун: &e60с&7."
       - "<prefix>&8• &7Пассивные эффекты: &aStrength I&7 и &9Resistance I&7."
   the_diver:
     description:
@@ -626,6 +627,12 @@ stats:
   description_header: <prefix>&8────── &aAbility Description &8──────
   none: <prefix>&a{player}&7 has no active CompoundV ability.
   footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ice_cube:
+  spike_fired: "<prefix>&bЛедяной шип выпущен."
+  spike_cooldown: "<prefix>&7Перезарядка ледяного шипа: &e{seconds}s&7."
+  wall_created: "<prefix>&bЛедяная стена создана."
+  wall_cooldown: "<prefix>&7Кулдаун ледяной стены: &e{seconds}с&7."
 
 death_messages:
   heat_vision: "{victim} был прожарен лазером от {killer}."

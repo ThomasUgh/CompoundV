@@ -87,6 +87,7 @@ ability:
     - '<prefix>&8• &bEisspitze&7: Drücke &dF &8(Swap Item with Offhand)&7, um eine kleine Eisspitze zu schießen. Cooldown: &e3s&7.'
     - '<prefix>&8• &7Eisspitzen geben &bSlowness III&7 für &e5s&7 und &7Weakness II&7 für &e10s&7.'
     - '<prefix>&8• &7Nahkampftreffer geben &bSlowness I&7 für &e5s&7.'
+    - '<prefix>&8• &bEiswand&7: &dSchleichen + Linksklick&7 erzeugt eine temporäre Wand ca. &e4 Blöcke&7 vor dir. Cooldown: &e60s&7.'
     - '<prefix>&8• &7Passive Effekte: &aStärke I&7 und &9Resistenz I&7.'
   the_diver:
     description:
@@ -627,6 +628,11 @@ tutorial_book:
   - '&4Nebenwirkung kommt'
   - '&4zusätzlich zur Kraft.'
 
+ice_cube:
+  spike_fired: "<prefix>&bEisspitze abgefeuert."
+  spike_cooldown: "<prefix>&7Eisspitze Cooldown: &e{seconds}s&7."
+  wall_created: "<prefix>&bEiswand erzeugt."
+  wall_cooldown: "<prefix>&7Eiswand Cooldown: &e{seconds}s&7."
 death_messages:
   heat_vision: "{victim} wurde von {killer} laser-gegart."
   the_patriot_heat_vision: "{victim} wurde von {killer}s Heatvision ausgelöscht."
