@@ -1,4 +1,4 @@
-language_file_version: 21
+language_file_version: 22
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cDafür hast du keine Berechtigung.
@@ -618,3 +618,11 @@ tutorial_book:
   - ''
   - '&4Nebenwirkung kommt'
   - '&4zusätzlich zur Kraft.'
+
+death_messages:
+  heat_vision: "&c{victim}&7 wurde von &c{killer}&7 laser-gegart."
+  the_patriot_heat_vision: "&4{victim}&7 wurde von &4{killer}s&7 Heatvision ausgelöscht."
+  the_veteran_beam: "&e{victim}&7 wurde von &6{killer}s&7 Reaktorstrahl erwischt."
+  the_veteran_ground_zero: "&6{victim}&7 stand zu nah an &e{killer}s&7 Ground Zero."
+  stormstrike: "&b{victim}&7 wurde von &d{killer}&7 überladen."
+  the_headpopper: "&5{victim}&7 hatte in der Nähe von &5{killer}&7 einen sehr schlechten Gedanken."
