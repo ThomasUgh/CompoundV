@@ -48,12 +48,12 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override public String    getId()          { return id; }
     @Override public String    getDisplayName() { return "The Patriot"; }
     @Override public int getColor()       { return color; }
-    @Override protected float  size()           { return isVOne() ? 0.67f : 0.65f; }
-    @Override protected float  glowSize()       { return isVOne() ? 0.44f : 0.43f; }
-    @Override protected double step()           { return isVOne() ? 0.304 : 0.314;  }
-    @Override protected int    coreParticles()  { return 2; }
-    @Override protected int    glowParticles()  { return 1; }
-    @Override protected int    impactParticles(){ return isVOne() ? 19 : 17; }
+    @Override protected float  size()           { return (float) Math.max(0.01, plugin.getConfig().getDouble(t("heat_vision_core_size"), isVOne() ? 0.67 : 0.65)); }
+    @Override protected float  glowSize()       { return (float) Math.max(0.01, plugin.getConfig().getDouble(t("heat_vision_glow_size"), isVOne() ? 0.44 : 0.43)); }
+    @Override protected double step()           { return Math.max(0.08, plugin.getConfig().getDouble(t("heat_vision_step"), isVOne() ? 0.304 : 0.314));  }
+    @Override protected int    coreParticles()  { return Math.max(0, plugin.getConfig().getInt(t("heat_vision_core_particles"), 2)); }
+    @Override protected int    glowParticles()  { return Math.max(0, plugin.getConfig().getInt(t("heat_vision_glow_particles"), 1)); }
+    @Override protected int    impactParticles(){ return Math.max(0, plugin.getConfig().getInt(t("heat_vision_impact_particles"), isVOne() ? 19 : 17)); }
     @Override protected int    entityFireTicks(){ return isVOne() ? 100 : 80; }
     @Override protected double hitRadius()      { return Math.max(0.01, plugin.getConfig().getDouble(t("heat_vision_hit_radius"), 0.0525)); }
     @Override protected Color  coreColor()      { return Color.fromRGB(255, 20, 8); }
@@ -68,6 +68,9 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected int maxContinuousTicks() { return plugin.getConfig().getInt(t("heat_vision_max_continuous_ticks"), isVOne() ? 600 : 500); }
     @Override protected long overheatCooldownMs() { return plugin.getConfig().getLong(t("heat_vision_overheat_cooldown_ms"), 5000L); }
     @Override protected boolean cooksMeatDrops() { return plugin.getConfig().getBoolean(t("heat_vision_cooks_meat"), true); }
+    @Override protected String killMessageKey() { return "death_messages.the_patriot_heat_vision"; }
+    @Override protected String activeSoundConfigPath() { return t("heat_vision_active_sound"); }
+    @Override protected String fallbackActiveSoundConfigPath() { return s("heat_vision_active_sound"); }
 
     @Override
     protected double range() {
@@ -251,7 +254,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
                 new Particle.DustOptions(Color.fromRGB(220, 10, 0), 1f));
         p.setFlying(false); p.setAllowFlight(false);
 
-        double vel  = plugin.getConfig().getDouble(s("launch_velocity"), 3.5);
+        double vel  = plugin.getConfig().getDouble(s("launch_velocity"), 3.85);
         Vector look = p.getLocation().getDirection();
         p.setVelocity(new Vector(look.getX() * .25, vel, look.getZ() * .25));
 

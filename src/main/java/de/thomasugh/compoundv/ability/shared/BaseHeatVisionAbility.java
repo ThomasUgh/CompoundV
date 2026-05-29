@@ -84,15 +84,14 @@ public abstract class BaseHeatVisionAbility implements Ability {
         UUID uuid = p.getUniqueId();
         if (!beamActive.getOrDefault(uuid, false)) return;
 
+        int ticks = activeTicks.merge(uuid, 1, Integer::sum);
         int maxTicks = maxContinuousTicks();
-        if (maxTicks > 0) {
-            int ticks = activeTicks.merge(uuid, 1, Integer::sum);
-            if (ticks >= maxTicks) {
-                triggerOverheatCooldown(p);
-                return;
-            }
+        if (maxTicks > 0 && ticks >= maxTicks) {
+            triggerOverheatCooldown(p);
+            return;
         }
 
+        playActiveBeamSound(p, ticks);
         beam(p);
     }
 
@@ -124,7 +123,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
         double  range   = range();
         double  damage  = damageAmount();
-        int     ivl     = damageInterval();
+        int     ivl     = Math.max(1, damageInterval());
         boolean ignite  = plugin.getConfig().getBoolean("heat_vision.ignite_blocks",   true);
         boolean igniteE = plugin.getConfig().getBoolean("heat_vision.ignite_entities", true);
         boolean bGlass  = plugin.getConfig().getBoolean("heat_vision.break_glass",     true);
@@ -172,7 +171,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
                 return;
             }
             if (cooksMeatDrops()) markCookedByHeatVision(le);
-            le.damage(finalDamage, player);
+            AbilityKillTracker.damage(plugin, le, player, finalDamage, killMessageKey(), true);
             if (igniteE) le.setFireTicks(entityFireTicks());
             w.spawnParticle(Particle.DUST,  imp, impactParticles(), 0.3, 0.4, 0.3, 0, core);
             w.spawnParticle(Particle.SMOKE, imp,  5, 0.1, 0.2, 0.1, 0.02);
@@ -492,13 +491,69 @@ public abstract class BaseHeatVisionAbility implements Ability {
     protected Color coreColor()     { return Color.fromRGB(45, 210, 255); }
     protected Color glowColor()     { return Color.fromRGB(150, 235, 255); }
     protected boolean fireParticles() { return plugin.getConfig().getBoolean("heat_vision.fire_particles", false); }
-    protected int coreParticles()   { return 2; }
-    protected int glowParticles()   { return 1; }
-    protected int impactParticles() { return 12; }
+    protected int coreParticles()   { return Math.max(0, plugin.getConfig().getInt("heat_vision.particles.core_particles", 2)); }
+    protected int glowParticles()   { return Math.max(0, plugin.getConfig().getInt("heat_vision.particles.glow_particles", 1)); }
+    protected int impactParticles() { return Math.max(0, plugin.getConfig().getInt("heat_vision.particles.impact_particles", 12)); }
     protected int entityFireTicks() { return 50; }
-    protected float glowSize()      { return 0.35f; }
-    protected float  size()         { return 0.55f; }
-    protected double step()         { return 0.40; }
+    protected float glowSize()      { return (float) Math.max(0.01, plugin.getConfig().getDouble("heat_vision.particles.glow_size", 0.35)); }
+    protected float  size()         { return (float) Math.max(0.01, plugin.getConfig().getDouble("heat_vision.particles.core_size", 0.55)); }
+    protected double step()         { return Math.max(0.08, plugin.getConfig().getDouble("heat_vision.particles.step", 0.40)); }
+
+    protected String activeSoundConfigPath() { return "heat_vision.active_sound"; }
+    protected String fallbackActiveSoundConfigPath() { return null; }
+
+    private void playActiveBeamSound(Player player, int activeTick) {
+        if (!getActiveSoundBoolean("enabled", true)) return;
+        int interval = Math.max(1, getActiveSoundInt("repeat_interval_ticks", 2));
+        if (activeTick % interval != 0) return;
+
+        String sound = getActiveSoundString("sound", "entity.blaze.shoot");
+        if (sound == null || sound.isBlank()) return;
+
+        float volume = (float) Math.max(0.0, getActiveSoundDouble("volume", 0.04));
+        float pitch = (float) Math.max(0.01, getActiveSoundDouble("pitch", 0.75));
+        player.getWorld().playSound(player.getLocation(), sound, volume, pitch);
+    }
+
+    private boolean getActiveSoundBoolean(String key, boolean def) {
+        String path = activeSoundConfigPath() + "." + key;
+        if (plugin.getConfig().contains(path)) return plugin.getConfig().getBoolean(path, def);
+        String fallback = fallbackActiveSoundConfigPath();
+        if (fallback != null && plugin.getConfig().contains(fallback + "." + key)) {
+            return plugin.getConfig().getBoolean(fallback + "." + key, def);
+        }
+        return def;
+    }
+
+    private int getActiveSoundInt(String key, int def) {
+        String path = activeSoundConfigPath() + "." + key;
+        if (plugin.getConfig().contains(path)) return plugin.getConfig().getInt(path, def);
+        String fallback = fallbackActiveSoundConfigPath();
+        if (fallback != null && plugin.getConfig().contains(fallback + "." + key)) {
+            return plugin.getConfig().getInt(fallback + "." + key, def);
+        }
+        return def;
+    }
+
+    private double getActiveSoundDouble(String key, double def) {
+        String path = activeSoundConfigPath() + "." + key;
+        if (plugin.getConfig().contains(path)) return plugin.getConfig().getDouble(path, def);
+        String fallback = fallbackActiveSoundConfigPath();
+        if (fallback != null && plugin.getConfig().contains(fallback + "." + key)) {
+            return plugin.getConfig().getDouble(fallback + "." + key, def);
+        }
+        return def;
+    }
+
+    private String getActiveSoundString(String key, String def) {
+        String path = activeSoundConfigPath() + "." + key;
+        if (plugin.getConfig().contains(path)) return plugin.getConfig().getString(path, def);
+        String fallback = fallbackActiveSoundConfigPath();
+        if (fallback != null && plugin.getConfig().contains(fallback + "." + key)) {
+            return plugin.getConfig().getString(fallback + "." + key, def);
+        }
+        return def;
+    }
 
     public boolean isBeamActive(Player p) {
         return beamActive.getOrDefault(p.getUniqueId(), false);

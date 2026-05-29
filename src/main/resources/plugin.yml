@@ -20,3 +20,7 @@ permissions:
   compoundv.admin:
     description: Allows /cv give, /cv remove and /cv reload
     default: op
+
+  compoundv.damage-bypass:
+    description: Allows trusted admins to bypass protected/immortal target damage fallback
+    default: op

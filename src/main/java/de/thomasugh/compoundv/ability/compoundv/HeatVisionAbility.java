@@ -94,12 +94,37 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
 
     @Override protected boolean cooksMeatDrops() { return true; }
 
-    @Override protected int coreParticles() { return stage >= 3 ? 2 : super.coreParticles(); }
-    @Override protected int glowParticles() { return stage == 4 ? 1 : super.glowParticles(); }
-    @Override protected int impactParticles() { return stage == 4 ? 16 : stage == 3 ? 14 : super.impactParticles(); }
-    @Override protected float size() { return stage == 4 ? 0.64f : stage == 3 ? 0.58f : super.size(); }
-    @Override protected float glowSize() { return stage == 4 ? 0.42f : stage == 3 ? 0.38f : super.glowSize(); }
-    @Override protected double step() { return stage == 4 ? 0.32 : stage == 3 ? 0.36 : super.step(); }
+    @Override protected int coreParticles() {
+        return Math.max(0, plugin.getConfig().getInt(stagePath("core_particles"), stage >= 3 ? 2 : super.coreParticles()));
+    }
+
+    @Override protected int glowParticles() {
+        return Math.max(0, plugin.getConfig().getInt(stagePath("glow_particles"), stage == 4 ? 1 : super.glowParticles()));
+    }
+
+    @Override protected int impactParticles() {
+        return Math.max(0, plugin.getConfig().getInt(stagePath("impact_particles"), stage == 4 ? 16 : stage == 3 ? 14 : super.impactParticles()));
+    }
+
+    @Override protected float size() {
+        return (float) Math.max(0.01, plugin.getConfig().getDouble(stagePath("core_size"), stage == 4 ? 0.64 : stage == 3 ? 0.58 : super.size()));
+    }
+
+    @Override protected float glowSize() {
+        return (float) Math.max(0.01, plugin.getConfig().getDouble(stagePath("glow_size"), stage == 4 ? 0.42 : stage == 3 ? 0.38 : super.glowSize()));
+    }
+
+    @Override protected double step() {
+        return Math.max(0.08, plugin.getConfig().getDouble(stagePath("step"), stage == 4 ? 0.32 : stage == 3 ? 0.36 : super.step()));
+    }
+
+    @Override protected String activeSoundConfigPath() {
+        return stagePath("active_sound");
+    }
+
+    @Override protected String fallbackActiveSoundConfigPath() {
+        return "heat_vision.active_sound";
+    }
 
     private String stagePath(String key) {
         return "heat_vision.stages.stage_" + stage + "." + key;
