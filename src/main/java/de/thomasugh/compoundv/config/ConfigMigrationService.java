@@ -60,6 +60,24 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_max_bolts", 4, 2);
         changed |= replaceIfNumericEquals("abilities.stormstrike.beam_damage_hearts", 1.275, 0.95625);
         changed |= replaceIfNumericEquals("abilities.stormstrike.lightning_tick_damage_hearts", 0.675, 0.54);
+        changed |= replaceIfNumericEquals("abilities.stormstrike.beam_damage_hearts", 2.0, 0.95625);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.heat_vision_active_sound.pitch", 1.75, 1.80);
+        changed |= replaceIfNumericEquals("heat_vision.active_sound.volume", 0.04, 0.05);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.heat_vision_active_sound.volume", 0.04, 0.05);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_active_sound.volume", 0.06);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.range", 25.0);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.speed_dash.range", 20.0, 25.0);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.speed_dash.cooldown_ms", 2500, 5000);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_active_sound.pitch", 1.95, 1.99);
+        changed |= removeIfPresent("heat_vision.hit_sound");
+        changed |= replaceIfNumericEquals("heat_vision.active_sound.volume", 0.045, 0.05);
+        changed |= replaceIfNumericEquals("heat_vision.active_sound.pitch", 0.65, 0.75);
+        changed |= replaceIfNumericEquals("heat_vision.active_sound.repeat_interval_ticks", 3, 2);
+        changed |= setIfMissing("heat_vision.player_damage_sound.enabled", false);
+        changed |= setIfMissing("heat_vision.generic_hit_sound.enabled", true);
+        changed |= setIfMissing("heat_vision.stages.stage_2.active_sound.pitch", 0.90);
+        changed |= setIfMissing("heat_vision.stages.stage_3.active_sound.pitch", 1.05);
+        changed |= setIfMissing("heat_vision.stages.stage_4.active_sound.pitch", 1.20);
 
         return changed;
     }
@@ -69,7 +87,8 @@ public final class ConfigMigrationService {
         String[] obsolete = {
                 "compound_v.chances.invisibility",
                 "temp_v.chances.invisibility",
-                "metrics"
+                "metrics",
+                "abilities.the_patriot.shared.forward_leap"
         };
         for (String path : obsolete) {
             if (plugin.getConfig().contains(path)) {
@@ -970,6 +989,15 @@ public final class ConfigMigrationService {
     private boolean removeIfPresent(String path) {
         if (!plugin.getConfig().contains(path)) return false;
         plugin.getConfig().set(path, null);
+        return true;
+    }
+
+
+    private boolean setValueIfPresent(String path, Object value) {
+        if (!plugin.getConfig().contains(path)) return false;
+        Object current = plugin.getConfig().get(path);
+        if (current == null ? value == null : current.equals(value)) return false;
+        plugin.getConfig().set(path, value);
         return true;
     }
 

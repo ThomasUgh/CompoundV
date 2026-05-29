@@ -2,15 +2,19 @@ package de.thomasugh.compoundv.ability.shared;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.TeleportUtil;
 import org.bukkit.Bukkit;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import org.bukkit.ChatColor;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import de.thomasugh.compoundv.util.AttributeUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -18,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -37,6 +42,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     private final Map<UUID, Set<UUID>> visibleTargets = new HashMap<>();
     private final Set<UUID>          launching      = new HashSet<>();
     private final Map<UUID, Long>    launchCooldown = new HashMap<>();
+    private final Map<UUID, Long>    speedDashCooldown = new HashMap<>();
     private final Map<UUID, Long>    fallImpactCooldown = new HashMap<>();
 
     public ThePatriotAbility(CompoundV plugin, String id, String tierKey, int color) {
@@ -131,7 +137,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
                 PotionEffects.NIGHT_VISION).forEach(p::removePotionEffect);
         if (glowActive.getOrDefault(u, false)) clearGlow(p);
         glowActive.remove(u); glowTicker.remove(u);
-        launching.remove(u); launchCooldown.remove(u); fallImpactCooldown.remove(u);
+        launching.remove(u); launchCooldown.remove(u); speedDashCooldown.remove(u); fallImpactCooldown.remove(u);
         setMaxHealthBonus(p, 0);
     }
 
@@ -171,7 +177,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             currentTargets.add(le.getUniqueId());
             le.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
                     45, 0, false, false, false));
-            if (team != null) team.addEntry(e.getUniqueId().toString());
+            if (team != null) team.addEntry(scoreboardEntry(e));
         }
         clearStaleGlow(p, currentTargets);
         visibleTargets.put(p.getUniqueId(), currentTargets);
@@ -186,7 +192,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            if (team != null) team.removeEntry(targetId.toString());
+            if (team != null && entity != null) team.removeEntry(scoreboardEntry(entity));
         }
     }
 
@@ -200,8 +206,15 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             if (entity instanceof LivingEntity living) {
                 living.removePotionEffect(PotionEffects.GLOWING);
             }
-            if (team != null) team.removeEntry(targetId.toString());
+            if (team != null && entity != null) team.removeEntry(scoreboardEntry(entity));
         }
+    }
+
+    private String scoreboardEntry(Entity entity) {
+        if (entity instanceof Player player) {
+            return player.getName();
+        }
+        return entity.getUniqueId().toString();
     }
 
     private void renderPrivateGlowOutline(Player viewer, LivingEntity target, Particle.DustOptions dust) {
@@ -246,6 +259,9 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         Location loc = p.getLocation(); World w = p.getWorld();
         w.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE,           2.0f, 0.5f);
         w.playSound(loc, Sound.ITEM_FIRECHARGE_USE,              1.5f, 0.6f);
+        playConfiguredSound(loc, s("launch_flap_sound.sound"), "entity.ender_dragon.flap",
+                s("launch_flap_sound.volume"), 1.10f,
+                s("launch_flap_sound.pitch"), 1.35f);
         w.spawnParticle(Particle.CLOUD,       loc.clone().add(0, .2, 0), 50, 1.2, .15, 1.2, .25);
         w.spawnParticle(Particle.POOF,        loc.clone().add(0, .4, 0), 28, 1.0, .15, 1.0,  0);
         w.spawnParticle(Particle.EXPLOSION,   loc.clone().add(0, .5, 0),  6,  .8, .05,  .8,  0);
@@ -268,6 +284,173 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
                 p.setFlySpeed((float) spd);
             }
         }, peak);
+    }
+
+    public boolean trySpeedDash(Player player) {
+        if (!plugin.getConfig().getBoolean(s("speed_dash.enabled"), true)) return false;
+        if (plugin.getConfig().getBoolean(s("speed_dash.require_sneak"), true) && !player.isSneaking()) return false;
+
+        UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        long cooldownMs = plugin.getConfig().getLong(s("speed_dash.cooldown_ms"), 5000L);
+        long readyAt = speedDashCooldown.getOrDefault(uuid, 0L);
+        if (readyAt > now) {
+            long seconds = Math.max(1L, (long) Math.ceil((readyAt - now) / 1000.0));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("patriot.speed_dash_cooldown",
+                    "seconds", Long.toString(seconds)));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.35f, 1.45f);
+            return true;
+        }
+
+        Location destination = findSpeedDashDestination(player);
+        if (destination == null) {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.35f, 0.85f);
+            return true;
+        }
+
+        Location from = player.getLocation().clone();
+        speedDashCooldown.put(uuid, now + Math.max(0L, cooldownMs));
+        renderSpeedDashTrail(from, destination);
+        playSpeedDashFlap(player);
+        TeleportUtil.teleportSafely(plugin, player, destination);
+        SchedulerAdapter.runLater(plugin, player, () -> {
+            if (!player.isOnline()) return;
+            if (plugin.getConfig().getBoolean(s("speed_dash.sound.repeat_at_destination"), true)) {
+                playSpeedDashFlap(player);
+            }
+            renderSpeedDashArrival(player.getLocation());
+        }, 1L);
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("patriot.speed_dash"));
+        return true;
+    }
+
+    private void playSpeedDashFlap(Player player) {
+        if (!plugin.getConfig().getBoolean(s("speed_dash.sound.enabled"), true)) return;
+        playConfiguredSound(player, s("speed_dash.sound.sound"), "entity.ender_dragon.flap",
+                s("speed_dash.sound.volume"), 1.35f,
+                s("speed_dash.sound.pitch"), 1.30f);
+    }
+
+    private void playConfiguredSound(Location location, String soundPath, String fallbackSound,
+                                     String volumePath, float fallbackVolume,
+                                     String pitchPath, float fallbackPitch) {
+        String sound = plugin.getConfig().getString(soundPath, fallbackSound);
+        if (sound == null || sound.isBlank()) return;
+        location.getWorld().playSound(location, sound,
+                Math.max(0.0f, (float) plugin.getConfig().getDouble(volumePath, fallbackVolume)),
+                Math.max(0.01f, (float) plugin.getConfig().getDouble(pitchPath, fallbackPitch)));
+    }
+
+    private void playConfiguredSound(Player player, String soundPath, String fallbackSound,
+                                     String volumePath, float fallbackVolume,
+                                     String pitchPath, float fallbackPitch) {
+        String sound = plugin.getConfig().getString(soundPath, fallbackSound);
+        if (sound == null || sound.isBlank()) return;
+        player.playSound(player.getLocation(), sound,
+                Math.max(0.0f, (float) plugin.getConfig().getDouble(volumePath, fallbackVolume)),
+                Math.max(0.01f, (float) plugin.getConfig().getDouble(pitchPath, fallbackPitch)));
+    }
+
+    private Location findSpeedDashDestination(Player player) {
+        World world = player.getWorld();
+        Location eye = player.getEyeLocation();
+        Vector direction = eye.getDirection().normalize();
+        double range = Math.max(1.0, plugin.getConfig().getDouble(s("speed_dash.range"), 25.0));
+
+        RayTraceResult hit = world.rayTraceBlocks(eye, direction, range, FluidCollisionMode.NEVER, true);
+        double maxDistance = range;
+        if (hit != null && hit.getHitPosition() != null) {
+            maxDistance = Math.max(1.0, hit.getHitPosition().distance(eye.toVector()) - 0.75);
+        }
+
+        Location base = player.getLocation();
+        for (double distance = maxDistance; distance >= 1.25; distance -= 0.75) {
+            Location candidate = base.clone().add(direction.clone().multiply(distance));
+            candidate.setYaw(base.getYaw());
+            candidate.setPitch(base.getPitch());
+            Location safe = nearestSafeSpeedDashLocation(candidate);
+            if (safe != null && safe.distanceSquared(base) > 1.0) {
+                return safe;
+            }
+        }
+        return null;
+    }
+
+    private Location nearestSafeSpeedDashLocation(Location origin) {
+        World world = origin.getWorld();
+        if (world == null) return null;
+        int x = origin.getBlockX();
+        int y = origin.getBlockY();
+        int z = origin.getBlockZ();
+
+        for (int up = 0; up <= 3; up++) {
+            Location safe = speedDashLocationAt(world, x, y + up, z, origin);
+            if (safe != null) return safe;
+        }
+        for (int down = 1; down <= 6; down++) {
+            Location safe = speedDashLocationAt(world, x, y - down, z, origin);
+            if (safe != null) return safe;
+        }
+        return null;
+    }
+
+    private Location speedDashLocationAt(World world, int x, int y, int z, Location origin) {
+        if (y <= world.getMinHeight() || y >= world.getMaxHeight() - 2) return null;
+        Block feet = world.getBlockAt(x, y, z);
+        Block head = world.getBlockAt(x, y + 1, z);
+        Block below = world.getBlockAt(x, y - 1, z);
+
+        if (!isSpeedDashPassable(feet.getType()) || !isSpeedDashPassable(head.getType())) return null;
+        if (!below.getType().isSolid() || isSpeedDashDangerous(below.getType()) || isSpeedDashDangerous(feet.getType())) return null;
+
+        return new Location(world, x + 0.5, y, z + 0.5, origin.getYaw(), origin.getPitch());
+    }
+
+    private boolean isSpeedDashPassable(Material material) {
+        return material.isAir() || !material.isSolid();
+    }
+
+    private boolean isSpeedDashDangerous(Material material) {
+        String name = material.name();
+        return name.contains("LAVA")
+                || name.equals("FIRE")
+                || name.equals("SOUL_FIRE")
+                || name.equals("MAGMA_BLOCK")
+                || name.equals("CACTUS")
+                || name.equals("POWDER_SNOW")
+                || name.equals("CAMPFIRE")
+                || name.equals("SOUL_CAMPFIRE");
+    }
+
+    private void renderSpeedDashTrail(Location from, Location to) {
+        World world = from.getWorld();
+        if (world == null) return;
+        Vector delta = to.toVector().subtract(from.toVector());
+        double length = delta.length();
+        if (length < 0.1) return;
+        Vector direction = delta.normalize();
+
+        world.spawnParticle(Particle.CLOUD, from.clone().add(0, 0.45, 0), 26, 0.55, 0.16, 0.55, 0.12);
+        world.spawnParticle(Particle.POOF, from.clone().add(0, 0.85, 0), 16, 0.40, 0.16, 0.40, 0.04);
+        world.spawnParticle(Particle.SMOKE, from.clone().add(0, 0.65, 0), 8, 0.36, 0.10, 0.36, 0.025);
+
+        for (double d = 0.0; d <= length; d += 0.42) {
+            Location point = from.clone().add(direction.clone().multiply(d)).add(0, 0.95, 0);
+            world.spawnParticle(Particle.POOF, point, 3, 0.13, 0.06, 0.13, 0.014);
+            world.spawnParticle(Particle.CLOUD, point.clone().subtract(direction.clone().multiply(0.20)), 2, 0.18, 0.05, 0.18, 0.020);
+            if (d % 1.26 < 0.42) {
+                world.spawnParticle(Particle.SMOKE, point, 2, 0.12, 0.05, 0.12, 0.010);
+            }
+        }
+    }
+
+    private void renderSpeedDashArrival(Location destination) {
+        World world = destination.getWorld();
+        if (world == null) return;
+        Location center = destination.clone().add(0, 0.55, 0);
+        world.spawnParticle(Particle.CLOUD, center, 24, 0.52, 0.20, 0.52, 0.08);
+        world.spawnParticle(Particle.POOF, center.clone().add(0, 0.35, 0), 14, 0.38, 0.14, 0.38, 0.035);
+        world.spawnParticle(Particle.SMOKE, center, 8, 0.28, 0.10, 0.28, 0.018);
     }
 
     public void triggerFallImpact(Player p) {

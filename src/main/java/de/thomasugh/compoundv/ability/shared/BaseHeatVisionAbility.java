@@ -387,8 +387,13 @@ public abstract class BaseHeatVisionAbility implements Ability {
     }
 
     private void playHeatVisionDamageSounds(World world, Location impact, LivingEntity target) {
+        if (target instanceof Player && !plugin.getConfig().getBoolean("heat_vision.player_damage_sound.enabled", false)) return;
         Sound specific = hurtSoundFor(target);
-        world.playSound(impact, specific, 0.95f, 1.0f);
+        world.playSound(impact, specific, 1.00f, 1.0f);
+        world.playSound(impact, specific, 0.55f, 1.18f);
+        if (!(target instanceof Player) || plugin.getConfig().getBoolean("heat_vision.generic_hit_sound.enabled", false)) {
+            world.playSound(impact, Sound.ENTITY_GENERIC_HURT, 0.38f, 1.28f);
+        }
     }
 
     private Sound hurtSoundFor(LivingEntity target) {

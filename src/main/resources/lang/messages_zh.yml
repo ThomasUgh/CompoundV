@@ -1,4 +1,4 @@
-language_file_version: 22
+language_file_version: 28
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&c你没有权限这么做。
@@ -628,6 +628,9 @@ tutorial_book:
   - '&4副作用会'
   - '&4叠加在能力上。'
 
+patriot:
+  speed_dash: "&cThe Patriot &7冲刺."
+  speed_dash_cooldown: "&7冲刺将在 &c{seconds}s&7 后就绪."
 ice_cube:
   spike_fired: "<prefix>&b冰刺已发射。"
   spike_cooldown: "<prefix>&7冰刺冷却：&e{seconds}s&7。"

@@ -98,6 +98,11 @@ heat_vision:
     sound: entity.blaze.shoot
     volume: 0.05
     pitch: 0.75
+  # Player damage sounds stay disabled by default. Mob/animal hurt sounds use the old Heatvision behavior.
+  player_damage_sound:
+    enabled: false
+  generic_hit_sound:
+    enabled: true
   particles:
     core_particles: 2
     glow_particles: 1
@@ -140,8 +145,25 @@ abilities:
         enabled: true
         repeat_interval_ticks: 2
         sound: entity.wither.shoot
-        volume: 0.04
-        pitch: 1.80
+        volume: 0.05
+        pitch: 1.8
+      # Bukkit/Spigot cannot detect the real Pick-Block middle-click reliably.
+      # This uses Sneak + hotbar scroll as vanilla-server compatible dash trigger.
+      speed_dash:
+        enabled: true
+        require_sneak: true
+        range: 25.0
+        cooldown_ms: 5000
+        sound:
+          enabled: true
+          sound: entity.ender_dragon.flap
+          volume: 1.35
+          pitch: 1.30
+          repeat_at_destination: true
+      launch_flap_sound:
+        sound: entity.ender_dragon.flap
+        volume: 1.10
+        pitch: 1.35
     compound_v:
       heat_vision_core_particles: 2
       heat_vision_core_size: 0.65
@@ -152,7 +174,7 @@ abilities:
       heat_vision_impact_particles: 19
       heat_vision_active_sound:
         volume: 0.06
-        pitch: 1.95
+        pitch: 1.99
 
   # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:

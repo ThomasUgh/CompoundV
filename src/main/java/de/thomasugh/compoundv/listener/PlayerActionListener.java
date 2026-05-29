@@ -60,6 +60,7 @@ import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -340,6 +341,16 @@ public class PlayerActionListener implements Listener {
                 age += 10;
             }
         }, 0L, 10L);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onItemHeld(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        if (!player.isSneaking()) return;
+        Ability ability = manager.getAbility(player);
+        if (ability instanceof ThePatriotAbility patriot && patriot.trySpeedDash(player)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -664,6 +675,7 @@ public class PlayerActionListener implements Listener {
         if (!prevGround && currGround && p.getFlySpeed() > 0.1001f) {
             p.setFlySpeed(0.1f);
         }
+
 
         if (!prevGround || currGround
                 || p.getVelocity().getY() <= 0.15

@@ -1,4 +1,4 @@
-language_file_version: 22
+language_file_version: 28
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cDafür hast du keine Berechtigung.
@@ -43,6 +43,8 @@ ability:
     - '<prefix>&8• &cHeat Vision&7: Drücke &dF &8(Swap Item with Offhand)&7 zum Umschalten. Standard: &e5 Herzen&7, &e44 Blöcke&7.'
     - '<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen.'
     - '<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen.'
+    - '<prefix>&8• &cSpeed Dash&7: &dSchleichen + Hotbar scrollen&7 für bis zu &e25 Blöcke&7 nach vorne.'
+    - '<prefix>&8• &cForward Leap&7: &dSchleichen + Sprung + nach vorne laufen&7 für einen flachen 10-15 Block-Satz.'
     - '<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7 und &cExtra-Herzen&7.'
   the_patriot_v_one:
     description:
@@ -51,6 +53,8 @@ ability:
     - '<prefix>&8• &cHeat Vision&7: Drücke &dF &8(Swap Item with Offhand)&7 zum Umschalten. Standard: &e4,725 Herzen&7, &e50 Blöcke&7.'
     - '<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen.'
     - '<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen.'
+    - '<prefix>&8• &cSpeed Dash&7: &dSchleichen + Hotbar scrollen&7 für bis zu &e25 Blöcke&7 nach vorne.'
+    - '<prefix>&8• &cForward Leap&7: &dSchleichen + Sprung + nach vorne laufen&7 für einen flachen 10-15 Block-Satz.'
     - '<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7, &6Feuerresistenz&7 und &cExtra-Herzen&7.'
   sonic_boom:
     description:
@@ -628,11 +632,15 @@ tutorial_book:
   - '&4Nebenwirkung kommt'
   - '&4zusätzlich zur Kraft.'
 
+patriot:
+  speed_dash: "&cThe Patriot &7Dash."
+  speed_dash_cooldown: "&7Dash bereit in &c{seconds}s&7."
 ice_cube:
   spike_fired: "<prefix>&bEisspitze abgefeuert."
   spike_cooldown: "<prefix>&7Eisspitze Cooldown: &e{seconds}s&7."
   wall_created: "<prefix>&bEiswand erzeugt."
   wall_cooldown: "<prefix>&7Eiswand Cooldown: &e{seconds}s&7."
+
 death_messages:
   heat_vision: "{victim} wurde von {killer} laser-gegart."
   the_patriot_heat_vision: "{victim} wurde von {killer}s Heatvision ausgelöscht."

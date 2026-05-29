@@ -1,4 +1,4 @@
-language_file_version: 22
+language_file_version: 28
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cTu n'as pas la permission de faire cela.
@@ -628,6 +628,9 @@ stats:
   none: <prefix>&a{player}&7 has no active CompoundV ability.
   footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+patriot:
+  speed_dash: "&cThe Patriot &7dash activé."
+  speed_dash_cooldown: "&7Dash prêt dans &c{seconds}s&7."
 ice_cube:
   spike_fired: "<prefix>&bPic de glace tiré."
   spike_cooldown: "<prefix>&7Cooldown du pic de glace : &e{seconds}s&7."

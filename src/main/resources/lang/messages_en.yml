@@ -1,4 +1,4 @@
-language_file_version: 22
+language_file_version: 28
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -50,6 +50,8 @@ ability:
       - "<prefix>&8• &cHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle. Default: &e5 hearts&7, &e44 blocks&7."
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
+      - "<prefix>&8• &cSpeed Dash&7: &dSneak + hotbar scroll&7 to burst up to &e25 blocks&7 forward."
+      - "<prefix>&8• &cForward Leap&7: &dSneak + jump + move forward&7 for a flat 10-15 block burst."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7 and &cBonus Hearts&7."
   the_patriot_v_one:
     description:
@@ -58,6 +60,8 @@ ability:
       - "<prefix>&8• &cHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle. Default: &e4.725 hearts&7, &e50 blocks&7."
       - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
       - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
+      - "<prefix>&8• &cSpeed Dash&7: &dSneak + hotbar scroll&7 to burst up to &e25 blocks&7 forward."
+      - "<prefix>&8• &cForward Leap&7: &dSneak + jump + move forward&7 for a flat 10-15 block burst."
       - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7, &6Fire Resistance&7 and &cBonus Hearts&7."
   sonic_boom:
     description:
@@ -668,6 +672,9 @@ tutorial_book:
     - "&4Side effects are"
     - "&4added to powers."
 
+patriot:
+  speed_dash: "&cThe Patriot &7dash."
+  speed_dash_cooldown: "&7Dash ready in &c{seconds}s&7."
 ice_cube:
   spike_fired: "<prefix>&bIce Spike fired."
   spike_cooldown: "<prefix>&7Ice Spike cooldown: &e{seconds}s&7."
