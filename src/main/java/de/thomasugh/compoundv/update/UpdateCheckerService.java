@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import de.thomasugh.compoundv.server.SchedulerAdapter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -69,13 +70,24 @@ public final class UpdateCheckerService implements Listener {
         Player player = event.getPlayer();
         if (!player.isOp()) return;
 
+        long delayTicks = Math.max(0L, plugin.getConfig().getLong("updates.op_chat_delay_ticks", 60L));
+        SchedulerAdapter.runLater(plugin, player, () -> sendJoinUpdateNotice(player), delayTicks);
+    }
+
+    private void sendJoinUpdateNotice(Player player) {
+        if (player == null || !player.isOnline() || !player.isOp()) return;
+
         UpdateResult result = lastResult;
         if (result == null || !result.updateAvailable()) return;
 
+        String line = ChatColor.DARK_GRAY + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+        player.sendMessage(line);
         player.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.AQUA + "CompoundV" + ChatColor.DARK_GRAY + "] "
-                + ChatColor.YELLOW + "Update available: " + ChatColor.WHITE + result.latestVersion());
+                + ChatColor.YELLOW + ChatColor.BOLD.toString() + "Modrinth update available");
         player.sendMessage(ChatColor.GRAY + "Current: " + ChatColor.WHITE + result.currentVersion()
-                + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + "Modrinth: " + ChatColor.AQUA + MODRINTH_PROJECT_URL);
+                + ChatColor.DARK_GRAY + "  →  " + ChatColor.GRAY + "Latest: " + ChatColor.AQUA + result.latestVersion());
+        player.sendMessage(ChatColor.GRAY + "Download: " + ChatColor.AQUA + MODRINTH_PROJECT_URL);
+        player.sendMessage(line);
     }
 
     private UpdateResult fetchUpdateResult(String currentVersion) {

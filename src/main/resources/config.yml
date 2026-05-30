@@ -14,6 +14,8 @@ updates:
   console: true
   # Show update notices to OP players when they join.
   op_chat: true
+  # Delay the OP join notice so it appears after most join messages. 60 ticks = 3 seconds.
+  op_chat_delay_ticks: 60
 
 
 # ─────────────────────────────────────────────────────────────────────────────
