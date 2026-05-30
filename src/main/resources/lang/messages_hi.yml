@@ -463,6 +463,7 @@ serum:
     lore_2: '&8अगला: Totem of Undying.'
 side_effect:
   temp_v_lethal: <prefix>&4Temp V Overdose&7. आपका शरीर collapses.
+  temp_v_fadeout: '<prefix>&eTemp V Crash&7. Small side effects remain after the power fades.'
   adrenaline_crash: '<prefix>&eसाइड इफेक्ट: &6Adrenaline Crash&7. आपका शरीर is exhausted.'
   overload_sickness: '<prefix>&eसाइड इफेक्ट: &aOverload Sickness&7.'
   muscle_failure: '<prefix>&eसाइड इफेक्ट: &7Muscle Failure&7. Movement is impaired.'

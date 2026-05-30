@@ -494,6 +494,7 @@ serum:
     lore_2: '&8Weiter: Totem of Undying.'
 side_effect:
   temp_v_lethal: <prefix>&4Temp-V-Überdosis&7. Dein Körper kollabiert.
+  temp_v_fadeout: '<prefix>&eTemp-V-Crash&7. Kleine Nebenwirkungen bleiben nach dem Ablauf zurück.'
   adrenaline_crash: '<prefix>&eNebenwirkung: &6Adrenaline Crash&7. Dein Körper ist ausgelaugt.'
   overload_sickness: '<prefix>&eNebenwirkung: &aOverload Sickness&7.'
   muscle_failure: '<prefix>&eNebenwirkung: &7Muscle Failure&7. Bewegung eingeschränkt.'

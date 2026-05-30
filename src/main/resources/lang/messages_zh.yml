@@ -473,6 +473,7 @@ serum:
     lore_2: '&8下一步：不死图腾。'
 side_effect:
   temp_v_lethal: <prefix>&4Temp V 过量&7，你的身体崩溃了。
+  temp_v_fadeout: <prefix>&eTemp V 崩溃&7，能力消退后仍有轻微副作用。
   adrenaline_crash: <prefix>&e副作用：&6肾上腺素崩溃&7，身体极度疲惫。
   overload_sickness: <prefix>&e副作用：&a过载病&7。
   muscle_failure: <prefix>&e副作用：&7肌肉衰竭&7，移动受阻。

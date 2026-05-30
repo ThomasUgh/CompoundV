@@ -529,6 +529,7 @@ serum:
 
 side_effect:
   temp_v_lethal: "<prefix>&4Temp V Overdose&7. Your body collapses."
+  temp_v_fadeout: "<prefix>&eTemp V Crash&7. Small side effects remain after the power fades."
 
   adrenaline_crash: "<prefix>&eSide effect: &6Adrenaline Crash&7. Your body is exhausted."
   overload_sickness: "<prefix>&eSide effect: &aOverload Sickness&7."

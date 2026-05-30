@@ -500,6 +500,7 @@
     "lore_2": "&8Sıradaki: Totem of Undying."
 "side_effect":
   "temp_v_lethal": "<prefix>&4Temp V Overdose&7. Vücudun çöküyor."
+  "temp_v_fadeout": "<prefix>&eTemp V Çöküşü&7. Güç kaybolduktan sonra küçük yan etkiler kalır."
   "adrenaline_crash": "<prefix>&eYan etki: &6Adrenaline Crash&7. Vücudun bitkin düşüyor."
   "overload_sickness": "<prefix>&eYan etki: &aOverload Sickness&7."
   "muscle_failure": "<prefix>&eYan etki: &7Muscle Failure&7. Hareketin engelleniyor."

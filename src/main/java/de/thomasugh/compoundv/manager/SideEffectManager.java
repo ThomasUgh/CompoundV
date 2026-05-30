@@ -15,8 +15,10 @@ import org.bukkit.potion.PotionEffect;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -115,7 +117,8 @@ public class SideEffectManager {
     }
 
     public void handleAbilityExpired(Player player, PlayerAbilityData data) {
-        // Temp V side effects are applied directly on drink. Expiry only removes the temporary ability.
+        if (data == null || data.potionType() != CompoundPotion.TEMP_V) return;
+        applyTempVExpiryAftereffects(player);
     }
 
     public void applyVNull(Player player) {
@@ -228,6 +231,55 @@ public class SideEffectManager {
         player.getWorld().spawnParticle(Particle.EXPLOSION, player.getLocation().add(0, 1, 0), 3, 0.35, 0.45, 0.35, 0.0);
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 0.9f, 1.7f);
         player.damage(10_000.0);
+    }
+
+    private void applyTempVExpiryAftereffects(Player player) {
+        String basePath = "side_effects.temp_v.expiry_aftereffects";
+        if (!plugin.getConfig().getBoolean(basePath + ".enabled", true)) return;
+        if (!rollPercent(plugin.getConfig().getDouble(basePath + ".chance", 100.0))) return;
+
+        int minEffects = Math.max(1, plugin.getConfig().getInt(basePath + ".min_effects", 1));
+        int maxEffects = Math.max(minEffects, plugin.getConfig().getInt(basePath + ".max_effects", 3));
+        int effectCount = randomInt(basePath + ".min_effects", minEffects, basePath + ".max_effects", maxEffects);
+
+        Map<String, Double> weights = new HashMap<>();
+        weights.put("nausea", plugin.getConfig().getDouble(basePath + ".effects.nausea.chance", 35.0));
+        weights.put("blindness", plugin.getConfig().getDouble(basePath + ".effects.blindness.chance", 18.0));
+        weights.put("slowness", plugin.getConfig().getDouble(basePath + ".effects.slowness.chance", 30.0));
+        weights.put("weakness", plugin.getConfig().getDouble(basePath + ".effects.weakness.chance", 25.0));
+        weights.put("mining_fatigue", plugin.getConfig().getDouble(basePath + ".effects.mining_fatigue.chance", 18.0));
+        weights.put("hunger", plugin.getConfig().getDouble(basePath + ".effects.hunger.chance", 20.0));
+
+        Set<String> selected = new LinkedHashSet<>();
+        for (int i = 0; i < effectCount && !weights.isEmpty(); i++) {
+            String pick = weightedPick(weights);
+            if (pick == null || pick.isBlank()) break;
+            selected.add(pick);
+            weights.remove(pick);
+        }
+
+        if (selected.isEmpty()) return;
+
+        int minSeconds = Math.max(1, plugin.getConfig().getInt(basePath + ".min_seconds", 30));
+        int maxSeconds = Math.max(minSeconds, plugin.getConfig().getInt(basePath + ".max_seconds", 180));
+
+        for (String effect : selected) {
+            int seconds = randomInt(basePath + ".min_seconds", minSeconds, basePath + ".max_seconds", maxSeconds);
+            int amplifier = Math.max(0, plugin.getConfig().getInt(basePath + ".effects." + effect + ".amplifier", 0));
+            switch (effect) {
+                case "nausea" -> add(player, PotionEffects.NAUSEA, seconds * 20, amplifier);
+                case "blindness" -> add(player, PotionEffects.BLINDNESS, seconds * 20, amplifier);
+                case "slowness" -> add(player, PotionEffects.SLOWNESS, seconds * 20, amplifier);
+                case "weakness" -> add(player, PotionEffects.WEAKNESS, seconds * 20, amplifier);
+                case "mining_fatigue" -> add(player, PotionEffects.MINING_FATIGUE, seconds * 20, amplifier);
+                case "hunger" -> add(player, PotionEffects.HUNGER, seconds * 20, amplifier);
+                default -> { }
+            }
+        }
+
+        player.sendMessage(plugin.getLocaleManager().msg("side_effect.temp_v_fadeout"));
+        player.getWorld().spawnParticle(Particle.SMOKE, player.getLocation().add(0, 1, 0), 16, 0.38, 0.45, 0.38, 0.035);
+        player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.45f, 0.75f);
     }
 
     private void applyFailedTransformation(Player player) {

@@ -86,6 +86,26 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.bloodweaver.shared.rupture.knockback_vertical", 0.55, 0.35);
         changed |= setIfMissing("abilities.bloodweaver.shared.rupture.knockback_horizontal", 1.15);
         changed |= setIfMissing("abilities.bloodweaver.shared.rupture.knockback_vertical", 0.35);
+
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.enabled", true);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.chance", 100.0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.min_seconds", 30);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.max_seconds", 180);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.min_effects", 1);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.max_effects", 3);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.nausea.chance", 35.0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.nausea.amplifier", 0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.blindness.chance", 18.0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.blindness.amplifier", 0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.slowness.chance", 30.0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.slowness.amplifier", 0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.weakness.chance", 25.0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.weakness.amplifier", 0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.mining_fatigue.chance", 18.0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.mining_fatigue.amplifier", 0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.hunger.chance", 20.0);
+        changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.hunger.amplifier", 0);
+
         return changed;
     }
 

@@ -23,6 +23,7 @@ updates:
 compound_v:
   chances:
     the_patriot: 1
+    bloodweaver: 2
     fly: 15
     heat_vision: 9
     heat_vision_2: 7
@@ -180,6 +181,61 @@ abilities:
         volume: 0.06
         pitch: 1.99
 
+  # Bloodweaver: Marie-Moreau-like blood control. F = Blood Lash, Sneak + Left-Click = charged Blood Rupture.
+  bloodweaver:
+    shared:
+      heat_vision_received_damage_multiplier: 0.5
+      lash:
+        range: 25.0
+        hit_radius: 0.75
+        cooldown_ms: 3000
+        slowness_ticks: 60
+        slowness_level: 2
+        bleed_ticks: 60
+        bleed_interval_ticks: 20
+        bleed_damage_hearts: 0.5
+      melee_bleed:
+        required_hits: 3
+        duration_ticks: 40
+        interval_ticks: 20
+        damage_hearts: 0.5
+      rupture:
+        radius: 15.0
+        charge_ticks: 60
+        cooldown_ms: 45000
+        self_cost_hearts: 2.0
+        self_weakness_ticks: 400
+        self_weakness_level: 1
+        lift_height: 3.0
+        lift_ticks: 16
+        tick_period: 2
+        particle_interval_ticks: 4
+        damage_interval_ticks: 20
+        damage_hearts_per_second: 2.0
+        # Lower knockback keeps targets around roughly 10-20 blocks instead of launching them too far.
+        knockback_horizontal: 1.15
+        knockback_vertical: 0.35
+    compound_v:
+      resistance_level: 3
+      strength_level: 2
+      regen_level: 2
+      extra_hearts: 5.0
+      lash:
+        min_damage_hearts: 2.0
+        max_damage_hearts: 4.0
+      rupture:
+        duration_ticks: 100
+    v_one:
+      resistance_level: 3
+      strength_level: 2
+      regen_level: 2
+      extra_hearts: 10.0
+      lash:
+        min_damage_hearts: 2.5
+        max_damage_hearts: 5.0
+      rupture:
+        duration_ticks: 140
+
   # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:
     beam_damage_hearts: 0.95625
@@ -280,3 +336,31 @@ v_null:
 
 side_effects:
   enabled: true
+  temp_v:
+    # Small crash effects applied when Temp V expires. Durations are in seconds.
+    expiry_aftereffects:
+      enabled: true
+      chance: 100.0
+      min_seconds: 30
+      max_seconds: 180
+      min_effects: 1
+      max_effects: 3
+      effects:
+        nausea:
+          chance: 35.0
+          amplifier: 0
+        blindness:
+          chance: 18.0
+          amplifier: 0
+        slowness:
+          chance: 30.0
+          amplifier: 0
+        weakness:
+          chance: 25.0
+          amplifier: 0
+        mining_fatigue:
+          chance: 18.0
+          amplifier: 0
+        hunger:
+          chance: 20.0
+          amplifier: 0
