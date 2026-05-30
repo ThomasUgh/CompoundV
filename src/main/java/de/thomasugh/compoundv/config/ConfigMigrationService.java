@@ -103,6 +103,13 @@ public final class ConfigMigrationService {
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_max_horizontal_velocity");
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_max_vertical_velocity");
 
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.damage_hearts", 12.5, 20.0);
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 20000, 40000);
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 30000, 40000);
+        changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 20.0);
+        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 40000);
+        changed |= setIfMissing("abilities.the_headpopper.v_one_target_damage_multiplier", 0.5);
+
         changed |= setIfMissing("abilities.the_veteran.resistance_level", 4);
         changed |= setIfMissing("abilities.the_veteran.strength_level", 5);
         changed |= setIfMissing("abilities.the_veteran.extra_hearts", 20.0);
@@ -925,11 +932,13 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_headpopper.regeneration_level", 1);
         changed |= setIfMissing("abilities.the_headpopper.range", 30.0);
         changed |= setIfMissing("abilities.the_headpopper.countdown_seconds", 3);
-        changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 12.5);
+        changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 20.0);
         changed |= setIfMissing("abilities.the_headpopper.mob_damage_multiplier", 2.5);
         changed |= setIfMissing("abilities.the_headpopper.slowness_amplifier", 2);
-        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 30000.0, 20000);
-        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 20000);
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 30000.0, 40000);
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 20000.0, 40000);
+        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 40000);
+        changed |= setIfMissing("abilities.the_headpopper.v_one_target_damage_multiplier", 0.5);
         changed |= setIfMissing("abilities.the_headpopper.area_radius", 10.0);
         changed |= setIfMissing("abilities.the_headpopper.area_damage_health_percent", 0.25);
         changed |= setIfMissing("abilities.the_headpopper.area_cooldown_ms", 120000);

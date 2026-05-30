@@ -246,6 +246,13 @@ abilities:
     impact_damage_per_speed_level_hearts: 1.0
     impact_level_15_bonus_min_speed_level: 15
     impact_level_15_damage_multiplier: 1.33
+
+  # The Headpopper: marked target damage and V-One resistance tuning.
+  the_headpopper:
+    damage_hearts: 20.0
+    cooldown_ms: 40000
+    v_one_target_damage_multiplier: 0.5
+
   # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:
     beam_damage_hearts: 0.95625
