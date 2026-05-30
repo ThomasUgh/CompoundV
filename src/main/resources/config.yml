@@ -293,6 +293,38 @@ abilities:
     big_extra_hearts: 0.0
     big_jump_boost_level: 0
 
+  # The Veteran: Sneak + Left-Click charges a heavy chest blast. Defaults are tuned lower for Paper/Folia performance.
+  the_veteran:
+    resistance_level: 4
+    strength_level: 5
+    extra_hearts: 20.0
+    charge_duration_ticks: 100
+    burst_cooldown_ms: 300000
+
+    # Main blast around the player.
+    ground_zero_radius: 14.0
+    ground_zero_damage: 525.0
+    ground_zero_particle_multiplier: 0.35
+
+    # Chest beam: range, hit radius and damage strength.
+    beam_duration_ticks: 70
+    beam_range: 50.0
+    beam_radius: 1.25
+    beam_damage_multiplier: 5.0
+    beam_player_damage_multiplier: 0.0
+
+    # Block damage. Keep max_blocks_per_pulse low on public servers.
+    beam_break_blocks: true
+    beam_ignite_blocks: true
+    beam_max_blocks_per_pulse: 1
+    beam_block_hits_to_break: 7
+    beam_block_damage_multiplier: 1.0
+
+    # Visual mushroom cloud after the blast. Disable if players still get ping spikes.
+    mushroom_cloud_enabled: true
+    mushroom_cloud_duration_ticks: 500
+    mushroom_cloud_particle_multiplier: 0.30
+
   # The Diver: F uses Riptide Dash. Sneak + Left-Click toggles Sonar.
   the_diver:
     sonar_radius: 45.0

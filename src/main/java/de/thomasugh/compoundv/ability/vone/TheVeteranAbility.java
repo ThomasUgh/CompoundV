@@ -91,7 +91,7 @@ public class TheVeteranAbility implements Ability {
         int reducedStrength = Math.max(1, (int) Math.floor(baseStrength * plugin.getConfig().getDouble(
                 "abilities.the_veteran.post_burst_strength_multiplier", 0.5)));
         int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.post_burst_strength_reduction_ticks",
-                plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 2400));
+                plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 500));
 
         applyStrength(player, reducedStrength);
 
@@ -266,7 +266,7 @@ public class TheVeteranAbility implements Ability {
         boolean setFire = plugin.getConfig().getBoolean("abilities.the_veteran.ground_zero_set_fire", true);
 
         double particleMultiplier = Math.max(0.05, plugin.getConfig().getDouble(
-                "abilities.the_veteran.ground_zero_particle_multiplier", 0.75));
+                "abilities.the_veteran.ground_zero_particle_multiplier", 0.45));
 
         w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 5.0f, 0.25f);
         w.playSound(base, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 3.5f, 0.35f);
@@ -309,12 +309,12 @@ public class TheVeteranAbility implements Ability {
         World w = base.getWorld();
         if (w == null) return;
 
-        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 2400);
-        int periodTicks = Math.max(2, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_period_ticks", 12));
-        double maxHeight = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_height", 32.0);
-        double maxRadius = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_radius", 15.5);
+        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_duration_ticks", 500);
+        int periodTicks = Math.max(2, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_period_ticks", 20));
+        double maxHeight = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_height", 26.0);
+        double maxRadius = plugin.getConfig().getDouble("abilities.the_veteran.mushroom_cloud_radius", 12.0);
         double particleMultiplier = Math.max(0.05, plugin.getConfig().getDouble(
-                "abilities.the_veteran.mushroom_cloud_particle_multiplier", 0.78));
+                "abilities.the_veteran.mushroom_cloud_particle_multiplier", 0.45));
         int soundDurationTicks = Math.max(0, plugin.getConfig().getInt(
                 "abilities.the_veteran.mushroom_cloud_sound_duration_ticks", 80));
         int soundIntervalTicks = Math.max(periodTicks, Math.max(1, Math.round(40.0f / periodTicks)) * periodTicks);
@@ -410,12 +410,12 @@ public class TheVeteranAbility implements Ability {
     }
 
     private void fireChestBeam(Player shooter, UUID uuid, UUID token) {
-        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_duration_ticks", 100);
-        final int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_period_ticks", 2));
-        final double range = plugin.getConfig().getDouble("abilities.the_veteran.beam_range", 48.0);
-        final double radius = plugin.getConfig().getDouble("abilities.the_veteran.beam_radius", 1.35);
-        double particleStep = Math.max(0.35, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_step", 0.65));
-        double particleDensity = Math.max(0.25, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_density_multiplier", 0.70));
+        int durationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_duration_ticks", 70);
+        final int periodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_period_ticks", 4));
+        final double range = plugin.getConfig().getDouble("abilities.the_veteran.beam_range", 50.0);
+        final double radius = plugin.getConfig().getDouble("abilities.the_veteran.beam_radius", 1.25);
+        double particleStep = Math.max(0.35, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_step", 1.10));
+        double particleDensity = Math.max(0.25, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_density_multiplier", 0.35));
         double particleStartDistance = Math.max(0.4, plugin.getConfig().getDouble("abilities.the_veteran.beam_particle_start_distance", 1.8));
 
         double patriotDamage = plugin.getConfig().getDouble("abilities.the_patriot.v_one.heat_vision_damage_hearts", 4.725) * 2.0;
@@ -425,17 +425,21 @@ public class TheVeteranAbility implements Ability {
         final double entityDamage = configuredDamage
                 * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_entity_damage_multiplier", 1.045))
                 * pveDamageMultiplier;
-        final double playerDamage = 0.0;
+        final double playerDamage = configuredDamage
+                * Math.max(0.0, plugin.getConfig().getDouble("abilities.the_veteran.beam_player_damage_multiplier", 0.0));
         final double fullDamageRange = plugin.getConfig().getDouble("abilities.the_veteran.beam_full_damage_range", 7.0);
         final double farDamageMultiplier = plugin.getConfig().getDouble("abilities.the_veteran.beam_far_damage_multiplier", 0.5);
 
-        final int damageEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_damage_interval_ticks", 2));
+        final int damageEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_damage_interval_ticks", 6));
+        final int particleEveryTicks = Math.max(periodTicks, plugin.getConfig().getInt("abilities.the_veteran.beam_particle_interval_ticks", periodTicks));
+        final int entityScanEveryTicks = Math.max(periodTicks, plugin.getConfig().getInt("abilities.the_veteran.beam_entity_scan_interval_ticks", 6));
+        final int maxEntityHitsPerPulse = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_max_entity_hits_per_pulse", 6));
         final boolean breakBlocks = plugin.getConfig().getBoolean("abilities.the_veteran.beam_break_blocks", true);
         final boolean igniteBlocks = plugin.getConfig().getBoolean("abilities.the_veteran.beam_ignite_blocks", true);
-        final int blockAffectEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_affect_interval_ticks", 4));
-        int maxBlocksPerPulse = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_max_blocks_per_pulse", 5));
-        int blockHitsToBreak = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_hits_to_break", 5));
-        double blockDamageMultiplier = Math.max(0.1, plugin.getConfig().getDouble("abilities.the_veteran.beam_block_damage_multiplier", 1.21));
+        final int blockAffectEveryTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_affect_interval_ticks", 12));
+        int maxBlocksPerPulse = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_max_blocks_per_pulse", 1));
+        int blockHitsToBreak = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_block_hits_to_break", 7));
+        double blockDamageMultiplier = Math.max(0.1, plugin.getConfig().getDouble("abilities.the_veteran.beam_block_damage_multiplier", 1.0));
         boolean surfaceOnly = plugin.getConfig().getBoolean("abilities.the_veteran.beam_surface_only", true);
 
         final TaskHandle[] task = new TaskHandle[1];
@@ -455,15 +459,19 @@ public class TheVeteranAbility implements Ability {
                         activeBurstTokens.remove(uuid);
                     }
                     beamTasks.remove(uuid);
-                    int cloudDelayTicks = Math.max(20, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_delay_after_beam_ticks", 30));
-                    Location cloudBase = shooter.getLocation().clone();
-                    SchedulerAdapter.runLaterAt(plugin, cloudBase, () -> animateAtomicMushroom(cloudBase), cloudDelayTicks);
+                    if (plugin.getConfig().getBoolean("abilities.the_veteran.mushroom_cloud_enabled", true)) {
+                        int cloudDelayTicks = Math.max(20, plugin.getConfig().getInt("abilities.the_veteran.mushroom_cloud_delay_after_beam_ticks", 30));
+                        Location cloudBase = shooter.getLocation().clone();
+                        SchedulerAdapter.runLaterAt(plugin, cloudBase, () -> animateAtomicMushroom(cloudBase), cloudDelayTicks);
+                    }
                     if (task[0] != null) task[0].cancel();
                     return;
                 }
 
                 Location chest = shooter.getLocation().add(0, 0.95, 0);
                 Vector dir = shooter.getEyeLocation().getDirection().normalize();
+                boolean renderParticlesThisTick = age % particleEveryTicks == 0;
+                boolean damageThisTick = age % damageEveryTicks == 0 && age % entityScanEveryTicks == 0;
                 boolean affectBlocksThisTick = age % blockAffectEveryTicks == 0;
                 int effectiveMaxBlocksPerPulse = maxBlocksPerPulse;
                 if (affectBlocksThisTick) {
@@ -472,14 +480,16 @@ public class TheVeteranAbility implements Ability {
                     blockBudgetCarry = scaledBudget - effectiveMaxBlocksPerPulse;
                 }
 
-                renderAndApplyBeam(shooter, chest, dir, range, radius, particleStep, particleDensity, particleStartDistance,
-                        entityDamage, playerDamage, fullDamageRange, farDamageMultiplier,
-                        age % damageEveryTicks == 0,
-                        affectBlocksThisTick,
-                        breakBlocks, igniteBlocks, effectiveMaxBlocksPerPulse, blockHitsToBreak,
-                        surfaceOnly, weakenedBlocks, playerDamageTaken);
+                if (renderParticlesThisTick || damageThisTick || affectBlocksThisTick) {
+                    renderAndApplyBeam(shooter, chest, dir, range, radius, particleStep, particleDensity, particleStartDistance,
+                            entityDamage, playerDamage, fullDamageRange, farDamageMultiplier,
+                            damageThisTick, renderParticlesThisTick,
+                            affectBlocksThisTick,
+                            breakBlocks, igniteBlocks, effectiveMaxBlocksPerPulse, blockHitsToBreak,
+                            surfaceOnly, weakenedBlocks, playerDamageTaken, maxEntityHitsPerPulse);
+                }
 
-                int soundDurationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_sound_duration_ticks", 40);
+                int soundDurationTicks = plugin.getConfig().getInt("abilities.the_veteran.beam_sound_duration_ticks", 30);
                 int soundPeriodTicks = Math.max(1, plugin.getConfig().getInt("abilities.the_veteran.beam_sound_period_ticks", 20));
                 if (age <= soundDurationTicks && age % soundPeriodTicks == 0) {
                     shooter.getWorld().playSound(chest, Sound.ITEM_FIRECHARGE_USE, 0.8f, 0.7f);
@@ -495,11 +505,11 @@ public class TheVeteranAbility implements Ability {
     private void renderAndApplyBeam(Player shooter, Location origin, Vector dir,
                                     double range, double radius, double particleStep, double particleDensity, double particleStartDistance,
                                     double entityDamage, double playerDamage, double fullDamageRange, double farDamageMultiplier,
-                                    boolean damageThisTick, boolean affectBlocksThisTick,
+                                    boolean damageThisTick, boolean renderParticlesThisTick, boolean affectBlocksThisTick,
                                     boolean breakBlocks, boolean igniteBlocks,
                                     int maxBlocksPerPulse, int blockHitsToBreak,
                                     boolean surfaceOnly, Map<Block, Integer> weakenedBlocks,
-                                    Map<UUID, Double> playerDamageTaken) {
+                                    Map<UUID, Double> playerDamageTaken, int maxEntityHitsPerPulse) {
         World w = shooter.getWorld();
         Particle.DustOptions yellow = new Particle.DustOptions(Color.fromRGB(255, 220, 35), 2.4f);
         Particle.DustOptions orange = new Particle.DustOptions(Color.fromRGB(255, 120, 0), 1.8f);
@@ -517,27 +527,43 @@ public class TheVeteranAbility implements Ability {
         Vector up = right.clone().crossProduct(dir).normalize();
 
         int[] blockBudget = new int[] { maxBlocksPerPulse };
+        double blockStep = Math.max(particleStep, plugin.getConfig().getDouble("abilities.the_veteran.beam_block_step", 1.85));
+        double nextBlockCheckDistance = particleStartDistance;
 
         for (double d = particleStartDistance; d <= effectiveRange; d += particleStep) {
             Location center = origin.clone().add(dir.clone().multiply(d));
-            w.spawnParticle(Particle.DUST, center, scaledParticles(3, particleDensity), 0.09, 0.09, 0.09, 0, yellow);
-            w.spawnParticle(Particle.FLAME, center, scaledParticles(1, particleDensity), 0.10, 0.10, 0.10, 0.006);
-            if (d % 1.95 < particleStep) {
-                w.spawnParticle(Particle.DUST, center.clone().add(right.clone().multiply(radius * 0.38)), scaledParticles(1, particleDensity), 0.06, 0.06, 0.06, 0, orange);
-                w.spawnParticle(Particle.DUST, center.clone().subtract(right.clone().multiply(radius * 0.38)), scaledParticles(1, particleDensity), 0.06, 0.06, 0.06, 0, orange);
-                w.spawnParticle(Particle.DUST, center.clone().subtract(up.clone().multiply(radius * 0.22)), scaledParticles(1, particleDensity), 0.05, 0.05, 0.05, 0, whiteHot);
+            if (renderParticlesThisTick) {
+                w.spawnParticle(Particle.DUST, center, scaledParticles(2, particleDensity), 0.08, 0.08, 0.08, 0, yellow);
+                if (particleDensity >= 0.35) {
+                    w.spawnParticle(Particle.FLAME, center, scaledParticles(1, particleDensity), 0.08, 0.08, 0.08, 0.004);
+                }
+                if (d % 2.55 < particleStep) {
+                    w.spawnParticle(Particle.DUST, center.clone().add(right.clone().multiply(radius * 0.36)), scaledParticles(1, particleDensity), 0.05, 0.05, 0.05, 0, orange);
+                    w.spawnParticle(Particle.DUST, center.clone().subtract(right.clone().multiply(radius * 0.36)), scaledParticles(1, particleDensity), 0.05, 0.05, 0.05, 0, orange);
+                    w.spawnParticle(Particle.DUST, center.clone().subtract(up.clone().multiply(radius * 0.20)), scaledParticles(1, particleDensity), 0.04, 0.04, 0.04, 0, whiteHot);
+                }
             }
 
-            if (affectBlocksThisTick && (breakBlocks || igniteBlocks) && blockBudget[0] > 0) {
+            if (affectBlocksThisTick && (breakBlocks || igniteBlocks) && blockBudget[0] > 0 && d + 0.0001 >= nextBlockCheckDistance) {
                 affectBlocksAround(center, radius, breakBlocks, igniteBlocks, surfaceOnly,
                         blockHitsToBreak, blockBudget, weakenedBlocks);
+                nextBlockCheckDistance += blockStep;
             }
         }
 
         if (!damageThisTick) return;
-        for (Entity entity : w.getNearbyEntities(origin.clone().add(dir.clone().multiply(effectiveRange / 2.0)), effectiveRange / 2.0 + radius, effectiveRange / 2.0 + radius, effectiveRange / 2.0 + radius)) {
+        Vector beamOffset = dir.clone().multiply(effectiveRange);
+        Location searchCenter = origin.clone().add(beamOffset.clone().multiply(0.5));
+        double searchX = Math.abs(beamOffset.getX()) * 0.5 + radius + 1.25;
+        double searchY = Math.abs(beamOffset.getY()) * 0.5 + radius + 1.25;
+        double searchZ = Math.abs(beamOffset.getZ()) * 0.5 + radius + 1.25;
+
+        int hitsApplied = 0;
+        for (Entity entity : w.getNearbyEntities(searchCenter, searchX, searchY, searchZ)) {
+            if (hitsApplied >= maxEntityHitsPerPulse) break;
             if (!(entity instanceof LivingEntity target) || entity.equals(shooter)) continue;
             if (!isNearBeam(origin, dir, effectiveRange, radius + 0.65, target.getEyeLocation())) continue;
+            hitsApplied++;
             double along = distanceAlongBeam(origin, dir, target.getEyeLocation());
             double baseDamage = target instanceof Player ? playerDamage : entityDamage;
             double targetDamage = along <= fullDamageRange ? baseDamage : baseDamage * farDamageMultiplier;
@@ -549,16 +575,16 @@ public class TheVeteranAbility implements Ability {
                 AbilityKillTracker.damage(plugin, target, shooter, targetDamage, "death_messages.the_veteran_beam", false);
             }
             if (!(target instanceof Player)) target.setFireTicks(160);
-            double hitKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_knockback", 0.025);
+            double hitKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_knockback", 0.02);
             double hitVerticalKnockback = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_vertical_knockback", 0.0);
-            double maxHitHorizontalVelocity = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_max_horizontal_velocity", 0.16);
+            double maxHitHorizontalVelocity = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_max_horizontal_velocity", 0.12);
             double maxHitVerticalVelocity = plugin.getConfig().getDouble("abilities.the_veteran.beam_hit_max_vertical_velocity", 0.02);
             if (hitKnockback > 0 || hitVerticalKnockback > 0) {
                 Vector push = dir.clone().normalize().multiply(Math.max(0.0, hitKnockback));
                 push.setY(Math.max(0.0, hitVerticalKnockback));
                 target.setVelocity(limitVeteranKnockback(target.getVelocity().add(push), maxHitHorizontalVelocity, maxHitVerticalVelocity));
             }
-            w.spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), 22, 0.4, 0.5, 0.4, 0.06);
+            w.spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), Math.max(0, plugin.getConfig().getInt("abilities.the_veteran.beam_hit_particles", 5)), 0.32, 0.36, 0.32, 0.035);
 
             if (target instanceof Player playerTarget && plugin.getConfig().getBoolean("abilities.the_veteran.beam_removes_player_abilities", true)) {
                 if (plugin.getAbilityManager().hasAbility(playerTarget)) {
@@ -662,8 +688,10 @@ public class TheVeteranAbility implements Ability {
                         if (surfaceOnly && !isSurfaceBlock(block)) continue;
 
                         int hits = weakenedBlocks.merge(block, 1, Integer::sum);
-                        block.getWorld().spawnParticle(Particle.LARGE_SMOKE, block.getLocation().add(0.5, 0.5, 0.5), 3, 0.2, 0.2, 0.2, 0.02);
-                        block.getWorld().spawnParticle(Particle.FLAME, block.getLocation().add(0.5, 0.5, 0.5), 2, 0.16, 0.16, 0.16, 0.02);
+                        int blockParticles = Math.max(0, plugin.getConfig().getInt("abilities.the_veteran.beam_block_particles", 1));
+                        if (blockParticles > 0) {
+                            block.getWorld().spawnParticle(Particle.LARGE_SMOKE, block.getLocation().add(0.5, 0.5, 0.5), blockParticles, 0.18, 0.18, 0.18, 0.015);
+                        }
                         if (hits >= blockHitsToBreak) {
                             block.getWorld().playSound(block.getLocation().add(0.5, 0.5, 0.5), Sound.BLOCK_FIRE_EXTINGUISH, 0.55f, 1.7f);
                             block.setType(Material.AIR, false);
