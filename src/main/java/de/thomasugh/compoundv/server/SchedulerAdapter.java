@@ -2,6 +2,7 @@ package de.thomasugh.compoundv.server;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -64,6 +65,19 @@ public final class SchedulerAdapter {
         return task::cancel;
     }
 
+    public static TaskHandle runLater(Plugin plugin, Entity entity, Runnable runnable, long delayTicks) {
+        if (entity == null) return runLater(plugin, runnable, delayTicks);
+        if (entity instanceof Player player) return runLater(plugin, player, runnable, delayTicks);
+        if (isFolia()) {
+            TaskHandle handle = tryFoliaEntityLater(plugin, entity, safe(plugin, runnable), delayTicks);
+            if (handle != null) return handle;
+            TaskHandle global = tryFoliaGlobalLater(plugin, safe(plugin, runnable), delayTicks);
+            if (global != null) return global;
+        }
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, safe(plugin, runnable), delayTicks);
+        return task::cancel;
+    }
+
     public static TaskHandle runLaterAt(Plugin plugin, Location location, Runnable runnable, long delayTicks) {
         if (location == null) return runLater(plugin, runnable, delayTicks);
         if (isFolia()) {
@@ -98,6 +112,19 @@ public final class SchedulerAdapter {
         return task::cancel;
     }
 
+    public static TaskHandle runTimer(Plugin plugin, Entity entity, Runnable runnable, long delayTicks, long periodTicks) {
+        if (entity == null) return runTimer(plugin, runnable, delayTicks, periodTicks);
+        if (entity instanceof Player player) return runTimer(plugin, player, runnable, delayTicks, periodTicks);
+        if (isFolia()) {
+            TaskHandle handle = tryFoliaEntityTimer(plugin, entity, safe(plugin, runnable), delayTicks, periodTicks);
+            if (handle != null) return handle;
+            TaskHandle global = tryFoliaGlobalTimer(plugin, safe(plugin, runnable), delayTicks, periodTicks);
+            if (global != null) return global;
+        }
+        BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, safe(plugin, runnable), delayTicks, periodTicks);
+        return task::cancel;
+    }
+
     public static TaskHandle runTimerAt(Plugin plugin, Location location, Runnable runnable, long delayTicks, long periodTicks) {
         if (location == null) return runTimer(plugin, runnable, delayTicks, periodTicks);
         if (isFolia()) {
@@ -110,9 +137,9 @@ public final class SchedulerAdapter {
         return task::cancel;
     }
 
-    private static TaskHandle tryFoliaEntityLater(Plugin plugin, Player player, Runnable runnable, long delayTicks) {
+    private static TaskHandle tryFoliaEntityLater(Plugin plugin, Entity entity, Runnable runnable, long delayTicks) {
         try {
-            Object scheduler = player.getClass().getMethod("getScheduler").invoke(player);
+            Object scheduler = entity.getClass().getMethod("getScheduler").invoke(entity);
             Method runDelayed = scheduler.getClass().getMethod("runDelayed", Plugin.class, Consumer.class, Runnable.class, long.class);
             Object task = runDelayed.invoke(scheduler, plugin, (Consumer<Object>) ignored -> runnable.run(), (Runnable) () -> { }, Math.max(1L, delayTicks));
             return cancelHandle(task);
@@ -122,9 +149,9 @@ public final class SchedulerAdapter {
         }
     }
 
-    private static TaskHandle tryFoliaEntityTimer(Plugin plugin, Player player, Runnable runnable, long delayTicks, long periodTicks) {
+    private static TaskHandle tryFoliaEntityTimer(Plugin plugin, Entity entity, Runnable runnable, long delayTicks, long periodTicks) {
         try {
-            Object scheduler = player.getClass().getMethod("getScheduler").invoke(player);
+            Object scheduler = entity.getClass().getMethod("getScheduler").invoke(entity);
             Method runAtFixedRate = scheduler.getClass().getMethod("runAtFixedRate", Plugin.class, Consumer.class, Runnable.class, long.class, long.class);
             Object task = runAtFixedRate.invoke(
                     scheduler,

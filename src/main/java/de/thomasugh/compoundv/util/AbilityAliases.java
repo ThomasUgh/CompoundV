@@ -21,6 +21,15 @@ public final class AbilityAliases {
             Map.entry("the_patriot_v1", "the_patriot_v_one"),
             Map.entry("the_patriot_v_one", "the_patriot_v_one"),
 
+            Map.entry("bloodweaver", "bloodweaver"),
+            Map.entry("blood_weaver", "bloodweaver"),
+            Map.entry("blood-weaver", "bloodweaver"),
+            Map.entry("marie", "bloodweaver"),
+            Map.entry("marie_moreau", "bloodweaver"),
+            Map.entry("bloodweaver_v_one", "bloodweaver_v_one"),
+            Map.entry("blood_weaver_v_one", "bloodweaver_v_one"),
+            Map.entry("bloodweaver-v-one", "bloodweaver_v_one"),
+
             Map.entry("soldier_boy", "the_veteran"),
             Map.entry("soldierboy", "the_veteran"),
             Map.entry("veteran", "the_veteran"),

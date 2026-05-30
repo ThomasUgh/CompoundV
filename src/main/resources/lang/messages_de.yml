@@ -1,4 +1,4 @@
-language_file_version: 28
+language_file_version: 29
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cDafür hast du keine Berechtigung.
@@ -200,6 +200,23 @@ ability:
     - '<prefix>&8• &7Schaden: &c12,5 Herzen&7, Mobs/Tiere bekommen &cx2,5&7. Cooldown: &e20s&7.'
     - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 fügt allen nahen Living-Targets &c25% aktuelles Leben&7 als Schaden zu. Cooldown: &e2min&7.'
     - '<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz II&7, &dRegeneration I&7 und Heat-Vision-Immunität.'
+  bloodweaver:
+    description:
+    - '<prefix>&8• &7Stil: wie &cMarie Moreau&7.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 feuert &cBlood Lash&7 bis &e25 Blöcke&7. Cooldown: &e3s&7.'
+    - '<prefix>&8• &7Blood Lash verursacht &c2-4 Herzen&7, verlangsamt das Ziel und verursacht &e3s&7 Blutung.'
+    - '<prefix>&8• &7Jeder &edritte Nahkampf-Hit&7 verursacht &e2s&7 Blutung mit &c0,5 Herzen/s&7.'
+    - '<prefix>&8• &dSneak + Linksklick&7 und &e3s&7 weiter sneaken: &cBlood Rupture&7 im &e15-Block&7 Radius.'
+    - '<prefix>&8• &7Blood Rupture hebt Ziele &e3 Blöcke&7 an, fixiert sie &e5s&7, verursacht &c2 Herzen/s&7 und schleudert Überlebende zurück.'
+    - '<prefix>&8• &7Kosten: &c2 Herzen&7 und &7Schwäche für &e20s&7. Passiv: &9Resistenz III&7, &aStärke II&7, &dRegeneration II&7, &c+5 Herzen&7.'
+    - '<prefix>&8• &7Erhält &c50% weniger Heat-Vision-Schaden&7.'
+  bloodweaver_v_one:
+    description:
+    - '<prefix>&8• &3V One Upgrade&7 für Bloodweaver.'
+    - '<prefix>&8• &dF &8(Swap Item with Offhand)&7 feuert &cBlood Lash&7 bis &e25 Blöcke&7 mit &c2,5-5 Herzen&7 Schaden.'
+    - '<prefix>&8• &dSneak + Linksklick&7 und &e3s&7 weiter sneaken: stärkere &cBlood Rupture&7.'
+    - '<prefix>&8• &7Blood Rupture fixiert und hebt Ziele für &e7s&7 an, verursacht &c2 Herzen/s&7 und schleudert Überlebende zurück.'
+    - '<prefix>&8• &7Passiv: &9Resistenz III&7, &aStärke II&7, &dRegeneration II&7, &c+10 Herzen&7 und &c50% Heat-Vision-Reduktion&7.'
   spider_weaver:
     description:
     - '<prefix>&8• &7Style: like &fWebweaver&7.'
@@ -632,6 +649,16 @@ tutorial_book:
   - '&4Nebenwirkung kommt'
   - '&4zusätzlich zur Kraft.'
 
+bloodweaver:
+  lash_hit: '<prefix>&cBlood Lash&7 getroffen.'
+  lash_missed: '<prefix>&7Blood Lash verfehlt.'
+  lash_cooldown: '<prefix>&7Blood Lash Cooldown: &e{seconds}s&7.'
+  rupture_charge_start: '<prefix>&cBlood Rupture&7 lädt auf. Sneaken halten.'
+  rupture_charge_progress: '<prefix>&cBlood Rupture&7 in &e{seconds}s&7.'
+  rupture_cancelled: '<prefix>&7Blood Rupture abgebrochen.'
+  rupture_released: '<prefix>&cBlood Rupture&7 ausgelöst. Ziele: &e{targets}&7.'
+  rupture_cooldown: '<prefix>&7Blood Rupture Cooldown: &e{seconds}s&7.'
+
 patriot:
   speed_dash: "&cThe Patriot &7Dash."
   speed_dash_cooldown: "&7Dash bereit in &c{seconds}s&7."
@@ -649,3 +676,5 @@ death_messages:
   stormstrike: "{victim} wurde von {killer} überladen."
   the_headpopper: "{victim} hatte in der Nähe von {killer} einen sehr schlechten Gedanken."
   ice_cube: "{victim} wurde von {killer} eingefroren."
+  bloodweaver_lash: "{victim} wurde von {killer}s Blood Lash aufgeschnitten."
+  bloodweaver_rupture: "{victim} wurde von {killer}s Blutkontrolle zerrissen."

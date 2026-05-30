@@ -2,6 +2,7 @@ package de.thomasugh.compoundv;
 
 import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
+import de.thomasugh.compoundv.ability.compoundv.BloodweaverAbility;
 import de.thomasugh.compoundv.ability.compoundv.IceCubeAbility;
 import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDetonatorAbility;
@@ -115,6 +116,7 @@ public final class CompoundV extends JavaPlugin {
 
     private void registerAbilities() {
         registry.register(new ThePatriotAbility(this, "the_patriot", "compound_v", 0xE53935));
+        registry.register(new BloodweaverAbility(this, "bloodweaver", "compound_v", 0xB00020));
         registry.register(new FlyAbility(this));
         registry.register(new HeatVisionAbility(this, "heat_vision", "Heat Vision I", 1, 0x2DD2FF));
         registry.register(new HeatVisionAbility(this, "heat_vision_2", "Heat Vision II", 2, 0x2DFF69));
@@ -142,6 +144,7 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new IceCubeAbility(this));
         registry.register(new SizeChangerAbility(this));
         registry.register(new ThePatriotAbility(this, "the_patriot_v_one", "v_one", 0xFF5252));
+        registry.register(new BloodweaverAbility(this, "bloodweaver_v_one", "v_one", 0xE31B3D));
         registry.register(new TeleporterAbility(this, "teleporter_v_one", "Teleporter V One", "abilities.teleporter_v_one", 0xCE6BFF));
         registry.register(new SizeChangerAbility(this, "size_changer_v_one", "SizeChanger V One", "abilities.size_changer_v_one", 0xC091FF));
         registry.register(new TheVeteranAbility(this));

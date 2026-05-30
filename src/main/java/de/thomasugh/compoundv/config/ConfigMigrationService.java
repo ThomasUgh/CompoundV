@@ -79,6 +79,13 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("heat_vision.stages.stage_3.active_sound.pitch", 1.05);
         changed |= setIfMissing("heat_vision.stages.stage_4.active_sound.pitch", 1.20);
 
+        // 1.1.3 compact-config additions.
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_range", 44.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_range", 50.0);
+        changed |= replaceIfNumericEquals("abilities.bloodweaver.shared.rupture.knockback_horizontal", 2.35, 1.15);
+        changed |= replaceIfNumericEquals("abilities.bloodweaver.shared.rupture.knockback_vertical", 0.55, 0.35);
+        changed |= setIfMissing("abilities.bloodweaver.shared.rupture.knockback_horizontal", 1.15);
+        changed |= setIfMissing("abilities.bloodweaver.shared.rupture.knockback_vertical", 0.35);
         return changed;
     }
 

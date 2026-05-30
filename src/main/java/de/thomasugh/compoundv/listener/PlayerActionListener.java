@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.listener;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
+import de.thomasugh.compoundv.ability.compoundv.BloodweaverAbility;
 import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
 import de.thomasugh.compoundv.ability.compoundv.IceCubeAbility;
 import de.thomasugh.compoundv.ability.compoundv.TheDetonatorAbility;
@@ -201,6 +202,7 @@ public class PlayerActionListener implements Listener {
 
     private String vOneUpgradeFor(String abilityId) {
         if ("the_patriot".equalsIgnoreCase(abilityId)) return "the_patriot_v_one";
+        if ("bloodweaver".equalsIgnoreCase(abilityId)) return "bloodweaver_v_one";
         if ("teleporter".equalsIgnoreCase(abilityId)) return "teleporter_v_one";
         if ("size_changer".equalsIgnoreCase(abilityId)) return "size_changer_v_one";
         return null;
@@ -366,6 +368,11 @@ public class PlayerActionListener implements Listener {
             sonic.triggerSonicRing(e.getPlayer());
             return;
         }
+        if (ab instanceof BloodweaverAbility bloodweaver) {
+            e.setCancelled(true);
+            bloodweaver.shootBloodLash(e.getPlayer());
+            return;
+        }
         if (ab == null || !ab.hasToggle()) return;
         e.setCancelled(true);
         ab.onToggle(e.getPlayer());
@@ -485,6 +492,12 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
+        if (ab instanceof BloodweaverAbility bloodweaver && canUseSneakLeftClickAny(p, a)) {
+            cancelAbilityInteraction(e);
+            bloodweaver.handleSneakLeftClick(p);
+            return;
+        }
+
         if (ab instanceof TheDetonatorAbility detonator && canUseSneakLeftClickAny(p, a)) {
             cancelAbilityInteraction(e);
             detonator.triggerExplosion(p);
@@ -581,6 +594,10 @@ public class PlayerActionListener implements Listener {
         }
         if (ability instanceof SpiderWeaverAbility spiderWeaver) {
             spiderWeaver.shootWeb(player);
+            return;
+        }
+        if (ability instanceof BloodweaverAbility bloodweaver) {
+            bloodweaver.handleSneakLeftClick(player);
             return;
         }
         if (ability instanceof TheDetonatorAbility detonator) {
@@ -829,6 +846,9 @@ public class PlayerActionListener implements Listener {
         }
         if (ability instanceof StormstrikeAbility stormstrike) {
             stormstrike.handleMeleeHit(attacker, target);
+        }
+        if (ability instanceof BloodweaverAbility bloodweaver) {
+            bloodweaver.handleMeleeHit(attacker, target);
         }
     }
 

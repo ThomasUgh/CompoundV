@@ -1,4 +1,4 @@
-"language_file_version": 28
+"language_file_version": 29
 "prefix": "&8[&b&lCV&r&8] "
 "general":
   "no_permission": "<prefix>&cBunu yapmak için yetkin yok."
@@ -654,6 +654,16 @@
   - ""
   - "&4Yan etkis are"
   - "&4added hedefine powers."
+"bloodweaver":
+  "lash_hit": "<prefix>&cBlood Lash&7 isabet etti."
+  "lash_missed": "<prefix>&7Blood Lash ıskaladı."
+  "lash_cooldown": "<prefix>&7Blood Lash bekleme süresi: &e{seconds}sn&7."
+  "rupture_charge_start": "<prefix>&cBlood Rupture&7 yükleniyor. Eğilmeyi sürdür."
+  "rupture_charge_progress": "<prefix>&cBlood Rupture&7 &e{seconds}sn&7 içinde."
+  "rupture_cancelled": "<prefix>&7Blood Rupture iptal edildi."
+  "rupture_released": "<prefix>&cBlood Rupture&7 salındı. Hedefler: &e{targets}&7."
+  "rupture_cooldown": "<prefix>&7Blood Rupture bekleme süresi: &e{seconds}sn&7."
+
 "patriot":
   "speed_dash": "&cThe Patriot &7atılışı."
   "speed_dash_cooldown": "&7Atılış &c{seconds}sn&7 içinde hazır."
@@ -670,3 +680,5 @@
   "stormstrike": "{victim}, {killer} tarafından aşırı elektrikle yüklendi."
   "the_headpopper": "{victim}, {killer} yakınında çok kötü bir düşünce yaşadı."
   "ice_cube": "{victim}, {killer} tarafından donduruldu."
+  "bloodweaver_lash": "{victim}, {killer} adlı oyuncunun Blood Lash saldırısıyla kesildi."
+  "bloodweaver_rupture": "{victim}, {killer} tarafından kan kontrolüyle parçalandı."

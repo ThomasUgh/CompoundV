@@ -1,4 +1,4 @@
-language_file_version: 28
+language_file_version: 29
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -207,6 +207,23 @@ ability:
       - "<prefix>&8• &7Damage: &c12.5 hearts&7, mobs/animals take &cx2.5&7. Cooldown: &e20s&7."
       - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 damages all nearby living targets for &c25% current health&7. Cooldown: &e2min&7."
       - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance II&7, &dRegeneration I&7 and Heat Vision immunity."
+  bloodweaver:
+    description:
+      - "<prefix>&8• &7Style: like &cMarie Moreau&7."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 fires &cBlood Lash&7 up to &e25 blocks&7. Cooldown: &e3s&7."
+      - "<prefix>&8• &7Blood Lash deals &c2-4 hearts&7, slows the target and applies bleeding for &e3s&7."
+      - "<prefix>&8• &7Every &ethird melee hit&7 applies &e2s&7 bleeding with &c0.5 hearts/s&7."
+      - "<prefix>&8• &dSneak + Left-Click&7 and keep sneaking for &e3s&7 to cast &cBlood Rupture&7 in a &e15 block&7 radius."
+      - "<prefix>&8• &7Blood Rupture lifts targets &e3 blocks&7, roots them for &e5s&7, deals &c2 hearts/s&7 and throws survivors back."
+      - "<prefix>&8• &7Cost: &c2 hearts&7 and &7Weakness for &e20s&7. Passive: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+5 hearts&7."
+      - "<prefix>&8• &7Receives &c50% less Heat Vision damage&7."
+  bloodweaver_v_one:
+    description:
+      - "<prefix>&8• &3V One Upgrade&7 for Bloodweaver."
+      - "<prefix>&8• &dF &8(Swap Item with Offhand)&7 fires &cBlood Lash&7 up to &e25 blocks&7 with &c2.5-5 hearts&7 damage."
+      - "<prefix>&8• &dSneak + Left-Click&7 and keep sneaking for &e3s&7 to cast the stronger &cBlood Rupture&7."
+      - "<prefix>&8• &7Blood Rupture roots and lifts targets for &e7s&7, dealing &c2 hearts/s&7 before throwing survivors back."
+      - "<prefix>&8• &7Passive: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+10 hearts&7 and &c50% Heat Vision reduction&7."
   spider_weaver:
     description:
       - "<prefix>&8• &7Style: like &fWebweaver&7."
@@ -672,6 +689,16 @@ tutorial_book:
     - "&4Side effects are"
     - "&4added to powers."
 
+bloodweaver:
+  lash_hit: "<prefix>&cBlood Lash&7 hit."
+  lash_missed: "<prefix>&7Blood Lash missed."
+  lash_cooldown: "<prefix>&7Blood Lash cooldown: &e{seconds}s&7."
+  rupture_charge_start: "<prefix>&cBlood Rupture&7 charging. Keep sneaking."
+  rupture_charge_progress: "<prefix>&cBlood Rupture&7 in &e{seconds}s&7."
+  rupture_cancelled: "<prefix>&7Blood Rupture cancelled."
+  rupture_released: "<prefix>&cBlood Rupture&7 released. Targets: &e{targets}&7."
+  rupture_cooldown: "<prefix>&7Blood Rupture cooldown: &e{seconds}s&7."
+
 patriot:
   speed_dash: "&cThe Patriot &7dash."
   speed_dash_cooldown: "&7Dash ready in &c{seconds}s&7."
@@ -689,3 +716,5 @@ death_messages:
   stormstrike: "{victim} was overcharged by {killer}."
   the_headpopper: "{victim} had a very bad thought near {killer}."
   ice_cube: "{victim} was frozen out by {killer}."
+  bloodweaver_lash: "{victim} was cut open by {killer}'s Blood Lash."
+  bloodweaver_rupture: "{victim} was ruptured by {killer}'s blood control."

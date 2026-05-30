@@ -89,7 +89,8 @@ public class PotionRollManager {
                 || "teleporter".equalsIgnoreCase(abilityId)
                 || "teleporter_v_one".equalsIgnoreCase(abilityId)
                 || "size_changer".equalsIgnoreCase(abilityId)
-                || "size_changer_v_one".equalsIgnoreCase(abilityId);
+                || "size_changer_v_one".equalsIgnoreCase(abilityId)
+                || "bloodweaver_v_one".equalsIgnoreCase(abilityId);
     }
 
     private Map<String, Integer> getChances(CompoundPotion type) {
