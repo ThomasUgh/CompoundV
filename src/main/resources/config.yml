@@ -239,6 +239,13 @@ abilities:
       rupture:
         duration_ticks: 140
 
+  # The Runner: high-speed impact damage when running through entities.
+  the_runner:
+    impact_min_speed_level: 10
+    impact_base_damage_hearts: 6.0
+    impact_damage_per_speed_level_hearts: 1.0
+    impact_level_15_bonus_min_speed_level: 15
+    impact_level_15_damage_multiplier: 1.33
   # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:
     beam_damage_hearts: 0.95625
