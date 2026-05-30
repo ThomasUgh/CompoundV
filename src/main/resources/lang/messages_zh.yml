@@ -640,6 +640,7 @@ ice_cube:
 
 death_messages:
   heat_vision: "{victim} 被 {killer} 用激光烤熟了。"
+  the_patriot_dash: "{victim} was slammed by {killer}'s Patriot Dash."
   the_patriot_heat_vision: "{victim} 被 {killer} 的 Heat Vision 抹除了。"
   the_veteran_beam: "{victim} 被 {killer} 的反应堆光束击中。"
   the_veteran_ground_zero: "{victim} 离 {killer} 的 Ground Zero 太近了。"

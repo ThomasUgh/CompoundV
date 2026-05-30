@@ -675,6 +675,7 @@
   "wall_cooldown": "<prefix>&7Buz duvarı bekleme süresi: &e{seconds}sn&7."
 "death_messages":
   "heat_vision": "{victim}, {killer} tarafından lazerle pişirildi."
+  "the_patriot_dash": "{victim}, {killer} adlı oyuncunun Patriot Dash saldırısıyla savruldu."
   "the_patriot_heat_vision": "{victim}, {killer} adlı oyuncunun Lazer Gözleri tarafından silindi."
   "the_veteran_beam": "{victim}, {killer} adlı oyuncunun reaktör ışınına yakalandı."
   "the_veteran_ground_zero": "{victim}, {killer} adlı oyuncunun sıfır noktasına fazla yaklaştı."

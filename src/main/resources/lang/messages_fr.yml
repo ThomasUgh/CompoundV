@@ -640,6 +640,7 @@ ice_cube:
 
 death_messages:
   heat_vision: "{victim} a été grillé au laser par {killer}."
+  the_patriot_dash: "{victim} was slammed by {killer}'s Patriot Dash."
   the_patriot_heat_vision: "{victim} a été effacé par la Heat Vision de {killer}."
   the_veteran_beam: "{victim} a été pris dans le rayon réacteur de {killer}."
   the_veteran_ground_zero: "{victim} était trop près du Ground Zero de {killer}."

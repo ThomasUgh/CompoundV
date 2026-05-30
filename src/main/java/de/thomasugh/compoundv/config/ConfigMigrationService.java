@@ -82,6 +82,13 @@ public final class ConfigMigrationService {
         // 1.1.3 compact-config additions.
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_range", 44.0);
         changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_range", 50.0);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.enabled", true);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.min_hearts", 1.0);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.max_hearts", 2.0);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.speed_dash.damage.radius", 1.05, 1.75);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.radius", 1.75);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.max_targets", 8);
+
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.lift_height");
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.lift_ticks");
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_horizontal");

@@ -1,6 +1,7 @@
 package de.thomasugh.compoundv.ability.shared;
 
 import de.thomasugh.compoundv.CompoundV;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.TeleportUtil;
 import org.bukkit.Bukkit;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ThePatriotAbility extends BaseHeatVisionAbility {
 
@@ -311,6 +313,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         Location from = player.getLocation().clone();
         speedDashCooldown.put(uuid, now + Math.max(0L, cooldownMs));
         renderSpeedDashTrail(from, destination);
+        damageSpeedDashTargets(player, from, destination);
         playSpeedDashFlap(player);
         TeleportUtil.teleportSafely(plugin, player, destination);
         SchedulerAdapter.runLater(plugin, player, () -> {
@@ -322,6 +325,70 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         }, 1L);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("patriot.speed_dash"));
         return true;
+    }
+
+    private void damageSpeedDashTargets(Player player, Location from, Location to) {
+        if (!plugin.getConfig().getBoolean(s("speed_dash.damage.enabled"), true)) return;
+        World world = from.getWorld();
+        if (world == null || !world.equals(to.getWorld())) return;
+
+        Vector start = from.toVector().add(new Vector(0, 0.90, 0));
+        Vector end = to.toVector().add(new Vector(0, 0.90, 0));
+        Vector delta = end.clone().subtract(start);
+        double length = delta.length();
+        if (length < 0.25) return;
+
+        double radius = Math.max(0.35, plugin.getConfig().getDouble(s("speed_dash.damage.radius"), 1.75));
+        int maxTargets = Math.max(1, plugin.getConfig().getInt(s("speed_dash.damage.max_targets"), 8));
+        double minHearts = Math.max(0.0, plugin.getConfig().getDouble(s("speed_dash.damage.min_hearts"), 1.0));
+        double maxHearts = Math.max(minHearts, plugin.getConfig().getDouble(s("speed_dash.damage.max_hearts"), 2.0));
+
+        Vector mid = start.clone().add(end).multiply(0.5);
+        Location searchCenter = new Location(world, mid.getX(), mid.getY(), mid.getZ());
+        double searchX = Math.abs(end.getX() - start.getX()) * 0.5 + radius + 1.5;
+        double searchY = Math.abs(end.getY() - start.getY()) * 0.5 + radius + 1.5;
+        double searchZ = Math.abs(end.getZ() - start.getZ()) * 0.5 + radius + 1.5;
+
+        Set<UUID> damaged = new HashSet<>();
+        for (Entity entity : world.getNearbyEntities(searchCenter, searchX, searchY, searchZ)) {
+            if (damaged.size() >= maxTargets) break;
+            if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
+            if (!target.isValid() || target.isDead()) continue;
+            if (target instanceof Player playerTarget && (playerTarget.getGameMode() == org.bukkit.GameMode.CREATIVE || playerTarget.getGameMode() == org.bukkit.GameMode.SPECTATOR)) continue;
+            if (!isNearSpeedDashPath(start, end, target, radius)) continue;
+            if (!damaged.add(target.getUniqueId())) continue;
+
+            double hearts = minHearts + ThreadLocalRandom.current().nextDouble(maxHearts - minHearts + 0.0001);
+            SchedulerAdapter.runLater(plugin, target, () -> {
+                if (!player.isOnline() || !target.isValid() || target.isDead()) return;
+                AbilityKillTracker.damage(plugin, target, player, hearts * 2.0, "death_messages.the_patriot_dash", true);
+                Location hit = target.getLocation().add(0, Math.min(1.2, Math.max(0.7, target.getEyeHeight() * 0.65)), 0);
+                target.getWorld().spawnParticle(Particle.CRIT, hit, 10, 0.28, 0.26, 0.28, 0.09);
+                target.getWorld().spawnParticle(Particle.CLOUD, hit, 8, 0.30, 0.18, 0.30, 0.06);
+                target.getWorld().playSound(hit, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.50f, 1.35f);
+            }, 1L);
+        }
+    }
+
+    private boolean isNearSpeedDashPath(Vector start, Vector end, LivingEntity target, double radius) {
+        double radiusSquared = radius * radius;
+        Location feet = target.getLocation();
+        Vector base = feet.toVector().add(new Vector(0, 0.35, 0));
+        Vector body = feet.toVector().add(new Vector(0, Math.min(1.25, Math.max(0.65, target.getEyeHeight() * 0.55)), 0));
+        Vector eye = target.getEyeLocation().toVector();
+        return distanceSquaredToSegment(base, start, end) <= radiusSquared
+                || distanceSquaredToSegment(body, start, end) <= radiusSquared
+                || distanceSquaredToSegment(eye, start, end) <= radiusSquared;
+    }
+
+    private double distanceSquaredToSegment(Vector point, Vector start, Vector end) {
+        Vector segment = end.clone().subtract(start);
+        double lengthSquared = segment.lengthSquared();
+        if (lengthSquared < 0.0001) return point.distanceSquared(start);
+        double t = point.clone().subtract(start).dot(segment) / lengthSquared;
+        t = Math.max(0.0, Math.min(1.0, t));
+        Vector closest = start.clone().add(segment.multiply(t));
+        return point.distanceSquared(closest);
     }
 
     private void playSpeedDashFlap(Player player) {

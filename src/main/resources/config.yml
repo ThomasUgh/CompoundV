@@ -157,6 +157,12 @@ abilities:
         require_sneak: true
         range: 25.0
         cooldown_ms: 5000
+        damage:
+          enabled: true
+          min_hearts: 1.0
+          max_hearts: 2.0
+          radius: 1.75
+          max_targets: 8
         sound:
           enabled: true
           sound: entity.ender_dragon.flap

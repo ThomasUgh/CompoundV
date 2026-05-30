@@ -640,6 +640,7 @@ ice_cube:
 
 death_messages:
   heat_vision: "{victim} को {killer} ने लेज़र से भून दिया."
+  the_patriot_dash: "{victim} was slammed by {killer}'s Patriot Dash."
   the_patriot_heat_vision: "{victim} को {killer} की Heat Vision ने मिटा दिया."
   the_veteran_beam: "{victim} {killer} के रिएक्टर बीम में फँस गया."
   the_veteran_ground_zero: "{victim}, {killer} के Ground Zero के बहुत पास था."
