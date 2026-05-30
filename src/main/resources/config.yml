@@ -165,10 +165,14 @@ abilities:
         volume: 1.10
         pitch: 1.35
     compound_v:
+      resistance_level: 3
+      heat_vision_range: 44.0
       heat_vision_core_particles: 2
       heat_vision_core_size: 0.65
       heat_vision_impact_particles: 17
     v_one:
+      resistance_level: 4
+      heat_vision_range: 50.0
       heat_vision_core_particles: 2
       heat_vision_core_size: 0.67
       heat_vision_impact_particles: 19

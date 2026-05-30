@@ -492,6 +492,10 @@ public abstract class BaseHeatVisionAbility implements Ability {
             if (ability != null && "the_patriot_v_one".equalsIgnoreCase(ability.getId())) {
                 return damage * plugin.getConfig().getDouble("heat_vision.v_one_received_damage_multiplier", 0.5);
             }
+            if (ability != null && ("bloodweaver".equalsIgnoreCase(ability.getId())
+                    || "bloodweaver_v_one".equalsIgnoreCase(ability.getId()))) {
+                return damage * plugin.getConfig().getDouble("abilities.bloodweaver.shared.heat_vision_received_damage_multiplier", 0.5);
+            }
         }
         return damage;
     }
