@@ -255,13 +255,9 @@ public final class BloodweaverAbility implements Ability {
 
     private void lockAndDamageTarget(Player owner, LivingEntity target, int durationTicks, Set<TaskHandle> ownerTasks) {
         Location start = target.getLocation().clone();
-        Vector ownerOrigin = owner.getLocation().toVector();
-        int liftTicks = Math.min(durationTicks, Math.max(5, configInt("rupture.lift_ticks", 16)));
-        double liftHeight = Math.max(0.0, configDouble("rupture.lift_height", 3.0));
-        double liftVelocity = liftTicks <= 0 ? 0.0 : Math.min(0.42, liftHeight / Math.max(1.0, liftTicks) * 1.08);
         double damagePerSecond = Math.max(0.0, configDouble("rupture.damage_hearts_per_second", 2.0)) * 2.0;
-        int tickPeriod = Math.max(1, configInt("rupture.tick_period", 2));
-        int particleInterval = Math.max(tickPeriod, configInt("rupture.particle_interval_ticks", 4));
+        int tickPeriod = Math.max(2, configInt("rupture.tick_period", 4));
+        int particleInterval = Math.max(tickPeriod, configInt("rupture.particle_interval_ticks", 10));
         int damageInterval = Math.max(1, configInt("rupture.damage_interval_ticks", 20));
 
         final TaskHandle[] handle = new TaskHandle[1];
@@ -271,7 +267,7 @@ public final class BloodweaverAbility implements Ability {
 
             @Override public void run() {
                 if (!target.isValid() || target.isDead() || !start.getWorld().equals(target.getWorld())) {
-                    releaseTarget(ownerOrigin, target, false);
+                    releaseTarget(target);
                     removeLockedTarget(owner.getUniqueId(), target);
                     removeTask(owner.getUniqueId(), handle[0]);
                     if (handle[0] != null) handle[0].cancel();
@@ -282,20 +278,19 @@ public final class BloodweaverAbility implements Ability {
                     initialized = true;
                     target.addPotionEffect(new PotionEffect(PotionEffects.GLOWING, durationTicks + 15, 0, false, false, false));
                     target.addPotionEffect(new PotionEffect(PotionEffects.SLOWNESS, durationTicks + 15, 9, false, false, false));
-                    target.setGravity(false);
+                    target.setGravity(true);
+                    target.setFallDistance(0.0f);
+                    target.setVelocity(new Vector(0.0, 0.0, 0.0));
                     if (target instanceof Mob mob) mob.setAI(false);
                 }
 
                 if (age >= durationTicks) {
-                    releaseTarget(ownerOrigin, target, true);
+                    releaseTarget(target);
                     removeLockedTarget(owner.getUniqueId(), target);
                     removeTask(owner.getUniqueId(), handle[0]);
                     if (handle[0] != null) handle[0].cancel();
                     return;
                 }
-
-                double yVelocity = age < liftTicks ? liftVelocity : 0.0;
-                target.setVelocity(new Vector(0, yVelocity, 0));
 
                 if (age % particleInterval == 0) renderRuptureTarget(target, age);
 
@@ -308,21 +303,14 @@ public final class BloodweaverAbility implements Ability {
         ownerTasks.add(handle[0]);
     }
 
-    private void releaseTarget(Vector ownerOrigin, LivingEntity target, boolean knockback) {
+    private void releaseTarget(LivingEntity target) {
         if (target == null || !target.isValid()) return;
         target.setGravity(true);
+        target.setFallDistance(0.0f);
         if (target instanceof Mob mob) mob.setAI(true);
         target.removePotionEffect(PotionEffects.SLOWNESS);
         target.removePotionEffect(PotionEffects.GLOWING);
-        if (!knockback || target.isDead()) return;
-
-        Vector away = target.getLocation().toVector().subtract(ownerOrigin);
-        away.setY(0);
-        if (away.lengthSquared() < 0.001) away = new Vector(0, 0, 1);
-        away.normalize().multiply(configDouble("rupture.knockback_horizontal", 1.15));
-        away.setY(configDouble("rupture.knockback_vertical", 0.35));
-        target.setVelocity(away);
-        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_ATTACK_KNOCKBACK, 0.7f, 0.75f);
+        target.setVelocity(new Vector(0.0, 0.0, 0.0));
     }
 
     private void applyLashBleed(Player owner, LivingEntity target) {

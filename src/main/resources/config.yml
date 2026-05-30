@@ -208,15 +208,10 @@ abilities:
         self_cost_hearts: 2.0
         self_weakness_ticks: 400
         self_weakness_level: 1
-        lift_height: 3.0
-        lift_ticks: 16
-        tick_period: 2
-        particle_interval_ticks: 4
+        tick_period: 4
+        particle_interval_ticks: 10
         damage_interval_ticks: 20
         damage_hearts_per_second: 2.0
-        # Lower knockback keeps targets around roughly 10-20 blocks instead of launching them too far.
-        knockback_horizontal: 1.15
-        knockback_vertical: 0.35
     compound_v:
       resistance_level: 3
       strength_level: 2

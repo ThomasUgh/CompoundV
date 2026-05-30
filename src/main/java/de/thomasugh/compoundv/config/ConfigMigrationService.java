@@ -82,10 +82,19 @@ public final class ConfigMigrationService {
         // 1.1.3 compact-config additions.
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_range", 44.0);
         changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_range", 50.0);
-        changed |= replaceIfNumericEquals("abilities.bloodweaver.shared.rupture.knockback_horizontal", 2.35, 1.15);
-        changed |= replaceIfNumericEquals("abilities.bloodweaver.shared.rupture.knockback_vertical", 0.55, 0.35);
-        changed |= setIfMissing("abilities.bloodweaver.shared.rupture.knockback_horizontal", 1.15);
-        changed |= setIfMissing("abilities.bloodweaver.shared.rupture.knockback_vertical", 0.35);
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.lift_height");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.lift_ticks");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_horizontal");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_stop_after_ticks");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_stop_repeat_ticks");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_stop_repeats");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_stop_multiplier");
+        changed |= replaceIfNumericEquals("abilities.bloodweaver.shared.rupture.tick_period", 2, 4);
+        changed |= replaceIfNumericEquals("abilities.bloodweaver.shared.rupture.particle_interval_ticks", 4, 10);
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_strength");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_vertical");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_max_horizontal_velocity");
+        changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_max_vertical_velocity");
 
         changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.enabled", true);
         changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.chance", 100.0);
