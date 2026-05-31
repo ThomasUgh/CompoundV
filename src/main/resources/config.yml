@@ -239,13 +239,6 @@ abilities:
       rupture:
         duration_ticks: 140
 
-  # The Runner: high-speed impact damage when running through entities.
-  the_runner:
-    impact_min_speed_level: 10
-    impact_base_damage_hearts: 6.0
-    impact_damage_per_speed_level_hearts: 1.0
-    impact_level_15_bonus_min_speed_level: 15
-    impact_level_15_damage_multiplier: 1.33
 
   # The Headpopper: marked target damage and V-One resistance tuning.
   the_headpopper:
@@ -307,7 +300,26 @@ abilities:
     big_extra_hearts: 0.0
     big_jump_boost_level: 0
 
-  # The Veteran: Sneak + Left-Click charges a heavy chest blast. Defaults are tuned lower for Paper/Folia performance.
+
+  # The Runner: speed stages. Level 20 is the final high-speed stage with extra impact damage.
+  the_runner:
+    resistance_level: 1
+    strength_level: 2
+    extra_hearts: 5.0
+    attack_speed_bonus: 1024.0
+    speed_levels: [11, 12, 15, 20]
+    default_speed_level: 11
+    impact_min_speed_level: 11
+    impact_base_damage_hearts: 6.0
+    impact_damage_per_speed_level_hearts: 1.0
+    impact_level_20_bonus_hearts: 3.0
+    impact_radius: 0.65
+    impact_vertical_radius: 0.55
+    impact_min_move_delta: 0.08
+    impact_min_horizontal_speed: 0.32
+    impact_path_step: 0.28
+    impact_cooldown_ms: 750
+    impact_knockback: 1.15
   the_veteran:
     resistance_level: 4
     strength_level: 5

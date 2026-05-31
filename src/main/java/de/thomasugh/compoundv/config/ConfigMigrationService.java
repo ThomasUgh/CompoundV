@@ -109,6 +109,30 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 20.0);
         changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 40000);
         changed |= setIfMissing("abilities.the_headpopper.v_one_target_damage_multiplier", 0.5);
+        changed |= setIfMissing("abilities.the_runner.resistance_level", 1);
+        changed |= setIfMissing("abilities.the_runner.strength_level", 2);
+        changed |= setIfMissing("abilities.the_runner.extra_hearts", 5.0);
+        changed |= setIfMissing("abilities.the_runner.attack_speed_bonus", 1024.0);
+        if (!plugin.getConfig().contains("abilities.the_runner.speed_levels")
+                || plugin.getConfig().getIntegerList("abilities.the_runner.speed_levels").equals(java.util.List.of(10, 11, 12, 15))) {
+            plugin.getConfig().set("abilities.the_runner.speed_levels", java.util.List.of(11, 12, 15, 20));
+            changed = true;
+        }
+        if (plugin.getConfig().getInt("abilities.the_runner.default_speed_level", 10) < 11) {
+            plugin.getConfig().set("abilities.the_runner.default_speed_level", 11);
+            changed = true;
+        }
+        changed |= setIfMissing("abilities.the_runner.impact_min_speed_level", 11);
+        changed |= setIfMissing("abilities.the_runner.impact_base_damage_hearts", 6.0);
+        changed |= setIfMissing("abilities.the_runner.impact_damage_per_speed_level_hearts", 1.0);
+        changed |= setIfMissing("abilities.the_runner.impact_level_20_bonus_hearts", 3.0);
+        changed |= setIfMissing("abilities.the_runner.impact_radius", 0.65);
+        changed |= setIfMissing("abilities.the_runner.impact_vertical_radius", 0.55);
+        changed |= setIfMissing("abilities.the_runner.impact_min_move_delta", 0.08);
+        changed |= setIfMissing("abilities.the_runner.impact_min_horizontal_speed", 0.32);
+        changed |= setIfMissing("abilities.the_runner.impact_path_step", 0.28);
+        changed |= setIfMissing("abilities.the_runner.impact_cooldown_ms", 750);
+        changed |= setIfMissing("abilities.the_runner.impact_knockback", 1.15);
 
         changed |= setIfMissing("abilities.the_veteran.resistance_level", 4);
         changed |= setIfMissing("abilities.the_veteran.strength_level", 5);

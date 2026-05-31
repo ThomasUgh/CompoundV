@@ -163,7 +163,7 @@ public class TheRunnerAbility implements Ability {
     private List<Integer> configuredSpeedLevels() {
         List<Integer> configured = plugin.getConfig().getIntegerList("abilities.the_runner.speed_levels");
         if (configured.isEmpty()) {
-            configured = List.of(10, 11, 12, 15);
+            configured = List.of(11, 12, 15, 20);
         }
 
         List<Integer> levels = new ArrayList<>();
@@ -172,10 +172,10 @@ public class TheRunnerAbility implements Ability {
             levels.add(level);
         }
         if (levels.isEmpty()) {
-            levels.add(10);
             levels.add(11);
             levels.add(12);
             levels.add(15);
+            levels.add(20);
         }
         return levels;
     }
@@ -212,10 +212,8 @@ public class TheRunnerAbility implements Ability {
         double perLevelHearts = plugin.getConfig().getDouble("abilities.the_runner.impact_damage_per_speed_level_hearts", 1.0);
         int minImpactLevel = plugin.getConfig().getInt("abilities.the_runner.impact_min_speed_level", 10);
         double hearts = baseHearts + Math.max(0, speedLevel - minImpactLevel) * perLevelHearts;
-        int bonusMinLevel = plugin.getConfig().getInt("abilities.the_runner.impact_level_15_bonus_min_speed_level", 15);
-        if (speedLevel >= bonusMinLevel) {
-            hearts *= Math.max(0.0, plugin.getConfig().getDouble(
-                    "abilities.the_runner.impact_level_15_damage_multiplier", 1.33));
+        if (speedLevel >= 20) {
+            hearts += plugin.getConfig().getDouble("abilities.the_runner.impact_level_20_bonus_hearts", 3.0);
         }
         return Math.max(0.0, hearts * 2.0);
     }
