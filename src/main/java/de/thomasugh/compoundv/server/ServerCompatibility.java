@@ -27,12 +27,19 @@ public final class ServerCompatibility {
         return folia;
     }
 
+    private static volatile Boolean foliaDetected;
+
     public static boolean detectFolia() {
+        Boolean cached = foliaDetected;
+        if (cached != null) return cached;
+        boolean result;
         try {
             Bukkit.getServer().getClass().getMethod("getGlobalRegionScheduler");
-            return true;
+            result = true;
         } catch (ReflectiveOperationException ignored) {
-            return false;
+            result = false;
         }
+        foliaDetected = result;
+        return result;
     }
 }

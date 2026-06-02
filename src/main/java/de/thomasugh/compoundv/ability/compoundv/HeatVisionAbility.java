@@ -107,15 +107,28 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
     }
 
     @Override protected float size() {
-        return (float) Math.max(0.01, plugin.getConfig().getDouble(stagePath("core_size"), stage == 4 ? 0.64 : stage == 3 ? 0.58 : super.size()));
+        return (float) Math.max(0.01, particleDouble("core_size", super.size()));
     }
 
     @Override protected float glowSize() {
-        return (float) Math.max(0.01, plugin.getConfig().getDouble(stagePath("glow_size"), stage == 4 ? 0.42 : stage == 3 ? 0.38 : super.glowSize()));
+        return (float) Math.max(0.01, particleDouble("glow_size", super.glowSize()));
     }
 
     @Override protected double step() {
-        return Math.max(0.08, plugin.getConfig().getDouble(stagePath("step"), stage == 4 ? 0.32 : stage == 3 ? 0.36 : super.step()));
+        return Math.max(0.08, particleDouble("step", super.step()));
+    }
+
+    private double particleDouble(String key, double fallback) {
+        String globalPath = "heat_vision.particles." + key;
+        double global = plugin.getConfig().getDouble(globalPath, fallback);
+
+        // Global particle tuning is the default for every Heatvision tier.
+        // Stage-specific tuning only wins when explicitly enabled so changing
+        // heat_vision.particles.step/core_size/glow_size always affects I-IV.
+        if (plugin.getConfig().getBoolean(stagePath("custom_particles"), false)) {
+            return plugin.getConfig().getDouble(stagePath(key), global);
+        }
+        return global;
     }
 
     @Override protected String activeSoundConfigPath() {

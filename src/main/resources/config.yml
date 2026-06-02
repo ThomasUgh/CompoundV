@@ -1,6 +1,10 @@
 # CompoundV 1.1.2 configuration
 # Keep this file small. Values not listed here use safe built-in defaults.
 
+# Internal config schema version. Do NOT edit by hand. CompoundV uses this to
+# apply one-time upgrades. Your custom values are preserved across restarts.
+config-version: 4
+
 # ─────────────────────────────────────────────────────────────────────────────
 # General
 # ─────────────────────────────────────────────────────────────────────────────
@@ -89,12 +93,19 @@ combat:
     # Optional direct-damage fallback for protected/immortal targets.
     # Keep disabled unless trusted admins should bypass protection plugins.
     enabled: false
+    # true = every ability can use the fallback when the caster has the permission.
+    # false = only abilities that explicitly allow the fallback can use it.
+    apply_to_all_ability_damage: true
     permission: compoundv.damage-bypass
 
 heat_vision:
   # Entity raytrace hit radius in blocks. 0.05 is the old/default thin beam.
   hit_radius: 0.051
   damage_interval: 2
+  # Folia/performance: how often (in ticks) the cosmetic along-beam block effects
+  # (snow melt, water sizzle, vegetation clearing) are scanned. Higher = cheaper.
+  # Damage and raytrace are NOT affected by this; only visual block effects.
+  block_effect_interval_ticks: 4
   active_sound:
     enabled: true
     repeat_interval_ticks: 2
@@ -106,7 +117,11 @@ heat_vision:
     enabled: false
   generic_hit_sound:
     enabled: true
+  # Master particle settings for all Heatvision beams: stage I-IV and The Patriot/V One.
   particles:
+    # Folia/performance: render the visible beam strand every N ticks instead of
+    # every tick. 1 = old behavior (most particles), 2 = half the packets, etc.
+    render_interval_ticks: 2
     core_particles: 2
     glow_particles: 1
     impact_particles: 12
@@ -118,25 +133,21 @@ heat_vision:
       damage_hearts: 1.35
       range: 30.0
       core_particles: 2
-      core_size: 0.55
     stage_2:
       damage_hearts: 2.0
       range: 35.0
       core_particles: 2
-      core_size: 0.56
       active_sound: { pitch: 0.90 }
     stage_3:
       damage_hearts: 2.25
       range: 37.0
       core_particles: 2
-      core_size: 0.58
       active_sound: { pitch: 1.05 }
     stage_4:
       damage_hearts: 2.7
       range: 40.0
       core_particles: 2
       impact_particles: 16
-      core_size: 0.64
       active_sound: { pitch: 1.20 }
 
 abilities:
@@ -161,7 +172,8 @@ abilities:
           enabled: true
           min_hearts: 1.0
           max_hearts: 2.0
-          radius: 1.75
+          radius: 2.20
+          path_step: 0.45
           max_targets: 8
         sound:
           enabled: true
@@ -176,14 +188,18 @@ abilities:
     compound_v:
       resistance_level: 3
       heat_vision_range: 44.0
+      heat_vision_damage_hearts: 4.5
+      heat_vision_damage_multiplier: 1.0
+      heat_vision_hit_radius: 0.0525
       heat_vision_core_particles: 2
-      heat_vision_core_size: 0.65
       heat_vision_impact_particles: 17
     v_one:
       resistance_level: 4
       heat_vision_range: 50.0
+      heat_vision_damage_hearts: 4.725
+      heat_vision_damage_multiplier: 1.0
+      heat_vision_hit_radius: 0.0525
       heat_vision_core_particles: 2
-      heat_vision_core_size: 0.67
       heat_vision_impact_particles: 19
       heat_vision_active_sound:
         volume: 0.06

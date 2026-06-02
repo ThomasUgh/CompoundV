@@ -12,7 +12,11 @@ import java.util.Map;
 
 public final class ConfigMigrationService {
 
+    private static final int CURRENT_CONFIG_VERSION = 4;
+
     private final JavaPlugin plugin;
+
+    private boolean allowValueRewrites = false;
 
     public ConfigMigrationService(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -21,14 +25,21 @@ public final class ConfigMigrationService {
     public void migrate() {
         boolean changed = false;
 
-        // 1.1.1 intentionally ships a compact public config. Older verbose
-        // runtime-only tuning keys are no longer copied into config.yml; the
-        // abilities keep safe built-in defaults for those values.
+        int storedVersion = plugin.getConfig().getInt("config-version", 0);
+        allowValueRewrites = storedVersion < CURRENT_CONFIG_VERSION;
+
         changed |= mergeBundledDefaults();
         changed |= migrateLegacyAliases();
         changed |= migrateVersion111Step32Defaults();
         changed |= cleanupObsoleteEntries();
         changed |= pruneToBundledConfigShape();
+
+        if (allowValueRewrites) {
+            plugin.getConfig().set("config-version", CURRENT_CONFIG_VERSION);
+            changed = true;
+            plugin.getLogger().info("Config migrated to version " + CURRENT_CONFIG_VERSION
+                    + " (from " + storedVersion + "). Your custom values are now preserved across restarts.");
+        }
 
         if (changed) {
             plugin.saveConfig();
@@ -78,16 +89,45 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("heat_vision.stages.stage_2.active_sound.pitch", 0.90);
         changed |= setIfMissing("heat_vision.stages.stage_3.active_sound.pitch", 1.05);
         changed |= setIfMissing("heat_vision.stages.stage_4.active_sound.pitch", 1.20);
+        // v1.1.4 Folia/performance: throttle cosmetic beam rendering and along-beam block effects.
+        changed |= setIfMissing("heat_vision.particles.render_interval_ticks", 2);
+        changed |= setIfMissing("heat_vision.block_effect_interval_ticks", 4);
+        changed |= setIfMissing("combat.protection_bypass.apply_to_all_ability_damage", true);
 
         // 1.1.3 compact-config additions.
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_range", 44.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 4.5);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_multiplier", 1.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_hit_radius", 0.0525);
         changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_range", 50.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_hearts", 4.725);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_hit_radius", 0.0525);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.enabled", true);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.min_hearts", 1.0);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.max_hearts", 2.0);
         changed |= replaceIfNumericEquals("abilities.the_patriot.shared.speed_dash.damage.radius", 1.05, 1.75);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.radius", 1.75);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.max_targets", 8);
+
+        changed |= removeIfPresent("heat_vision.stages.stage_1.core_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_2.core_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_3.core_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_4.core_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_1.glow_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_2.glow_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_3.glow_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_4.glow_size");
+        changed |= removeIfPresent("heat_vision.stages.stage_1.step");
+        changed |= removeIfPresent("heat_vision.stages.stage_2.step");
+        changed |= removeIfPresent("heat_vision.stages.stage_3.step");
+        changed |= removeIfPresent("heat_vision.stages.stage_4.step");
+        changed |= removeIfPresent("abilities.the_patriot.compound_v.heat_vision_core_size");
+        changed |= removeIfPresent("abilities.the_patriot.v_one.heat_vision_core_size");
+        changed |= removeIfPresent("abilities.the_patriot.compound_v.heat_vision_glow_size");
+        changed |= removeIfPresent("abilities.the_patriot.v_one.heat_vision_glow_size");
+        changed |= removeIfPresent("abilities.the_patriot.compound_v.heat_vision_step");
+        changed |= removeIfPresent("abilities.the_patriot.v_one.heat_vision_step");
 
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.lift_height");
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.lift_ticks");
@@ -577,7 +617,13 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_patriot.compound_v.heat_vision_range", 43.0, 44.0);
         changed |= replaceIfNumericEquals("abilities.the_patriot.v_one.heat_vision_range", 48.0, 50.0);
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_range", 44.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 4.5);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_multiplier", 1.0);
+        changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_hit_radius", 0.0525);
         changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_range", 50.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_hearts", 4.725);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_multiplier", 1.0);
+        changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_hit_radius", 0.0525);
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 4.5);
         changed |= replaceIfNumericEquals("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 5.0, 4.5);
         changed |= setIfMissing("abilities.the_patriot.v_one.heat_vision_damage_hearts", 4.725);
@@ -1178,6 +1224,10 @@ public final class ConfigMigrationService {
     }
 
     private boolean replaceIfNumericEquals(String path, double oldValue, Object newValue) {
+        // One-time value rewrites only run during a real version upgrade.
+        // Without this guard, any admin value that happened to equal the old
+        // bundled default was silently reverted on every restart.
+        if (!allowValueRewrites) return false;
         if (!plugin.getConfig().contains(path)) return false;
         Object current = plugin.getConfig().get(path);
         if (!(current instanceof Number n)) return false;

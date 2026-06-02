@@ -149,16 +149,32 @@ public abstract class BaseHeatVisionAbility implements Ability {
         double dL = rL != null ? rL.getHitPosition().distance(lEye.toVector()) : range;
         double dR = rR != null ? rR.getHitPosition().distance(rEye.toVector()) : range;
 
+        // Particle strands: throttled to cut packet volume. DUST particles
+        // linger ~1s client-side, so rendering every couple of ticks stays
+        // visually continuous while roughly halving the packets sent to every
+        // nearby player (the main cause of server-wide ping spikes when many
+        // players use Heatvision in a crowded area).
+        int renderInterval = Math.max(1, plugin.getConfig().getInt("heat_vision.particles.render_interval_ticks", 2));
         Particle.DustOptions core = new Particle.DustOptions(coreColor(), size());
         Particle.DustOptions glow = new Particle.DustOptions(glowColor(), glowSize());
-        strand(w, lEye, dir, dL, core, glow, fireParticles());
-        strand(w, rEye, dir, dR, core, glow, fireParticles());
-        meltPassableSnowAlongBeam(player, lEye, dir, dL, w);
-        meltPassableSnowAlongBeam(player, rEye, dir, dR, w);
-        sizzleWaterImpactAlongBeam(player, lEye, dir, dL, w);
-        sizzleWaterImpactAlongBeam(player, rEye, dir, dR, w);
-        clearPassableVegetationAlongBeam(player, lEye, dir, dL, w);
-        clearPassableVegetationAlongBeam(player, rEye, dir, dR, w);
+        if (player.getTicksLived() % renderInterval == 0) {
+            strand(w, lEye, dir, dL, core, glow, fireParticles());
+            strand(w, rEye, dir, dR, core, glow, fireParticles());
+        }
+
+        // Cosmetic environment effects (snow melt / water sizzle / vegetation
+        // burn) along the beam. These previously ran every tick on BOTH strands
+        // = six full-length block scans per tick per player. The two strands are
+        // only 0.24 blocks apart, so a single pass on the centre line is
+        // visually identical; throttling collapses this to at most three scans
+        // every few ticks.
+        int blockFxInterval = Math.max(1, plugin.getConfig().getInt("heat_vision.block_effect_interval_ticks", 4));
+        if (player.getTicksLived() % blockFxInterval == 0) {
+            double centreDist = Math.max(dL, dR);
+            meltPassableSnowAlongBeam(player, eye, dir, centreDist, w);
+            sizzleWaterImpactAlongBeam(player, eye, dir, centreDist, w);
+            clearPassableVegetationAlongBeam(player, eye, dir, centreDist, w);
+        }
 
         int cnt = damageCounter.merge(player.getUniqueId(), 1, Integer::sum);
         if (cnt % ivl != 0 || hit == null) return;
@@ -217,8 +233,16 @@ public abstract class BaseHeatVisionAbility implements Ability {
         Block standOn = player.getLocation().getBlock().getRelative(org.bukkit.block.BlockFace.DOWN);
         Block playerBlock = player.getLocation().getBlock();
 
+        double ox = origin.getX(), oy = origin.getY(), oz = origin.getZ();
+        double dx = dir.getX(), dy = dir.getY(), dz = dir.getZ();
+        int lastX = Integer.MIN_VALUE, lastY = Integer.MIN_VALUE, lastZ = Integer.MIN_VALUE;
         for (double d = 0.5; d <= range; d += 0.32) {
-            Block block = origin.clone().add(dir.clone().multiply(d)).getBlock();
+            int bx = (int) Math.floor(ox + dx * d);
+            int by = (int) Math.floor(oy + dy * d);
+            int bz = (int) Math.floor(oz + dz * d);
+            if (bx == lastX && by == lastY && bz == lastZ) continue;
+            lastX = bx; lastY = by; lastZ = bz;
+            Block block = world.getBlockAt(bx, by, bz);
             if (block.equals(standOn) || block.equals(playerBlock)) continue;
             if (isHeatVisionClearableVegetation(block.getType())) {
                 clearVegetationBlock(block, world);
@@ -296,8 +320,16 @@ public abstract class BaseHeatVisionAbility implements Ability {
 
     private void sizzleWaterImpactAlongBeam(Player player, Location origin, Vector dir, double range, World world) {
         if (player.getTicksLived() % 4 != 0) return;
+        double ox = origin.getX(), oy = origin.getY(), oz = origin.getZ();
+        double dx = dir.getX(), dy = dir.getY(), dz = dir.getZ();
+        int lastX = Integer.MIN_VALUE, lastY = Integer.MIN_VALUE, lastZ = Integer.MIN_VALUE;
         for (double d = 0.5; d <= range; d += 0.45) {
-            Block block = origin.clone().add(dir.clone().multiply(d)).getBlock();
+            int bx = (int) Math.floor(ox + dx * d);
+            int by = (int) Math.floor(oy + dy * d);
+            int bz = (int) Math.floor(oz + dz * d);
+            if (bx == lastX && by == lastY && bz == lastZ) continue;
+            lastX = bx; lastY = by; lastZ = bz;
+            Block block = world.getBlockAt(bx, by, bz);
             if (!isWaterLike(block.getType())) continue;
             Location loc = block.getLocation().add(0.5, 0.65, 0.5);
             world.spawnParticle(Particle.CLOUD, loc, 8, 0.18, 0.12, 0.18, 0.02);
@@ -311,8 +343,16 @@ public abstract class BaseHeatVisionAbility implements Ability {
         Block standOn = player.getLocation().getBlock().getRelative(org.bukkit.block.BlockFace.DOWN);
         Block playerBlock = player.getLocation().getBlock();
 
+        double ox = origin.getX(), oy = origin.getY(), oz = origin.getZ();
+        double dx = dir.getX(), dy = dir.getY(), dz = dir.getZ();
+        int lastX = Integer.MIN_VALUE, lastY = Integer.MIN_VALUE, lastZ = Integer.MIN_VALUE;
         for (double d = 0.5; d <= range; d += 0.35) {
-            Block block = origin.clone().add(dir.clone().multiply(d)).getBlock();
+            int bx = (int) Math.floor(ox + dx * d);
+            int by = (int) Math.floor(oy + dy * d);
+            int bz = (int) Math.floor(oz + dz * d);
+            if (bx == lastX && by == lastY && bz == lastZ) continue;
+            lastX = bx; lastY = by; lastZ = bz;
+            Block block = world.getBlockAt(bx, by, bz);
             if (block.equals(standOn) || block.equals(playerBlock)) continue;
             Material type = block.getType();
             if (type == Material.SNOW || type == Material.POWDER_SNOW) {
@@ -429,11 +469,21 @@ public abstract class BaseHeatVisionAbility implements Ability {
     private void strand(World w, Location origin, Vector dir, double dist,
                         Particle.DustOptions core, Particle.DustOptions glow,
                         boolean fireParticles) {
-        for (double d = 0.5; d <= dist; d += step()) {
-            Location pos = origin.clone().add(dir.clone().multiply(d));
-            w.spawnParticle(Particle.DUST, pos, coreParticles(), 0.01, 0.01, 0.01, 0, core);
-            if (d % 0.9 < step()) w.spawnParticle(Particle.DUST, pos, glowParticles(), 0.005, 0.005, 0.005, 0, glow);
-            if (fireParticles && d % 1.4 < step())
+        double st = step();
+        int coreCount = coreParticles();
+        int glowCount = glowParticles();
+        double ox = origin.getX(), oy = origin.getY(), oz = origin.getZ();
+        double dx = dir.getX(), dy = dir.getY(), dz = dir.getZ();
+        // Reuse a single Location instead of cloning per step (was 2+ object
+        // allocations and 3 config reads per particle point).
+        Location pos = new Location(w, 0, 0, 0);
+        for (double d = 0.5; d <= dist; d += st) {
+            pos.setX(ox + dx * d);
+            pos.setY(oy + dy * d);
+            pos.setZ(oz + dz * d);
+            if (coreCount > 0) w.spawnParticle(Particle.DUST, pos, coreCount, 0.01, 0.01, 0.01, 0, core);
+            if (glowCount > 0 && d % 0.9 < st) w.spawnParticle(Particle.DUST, pos, glowCount, 0.005, 0.005, 0.005, 0, glow);
+            if (fireParticles && d % 1.4 < st)
                 w.spawnParticle(Particle.FLAME, pos, 1, 0.02, 0.02, 0.02, 0.0);
         }
     }

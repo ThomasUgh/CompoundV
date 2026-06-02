@@ -56,9 +56,9 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override public String    getId()          { return id; }
     @Override public String    getDisplayName() { return "The Patriot"; }
     @Override public int getColor()       { return color; }
-    @Override protected float  size()           { return (float) Math.max(0.01, plugin.getConfig().getDouble(t("heat_vision_core_size"), isVOne() ? 0.67 : 0.65)); }
-    @Override protected float  glowSize()       { return (float) Math.max(0.01, plugin.getConfig().getDouble(t("heat_vision_glow_size"), isVOne() ? 0.44 : 0.43)); }
-    @Override protected double step()           { return Math.max(0.08, plugin.getConfig().getDouble(t("heat_vision_step"), isVOne() ? 0.304 : 0.314));  }
+    @Override protected float  size()           { return (float) Math.max(0.01, patriotParticleDouble("core_size", super.size())); }
+    @Override protected float  glowSize()       { return (float) Math.max(0.01, patriotParticleDouble("glow_size", super.glowSize())); }
+    @Override protected double step()           { return Math.max(0.08, patriotParticleDouble("step", super.step()));  }
     @Override protected int    coreParticles()  { return Math.max(0, plugin.getConfig().getInt(t("heat_vision_core_particles"), 2)); }
     @Override protected int    glowParticles()  { return Math.max(0, plugin.getConfig().getInt(t("heat_vision_glow_particles"), 1)); }
     @Override protected int    impactParticles(){ return Math.max(0, plugin.getConfig().getInt(t("heat_vision_impact_particles"), isVOne() ? 19 : 17)); }
@@ -79,6 +79,18 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     @Override protected String killMessageKey() { return "death_messages.the_patriot_heat_vision"; }
     @Override protected String activeSoundConfigPath() { return t("heat_vision_active_sound"); }
     @Override protected String fallbackActiveSoundConfigPath() { return s("heat_vision_active_sound"); }
+
+    private double patriotParticleDouble(String key, double fallback) {
+        double global = plugin.getConfig().getDouble("heat_vision.particles." + key, fallback);
+
+        // Same behavior as normal Heatvision: global particle values are the
+        // master controls. Per-Patriot particle values only win when explicitly
+        // enabled for the tier.
+        if (plugin.getConfig().getBoolean(t("custom_heat_vision_particles"), false)) {
+            return plugin.getConfig().getDouble(t("heat_vision_" + key), global);
+        }
+        return global;
+    }
 
     @Override
     protected double range() {
@@ -345,9 +357,9 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
 
         Vector mid = start.clone().add(end).multiply(0.5);
         Location searchCenter = new Location(world, mid.getX(), mid.getY(), mid.getZ());
-        double searchX = Math.abs(end.getX() - start.getX()) * 0.5 + radius + 1.5;
-        double searchY = Math.abs(end.getY() - start.getY()) * 0.5 + radius + 1.5;
-        double searchZ = Math.abs(end.getZ() - start.getZ()) * 0.5 + radius + 1.5;
+        double searchX = Math.abs(end.getX() - start.getX()) * 0.5 + radius + 2.25;
+        double searchY = Math.abs(end.getY() - start.getY()) * 0.5 + radius + 2.25;
+        double searchZ = Math.abs(end.getZ() - start.getZ()) * 0.5 + radius + 2.25;
 
         Set<UUID> damaged = new HashSet<>();
         for (Entity entity : world.getNearbyEntities(searchCenter, searchX, searchY, searchZ)) {
@@ -374,7 +386,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         double radiusSquared = radius * radius;
         Location feet = target.getLocation();
         Vector base = feet.toVector().add(new Vector(0, 0.35, 0));
-        Vector body = feet.toVector().add(new Vector(0, Math.min(1.25, Math.max(0.65, target.getEyeHeight() * 0.55)), 0));
+        Vector body = feet.toVector().add(new Vector(0, Math.min(1.45, Math.max(0.70, target.getEyeHeight() * 0.62)), 0));
         Vector eye = target.getEyeLocation().toVector();
         return distanceSquaredToSegment(base, start, end) <= radiusSquared
                 || distanceSquaredToSegment(body, start, end) <= radiusSquared

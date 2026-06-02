@@ -56,7 +56,9 @@ public final class AbilityKillTracker {
     private static boolean shouldDirectFallback(CompoundV plugin, LivingEntity target, Player attacker,
                                                 boolean allowDirectFallback, double healthBefore,
                                                 double absorptionBefore) {
-        if (!allowDirectFallback) return false;
+        boolean globalFallback = plugin.getConfig().getBoolean(
+                "combat.protection_bypass.apply_to_all_ability_damage", true);
+        if (!allowDirectFallback && !globalFallback) return false;
         if (target.isDead() || target.getHealth() <= 0.0) return false;
         if (target instanceof Player targetPlayer
                 && (targetPlayer.getGameMode() == GameMode.CREATIVE || targetPlayer.getGameMode() == GameMode.SPECTATOR)) {
