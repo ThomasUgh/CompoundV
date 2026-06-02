@@ -106,8 +106,10 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.enabled", true);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.min_hearts", 1.0);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.max_hearts", 2.0);
-        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.speed_dash.damage.radius", 1.05, 1.75);
-        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.radius", 1.75);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.speed_dash.damage.radius", 1.05, 2.20);
+        changed |= replaceIfNumericEquals("abilities.the_patriot.shared.speed_dash.damage.radius", 1.75, 2.20);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.radius", 2.20);
+        changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.path_step", 0.45);
         changed |= setIfMissing("abilities.the_patriot.shared.speed_dash.damage.max_targets", 8);
 
         changed |= removeIfPresent("heat_vision.stages.stage_1.core_size");

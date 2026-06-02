@@ -350,7 +350,8 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         double length = delta.length();
         if (length < 0.25) return;
 
-        double radius = Math.max(0.35, plugin.getConfig().getDouble(s("speed_dash.damage.radius"), 1.75));
+        double radius = Math.max(0.35, plugin.getConfig().getDouble(s("speed_dash.damage.radius"), 2.20));
+        double pathStep = Math.max(0.20, plugin.getConfig().getDouble(s("speed_dash.damage.path_step"), 0.45));
         int maxTargets = Math.max(1, plugin.getConfig().getInt(s("speed_dash.damage.max_targets"), 8));
         double minHearts = Math.max(0.0, plugin.getConfig().getDouble(s("speed_dash.damage.min_hearts"), 1.0));
         double maxHearts = Math.max(minHearts, plugin.getConfig().getDouble(s("speed_dash.damage.max_hearts"), 2.0));
@@ -367,7 +368,7 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
             if (!target.isValid() || target.isDead()) continue;
             if (target instanceof Player playerTarget && (playerTarget.getGameMode() == org.bukkit.GameMode.CREATIVE || playerTarget.getGameMode() == org.bukkit.GameMode.SPECTATOR)) continue;
-            if (!isNearSpeedDashPath(start, end, target, radius)) continue;
+            if (!isNearSpeedDashPath(start, end, target, radius) && !didSpeedDashSampleHit(start, end, target, radius, pathStep)) continue;
             if (!damaged.add(target.getUniqueId())) continue;
 
             double hearts = minHearts + ThreadLocalRandom.current().nextDouble(maxHearts - minHearts + 0.0001);
@@ -391,6 +392,28 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         return distanceSquaredToSegment(base, start, end) <= radiusSquared
                 || distanceSquaredToSegment(body, start, end) <= radiusSquared
                 || distanceSquaredToSegment(eye, start, end) <= radiusSquared;
+    }
+
+    private boolean didSpeedDashSampleHit(Vector start, Vector end, LivingEntity target, double radius, double pathStep) {
+        Vector delta = end.clone().subtract(start);
+        double length = delta.length();
+        if (length < 0.001) return false;
+
+        int samples = Math.max(2, (int) Math.ceil(length / pathStep));
+        double radiusSquared = radius * radius;
+        org.bukkit.util.BoundingBox box = target.getBoundingBox().expand(radius, 0.75, radius);
+        for (int i = 0; i <= samples; i++) {
+            Vector point = start.clone().add(delta.clone().multiply(i / (double) samples));
+            if (box.contains(point)
+                    || box.contains(point.clone().add(new Vector(0, -0.45, 0)))
+                    || box.contains(point.clone().add(new Vector(0, 0.45, 0)))) {
+                return true;
+            }
+            if (target.getLocation().toVector().add(new Vector(0, 0.9, 0)).distanceSquared(point) <= radiusSquared) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private double distanceSquaredToSegment(Vector point, Vector start, Vector end) {
