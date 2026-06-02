@@ -336,6 +336,9 @@ abilities:
     impact_path_step: 0.28
     impact_cooldown_ms: 750
     impact_knockback: 1.15
+
+  # The Veteran: Sneak + Left-Click charges a heavy chest blast.
+  # Lower defaults avoid public-server ping spikes. Use /compoundv reload after config changes.
   the_veteran:
     resistance_level: 4
     strength_level: 5
@@ -343,29 +346,65 @@ abilities:
     charge_duration_ticks: 100
     burst_cooldown_ms: 300000
 
-    # Main blast around the player.
-    ground_zero_radius: 14.0
-    ground_zero_damage: 525.0
-    ground_zero_particle_multiplier: 0.35
+    ground_zero:
+      enabled: true
+      radius: 12.0
+      damage_hearts: 5.0
+      scale_damage_by_distance: false
+      player_damage_multiplier: 1.0
+      entity_damage_multiplier: 1.0
+      max_targets: 32
+      particles_enabled: true
+      particle_multiplier: 0.16
+      sounds_enabled: true
+      set_fire: false
 
-    # Chest beam: range, hit radius and damage strength.
-    beam_duration_ticks: 70
-    beam_range: 50.0
-    beam_radius: 1.25
-    beam_damage_multiplier: 5.0
-    beam_player_damage_multiplier: 0.0
+    chest_beam:
+      enabled: true
+      duration_ticks: 70
+      tick_period: 6
+      range: 46.0
+      # Beam thickness (blocks). Affects both the visual strand spread and the
+      # carve/hit width. Raised from 1.20 for a chunkier Soldier-Boy beam.
+      radius: 1.6
+      damage_hearts_per_tick: 1.0
+      damage_interval_ticks: 6
+      player_damage_enabled: true
+      player_damage_multiplier: 1.0
+      entity_damage_multiplier: 1.0
+      particles_enabled: true
+      particle_interval_ticks: 12
+      particle_step: 1.55
+      particle_multiplier: 0.18
+      particle_start_distance: 0.7
+      hit_particles: 1
+      entity_scan_interval_ticks: 12
+      max_entity_hits_per_pulse: 4
+      sounds_enabled: true
+      block_damage:
+        enabled: true
+        ignite_blocks: false
+        # interval_ticks MUST be a multiple of tick_period (6) or pulses won't
+        # align. 6 = break on every beam pulse for strong, consistent carving.
+        interval_ticks: 6
+        max_blocks_per_pulse: 8
+        hits_to_break: 1
+        multiplier: 1.0
+        # surface_only true keeps it from hollowing huge volumes (lag-safe);
+        # it still eats through walls layer by layer.
+        surface_only: true
+        block_step: 1.0
+        block_particles: 1
 
-    # Block damage. Keep max_blocks_per_pulse low on public servers.
-    beam_break_blocks: true
-    beam_ignite_blocks: true
-    beam_max_blocks_per_pulse: 1
-    beam_block_hits_to_break: 7
-    beam_block_damage_multiplier: 1.0
-
-    # Visual mushroom cloud after the blast. Disable if players still get ping spikes.
-    mushroom_cloud_enabled: true
-    mushroom_cloud_duration_ticks: 500
-    mushroom_cloud_particle_multiplier: 0.30
+    mushroom_cloud:
+      enabled: true
+      delay_after_beam_ticks: 30
+      duration_ticks: 160
+      period_ticks: 40
+      height: 13.0
+      radius: 6.0
+      particle_multiplier: 0.10
+      sound_duration_ticks: 0
 
   # The Diver: F uses Riptide Dash. Sneak + Left-Click toggles Sonar.
   the_diver:
