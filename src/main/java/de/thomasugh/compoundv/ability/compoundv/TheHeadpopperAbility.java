@@ -2,8 +2,6 @@ package de.thomasugh.compoundv.ability.compoundv;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
-import de.thomasugh.compoundv.data.CompoundPotion;
-import de.thomasugh.compoundv.data.PlayerAbilityData;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.AbilityKillTracker;
@@ -22,7 +20,6 @@ import org.bukkit.util.RayTraceResult;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Locale;
 import java.util.UUID;
 
 public class TheHeadpopperAbility implements Ability {
@@ -130,7 +127,6 @@ public class TheHeadpopperAbility implements Ability {
             if (!(entity instanceof LivingEntity target) || target.equals(player)) continue;
             if (target.getLocation().distanceSquared(center) > radius * radius) continue;
             double damage = Math.max(0.0, target.getHealth() * Math.max(0.0, ratio));
-            damage *= targetDamageMultiplier(target);
             Location loc = target.getLocation().add(0, Math.min(1.4, Math.max(0.8, target.getEyeHeight())), 0);
             AbilityKillTracker.damage(plugin, target, player, damage, "death_messages.the_headpopper", false);
             world.spawnParticle(Particle.DUST, loc, 22, 0.25, 0.28, 0.25, 0,
@@ -176,11 +172,10 @@ public class TheHeadpopperAbility implements Ability {
         }
         activeMarkedTargets.remove(player.getUniqueId());
         cooldownUntil.put(player.getUniqueId(), System.currentTimeMillis()
-                + plugin.getConfig().getLong("abilities.the_headpopper.cooldown_ms", 40000L));
-        double damage = plugin.getConfig().getDouble("abilities.the_headpopper.damage_hearts", 20.0) * 2.0;
+                + plugin.getConfig().getLong("abilities.the_headpopper.cooldown_ms", 20000L));
+        double damage = plugin.getConfig().getDouble("abilities.the_headpopper.damage_hearts", 12.5) * 2.0;
         double mobMultiplier = plugin.getConfig().getDouble("abilities.the_headpopper.mob_damage_multiplier", 2.5);
         if (!(target instanceof Player)) damage *= Math.max(0.0, mobMultiplier);
-        damage *= targetDamageMultiplier(target);
         Location loc = target.getLocation().add(0, Math.min(1.4, Math.max(0.8, target.getEyeHeight())), 0);
         World world = target.getWorld();
         world.spawnParticle(Particle.DUST, loc, 46, 0.35, 0.35, 0.35, 0,
@@ -211,20 +206,6 @@ public class TheHeadpopperAbility implements Ability {
         target.removePotionEffect(PotionEffects.SLOWNESS);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_headpopper.cancelled"));
         player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 0.38f, 0.65f);
-    }
-
-    private double targetDamageMultiplier(LivingEntity target) {
-        if (!isVOneTarget(target)) return 1.0;
-        return Math.max(0.0, plugin.getConfig().getDouble(
-                "abilities.the_headpopper.v_one_target_damage_multiplier", 0.5));
-    }
-
-    private boolean isVOneTarget(LivingEntity target) {
-        if (!(target instanceof Player player)) return false;
-        PlayerAbilityData data = plugin.getAbilityManager().getData(player);
-        if (data == null) return false;
-        if (data.potionType() == CompoundPotion.V_ONE) return true;
-        return data.abilityId() != null && data.abilityId().toLowerCase(Locale.ROOT).endsWith("_v_one");
     }
 
     private void renderMark(LivingEntity target) {

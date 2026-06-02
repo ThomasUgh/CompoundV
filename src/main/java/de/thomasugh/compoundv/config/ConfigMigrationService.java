@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class ConfigMigrationService {
 
-    private static final int CURRENT_CONFIG_VERSION = 4;
+    private static final int CURRENT_CONFIG_VERSION = 5;
 
     private final JavaPlugin plugin;
 
@@ -145,24 +145,23 @@ public final class ConfigMigrationService {
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_max_horizontal_velocity");
         changed |= removeIfPresent("abilities.bloodweaver.shared.rupture.knockback_max_vertical_velocity");
 
-        changed |= replaceIfNumericEquals("abilities.the_headpopper.damage_hearts", 12.5, 20.0);
-        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 20000, 40000);
-        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 30000, 40000);
-        changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 20.0);
-        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 40000);
-        changed |= setIfMissing("abilities.the_headpopper.v_one_target_damage_multiplier", 0.5);
         changed |= setIfMissing("abilities.the_runner.resistance_level", 1);
         changed |= setIfMissing("abilities.the_runner.strength_level", 2);
         changed |= setIfMissing("abilities.the_runner.extra_hearts", 5.0);
         changed |= setIfMissing("abilities.the_runner.attack_speed_bonus", 1024.0);
-        if (!plugin.getConfig().contains("abilities.the_runner.speed_levels")
-                || plugin.getConfig().getIntegerList("abilities.the_runner.speed_levels").equals(java.util.List.of(10, 11, 12, 15))) {
-            plugin.getConfig().set("abilities.the_runner.speed_levels", java.util.List.of(11, 12, 15, 20));
-            changed = true;
-        }
-        if (plugin.getConfig().getInt("abilities.the_runner.default_speed_level", 10) < 11) {
-            plugin.getConfig().set("abilities.the_runner.default_speed_level", 11);
-            changed = true;
+        if (allowValueRewrites) {
+            if (!plugin.getConfig().contains("abilities.the_runner.speed_levels")
+                    || plugin.getConfig().getIntegerList("abilities.the_runner.speed_levels").equals(java.util.List.of(10, 11, 12, 15))) {
+                plugin.getConfig().set("abilities.the_runner.speed_levels", java.util.List.of(11, 12, 15, 20));
+                changed = true;
+            }
+            if (plugin.getConfig().getInt("abilities.the_runner.default_speed_level", 10) < 11) {
+                plugin.getConfig().set("abilities.the_runner.default_speed_level", 11);
+                changed = true;
+            }
+        } else {
+            changed |= setIfMissing("abilities.the_runner.speed_levels", java.util.List.of(11, 12, 15, 20));
+            changed |= setIfMissing("abilities.the_runner.default_speed_level", 11);
         }
         changed |= setIfMissing("abilities.the_runner.impact_min_speed_level", 11);
         changed |= setIfMissing("abilities.the_runner.impact_base_damage_hearts", 6.0);
@@ -195,6 +194,10 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.max_blocks_per_pulse", 2.0, 8);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.block_step", 1.4, 1.0);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.radius", 1.20, 1.6);
+        // v5: reduce Chest Beam block damage by 25% (budget multiplier 1.0 -> 0.75).
+        // Chains off the v4 value, so a server coming from 1.1.3 or the first 1.1.4
+        // build lands on 0.75 exactly once; entity/player damage is unaffected.
+        changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.multiplier", 1.0, 0.75);
         changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud.duration_ticks", 220.0, 160);
         changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud.period_ticks", 30.0, 40);
         changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud.height", 18.0, 13.0);
@@ -235,7 +238,7 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.interval_ticks", 6);
         changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.max_blocks_per_pulse", 8);
         changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.hits_to_break", 1);
-        changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.multiplier", 1.0);
+        changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.multiplier", 0.75);
         changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.surface_only", true);
         changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.block_step", 1.0);
         changed |= setIfMissing("abilities.the_veteran.chest_beam.block_damage.block_particles", 1);
@@ -991,13 +994,11 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_headpopper.regeneration_level", 1);
         changed |= setIfMissing("abilities.the_headpopper.range", 30.0);
         changed |= setIfMissing("abilities.the_headpopper.countdown_seconds", 3);
-        changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 20.0);
+        changed |= setIfMissing("abilities.the_headpopper.damage_hearts", 12.5);
         changed |= setIfMissing("abilities.the_headpopper.mob_damage_multiplier", 2.5);
         changed |= setIfMissing("abilities.the_headpopper.slowness_amplifier", 2);
-        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 30000.0, 40000);
-        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 20000.0, 40000);
-        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 40000);
-        changed |= setIfMissing("abilities.the_headpopper.v_one_target_damage_multiplier", 0.5);
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.cooldown_ms", 30000.0, 20000);
+        changed |= setIfMissing("abilities.the_headpopper.cooldown_ms", 20000);
         changed |= setIfMissing("abilities.the_headpopper.area_radius", 10.0);
         changed |= setIfMissing("abilities.the_headpopper.area_damage_health_percent", 0.25);
         changed |= setIfMissing("abilities.the_headpopper.area_cooldown_ms", 120000);
