@@ -383,7 +383,6 @@ abilities:
         max_blocks_per_pulse: 8
         hits_to_break: 1
         # Scales the per-pulse block-break budget (8 * 0.75 = 6 blocks/pulse).
-        # 0.75 = 25% less block damage than the full-strength 1.1.4 value.
         # Does NOT affect entity/player damage (those are separate multipliers).
         multiplier: 0.75
         # surface_only true keeps it from hollowing huge volumes (lag-safe);

@@ -89,12 +89,10 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("heat_vision.stages.stage_2.active_sound.pitch", 0.90);
         changed |= setIfMissing("heat_vision.stages.stage_3.active_sound.pitch", 1.05);
         changed |= setIfMissing("heat_vision.stages.stage_4.active_sound.pitch", 1.20);
-        // v1.1.4 Folia/performance: throttle cosmetic beam rendering and along-beam block effects.
         changed |= setIfMissing("heat_vision.particles.render_interval_ticks", 2);
         changed |= setIfMissing("heat_vision.block_effect_interval_ticks", 4);
         changed |= setIfMissing("combat.protection_bypass.apply_to_all_ability_damage", true);
 
-        // 1.1.3 compact-config additions.
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_range", 44.0);
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_hearts", 4.5);
         changed |= setIfMissing("abilities.the_patriot.compound_v.heat_vision_damage_multiplier", 1.0);
@@ -185,18 +183,11 @@ public final class ConfigMigrationService {
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.interval_ticks", 20.0, 12);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.hits_to_break", 10.0, 2);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.max_blocks_per_pulse", 1.0, 2);
-        // v4: stronger Chest Beam block damage + slightly thicker beam.
-        // These chain off the older values above so a stock 1.1.3 config lands
-        // on the new strong defaults exactly once, while admin-tuned values
-        // (anything not equal to the listed old value) are left untouched.
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.interval_ticks", 12.0, 6);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.hits_to_break", 2.0, 1);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.max_blocks_per_pulse", 2.0, 8);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.block_step", 1.4, 1.0);
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.radius", 1.20, 1.6);
-        // v5: reduce Chest Beam block damage by 25% (budget multiplier 1.0 -> 0.75).
-        // Chains off the v4 value, so a server coming from 1.1.3 or the first 1.1.4
-        // build lands on 0.75 exactly once; entity/player damage is unaffected.
         changed |= replaceIfNumericEquals("abilities.the_veteran.chest_beam.block_damage.multiplier", 1.0, 0.75);
         changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud.duration_ticks", 220.0, 160);
         changed |= replaceIfNumericEquals("abilities.the_veteran.mushroom_cloud.period_ticks", 30.0, 40);
