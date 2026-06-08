@@ -1,6 +1,7 @@
 package de.thomasugh.compoundv.ability.vone;
 
 import de.thomasugh.compoundv.CompoundV;
+import de.thomasugh.compoundv.ability.shared.BaseHeatVisionAbility;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.server.TaskHandle;
 import de.thomasugh.compoundv.util.PotionEffects;
@@ -18,13 +19,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Plays the short "ascension" cinematic when a player who already holds The
- * Patriot drinks V One (Patriot -&gt; The Patriot V One). The player is rooted,
- * their head snaps upward, and a tall heat-vision beam fires straight up for a
- * few seconds before control is returned. Purely cosmetic / control-locking; it
- * does not grant or change abilities itself.
- */
 public final class PatriotAscensionCinematic {
 
     private static final String BASE = "abilities.the_patriot_v_one.ascension_cinematic";
@@ -36,7 +30,6 @@ public final class PatriotAscensionCinematic {
         this.plugin = plugin;
     }
 
-    /** True while the player is locked inside the cinematic (input should be ignored). */
     public boolean isLocked(UUID uuid) {
         return uuid != null && active.contains(uuid);
     }
@@ -52,19 +45,22 @@ public final class PatriotAscensionCinematic {
         if (!plugin.getConfig().getBoolean(BASE + ".enabled", true)) return;
 
         final UUID uuid = player.getUniqueId();
-        if (!active.add(uuid)) return; // already running for this player
+        if (!active.add(uuid)) return;
 
         final long chargeTicks = Math.max(0L, plugin.getConfig().getLong(BASE + ".charge_up_ticks", 40L));
         final long beamTicks = Math.max(20L, plugin.getConfig().getLong(BASE + ".beam_duration_ticks", 80L));
-        final double height = Math.max(8.0, plugin.getConfig().getDouble(BASE + ".beam_height", 100.0));
+        final double height = Math.max(8.0, plugin.getConfig().getDouble(BASE + ".beam_height", 110.0));
         final long totalTicks = chargeTicks + beamTicks;
 
         final Location anchor = player.getLocation().clone();
         final float lockedYaw = anchor.getYaw();
         final float originalWalk = safeWalkSpeed(player);
 
-        // Lock the player in place. Flight is re-granted automatically by the
-        // ability's own onTick once the lock is released.
+        final BaseHeatVisionAbility heatVision = plugin.getRegistry().get("the_patriot_v_one")
+                .filter(a -> a instanceof BaseHeatVisionAbility)
+                .map(a -> (BaseHeatVisionAbility) a)
+                .orElse(null);
+
         player.setSprinting(false);
         player.setFlying(false);
         player.setAllowFlight(false);
@@ -88,21 +84,17 @@ public final class PatriotAscensionCinematic {
                     return;
                 }
 
-                // Keep them rooted. The ability's own onTick re-grants flight every
-                // tick, so we must re-assert the lock here as well.
+                forceLookUp(p, anchor, lockedYaw);
                 p.setVelocity(new Vector(0, 0, 0));
                 if (p.isFlying() || p.getAllowFlight()) {
                     p.setFlying(false);
                     p.setAllowFlight(false);
                 }
-                if (t % 8L == 0L) {
-                    forceLookUp(p, anchor, lockedYaw);
-                }
 
                 if (t < chargeTicks) {
                     renderChargeUp(p, anchor, t, chargeTicks);
                 } else {
-                    renderBeam(p, anchor, height, t - chargeTicks);
+                    renderBeam(p, heatVision, height, t - chargeTicks);
                 }
 
                 t++;
@@ -136,31 +128,27 @@ public final class PatriotAscensionCinematic {
         }
     }
 
-    private void renderBeam(Player p, Location anchor, double height, long beamTick) {
-        // Throttle the heavy vertical column to every other tick for performance.
-        if (beamTick % 2L != 0L) {
-            p.getWorld().playSound(p.getEyeLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.18f, 0.6f);
-            return;
-        }
+    private void renderBeam(Player p, BaseHeatVisionAbility heatVision, double length, long beamTick) {
         World w = p.getWorld();
         Location eye = p.getEyeLocation();
-        double ox = eye.getX(), oy = eye.getY(), oz = eye.getZ();
 
-        Particle.DustOptions core = new Particle.DustOptions(Color.fromRGB(255, 235, 60), 1.4f);
-        Particle.DustOptions outer = new Particle.DustOptions(Color.fromRGB(255, 120, 0), 1.0f);
-
-        // Single straight column upward. Step 0.8 keeps packet count bounded
-        // (~125 points for a 100-block beam) and only one strand is drawn.
-        for (double d = 0.0; d <= height; d += 0.8) {
-            double y = oy + d;
-            w.spawnParticle(Particle.DUST, ox, y, oz, 1, 0.04, 0.0, 0.04, 0, core);
-            if (((int) d) % 2 == 0) {
-                w.spawnParticle(Particle.DUST, ox, y, oz, 1, 0.12, 0.0, 0.12, 0, outer);
+        if (beamTick % 2L == 0L) {
+            if (heatVision != null) {
+                heatVision.renderUpwardCinematicBeam(p, length);
+            } else {
+                double ox = eye.getX(), oy = eye.getY(), oz = eye.getZ();
+                Particle.DustOptions core = new Particle.DustOptions(Color.fromRGB(45, 210, 255), 1.2f);
+                for (double d = 0.5; d <= length; d += 0.8) {
+                    w.spawnParticle(Particle.DUST, ox, oy + d, oz, 1, 0.03, 0.0, 0.03, 0, core);
+                }
             }
         }
-        w.spawnParticle(Particle.FLAME, ox, oy + 0.4, oz, 6, 0.12, 0.2, 0.12, 0.01);
-        w.playSound(eye, Sound.ENTITY_BLAZE_SHOOT, 0.35f, 0.55f);
-        w.playSound(eye, Sound.ITEM_FIRECHARGE_USE, 0.25f, 0.6f);
+
+        w.spawnParticle(Particle.FLAME, eye.getX(), eye.getY() + 0.4, eye.getZ(), 4, 0.12, 0.2, 0.12, 0.01);
+        if (beamTick % 4L == 0L) {
+            w.playSound(eye, Sound.ENTITY_BLAZE_SHOOT, 0.35f, 0.55f);
+            w.playSound(eye, Sound.ITEM_FIRECHARGE_USE, 0.22f, 0.6f);
+        }
     }
 
     private void finish(Player p, Location anchor, double height) {
@@ -189,17 +177,17 @@ public final class PatriotAscensionCinematic {
     }
 
     private void forceLookUp(Player p, Location anchor, float lockedYaw) {
-        Location look = p.getLocation();
-        look.setX(anchor.getX());
-        look.setY(anchor.getY());
-        look.setZ(anchor.getZ());
-        look.setYaw(lockedYaw);
-        look.setPitch(-90f);
+        Location look = new Location(p.getWorld(), anchor.getX(), anchor.getY(), anchor.getZ(), lockedYaw, -90f);
+        if (SchedulerAdapter.isFolia()) {
+            try {
+                p.getClass().getMethod("teleportAsync", Location.class).invoke(p, look);
+                return;
+            } catch (Throwable ignored) {
+            }
+        }
         try {
             p.teleport(look);
         } catch (Throwable ignored) {
-            // Folia may reject a synchronous teleport in rare cases; the freeze
-            // effects still hold the player, so this is non-fatal.
         }
     }
 
@@ -215,7 +203,6 @@ public final class PatriotAscensionCinematic {
         try {
             p.setWalkSpeed(Math.max(-1f, Math.min(1f, speed)));
         } catch (Throwable ignored) {
-            // Ignore invalid speed values defensively.
         }
     }
 

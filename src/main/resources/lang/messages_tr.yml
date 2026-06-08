@@ -325,6 +325,8 @@
   "vomit_cooldown": "&2Zehirli Kusmuk &chazır olmasına {seconds}sn"
 "the_countess":
   "fireball_cooldown": "&cAteş Topu &chazır olmasına {seconds}sn"
+"the_patriot_v_one":
+  "ascension_busy": "<prefix>&7V One yükselişini kanalize ediyorsun. Bitmesini bekle."
 "the_headpopper":
   "no_target": "&cNo valid target."
   "cooldown": "&cHeadpop hazır olmasına {seconds}sn"

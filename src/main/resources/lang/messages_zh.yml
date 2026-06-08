@@ -298,6 +298,8 @@ toxic_cloud:
   vomit_cooldown: '&2毒吐 &c{seconds} 秒后可再用'
 the_countess:
   fireball_cooldown: '&c火球 {seconds} 秒后可再用'
+the_patriot_v_one:
+  ascension_busy: "<prefix>&7你正在引导 V One 升华。请等待其完成。"
 the_headpopper:
   no_target: '&c没有有效目标。'
   cooldown: '&c爆头 {seconds} 秒后可再用'

@@ -466,6 +466,19 @@ public abstract class BaseHeatVisionAbility implements Ability {
         };
     }
 
+    public void renderUpwardCinematicBeam(Player player, double length) {
+        World w = player.getWorld();
+        Location eye = player.getEyeLocation();
+        Vector dir = new Vector(0, 1, 0);
+        Vector right = new Vector(0.12, 0, 0);
+        Location lEye = eye.clone().subtract(right);
+        Location rEye = eye.clone().add(right);
+        Particle.DustOptions core = new Particle.DustOptions(coreColor(), size());
+        Particle.DustOptions glow = new Particle.DustOptions(glowColor(), glowSize());
+        strand(w, lEye, dir, length, core, glow, fireParticles());
+        strand(w, rEye, dir, length, core, glow, fireParticles());
+    }
+
     private void strand(World w, Location origin, Vector dir, double dist,
                         Particle.DustOptions core, Particle.DustOptions glow,
                         boolean fireParticles) {

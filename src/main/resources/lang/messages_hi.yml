@@ -298,6 +298,8 @@ toxic_cloud:
   vomit_cooldown: '&2ज़हर Vomit &cतैयार होगा {seconds}s'
 the_countess:
   fireball_cooldown: '&cफायरबॉल &cतैयार होगा {seconds}s'
+the_patriot_v_one:
+  ascension_busy: "<prefix>&7आप V One उत्थान को चैनल कर रहे हैं। समाप्त होने तक प्रतीक्षा करें।"
 the_headpopper:
   no_target: '&cकोई मान्य लक्ष्य नहीं।'
   cooldown: '&cHeadpop तैयार होगा {seconds}s'

@@ -298,6 +298,8 @@ toxic_cloud:
   vomit_cooldown: '&2Яд Vomit &cготово через {seconds}s'
 the_countess:
   fireball_cooldown: '&cОгненный шар &cготово через {seconds}s'
+the_patriot_v_one:
+  ascension_busy: "<prefix>&7Вы вызываете восхождение V One. Подождите, пока оно завершится."
 the_headpopper:
   no_target: '&cНет допустимой цели.'
   cooldown: '&cHeadpop готово через {seconds}s'
