@@ -28,6 +28,7 @@ import de.thomasugh.compoundv.ability.shared.ThePatriotAbility;
 import de.thomasugh.compoundv.ability.vone.SizeChangerAbility;
 import de.thomasugh.compoundv.ability.vone.SonicBoomAbility;
 import de.thomasugh.compoundv.ability.vone.TheVeteranAbility;
+import de.thomasugh.compoundv.ability.vone.PatriotAscensionCinematic;
 import de.thomasugh.compoundv.ability.vone.StormstrikeAbility;
 import de.thomasugh.compoundv.ability.vone.HealAngelAbility;
 import de.thomasugh.compoundv.ability.vone.SubmarineAbility;
@@ -62,6 +63,7 @@ public final class CompoundV extends JavaPlugin {
     private AbilityManager abilityManager;
     private PotionRollManager rollManager;
     private SideEffectManager sideEffectManager;
+    private PatriotAscensionCinematic patriotAscension;
     private PersistenceManager persistence;
     private LocaleManager localeManager;
     private ServerCompatibility compatibility;
@@ -109,6 +111,7 @@ public final class CompoundV extends JavaPlugin {
         registry = new AbilityRegistry();
         persistence = new PersistenceManager(this);
         sideEffectManager = new SideEffectManager(this);
+        patriotAscension = new PatriotAscensionCinematic(this);
         abilityManager = new AbilityManager(this, registry, persistence);
         rollManager = new PotionRollManager(this, abilityManager);
         metricsService = new MetricsService(this);
@@ -209,6 +212,10 @@ public final class CompoundV extends JavaPlugin {
 
     public SideEffectManager getSideEffectManager() {
         return sideEffectManager;
+    }
+
+    public PatriotAscensionCinematic getPatriotAscension() {
+        return patriotAscension;
     }
 
     public LocaleManager getLocaleManager() {

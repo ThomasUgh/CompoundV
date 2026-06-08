@@ -339,6 +339,9 @@ toxic_cloud:
 the_countess:
   fireball_cooldown: "&cFireball &cready in {seconds}s"
 
+the_patriot_v_one:
+  ascension_busy: "<prefix>&7You are channeling the V One ascension. Wait until it finishes."
+
 the_headpopper:
   no_target: "&cNo valid target."
   cooldown: "&cHeadpop ready in {seconds}s"

@@ -105,6 +105,10 @@ public class PlayerActionListener implements Listener {
         e.setCancelled(true);
 
         Player p = e.getPlayer();
+        if (plugin.getPatriotAscension().isLocked(p.getUniqueId())) {
+            p.sendMessage(plugin.getLocaleManager().msg("the_patriot_v_one.ascension_busy"));
+            return;
+        }
         consumeBottle(p, e.getItem());
 
         p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_DRINK, 1.0f, 1.0f);
@@ -193,6 +197,17 @@ public class PlayerActionListener implements Listener {
                 manager.giveAbility(p, upgrade, CompoundPotion.V_ONE, 0L);
                 plugin.getSideEffectManager().afterSuccessfulRoll(p, CompoundPotion.V_ONE);
                 p.sendMessage(plugin.getLocaleManager().msg("potion.v_one_upgrade"));
+                if ("the_patriot_v_one".equalsIgnoreCase(upgrade)) {
+                    long delay = Math.max(1L, plugin.getConfig().getLong(
+                            "abilities.the_patriot_v_one.ascension_cinematic.start_delay_ticks", 45L));
+                    final UUID pid = p.getUniqueId();
+                    SchedulerAdapter.runLater(plugin, p, () -> {
+                        Player target = Bukkit.getPlayer(pid);
+                        if (target != null && target.isOnline()) {
+                            plugin.getPatriotAscension().play(target);
+                        }
+                    }, delay);
+                }
                 return true;
             }
         }
@@ -382,6 +397,11 @@ public class PlayerActionListener implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         if (e.getHand() != EquipmentSlot.HAND && e.getHand() != EquipmentSlot.OFF_HAND) return;
         Player p = e.getPlayer();
+
+        if (plugin.getPatriotAscension().isLocked(p.getUniqueId())) {
+            e.setCancelled(true);
+            return;
+        }
 
         Action a = e.getAction();
         if (a != Action.RIGHT_CLICK_AIR && a != Action.RIGHT_CLICK_BLOCK

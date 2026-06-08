@@ -309,6 +309,21 @@ abilities:
     big_extra_hearts: 0.0
     big_jump_boost_level: 0
 
+  # The Patriot V One: when a player who already has The Patriot drinks V One,
+  # a short cinematic plays (Homelander/Soldier-Boy style): the player is rooted,
+  # looks up, and fires a tall heat-vision beam straight up before control returns.
+  the_patriot_v_one:
+    ascension_cinematic:
+      enabled: true
+      # Delay after drinking V One before the cinematic starts.
+      start_delay_ticks: 45
+      # Charge-up (rooted, swirling particles) before the beam fires.
+      charge_up_ticks: 40
+      # Beam phase length (80 ticks = 4s). The player is locked for this whole time.
+      beam_duration_ticks: 80
+      # How many blocks tall the upward beam reaches.
+      beam_height: 100
+
 
   # The Runner: speed stages. Level 20 is the final high-speed stage with extra impact damage.
   the_runner:
