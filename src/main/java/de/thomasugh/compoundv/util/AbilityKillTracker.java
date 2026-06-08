@@ -71,6 +71,12 @@ public final class AbilityKillTracker {
                 || (permission != null && !permission.isBlank() && attacker.hasPermission(permission));
         if (!permitted) return false;
 
+        if (target instanceof Player
+                && plugin.getConfig().getBoolean("combat.protection_bypass.respect_worldguard_regions", true)
+                && !RegionProtection.isPvpAllowed(attacker, target.getLocation())) {
+            return false;
+        }
+
         double healthAfter = safeHealth(target);
         double absorptionAfter = safeAbsorption(target);
         return healthAfter >= healthBefore - 0.0001 && absorptionAfter >= absorptionBefore - 0.0001;
