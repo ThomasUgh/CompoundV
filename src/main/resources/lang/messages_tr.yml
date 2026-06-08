@@ -513,6 +513,11 @@
   "body_rejection": "<prefix>&cYan etki: &4Body Rejection&7."
   "critical_instability": "<prefix>&4Critical Instability&7. V One vücudunu kısa süreliğine dengesizleştiriyor."
   "no_power": "<prefix>&7No Power&7. V One is unstable, ama yetenek aktif kalır."
+  "minor":
+    "nosebleed": "<prefix>&eYan etki: &cBurun kanaması&7. Serum bedenini zorluyor."
+    "static_discharge": "<prefix>&eYan etki: &bStatik boşalma&7. Enerji üzerinde çıtırdıyor."
+    "dizziness": "<prefix>&eYan etki: &7Baş dönmesi&7. Dünya bir an için dönüyor."
+    "adrenaline_rush": "<prefix>&eYan etki: &aAdrenalin patlaması&7. Kısa bir hız patlaması."
 "v_null":
   "hit_powered": "<prefix>&2V-Null Virus&7 V sistedki enfekte etti. 15 dakika hayatta kal yoksa ölürsün."
   "hit_v_one": "<prefix>&2V-Null Virus&7 sana isabet etti ama V One buna kısmen direniyor."

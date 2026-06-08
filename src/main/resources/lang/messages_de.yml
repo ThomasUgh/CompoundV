@@ -507,6 +507,11 @@ side_effect:
   body_rejection: '<prefix>&cNebenwirkung: &4Body Rejection&7.'
   critical_instability: <prefix>&4Critical Instability&7. V One destabilisiert deinen Körper kurzzeitig.
   no_power: <prefix>&7No Power&7. V One ist instabil, die Fähigkeit bleibt aber aktiv.
+  minor:
+    nosebleed: "<prefix>&eNebenwirkung: &cNasenbluten&7. Das Serum belastet deinen Körper."
+    static_discharge: "<prefix>&eNebenwirkung: &bStatische Entladung&7. Energie knistert von dir ab."
+    dizziness: "<prefix>&eNebenwirkung: &7Schwindel&7. Die Welt dreht sich kurz."
+    adrenaline_rush: "<prefix>&eNebenwirkung: &aAdrenalinschub&7. Ein kurzer Geschwindigkeitsschub."
 v_null:
   hit_powered: <prefix>&2V-Null Virus&7 hat dein V-System infiziert. Überlebe 15 Minuten oder stirb.
   hit_v_one: <prefix>&2V-Null Virus&7 hat dich getroffen, aber V One widersteht teilweise.

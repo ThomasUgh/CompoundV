@@ -476,6 +476,11 @@ side_effect:
   body_rejection: '<prefix>&cसाइड इफेक्ट: &4Body Rejection&7.'
   critical_instability: <prefix>&4Critical Instक्षमता&7. V One destabilizes your body for a short time.
   no_power: <prefix>&7No Power&7. V One is unstable, but the क्षमता remains active.
+  minor:
+    nosebleed: "<prefix>&eदुष्प्रभाव: &cनकसीर&7. सीरम आपके शरीर पर दबाव डालता है।"
+    static_discharge: "<prefix>&eदुष्प्रभाव: &bस्थैतिक झटका&7. ऊर्जा आपके चारों ओर चटकती है।"
+    dizziness: "<prefix>&eदुष्प्रभाव: &7चक्कर&7. दुनिया एक पल के लिए घूमती है।"
+    adrenaline_rush: "<prefix>&eदुष्प्रभाव: &aएड्रेनालाईन उछाल&7. गति का एक छोटा झोंका।"
 v_null:
   hit_powered: <prefix>&2V-Null Virus&7 infected your V system. Survive 15 minutes या die.
   hit_v_one: <prefix>&2V-Null Virus&7 हिट you, but V One partially resists it.

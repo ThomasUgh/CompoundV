@@ -147,11 +147,13 @@ public class AbilityManager {
     }
 
     private void tickAbilities() {
+        if (activeAbility.isEmpty()) return;
+        boolean folia = SchedulerAdapter.isFolia();
         for (UUID uuid : new ArrayList<>(activeAbility.keySet())) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
 
-            if (SchedulerAdapter.isFolia()) {
+            if (folia) {
                 SchedulerAdapter.runNow(plugin, player, () -> tickSingleAbility(uuid, player));
             } else {
                 tickSingleAbility(uuid, player);

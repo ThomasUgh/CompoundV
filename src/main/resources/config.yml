@@ -9,6 +9,7 @@ config-version: 5
 # General
 # ─────────────────────────────────────────────────────────────────────────────
 # Available languages: en, de, es, fr, hi, ru, zh, tr
+# available: en, de, es, fr, hi, ru, zh, tr, fi
 language: en
 
 updates:
@@ -479,6 +480,17 @@ v_null:
 
 side_effects:
   enabled: true
+  # small extra side effects with low chance (percent) on Compound V / V One
+  minor_flavor:
+    enabled: true
+    nosebleed:
+      chance: 2.5
+    static_discharge:
+      chance: 2.0
+    dizziness:
+      chance: 3.0
+    adrenaline_rush:
+      chance: 2.0
   temp_v:
     # Small crash effects applied when Temp V expires. Durations are in seconds.
     expiry_aftereffects:

@@ -545,6 +545,12 @@ side_effect:
   critical_instability: "<prefix>&4Critical Instability&7. V One destabilizes your body for a short time."
   no_power: "<prefix>&7No Power&7. V One is unstable, but the ability remains active."
 
+  minor:
+    nosebleed: "<prefix>&eSide effect: &cNosebleed&7. The serum strains your body."
+    static_discharge: "<prefix>&eSide effect: &bStatic Discharge&7. Energy crackles off you."
+    dizziness: "<prefix>&eSide effect: &7Dizziness&7. The world spins for a moment."
+    adrenaline_rush: "<prefix>&eSide effect: &aAdrenaline Rush&7. A short burst of speed."
+
 v_null:
   hit_powered: "<prefix>&2V-Null Virus&7 infected your V system. Survive 15 minutes or die."
   hit_v_one: "<prefix>&2V-Null Virus&7 hit you, but V One partially resists it."

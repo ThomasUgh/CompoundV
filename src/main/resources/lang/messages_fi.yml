@@ -1,0 +1,731 @@
+language_file_version: 29
+prefix: "&8[&b&lCV&r&8] "
+
+general:
+  no_permission: "<prefix>&cSinulla ei ole oikeutta tähän."
+  player_not_found: "<prefix>&cPelaajaa ei löytynyt."
+  reloaded: "<prefix>&aCompoundV ladattiin uudelleen."
+  not_a_player: "<prefix>&cTätä komentoa voivat käyttää vain pelaajat."
+  only_players: "<prefix>&cTätä komentoa voivat käyttää vain pelaajat."
+
+potion:
+  drinking: "<prefix>&7&bSeerumi&7 aktivoituu..."
+  drink_temp_v: "<prefix>&aTemp V&7 aktivoituu. Kykysi kestää vain rajoitetun ajan."
+  drink_v_one: "<prefix>&3V One&7 aktivoituu. Valmistaudu."
+  drink_anti_v: "<prefix>&cAnti V&7 poistaa aktiivisen kykysi."
+  no_ability: "<prefix>&7Sinulla ei ole aktiivista kykyä."
+  milk_blocked: "<prefix>&cMaito ei voi poistaa Compound V -voimia. Käytä sen sijaan Anti V:tä tai V-Null-mekaniikkaa."
+  no_chances: "<prefix>&cTähän juomaan ei ole määritetty kelvollisia kykyjä. Ota yhteyttä ylläpitäjään."
+  roll_failed: "<prefix>&cSeerumia ei voitu käsitellä. Ota yhteyttä ylläpitäjään."
+
+  drink_v_null: "<prefix>&2V-Null-virus&7 leviää..."
+  temp_v_extended: "<prefix>&aTemp V&7 pidennettiin. Sama kyky, pidempi kesto."
+  compound_v_after_temp: "<prefix>&bCompound V&7 sitoutui väliaikaiseen kykyysi. Pysyvä Compound V -kyky aktivoituu, kun Temp V päättyy."
+  compound_v_delayed_granted: "<prefix>&bCompound V&7 on nyt aktivoitunut pysyvästi."
+  temp_v_blocked_by_compound: "<prefix>&aTemp V&7 ei voi korvata pysyvää Compound V:tä. Vain pieniä sivuvaikutuksia ilmeni."
+  no_effect_compound_active: "<prefix>&7Compound V:llä ei ole vaikutusta, kun sinulla on jo pysyvä kyky. Käytä ensin &cAnti V&7."
+  no_effect_v_one_active: "<prefix>&7V One -järjestelmäsi hylkää lisää V:tä. Mitään ei tapahdu."
+  v_one_upgrade: "<prefix>&3V One&7 paransi nykyistä voimaasi."
+  v_one_no_upgrade: "<prefix>&7V One ei reagoinut tähän kykyyn vielä."
+
+  only_drinkable: "<prefix>&cCompound V -seerumeja voi käyttää vain tavallisina juotavina juomina. V-Null-virus on heitettävä."
+
+ability:
+  granted_header: "<prefix>&8━━━━━━━━ &aKyky avattu &8━━━━━━━━"
+  granted_name: "<prefix>&7Avasit kyvyn &a&l{name}&r&7 juomalla &b{potion}&7."
+  controls_header: "<prefix>&8────── &aHallinta & vaikutukset &8──────"
+  granted_expires: "<prefix>&8• &7Kesto: &e{minutes}min {seconds}s"
+  granted_tip: "<prefix>&8• &7Käytä &f/cv stats&7 milloin tahansa nähdäksesi nykyisen kykysi ja sen hallinnan."
+  granted_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  lost_on_death: "<prefix>&cMenetit kykysi kuollessasi."
+  expired: "<prefix>&eVäliaikainen kykysi on päättynyt."
+  removed_admin: "<prefix>&cYlläpitäjä poisti kykysi."
+  removed_anti_v: "<prefix>&cAnti V poisti kykysi."
+
+  the_patriot:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &cHomelander&7."
+      - "<prefix>&8• &aLentäminen&7 on käytössä automaattisesti."
+      - "<prefix>&8• &cHeat Vision&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vaihtaaksesi. Oletus: &e5 sydäntä&7, &e44 lohkoa&7."
+      - "<prefix>&8• &bXRay&7: &dHiivi + vasen klikkaus ilmaan&7 paljastaaksesi lähellä olevat olennot."
+      - "<prefix>&8• &6Jump Start&7: &dHiivi&7, katso ylös ja hyppää ponnistaaksesi."
+      - "<prefix>&8• &cSpeed Dash&7: &dHiivi + työkalupalkin rullaus&7 syöksyäksesi jopa &e25 lohkoa&7 eteenpäin."
+      - "<prefix>&8• &cForward Leap&7: &dHiivi + hyppy + liiku eteenpäin&7 saadaksesi tasaisen 10–15 lohkon syöksyn."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima&7, &9Kestävyys&7, &dRegeneraatio&7 ja &cbonus-sydämet&7."
+  the_patriot_v_one:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &cHomelander&7."
+      - "<prefix>&8• &aLentäminen&7 on käytössä automaattisesti, vahvemmilla V One -tehosteilla."
+      - "<prefix>&8• &cHeat Vision&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vaihtaaksesi. Oletus: &e4.725 sydäntä&7, &e50 lohkoa&7."
+      - "<prefix>&8• &bXRay&7: &dHiivi + vasen klikkaus ilmaan&7 paljastaaksesi lähellä olevat olennot."
+      - "<prefix>&8• &6Jump Start&7: &dHiivi&7, katso ylös ja hyppää ponnistaaksesi."
+      - "<prefix>&8• &cSpeed Dash&7: &dHiivi + työkalupalkin rullaus&7 syöksyäksesi jopa &e25 lohkoa&7 eteenpäin."
+      - "<prefix>&8• &cForward Leap&7: &dHiivi + hyppy + liiku eteenpäin&7 saadaksesi tasaisen 10–15 lohkon syöksyn."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima&7, &9Kestävyys&7, &dRegeneraatio&7, &6Tulenkestävyys&7 ja &cbonus-sydämet&7."
+  sonic_boom:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &3Bombsight&7."
+      - "<prefix>&8• &aLentäminen&7 on käytössä automaattisesti."
+      - "<prefix>&8• &6Jump Start&7: &dHiivi&7, katso ylös ja hyppää. Vahvempi kuin Flight, hieman heikompi kuin Patriot."
+      - "<prefix>&8• &3Sonic Beam&7: &dHiivi + vasen klikkaus&7 ampuaksesi Warden-tyylisen äänisäteen. Jäähtyminen: &e3s&7."
+      - "<prefix>&8• &cRäjähtävä lähitaistelu&7: joka toinen osuma lisää pienen räjähdyksen; kriittiset osumat tekevät enemmän."
+      - "<prefix>&8• &cRäjähtävä laskeutuminen&7: &dHiivi&7 laskeutuessasi korkean pudotuksen jälkeen. Jäähtyminen: &e60s&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima IV&7 ja &9Kestävyys IV&7."
+  size_changer:
+    description:
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima I&7 ja &9Kestävyys I&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus + katso ylös&7: muutu &52x suuremmaksi&7 pienemmällä bonusvahingolla enintään &e1min&7 ajaksi."
+      - "<prefix>&8• &dHiivi + vasen klikkaus + katso alas&7: muutu &53.5x pienemmäksi&7 enintään &e2min&7 ajaksi."
+      - "<prefix>&8• &7Muuntuneena &dHiivi + vasen klikkaus + katso ylös/alas&7 palauttaa sinut heti normaaliksi."
+      - "<prefix>&8• &7Jäähtyminen alkaa, kun palaat normaaliksi."
+  size_changer_v_one:
+    description:
+      - "<prefix>&8• &3V One -parannus&7 SizeChangerille. Passiivinen: &aVoima I&7 ja &9Kestävyys I&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus + katso ylös&7: noin &53x suuremmaksi&7 pienemmällä V One -bonusvahingolla."
+      - "<prefix>&8• &dHiivi + vasen klikkaus + katso alas&7: noin &57x pienemmäksi&7."
+      - "<prefix>&8• &7Saatavilla vain parantamalla aktiivinen SizeChanger &3V One&7 -seerumilla."
+  heat_vision:
+    description:
+      - "<prefix>&8• &bHeat Vision&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vaihtaaksesi säteen."
+      - "<prefix>&8• &7Tasot: &bI&7 = 1.35 sydäntä / 30 lohkoa, &aII&7 = 2 sydäntä / 35 lohkoa."
+      - "<prefix>&8• &7Lisätasot: &6III&7 = 2.25 sydäntä / 37 lohkoa, &cIV&7 = 2.7 sydäntä / 40 lohkoa."
+      - "<prefix>&8• &7Voi sulattaa jäätä, lumilohkoja ja matalia lumikerroksia sekä kypsentää raakoja olentodrop-esineitä."
+  ice_cube:
+    description:
+      - "<prefix>&8• &bFrost Walker&7: vesi jäätyy allasi liikkuessasi."
+      - "<prefix>&8• &bIce Slide&7: jokainen lohko tuntuu liukkaalta; jäällä saat &eNopeus II&7."
+      - "<prefix>&8• &bIce Spike&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 ampuaksesi pienen jääpiikin. Jäähtyminen: &e3s&7."
+      - "<prefix>&8• &7Jääpiikit antavat &bHidastus III&7 &e5s&7 ajaksi ja &7Heikkous II&7 &e10s&7 ajaksi."
+      - "<prefix>&8• &7Lähitaisteluosumat antavat &bHidastus I&7 &e5s&7 ajaksi."
+      - "<prefix>&8• &bIce Wall&7: &dHiivi + vasen klikkaus&7 luo väliaikaisen seinän noin &e4 lohkoa&7 eteen. Jäähtyminen: &e60s&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima I&7 ja &9Kestävyys I&7."
+  the_diver:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &bThe Deep&7."
+      - "<prefix>&8• &bVedenalainen hengitys&7, &bDelfiinin armo VIII&7, &eNopeus veden alla&7 ja &3Conduit Power II&7 ovat pysyvästi aktiivisia."
+      - "<prefix>&8• &bSonar&7: &dHiivi + vasen klikkaus ilmaan&7 veden alla paljastaaksesi lähellä olevat olennot."
+      - "<prefix>&8• &bRiptide Dash&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vedessä tai sateessa, kuten Riptide IV ilman atrainta."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7 ja &9Kestävyys I&7."
+      - "<prefix>&8• &7Veden alla Voima ja Kestävyys kasvavat &a+1 tasolla&7."
+  jumper:
+    description:
+      - "<prefix>&8• &aVoima I&7 on pysyvästi aktiivinen."
+      - "<prefix>&8• &aJump Burst&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 saadaksesi &aHyppytehoste V&7 ja ei putoamisvahinkoa aktiivisena."
+      - "<prefix>&8• &7Oletusaktiiviaika: &e10s&7. Jäähtyminen: &e15s&7."
+  shockwave:
+    description:
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7 ja &9Kestävyys I&7."
+      - "<prefix>&8• &eShockwave&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vapauttaaksesi 10 lohkon takaisinlyöntiaallon."
+      - "<prefix>&8• &7Vahinko: &c3 sydäntä&7 pelaajille, &c6 sydäntä&7 olennoille. Jäähtyminen: &e2min&7."
+  vision:
+    description:
+      - "<prefix>&8• &bXRay&7: &dHiivi + vasen klikkaus ilmaan&7 paljastaaksesi lähellä olevat olennot."
+      - "<prefix>&8• &7Oletuskantama: &e35 lohkoa&7."
+  the_runner:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &eA-Train&7."
+      - "<prefix>&8• &eRunner Speed&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vaihtaaksesi nopeuksia Speed X, XI, XII, XV ja pois."
+      - "<prefix>&8• &eImpact Run&7: olentojen läpi juokseminen nopeudella X+ tekee &c6 sydäntä&7, plus &c+1 sydän&7 jokaiselta ylimääräiseltä nopeustasolta."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7, &9Kestävyys I&7, &c5 ylimääräistä sydäntä&7 ja ei lähitaistelun jäähtymistä."
+  teleporter:
+    description:
+      - "<prefix>&8• &5Blink&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 teleporttaaksesi jopa &e35 lohkoa&7."
+      - "<prefix>&8• &7Jäähtyminen: &e2 sekuntia&7. Sisältää &aVoima I&7 ja &9Kestävyys I&7."
+  teleporter_v_one:
+    description:
+      - "<prefix>&8• &3V One -parannus&7 Teleporterille."
+      - "<prefix>&8• &5Blink&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 teleporttaaksesi jopa &e50 lohkoa&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7 ja &9Kestävyys III&7."
+  fly:
+    description:
+      - "<prefix>&8• &aLentäminen&7 on käytössä automaattisesti."
+      - "<prefix>&8• &6Light Jump Start&7: &dHiivi&7, katso ylös ja hyppää saadaksesi heikomman ponnistuksen."
+      - "<prefix>&8• &7Sisältää &aVoima I&7 ja &9Kestävyys I&7."
+  speedster:
+    description:
+      - "<prefix>&8• &eSuper Speed&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 kytkeäksesi sen päälle/pois."
+      - "<prefix>&8• &7Sisältää pienen &9Kestävyys&7-bonuksen aktiivisena."
+  strength:
+    description:
+      - "<prefix>&8• &aVoima&7 on pysyvästi aktiivinen, kun sinulla on tämä kyky."
+      - "<prefix>&8• &7Sisältää pienen &9Kestävyys&7-bonuksen."
+  the_ghost:
+    description:
+      - "<prefix>&8• &5Ghost Mode&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 kytkeäksesi näkymättömyyden."
+      - "<prefix>&8• &7Päällä ollessa saat &5Näkymättömyys II&7 eivätkä olennot kohdista sinuun."
+      - "<prefix>&8• &7Olemassa olevat olentokohteet tyhjennetään Ghost Moden ollessa aktiivinen."
+      - "<prefix>&8• &7Passiiviset tehosteet: &9Kestävyys II&7, &aVoima I&7 ja &6Tulenkestävyys&7."
+      - "<prefix>&8• &7Heat Vision ei tee vahinkoa The Ghostille."
+  fire:
+    description:
+      - "<prefix>&8• &cFire Aura&7 sytyttää lähellä olevat viholliset automaattisesti."
+      - "<prefix>&8• &6Tulenkestävyys&7 on käytössä."
+      - "<prefix>&8• &7Sisältää &aVoima I&7 ja &9Kestävyys I&7."
+      - "<prefix>&8• &7Tavanomainen tulen asettaminen &6Tulukset&7 tai &6Tulipallot&7 -esineillä oikealla klikkauksella on estetty, kun omistat tämän kyvyn."
+  the_worm:
+    description:
+      - "<prefix>&8• &7Erittäin nopea kaivaminen &eKiire IV&7 -tehosteella, keskittyen multaan, ruohoon, soraan ja hiekkaan."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 kytkee &bPimeänäön&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima I&7 ja &9Kestävyys I&7."
+  flash_light:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &eStarlight&7. Passiivinen: &aVoima II&7 ja &9Kestävyys I&7."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 sokaisee pelaajat, olennot ja eläimet &e15 lohkon&7 sisällä &e20s&7 ajaksi. Jäähtyminen: &e2min&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7 ampuu 15 lohkon valosäteen, joka tekee &c2 sydäntä&7, pienen palovamman ja takaisinlyönnin."
+  stormstrike:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &eStormfront&7. &3Vain V One&7, sähköisellä jump startilla ja &e2.75x&7 lentonopeudella."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 ampuu sahalaitaisen 35 lohkon salamasäteen enintään &e6s&7 ajaksi. Vahinko: &c2.55 sydäntä&7 ja Hidastus. Ylikuumenee vasta täyden käytön jälkeen."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7 kutsuu &e4 oikeaa salamaniskua&7. Joka 5. lähitaisteluosuma kutsuu salamaniskun."
+      - "<prefix>&8• &7Hiipien laskeutumisisku: 6 salamaniskua 10 lohkon säteellä. Jäähtyminen: &e100s&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima III&7, &9Kestävyys III&7 ja &c10 ylimääräistä sydäntä&7."
+  fire_sonic:
+    description:
+      - "<prefix>&8• &cFlame Aura&7: jokainen lähitaisteluosuma sytyttää voimakkaan palovamman."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 ampuu ohuen liekkisäteen enintään &e2s&7 ajaksi. Vahinkotikit ovat lähellä Heat Visionin nopeutta mutta heikompia ja ylikuumenevat vasta täyden käytön jälkeen."
+  toxic_cloud:
+    description:
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima I&7 ja &9Kestävyys I&7. Immuuni myrkylle."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 vapauttaa myrkkykaasua eteesi antaen &2Myrkky IV&7. Jäähtyminen: &e2min&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7 ampuu lyhyen myrkkyoksennuksen, joka tekee &c1.5 sydäntä&7 ja &2Myrkky IV&7. Lähitaisteluosumat antavat lyhyen Myrkky I:n."
+  the_countess:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &cCrimson Countess&7."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 laukaisee tulipallon. Jäähtyminen: &e5s&7. Vahinko: &c2–4 sydäntä&7."
+      - "<prefix>&8• &7Kaksoishyppy pienellä tulianimaatiolla. Lähitaisteluosumat sytyttävät palovamman."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7, &9Kestävyys I&7 ja &6Tulenkestävyys&7."
+  the_warrior:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &eQueen Maeve&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima III&7, &9Kestävyys II&7, &dRegeneraatio I&7 ja &c10 ylimääräistä sydäntä&7."
+      - "<prefix>&8• &7Korkea putoamissuojaus, vahva kaksoishyppy ja pieni räjähtävä laskeutuminen &e6+ lohkosta&7 vain hiipien."
+  the_headpopper:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &cVictoria Neuman&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7 merkitsee kohteen jopa &e30 lohkon&7 päässä &c3s&7 laskennalle."
+      - "<prefix>&8• &7Vahinko: &c12.5 sydäntä&7, olennot/eläimet saavat &cx2.5&7. Jäähtyminen: &e20s&7."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 vahingoittaa kaikkia lähellä olevia eläviä kohteita &c25% nykyisestä terveydestä&7. Jäähtyminen: &e2min&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7, &9Kestävyys II&7, &dRegeneraatio I&7 ja immuniteetti Heat Visionille."
+  bloodweaver:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &cMarie Moreau&7."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 ampuu &cBlood Lashin&7 jopa &e25 lohkoa&7. Jäähtyminen: &e3s&7."
+      - "<prefix>&8• &7Blood Lash tekee &c2–4 sydäntä&7, hidastaa kohdetta ja aiheuttaa verenvuotoa &e3s&7 ajaksi."
+      - "<prefix>&8• &7Joka &ekolmas lähitaisteluosuma&7 aiheuttaa &e2s&7 verenvuotoa &c0.5 sydäntä/s&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7 ja jatka hiipimistä &e3s&7 loihtiaksesi &cBlood Rupturen&7 &e15 lohkon&7 säteellä."
+      - "<prefix>&8• &7Blood Rupture nostaa kohteet &e3 lohkoa&7, juurruttaa ne &e5s&7, tekee &c2 sydäntä/s&7 ja heittää selviytyjät taakse."
+      - "<prefix>&8• &7Hinta: &c2 sydäntä&7 ja &7Heikkous &e20s&7. Passiivinen: &9Kestävyys III&7, &aVoima II&7, &dRegeneraatio II&7, &c+5 sydäntä&7."
+      - "<prefix>&8• &7Saa &c50% vähemmän Heat Vision -vahinkoa&7."
+  bloodweaver_v_one:
+    description:
+      - "<prefix>&8• &3V One -parannus&7 Bloodweaverille."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 ampuu &cBlood Lashin&7 jopa &e25 lohkoa&7 &c2.5–5 sydämen&7 vahingolla."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7 ja jatka hiipimistä &e3s&7 loihtiaksesi vahvemman &cBlood Rupturen&7."
+      - "<prefix>&8• &7Blood Rupture juurruttaa ja nostaa kohteet &e7s&7, tehden &c2 sydäntä/s&7 ennen kuin heittää selviytyjät taakse."
+      - "<prefix>&8• &7Passiivinen: &9Kestävyys III&7, &aVoima II&7, &dRegeneraatio II&7, &c+10 sydäntä&7 ja &c50% Heat Vision -vähennys&7."
+  spider_weaver:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &fWebweaver&7."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 tai &dHiivi + vasen klikkaus&7 ampuu seittiammuksen. Jäähtyminen: &e5s&7."
+      - "<prefix>&8• &7Kohteet saavat vahinkoa, hidastuvat/kiinnittyvät, ja suuremmat seittirykelmät voivat pysyä jopa &e1min&7."
+      - "<prefix>&8• &7Voi kiivetä seiniä eikä saa putoamisvahinkoa. Passiivinen: &aVoima I&7, &9Kestävyys I&7 ja &dRegeneraatio I&7."
+  heal_angel:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &fPrivate Angel&7. &3Vain V One&7."
+      - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7, &9Kestävyys II&7, &dRegeneraatio II&7 ja &c5 ylimääräistä sydäntä&7."
+      - "<prefix>&8• &dHiivi + lähitaisteluosuma&7 parantaa kohdetta &a10% maksimiterveydestä&7, vähintään &a1 sydämen&7, eikä tee vahinkoa. Jäähtyminen: &e1s&7."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 käskee kohdistetun olennon/eläimen hyökkäämään lähellä olevia kohteita kohti paitsi sinua &e2min&7 ajan. Jäähtyminen: &e30s&7."
+  submarine:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &bTorpedo&7. &3Vain V One&7."
+      - "<prefix>&8• &7Passiivinen: &aVoima II&7, &9Kestävyys II&7, Vedenalainen hengitys, Delfiinin armo ja Conduit Power."
+      - "<prefix>&8• &7Vedessä: &aVoima V&7 ja Regeneraatio."
+      - "<prefix>&8• &dF &8(Vaihda esine kakkoskäteen)&7 käyttää kaksinkertaisen voiman syöksyn &e1s jäähtymisellä&7. &dHiivi + vasen klikkaus&7 kytkee vahvemman sonarin &e65 lohkon&7 kantamalla."
+  the_detonator:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &cNaqib&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7 aloittaa peruutettavan laskennan, sitten vapauttaa valtavan itsekeskeisen räjähdyksen. Jäähtyminen: &e10s&7."
+      - "<prefix>&8• &7Passiivinen: &aVoima II&7, &9Kestävyys I&7 ja &6Tulenkestävyys&7."
+      - "<prefix>&8• &7Lähitaisteluosumat sytyttävät kohteet. Joka 3. osuma laukaisee pienen räjähtävän osuman."
+  the_veteran:
+    description:
+      - "<prefix>&8• &7Tyyli: kuten &eSoldier Boy&7."
+      - "<prefix>&8• &7Korkea &aVoima&7, &9Kestävyys&7 ja &6Tulenkestävyys&7."
+      - "<prefix>&8• &dHiivi + vasen klikkaus&7: &e5s lataus&7, sitten rintasäde."
+      - "<prefix>&8• &7Säde: korkea vahinko, lohkojen polttaminen ja pelaajien kykyjen poisto."
+      - "<prefix>&8• &7Alkaa voimakkaalla lähietäisyyden iskulla ja sienipilvellä."
+
+toggle:
+  heat_vision_on: "{label} &aaktivoitu"
+  heat_vision_off: "{label} &7poistettu käytöstä"
+  heat_vision_overheated: "{label} &cjäähtyy {seconds}s"
+  heat_vision_cooldown: "{label} &cvalmis {seconds}s kuluttua"
+  xray_on: "&bXRay &akäytössä"
+  xray_off: "&7XRay pois käytöstä"
+  sonar_on: "&bSonar &akäytössä"
+  sonar_off: "&7Sonar pois käytöstä"
+  sonar_water_only: "&bSonar &7toimii vain veden alla"
+  diver_riptide: "&bRiptide Dash &aaktivoitu"
+  diver_riptide_water_or_rain: "&bRiptide Dash &7toimii vain vedessä tai sateessa"
+  diver_riptide_cooldown: "&cRiptide Dash valmis {seconds}s kuluttua"
+  speed_on: "&eSuper Speed &akäytössä"
+  speed_off: "&7Super Speed pois käytöstä"
+  runner_speed_level: "&eRunner Speed &7taso &a{level}"
+  runner_speed_off: "&7Runner Speed pois käytöstä"
+  ghost_on: "&5Ghost Mode &akäytössä"
+  ghost_off: "&7Ghost Mode pois käytöstä"
+  ghost_cooldown: "&5Ghost Mode &cvalmis {seconds}s kuluttua"
+  worm_night_vision_on: "&6The Worm &bPimeänäkö &akäytössä"
+  worm_night_vision_off: "&6The Worm &7Pimeänäkö pois käytöstä"
+
+teleporter:
+  used: "&5Blink &avalmis"
+  cooldown: "&cBlink valmis {seconds}s kuluttua"
+  no_safe_location: "&cTurvallista teleporttauspaikkaa ei löytynyt."
+
+veteran:
+  charge_start: "&eThe Veteran &7lataa &eRintasädettä&7..."
+  charge_progress: "&eRintaisku... &7laukeaa &a{seconds}s kuluttua"
+  charge_cancelled: "&cRintasäteen lataus peruttu."
+  burst_start: "&eThe Veteran &7vapautti &eRintasäteen&7."
+  burst_end: "&7Rintasäde päättyi."
+  cooldown: "&cRintasäde valmis {seconds}s kuluttua"
+  hit_target: "<prefix>&7Poistit kyvyn pelaajalta &a{target}&7."
+  hit_by: "<prefix>&c{source}&7 poisti kykysi."
+
+fall_impact: "&cIsku"
+fall_impact_cooldown: "&cRäjähtävä laskeutuminen valmis {seconds}s kuluttua"
+launch_cooldown: "&cJump Start valmis {seconds}s kuluttua"
+
+sonic_boom:
+  ring_cooldown: "&3Sonic Ring &cvalmis {seconds}s kuluttua"
+  beam_cooldown: "&3Sonic Beam &cvalmis {seconds}s kuluttua"
+
+stormstrike:
+  released: "&bStormstrike &7vapautettu"
+  cooldown: "&bStormstrike &cvalmis {seconds}s kuluttua"
+  beam_on: "&fStorm Beam &aaktivoitu"
+  beam_off: "&7Storm Beam pois käytöstä"
+  beam_overheated: "&fStorm Beam &7jäähtyy"
+  beam_cooldown: "&fStorm Beam &cvalmis {seconds}s kuluttua"
+  fall_impact: "&fStormfall &7vapautettu"
+  fall_cooldown: "&fStormfall &cvalmis {seconds}s kuluttua"
+
+flash_light:
+  flash_released: "&eFlash Light &7vapautettu &8({targets} kohdetta)"
+  flash_cooldown: "&eFlash Light &cvalmis {seconds}s kuluttua"
+
+jumper:
+  activated: "&aJump Burst &aaktivoitu"
+  active: "&aJump Burst &7aktiivinen {seconds}s"
+  cooldown: "&aJump Burst &cvalmis {seconds}s kuluttua"
+
+shockwave:
+  released: "&eShockwave &7vapautettu"
+  cooldown: "&eShockwave &cvalmis {seconds}s kuluttua"
+
+fire_sonic:
+  beam_on: "&cFireSonic Beam &aaktivoitu"
+  beam_off: "&7FireSonic Beam pois käytöstä"
+  beam_overheated: "&cFireSonic Beam &7jäähtyy"
+  cooldown: "&cFireSonic Beam &cvalmis {seconds}s kuluttua"
+
+toxic_cloud:
+  cloud_released: "&2Toxic Cloud &7vapautettu &8({targets} kohdetta)"
+  cloud_cooldown: "&2Toxic Cloud &cvalmis {seconds}s kuluttua"
+  vomit_cooldown: "&2Poison Vomit &cvalmis {seconds}s kuluttua"
+
+the_countess:
+  fireball_cooldown: "&cTulipallo &cvalmis {seconds}s kuluttua"
+
+the_patriot_v_one:
+  ascension_busy: "<prefix>&7Kanavoit parhaillaan V One -nousua. Odota, kunnes se päättyy."
+
+the_headpopper:
+  no_target: "&cEi kelvollista kohdetta."
+  cooldown: "&cHeadpop valmis {seconds}s kuluttua"
+  countdown: "&cHeadpop &7&e{seconds}s kuluttua"
+  countdown_active: "&cHeadpop &7latautuu jo"
+  cancelled: "&7Headpop peruttu"
+  released: "&cHeadpop &7vapautettu"
+  area_cooldown: "&cBlood Pulse valmis {seconds}s kuluttua"
+  area_released: "&cBlood Pulse &7vapautettu &8({targets} kohdetta)"
+
+spider_weaver:
+  cooldown: "&fWeb Shot &cvalmis {seconds}s kuluttua"
+  hit: "&fWeb Shot &7osui"
+
+heal_angel:
+  heal_cooldown: "&aAngel Heal &cvalmis {seconds}s kuluttua"
+  no_target: "&fHeal Angel &7tarvitsee olento- tai eläinkohteen."
+  command_released: "&fHeal Angel &7käsky vapautettu"
+  command_cooldown: "&fAngel Command &cvalmis {seconds}s kuluttua"
+  healed: "&aAngel Heal &7vapautettu"
+
+submarine:
+  sonar_on: "&bSubmarine Sonar &akäytössä"
+  sonar_off: "&7Submarine Sonar pois käytöstä"
+  sonar_water_only: "&bSubmarine Sonar &7toimii vain veden alla"
+  dash: "&bSubmarine Dash &aaktivoitu"
+  dash_water_or_rain: "&bSubmarine Dash &7toimii vain vedessä tai sateessa"
+  dash_cooldown: "&bSubmarine Dash &cvalmis {seconds}s kuluttua"
+
+the_detonator:
+  released: "&cDetonaatio &7vapautettu"
+  cooldown: "&cDetonaatio &cvalmis {seconds}s kuluttua"
+  charge_start: "&cDetonaation lataus &7aloitettu"
+  charge_progress: "&cDetonaatio &7&e{seconds}s kuluttua"
+  charge_cancelled: "&7Detonaatio &cperuttu"
+
+
+size_changer:
+  big_on: "&5SizeChanger &asuuri muoto käytössä"
+  small_on: "&5SizeChanger &apieni muoto käytössä"
+  normal: "&7SizeChanger palasi normaaliin kokoon"
+  cooldown: "&5SizeChanger &cvalmis {seconds}s kuluttua"
+  already_active: "&5SizeChanger &7on jo aktiivinen"
+  look_up_down: "&5SizeChanger &7katso ylös suureen muotoon tai alas pieneen muotoon"
+
+command:
+  header: "<prefix>&8━━━━━━━━ &aCompoundV-ohje &8━━━━━━━━"
+  give_bottle: "<prefix>&8• &7/cv give &a<pelaaja>&7 bottle &d[compoundv|tempv|vone|antiv|vnull]"
+  give_ability: "<prefix>&8• &7/cv give &a<pelaaja>&7 &c<kyky>&7 &d[juomatyyppi]"
+  remove: "<prefix>&8• &7/cv remove &a<pelaaja>"
+  info_self: "<prefix>&8• &7/cv info &d[pelaaja]"
+  stats: "<prefix>&8• &7/cv stats &d[pelaaja] &8- &7näyttää aktiivisen kyvyn ja hallinnan"
+  tutorial: "<prefix>&8• &7/cv tutorial &8- &7antaa sinulle Compound V -käsikirjan"
+  reload: "<prefix>&8• &7/cv reload"
+  abilities_list: "<prefix>&8• &7Kyvyt: &a{list}"
+  footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  give_bottle_ok: "<prefix>&7Annoit &b{bottle}&7 pelaajalle &a{player}&7."
+  give_ability_ok: "<prefix>&a{name}&7 määritettiin pelaajalle &a{player}&7. Pelaaja sai käyttöohjeen."
+  unknown_ability: "<prefix>&cTuntematon kyky: &f{ability}"
+  remove_ok: "<prefix>&7Poistit kyvyn pelaajalta &a{player}&7."
+  usage_give: "<prefix>&cKäyttö: &7/cv give <pelaaja> <bottle|kyky> [juomatyyppi]"
+  usage_remove: "<prefix>&cKäyttö: &7/cv remove <pelaaja>"
+  tutorial_given: "<prefix>&aSait Compound V -käsikirjan."
+
+info:
+  plugin_header: "<prefix>&8━━━━━━━━ &aCompoundV-tiedot &8━━━━━━━━"
+  plugin_version: "<prefix>&8• &7Versio: &a{version}"
+  plugin_author: "<prefix>&8• &7Tekijä: &aThomas U."
+  plugin_ability_count: "<prefix>&8• &7Ladatut kyvyt: &a{count}"
+  plugin_language: "<prefix>&8• &7Kieli: &a{language}"
+  help_hint: "<prefix>&8• &7Apua: &f/cv help"
+  player_header: "<prefix>&8────── &aPelaajan tila &8──────"
+  player_target: "<prefix>&8• &7Pelaaja: &a{player}"
+  player_none: "<prefix>&8• &a{player}&7 ei ole aktiivista kykyä."
+  player_ability: "<prefix>&8• &7Kyky: &a&l{name}"
+  player_potion: "<prefix>&8• &7Lähde: &b{potion}"
+  player_status_permanent: "<prefix>&8• &7Tila: &aPysyvä"
+  player_status_temporary: "<prefix>&8• &7Tila: &eVäliaikainen"
+  player_expires: "<prefix>&8• &7Päättyy: &e{minutes}min {seconds}s"
+  player_controls_header: "<prefix>&8────── &aHallinta & vaikutukset &8──────"
+  player_no_target_hint: "<prefix>&8• &7Käytä &f/cv info <pelaaja>&7 tarkastellaksesi pelaajaa."
+  plugin_footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+stats:
+  header: "<prefix>&8━━━━━━━━ &aCompoundV-tilastot &8━━━━━━━━"
+  player: "<prefix>&8• &7Pelaaja: &a{player}"
+  ability: "<prefix>&8• &7Kyky: &a&l{name}"
+  source: "<prefix>&8• &7Lähde: &b{potion}"
+  permanent: "<prefix>&8• &7Tila: &aPysyvä"
+  temporary: "<prefix>&8• &7Päättyy: &e{minutes}min {seconds}s"
+  description_header: "<prefix>&8────── &aKyvyn kuvaus &8──────"
+  none: "<prefix>&a{player}&7 ei ole aktiivista CompoundV-kykyä."
+  footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+bottle:
+  compound_v:
+    name: "&b&lCompound V"
+    lore_1: "&7Kokeellinen seerumi satunnaisella kyvyllä."
+    lore_2: "&8Juo avataksesi voimasi."
+  temp_v:
+    name: "&a&lTemp V"
+    lore_1: "&7Väliaikainen seerumi satunnaisella kyvyllä."
+    lore_2: "&8Päättyy määritetyn keston jälkeen."
+  v_one:
+    name: "&3&lV One"
+    lore_1: "&7Jalostettu seerumi voimakkailla kyvyillä."
+    lore_2: "&8Käytä varoen."
+  anti_v:
+    name: "&c&lAnti V"
+    lore_1: "&7Poistaa aktiivisen kykysi."
+    lore_2: "&8Juo nollataksesi voimasi."
+
+
+  v_null:
+    name: "&2&lV-Null-virus"
+    lore_1: "&7Ilmateitse leviävä super-vastainen patogeeni."
+    lore_2: "&8Heitettävät muodot ovat sallittuja."
+    lore_3: "&4Vaarallinen V-voimaisia pelaajia vastaan."
+
+serum:
+  default_lore_1: "&7Välivaiheen panimoseerumi."
+  default_lore_2: "&8Jatka panimoketjua."
+  crystalline_serum:
+    name: "&bKristalliseerumi"
+    lore_1: "&7Ametistilla vakautettu perusseerumi."
+    lore_2: "&8Seuraava: Echo Shard."
+  resonant_v_serum:
+    name: "&9Resonoiva V-seerumi"
+    lore_1: "&7Echo-infusoitu V-perusta."
+    lore_2: "&8Seuraava: Glowstone-pöly."
+  activated_v_serum:
+    name: "&b&lAktivoitu V-seerumi"
+    lore_1: "&7Valmis haarautumaan Temp V:hen tai Compound V:hen."
+    lore_2: "&8Sokeri -> Temp V, Timantti -> Compound V."
+  unstable_temp_v:
+    name: "&aEpävakaa Temp V"
+    lore_1: "&7Väliaikainen V-seerumi, yhä epävakaa."
+    lore_2: "&8Seuraava: Redstone-pöly."
+  unstable_v_serum:
+    name: "&bEpävakaa V-seerumi"
+    lore_1: "&7Pysyvä V-seerumi, yhä epävakaa."
+    lore_2: "&8Seuraava: Ancient Debris."
+  draconic_serum:
+    name: "&5Draconinen seerumi"
+    lore_1: "&7Dragon-breath V-One -perusta."
+    lore_2: "&8Seuraava: Echo Shard."
+  echo_charged_serum:
+    name: "&3Echo-ladattu seerumi"
+    lore_1: "&7Resonoiva V-One-välivaihe."
+    lore_2: "&8Seuraava: Ancient Debris."
+  reinforced_serum:
+    name: "&8Vahvistettu seerumi"
+    lore_1: "&7Netheriitilla vahvistettu V-One-seerumi."
+    lore_2: "&8Seuraava: Hapatettu hämähäkinsilmä."
+  unstable_v_one_serum:
+    name: "&1Epävakaa V-One-seerumi"
+    lore_1: "&7Voimakas mutta epävakaa V-One-seerumi."
+    lore_2: "&8Seuraava: Kuolemattomuuden toteemi."
+  cleansing_serum:
+    name: "&fPuhdistava seerumi"
+    lore_1: "&7Maitopohjainen neutralointiperusta."
+    lore_2: "&8Seuraava: Ghast-kyynel."
+  restorative_serum:
+    name: "&cElvyttävä seerumi"
+    lore_1: "&7Elvyttävä Anti V -välivaihe."
+    lore_2: "&8Seuraava: Hapatettu hämähäkinsilmä."
+  decay_serum:
+    name: "&2Lahoamisseerumi"
+    lore_1: "&7Wither Rose -patogeeniperusta."
+    lore_2: "&8Seuraava: Hapatettu hämähäkinsilmä."
+  corrupted_serum:
+    name: "&5Turmeltunut seerumi"
+    lore_1: "&7Turmeltunut super-vastainen patogeeni."
+    lore_2: "&8Seuraava: Echo Shard."
+  resonant_pathogen:
+    name: "&2Resonoiva patogeeni"
+    lore_1: "&7Echo-reaktiivinen patogeeni."
+    lore_2: "&8Seuraava: Dragon's Breath."
+  airborne_v_pathogen:
+    name: "&aIlmateitse leviävä V-patogeeni"
+    lore_1: "&7Ilmateitse leviävän patogeenin kantaja."
+    lore_2: "&8Seuraava: Ancient Debris."
+  stabilized_v_null_pathogen:
+    name: "&2Vakautettu V-Null-patogeeni"
+    lore_1: "&7Vakautettu V-Null-ydin."
+    lore_2: "&8Seuraava: Kuolemattomuuden toteemi."
+
+side_effect:
+  temp_v_lethal: "<prefix>&4Temp V -yliannostus&7. Kehosi romahtaa."
+  temp_v_fadeout: "<prefix>&eTemp V -krapula&7. Pieniä sivuvaikutuksia jää, kun voima haihtuu."
+
+  adrenaline_crash: "<prefix>&eSivuvaikutus: &6Adrenaliiniromahdus&7. Kehosi on uupunut."
+  overload_sickness: "<prefix>&eSivuvaikutus: &aYlikuormitussairaus&7."
+  muscle_failure: "<prefix>&eSivuvaikutus: &7Lihasten pettäminen&7. Liikkuminen on heikentynyt."
+  internal_damage: "<prefix>&eSivuvaikutus: &cSisäinen vaurio&7."
+  severe_collapse: "<prefix>&eSivuvaikutus: &4Vakava romahdus&7."
+  failed_transformation: "<prefix>&cEpäonnistunut muutos&7. Kehosi hylkää osan seerumista."
+  heat_spike: "<prefix>&cSivuvaikutus: &6Kuumapiikki&7."
+  body_rejection: "<prefix>&cSivuvaikutus: &4Kehon hylkimisreaktio&7."
+  critical_instability: "<prefix>&4Kriittinen epävakaus&7. V One horjuttaa kehoasi hetken."
+  no_power: "<prefix>&7Ei voimaa&7. V One on epävakaa, mutta kyky pysyy aktiivisena."
+
+  minor:
+    nosebleed: "<prefix>&eSivuvaikutus: &cNenäverenvuoto&7. Seerumi rasittaa kehoasi."
+    static_discharge: "<prefix>&eSivuvaikutus: &bStaattinen purkaus&7. Energia rätisee ympärilläsi."
+    dizziness: "<prefix>&eSivuvaikutus: &7Huimaus&7. Maailma pyörii hetken."
+    adrenaline_rush: "<prefix>&eSivuvaikutus: &aAdrenaliiniryöppy&7. Lyhyt nopeuden purkaus."
+
+v_null:
+  hit_powered: "<prefix>&2V-Null-virus&7 saastutti V-järjestelmäsi. Selviä 15 minuuttia tai kuole."
+  hit_v_one: "<prefix>&2V-Null-virus&7 osui sinuun, mutta V One vastustaa sitä osittain."
+  no_effect: "<prefix>&2V-Null-virus&7 ei löytänyt V-järjestelmää. Ei vaikutusta."
+
+  hit_unpowered: "<prefix>&2V-Null-virus&7 vaikutti sinuun heikosti."
+
+
+tutorial_book:
+  title: "Compound V -opas"
+  author: "Vought Lab"
+  page_1:
+    - "&1&lCompound V"
+    - "&8Työpöytälabra"
+    - ""
+    - "&0Vain askarteluruudukko."
+    - "&0Aina 2 esinettä:"
+    - "&8Lähde + Ainesosa"
+    - "&2= Tulos"
+    - ""
+    - "&0Muodolla ei ole väliä."
+    - "&4Panimoteline pois."
+  page_2:
+    - "&1&lPerusta 1/2"
+    - ""
+    - "&01) Vesipullo"
+    - "&8+ Nether Wart"
+    - "&2= Awkward"
+    - ""
+    - "&02) Awkward"
+    - "&8+ Ametisti"
+    - "&2= Kristalli"
+  page_3:
+    - "&1&lPerusta 2/2"
+    - ""
+    - "&03) Kristalli"
+    - "&8+ Echo Shard"
+    - "&2= Resonant V"
+    - ""
+    - "&04) Resonant V"
+    - "&8+ Glowstone"
+    - "&2= Activated V"
+  page_4:
+    - "&2&lTemp V"
+    - ""
+    - "&0Activated V"
+    - "&8+ Sokeri"
+    - "&2= Unstable Temp"
+    - ""
+    - "&0Unstable Temp"
+    - "&8+ Redstone"
+    - "&2= Temp V"
+    - ""
+    - "&4Maks. 5 annosta/elämä"
+  page_5:
+    - "&1&lCompound V"
+    - ""
+    - "&0Activated V"
+    - "&8+ Timantti"
+    - "&2= Unstable V"
+    - ""
+    - "&0Unstable V"
+    - "&8+ Ancient Debris"
+    - "&2= Compound V"
+    - ""
+    - "&0Pysyvä, kunnes Anti V."
+  page_6:
+    - "&3&lV One 1/2"
+    - ""
+    - "&01) Awkward"
+    - "&8+ Dragon Breath"
+    - "&2= Draconic"
+    - ""
+    - "&02) Draconic"
+    - "&8+ Echo Shard"
+    - "&2= Echo-Charged"
+  page_7:
+    - "&3&lV One 2/2"
+    - ""
+    - "&03) Echo-Charged"
+    - "&8+ Ancient Debris"
+    - "&2= Reinforced"
+    - ""
+    - "&04) Reinforced"
+    - "&8+ Ferm. silmä"
+    - "&2= Unstable V-One"
+    - "&05) + Toteemi"
+    - "&2= V One"
+  page_8:
+    - "&2&lAnti V"
+    - ""
+    - "&01) Awkward"
+    - "&8+ Maitoämpäri"
+    - "&2= Cleansing"
+    - ""
+    - "&02) Cleansing"
+    - "&8+ Ghast-kyynel"
+    - "&2= Restorative"
+    - "&03) + Ferm. silmä"
+    - "&2= Anti V"
+  page_9:
+    - "&4&lV-Null 1/2"
+    - ""
+    - "&01) Awkward"
+    - "&8+ Wither Rose"
+    - "&2= Decay"
+    - ""
+    - "&02) Decay"
+    - "&8+ Ferm. silmä"
+    - "&2= Corrupted"
+    - "&03) + Echo Shard"
+    - "&2= Resonant"
+  page_10:
+    - "&4&lV-Null 2/2"
+    - ""
+    - "&0Resonant"
+    - "&8+ Dragon Breath"
+    - "&2= Airborne"
+    - ""
+    - "&0Airborne"
+    - "&8+ Ancient Debris"
+    - "&2= Stabilized"
+    - "&0Stabilized + Toteemi"
+    - "&2= V-Null"
+  page_11:
+    - "&6&lKyvyt"
+    - ""
+    - "&0Patriot, Diver"
+    - "&0Runner, Worm"
+    - "&0Flash Light"
+    - "&0Veteran, Sonic"
+    - "&0Stormstrike V-One"
+    - ""
+    - "&8/cv info näyttää"
+    - "&8hallintasi."
+  page_12:
+    - "&4&lSivuvaikutukset"
+    - ""
+    - "&0Temp V:"
+    - "&8Krapula/Sairaus"
+    - "&8Pettäminen/Romahdus"
+    - ""
+    - "&0CV/V One:"
+    - "&8harvinaisia lisädebuffeja"
+    - ""
+    - "&4Sivuvaikutukset"
+    - "&4lisätään voimiin."
+
+bloodweaver:
+  lash_hit: "<prefix>&cBlood Lash&7 osui."
+  lash_missed: "<prefix>&7Blood Lash ohi."
+  lash_cooldown: "<prefix>&7Blood Lash -jäähtyminen: &e{seconds}s&7."
+  rupture_charge_start: "<prefix>&cBlood Rupture&7 latautuu. Jatka hiipimistä."
+  rupture_charge_progress: "<prefix>&cBlood Rupture&7 &e{seconds}s&7 kuluttua."
+  rupture_cancelled: "<prefix>&7Blood Rupture peruttu."
+  rupture_released: "<prefix>&cBlood Rupture&7 vapautettu. Kohteet: &e{targets}&7."
+  rupture_cooldown: "<prefix>&7Blood Rupture -jäähtyminen: &e{seconds}s&7."
+
+patriot:
+  speed_dash: "&cThe Patriot &7-syöksy."
+  speed_dash_cooldown: "&7Syöksy valmis &c{seconds}s&7 kuluttua."
+ice_cube:
+  spike_fired: "<prefix>&bJääpiikki ammuttu."
+  spike_cooldown: "<prefix>&7Jääpiikin jäähtyminen: &e{seconds}s&7."
+  wall_created: "<prefix>&bJääseinä nostettu."
+  wall_cooldown: "<prefix>&7Jääseinän jäähtyminen: &e{seconds}s&7."
+
+death_messages:
+  heat_vision: "{killer} paahtoi pelaajan {victim} laserilla."
+  the_patriot_dash: "{killer} murskasi pelaajan {victim} Patriot-syöksyllä."
+  the_patriot_heat_vision: "{killer} pyyhki pelaajan {victim} Heat Visionilla."
+  the_veteran_beam: "{victim} jäi {killer}n reaktorisäteeseen."
+  the_veteran_ground_zero: "{victim} seisoi liian lähellä {killer}n Ground Zeroa."
+  stormstrike: "{killer} ylilatasi pelaajan {victim}."
+  the_headpopper: "{victim} sai hyvin pahan ajatuksen lähellä pelaajaa {killer}."
+  ice_cube: "{killer} jäädytti pelaajan {victim}."
+  bloodweaver_lash: "{killer} viilsi pelaajan {victim} Blood Lashilla."
+  bloodweaver_rupture: "{killer} repäisi pelaajan {victim} verenhallinnalla."

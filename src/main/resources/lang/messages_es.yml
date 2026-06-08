@@ -476,6 +476,11 @@ side_effect:
   body_rejection: '<prefix>&cEfecto secundario: &4Body Rejection&7.'
   critical_instability: <prefix>&4Critical Insthabilidad&7. V One destabilizes your body for a short time.
   no_power: <prefix>&7No Power&7. V One is unstable, but the habilidad remains active.
+  minor:
+    nosebleed: "<prefix>&eEfecto secundario: &cHemorragia nasal&7. El suero fuerza tu cuerpo."
+    static_discharge: "<prefix>&eEfecto secundario: &bDescarga estática&7. La energía crepita a tu alrededor."
+    dizziness: "<prefix>&eEfecto secundario: &7Mareo&7. El mundo gira por un momento."
+    adrenaline_rush: "<prefix>&eEfecto secundario: &aSubidón de adrenalina&7. Un breve impulso de velocidad."
 v_null:
   hit_powered: <prefix>&2V-Null Virus&7 infected your V system. Survive 15 minutes o die.
   hit_v_one: <prefix>&2V-Null Virus&7 golpe you, but V One partially resists it.

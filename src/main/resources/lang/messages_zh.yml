@@ -486,6 +486,11 @@ side_effect:
   body_rejection: <prefix>&c副作用：&4身体排斥&7。
   critical_instability: <prefix>&4临界不稳&7，V One 短时间让身体失控。
   no_power: <prefix>&7无力&7，V One 不稳但能力仍激活。
+  minor:
+    nosebleed: "<prefix>&e副作用：&c流鼻血&7。血清让你的身体承压。"
+    static_discharge: "<prefix>&e副作用：&b静电放电&7。能量在你身上噼啪作响。"
+    dizziness: "<prefix>&e副作用：&7眩晕&7。世界瞬间旋转。"
+    adrenaline_rush: "<prefix>&e副作用：&a肾上腺素飙升&7。短暂的速度爆发。"
 v_null:
   hit_powered: <prefix>&2V-Null 病毒&7 感染了你的 V 系统，撑 15 分钟否则死亡。
   hit_v_one: <prefix>&2V-Null 病毒&7 击中你，但 V One 部分抵抗。

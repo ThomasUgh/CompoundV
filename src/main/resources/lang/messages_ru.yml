@@ -476,6 +476,11 @@ side_effect:
   body_rejection: '<prefix>&cПобочный эффект: &4Body Rejection&7.'
   critical_instability: <prefix>&4Critical Instспособность&7. V One destabilizes your body for a short time.
   no_power: <prefix>&7No Power&7. V One is unstable, but the способность remains active.
+  minor:
+    nosebleed: "<prefix>&eПобочный эффект: &cКровь из носа&7. Сыворотка нагружает тело."
+    static_discharge: "<prefix>&eПобочный эффект: &bСтатический разряд&7. Энергия потрескивает вокруг."
+    dizziness: "<prefix>&eПобочный эффект: &7Головокружение&7. Мир на миг кружится."
+    adrenaline_rush: "<prefix>&eПобочный эффект: &aВыброс адреналина&7. Короткий рывок скорости."
 v_null:
   hit_powered: <prefix>&2V-Null Virus&7 infected your V system. Survive 15 minutes или die.
   hit_v_one: <prefix>&2V-Null Virus&7 удар you, but V One partially resists it.

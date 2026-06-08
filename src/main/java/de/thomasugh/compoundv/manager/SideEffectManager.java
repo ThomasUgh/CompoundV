@@ -74,6 +74,7 @@ public class SideEffectManager {
                 applyMuscleFailure(player, "side_effects.compound_v.muscle_failure");
                 player.sendMessage(plugin.getLocaleManager().msg("side_effect.muscle_failure"));
             }
+            applyMinorFlavorSideEffects(player);
             return;
         }
 
@@ -105,6 +106,7 @@ public class SideEffectManager {
                 applyMuscleFailure(player, "side_effects.v_one.muscle_failure");
                 player.sendMessage(plugin.getLocaleManager().msg("side_effect.muscle_failure"));
             }
+            applyMinorFlavorSideEffects(player);
         }
     }
 
@@ -114,6 +116,34 @@ public class SideEffectManager {
         add(player, PotionEffects.HUNGER, 10 * 20, 0);
         player.getWorld().spawnParticle(Particle.SMOKE, player.getLocation().add(0, 1, 0), 8, 0.25, 0.25, 0.25, 0.02);
         player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_DRINK, 0.35f, 0.55f);
+    }
+
+    public void applyMinorFlavorSideEffects(Player player) {
+        if (!plugin.getConfig().getBoolean("side_effects.enabled", true)) return;
+        String base = "side_effects.minor_flavor";
+        if (!plugin.getConfig().getBoolean(base + ".enabled", true)) return;
+
+        if (rollChance(base + ".nosebleed.chance", 2.5)) {
+            player.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, player.getEyeLocation(), 4, 0.12, 0.06, 0.12, 0.0);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.25f, 1.25f);
+            player.sendMessage(plugin.getLocaleManager().msg("side_effect.minor.nosebleed"));
+        }
+        if (rollChance(base + ".static_discharge.chance", 2.0)) {
+            player.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, player.getLocation().add(0, 1, 0), 14, 0.4, 0.6, 0.4, 0.05);
+            player.playSound(player.getLocation(), Sound.ENTITY_BEE_STING, 0.3f, 1.6f);
+            add(player, PotionEffects.SLOWNESS, 30, 0);
+            player.sendMessage(plugin.getLocaleManager().msg("side_effect.minor.static_discharge"));
+        }
+        if (rollChance(base + ".dizziness.chance", 3.0)) {
+            add(player, PotionEffects.NAUSEA, 60, 0);
+            player.sendMessage(plugin.getLocaleManager().msg("side_effect.minor.dizziness"));
+        }
+        if (rollChance(base + ".adrenaline_rush.chance", 2.0)) {
+            add(player, PotionEffects.SPEED, 60, 0);
+            player.getWorld().spawnParticle(Particle.CRIT, player.getLocation().add(0, 1, 0), 12, 0.3, 0.45, 0.3, 0.06);
+            player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_DRINK, 0.3f, 1.4f);
+            player.sendMessage(plugin.getLocaleManager().msg("side_effect.minor.adrenaline_rush"));
+        }
     }
 
     public void handleAbilityExpired(Player player, PlayerAbilityData data) {

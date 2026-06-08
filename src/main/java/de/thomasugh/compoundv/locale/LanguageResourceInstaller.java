@@ -20,7 +20,8 @@ public final class LanguageResourceInstaller {
             "lang/messages_hi.yml",
             "lang/messages_ru.yml",
             "lang/messages_zh.yml",
-            "lang/messages_tr.yml"
+            "lang/messages_tr.yml",
+            "lang/messages_fi.yml"
     };
 
     private final JavaPlugin plugin;
