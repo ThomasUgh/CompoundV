@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +26,7 @@ public final class PatriotAscensionCinematic {
 
     private final CompoundV plugin;
     private final Set<UUID> active = ConcurrentHashMap.newKeySet();
+    private final Map<UUID, TaskHandle> tasks = new ConcurrentHashMap<>();
 
     public PatriotAscensionCinematic(CompoundV plugin) {
         this.plugin = plugin;
@@ -45,7 +47,8 @@ public final class PatriotAscensionCinematic {
         if (!plugin.getConfig().getBoolean(BASE + ".enabled", true)) return;
 
         final UUID uuid = player.getUniqueId();
-        if (!active.add(uuid)) return;
+        cancelExisting(player, uuid);
+        active.add(uuid);
 
         final long chargeTicks = Math.max(0L, plugin.getConfig().getLong(BASE + ".charge_up_ticks", 40L));
         final long beamTicks = Math.max(20L, plugin.getConfig().getLong(BASE + ".beam_duration_ticks", 80L));
@@ -54,7 +57,8 @@ public final class PatriotAscensionCinematic {
 
         final Location anchor = player.getLocation().clone();
         final float lockedYaw = anchor.getYaw();
-        final float originalWalk = safeWalkSpeed(player);
+        float ow = safeWalkSpeed(player);
+        final float originalWalk = ow <= 0f ? 0.2f : ow;
 
         final BaseHeatVisionAbility heatVision = plugin.getRegistry().get("the_patriot_v_one")
                 .filter(a -> a instanceof BaseHeatVisionAbility)
@@ -62,8 +66,6 @@ public final class PatriotAscensionCinematic {
                 .orElse(null);
 
         player.setSprinting(false);
-        player.setFlying(false);
-        player.setAllowFlight(false);
         trySetWalkSpeed(player, 0f);
         applyFreezeEffects(player, totalTicks + 10L);
         forceLookUp(player, anchor, lockedYaw);
@@ -86,10 +88,6 @@ public final class PatriotAscensionCinematic {
 
                 forceLookUp(p, anchor, lockedYaw);
                 p.setVelocity(new Vector(0, 0, 0));
-                if (p.isFlying() || p.getAllowFlight()) {
-                    p.setFlying(false);
-                    p.setAllowFlight(false);
-                }
 
                 if (t < chargeTicks) {
                     renderChargeUp(p, anchor, t, chargeTicks);
@@ -107,6 +105,24 @@ public final class PatriotAscensionCinematic {
         };
 
         handleBox[0] = SchedulerAdapter.runTimer(plugin, player, driver, 1L, 1L);
+        tasks.put(uuid, handleBox[0]);
+    }
+
+    private void cancelExisting(Player player, UUID uuid) {
+        TaskHandle h = tasks.remove(uuid);
+        if (h != null) {
+            try {
+                h.cancel();
+            } catch (Throwable ignored) {
+            }
+        }
+        active.remove(uuid);
+        if (player != null) {
+            trySetWalkSpeed(player, 0.2f);
+            player.removePotionEffect(PotionEffects.SLOWNESS);
+            player.removePotionEffect(PotionEffects.JUMP_BOOST);
+            player.removePotionEffect(PotionEffects.MINING_FATIGUE);
+        }
     }
 
     private void renderChargeUp(Player p, Location anchor, long t, long chargeTicks) {
@@ -162,6 +178,7 @@ public final class PatriotAscensionCinematic {
 
     private void release(UUID uuid, Player p, float originalWalk) {
         active.remove(uuid);
+        tasks.remove(uuid);
         if (p == null) return;
         trySetWalkSpeed(p, originalWalk <= 0f ? 0.2f : originalWalk);
         p.removePotionEffect(PotionEffects.SLOWNESS);

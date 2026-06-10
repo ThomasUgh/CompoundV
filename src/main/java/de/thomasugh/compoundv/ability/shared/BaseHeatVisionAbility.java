@@ -194,13 +194,13 @@ public abstract class BaseHeatVisionAbility implements Ability {
             }
             if (bGlass && mat.name().contains("GLASS")) {
                 w.playSound(b.getLocation().add(0.5,0.5,0.5), Sound.BLOCK_GLASS_BREAK, 1f, 1f);
-                b.setType(Material.AIR); return;
+                b.setType(Material.AIR, false); return;
             }
             if (bLeaves && mat.name().contains("LEAVES")) {
-                b.setType(Material.AIR);
+                b.setType(Material.AIR, false);
                 for (int i = 1; i <= 2; i++) {
                     Block next = b.getLocation().add(dir.clone().multiply(i)).getBlock();
-                    if (next.getType().name().contains("LEAVES")) next.setType(Material.AIR); else break;
+                    if (next.getType().name().contains("LEAVES")) next.setType(Material.AIR, false); else break;
                 }
                 return;
             }
@@ -231,6 +231,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
             int bz = (int) Math.floor(oz + dz * d);
             if (bx == lastX && by == lastY && bz == lastZ) continue;
             lastX = bx; lastY = by; lastZ = bz;
+            if (!world.isChunkLoaded(bx >> 4, bz >> 4)) continue;
             Block block = world.getBlockAt(bx, by, bz);
             if (block.equals(standOn) || block.equals(playerBlock)) continue;
             if (isHeatVisionClearableVegetation(block.getType())) {
@@ -243,7 +244,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         Location loc = block.getLocation().add(0.5, 0.45, 0.5);
         world.spawnParticle(Particle.SMOKE, loc, 4, 0.12, 0.12, 0.12, 0.01);
         world.spawnParticle(Particle.FLAME, loc, 1, 0.08, 0.08, 0.08, 0.0);
-        block.setType(Material.AIR);
+        block.setType(Material.AIR, false);
     }
 
     private boolean isHeatVisionClearableVegetation(Material material) {
@@ -318,6 +319,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
             int bz = (int) Math.floor(oz + dz * d);
             if (bx == lastX && by == lastY && bz == lastZ) continue;
             lastX = bx; lastY = by; lastZ = bz;
+            if (!world.isChunkLoaded(bx >> 4, bz >> 4)) continue;
             Block block = world.getBlockAt(bx, by, bz);
             if (!isWaterLike(block.getType())) continue;
             Location loc = block.getLocation().add(0.5, 0.65, 0.5);
@@ -341,6 +343,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
             int bz = (int) Math.floor(oz + dz * d);
             if (bx == lastX && by == lastY && bz == lastZ) continue;
             lastX = bx; lastY = by; lastZ = bz;
+            if (!world.isChunkLoaded(bx >> 4, bz >> 4)) continue;
             Block block = world.getBlockAt(bx, by, bz);
             if (block.equals(standOn) || block.equals(playerBlock)) continue;
             Material type = block.getType();
@@ -370,7 +373,7 @@ public abstract class BaseHeatVisionAbility implements Ability {
         world.spawnParticle(Particle.CLOUD, meltLoc, 10, 0.2, 0.2, 0.2, 0.02);
         world.spawnParticle(Particle.SMOKE, meltLoc, 6, 0.15, 0.15, 0.15, 0.01);
         world.playSound(meltLoc, Sound.BLOCK_FIRE_EXTINGUISH, 0.55f, 1.6f);
-        block.setType(flatSnow ? Material.AIR : Material.WATER);
+        block.setType(flatSnow ? Material.AIR : Material.WATER, false);
         return true;
     }
 
