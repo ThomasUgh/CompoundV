@@ -22,6 +22,12 @@ updates:
   # Delay the OP join notice so it appears after most join messages. 60 ticks = 3 seconds.
   op_chat_delay_ticks: 60
 
+# avoids giving the same power again right after, so repeated drinks feel more random
+randomization:
+  anti_repeat: true
+  # how many of your most recent powers to skip when possible (0 = off)
+  avoid_recent_count: 2
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Potion roll chances
@@ -423,7 +429,12 @@ abilities:
     riptide_cooldown_ms: 1800
 
   # Submarine: F uses the stronger dash. Sneak + Left-Click toggles Sonar.
+  heal_angel:
+    resistance_level: 3
+
   submarine:
+    strength_level: 3
+    extra_hearts: 10.0
     sonar_radius: 65.0
     riptide_velocity: 10.0
     riptide_cooldown_ms: 1000
@@ -453,7 +464,7 @@ abilities:
     # Area pulse (on toggle): radius and % of each target's current health dealt.
     area_radius: 10.0
     area_damage_health_percent: 0.25
-    area_cooldown_ms: 120000
+    area_cooldown_ms: 60000
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Crafting / V-Null / Side effects

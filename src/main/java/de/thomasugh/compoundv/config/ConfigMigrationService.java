@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class ConfigMigrationService {
 
-    private static final int CURRENT_CONFIG_VERSION = 5;
+    private static final int CURRENT_CONFIG_VERSION = 6;
 
     private final JavaPlugin plugin;
 
@@ -268,6 +268,14 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.mining_fatigue.amplifier", 0);
         changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.hunger.chance", 20.0);
         changed |= setIfMissing("side_effects.temp_v.expiry_aftereffects.effects.hunger.amplifier", 0);
+
+        changed |= replaceIfNumericEquals("abilities.the_headpopper.area_cooldown_ms", 120000, 60000);
+        changed |= setIfMissing("abilities.submarine.strength_level", 3);
+        changed |= setIfMissing("abilities.submarine.extra_hearts", 10.0);
+        changed |= setIfMissing("abilities.heal_angel.resistance_level", 3);
+        changed |= setIfMissing("abilities.lose_on_death", true);
+        changed |= setIfMissing("randomization.anti_repeat", true);
+        changed |= setIfMissing("randomization.avoid_recent_count", 2);
 
         return changed;
     }
@@ -1205,9 +1213,6 @@ public final class ConfigMigrationService {
     }
 
     private boolean replaceIfNumericEquals(String path, double oldValue, Object newValue) {
-        // One-time value rewrites only run during a real version upgrade.
-        // Without this guard, any admin value that happened to equal the old
-        // bundled default was silently reverted on every restart.
         if (!allowValueRewrites) return false;
         if (!plugin.getConfig().contains(path)) return false;
         Object current = plugin.getConfig().get(path);
