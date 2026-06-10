@@ -1,4 +1,6 @@
 package de.thomasugh.compoundv.ability.compoundv;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
+
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
@@ -145,7 +147,7 @@ public class FireSonicAbility implements Ability {
             if (!(entity instanceof LivingEntity target) || entity.equals(player)) continue;
             if (!isNearBeamTarget(eye, dir, effectiveRange, radius, target)) continue;
             target.setNoDamageTicks(0);
-            target.damage(Math.max(0.0, damage), player);
+            if (!AbilityKillTracker.damage(plugin, target, player, Math.max(0.0, damage), "death_messages.fire_sonic", true)) continue;
             target.setFireTicks(Math.max(target.getFireTicks(), fireTicks));
             world.spawnParticle(Particle.FLAME, target.getLocation().add(0, 1, 0), 18, 0.20, 0.30, 0.20, 0.04);
         }

@@ -149,11 +149,6 @@ public abstract class BaseHeatVisionAbility implements Ability {
         double dL = rL != null ? rL.getHitPosition().distance(lEye.toVector()) : range;
         double dR = rR != null ? rR.getHitPosition().distance(rEye.toVector()) : range;
 
-        // Particle strands: throttled to cut packet volume. DUST particles
-        // linger ~1s client-side, so rendering every couple of ticks stays
-        // visually continuous while roughly halving the packets sent to every
-        // nearby player (the main cause of server-wide ping spikes when many
-        // players use Heatvision in a crowded area).
         int renderInterval = Math.max(1, plugin.getConfig().getInt("heat_vision.particles.render_interval_ticks", 2));
         Particle.DustOptions core = new Particle.DustOptions(coreColor(), size());
         Particle.DustOptions glow = new Particle.DustOptions(glowColor(), glowSize());
@@ -162,12 +157,6 @@ public abstract class BaseHeatVisionAbility implements Ability {
             strand(w, rEye, dir, dR, core, glow, fireParticles());
         }
 
-        // Cosmetic environment effects (snow melt / water sizzle / vegetation
-        // burn) along the beam. These previously ran every tick on BOTH strands
-        // = six full-length block scans per tick per player. The two strands are
-        // only 0.24 blocks apart, so a single pass on the centre line is
-        // visually identical; throttling collapses this to at most three scans
-        // every few ticks.
         int blockFxInterval = Math.max(1, plugin.getConfig().getInt("heat_vision.block_effect_interval_ticks", 4));
         if (player.getTicksLived() % blockFxInterval == 0) {
             double centreDist = Math.max(dL, dR);
@@ -487,8 +476,6 @@ public abstract class BaseHeatVisionAbility implements Ability {
         int glowCount = glowParticles();
         double ox = origin.getX(), oy = origin.getY(), oz = origin.getZ();
         double dx = dir.getX(), dy = dir.getY(), dz = dir.getZ();
-        // Reuse a single Location instead of cloning per step (was 2+ object
-        // allocations and 3 config reads per particle point).
         Location pos = new Location(w, 0, 0, 0);
         for (double d = 0.5; d <= dist; d += st) {
             pos.setX(ox + dx * d);

@@ -1,4 +1,6 @@
 package de.thomasugh.compoundv.ability.compoundv;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
+
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
@@ -147,7 +149,7 @@ public class TheRunnerAbility implements Ability {
             if (playerCooldowns.getOrDefault(targetId, 0L) > now) continue;
 
             double damage = impactDamage(level);
-            target.damage(damage, player);
+            if (!AbilityKillTracker.damage(plugin, target, player, damage, "death_messages.the_runner", true)) continue;
             applyImpactKnockback(player, target);
             playImpactEffects(player, target);
             playerCooldowns.put(targetId, now + cooldownMs);

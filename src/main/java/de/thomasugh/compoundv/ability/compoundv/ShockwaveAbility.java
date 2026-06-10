@@ -1,4 +1,6 @@
 package de.thomasugh.compoundv.ability.compoundv;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
+
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
@@ -101,7 +103,7 @@ public class ShockwaveAbility implements Ability {
             double distance = Math.max(0.2, victim.getLocation().distance(center));
             if (distance > radius) continue;
             double factor = Math.max(0.3, 1.0 - (distance / radius));
-            victim.damage(damage * factor);
+            if (!AbilityKillTracker.damage(plugin, victim, attacker, damage * factor, "death_messages.shockwave", true)) continue;
             Vector push = victim.getLocation().toVector().subtract(center.toVector());
             if (push.lengthSquared() < 0.0001) push = attacker.getLocation().getDirection().clone();
             victim.setVelocity(victim.getVelocity().add(push.normalize().multiply(knockback * factor).setY(0.28 + factor * 0.22)));
@@ -165,7 +167,10 @@ public class ShockwaveAbility implements Ability {
             }
 
             double damage = target instanceof Player ? playerDamage : pveDamage;
-            target.damage(damage, player);
+            if (!AbilityKillTracker.damage(plugin, target, player, damage, "death_messages.shockwave", true)) {
+                hit.remove(target.getUniqueId());
+                continue;
+            }
             Vector push = target.getLocation().toVector().subtract(center.toVector());
             if (push.lengthSquared() < 0.0001) push = player.getLocation().getDirection().clone();
             double factor = Math.max(0.45, 1.0 - (distance / (maxRadius * 1.35)));

@@ -15,10 +15,8 @@ public final class SchedulerAdapter {
     private SchedulerAdapter() {
     }
 
-    // --- Folia detection (computed once) ------------------------------------
     private static volatile Boolean foliaCached;
 
-    // --- Cached reflective handles ------------------------------------------
     private static volatile Method entityGetScheduler;
     private static volatile Method entityRunDelayed;
     private static volatile Method entityRunAtFixedRate;
@@ -40,7 +38,6 @@ public final class SchedulerAdapter {
         return cached;
     }
 
-    // --- runNow -------------------------------------------------------------
     public static void runNow(Plugin plugin, Runnable runnable) {
         if (isFolia()) {
             TaskHandle handle = tryFoliaGlobalLater(plugin, safe(plugin, runnable), 1L);
@@ -57,8 +54,6 @@ public final class SchedulerAdapter {
         if (isFolia()) {
             TaskHandle handle = tryFoliaEntityLater(plugin, player, safe(plugin, runnable), 1L);
             if (handle != null) return;
-            // Last-resort Folia fallback: global scheduler. This should only happen if the
-            // Folia API signature changes. It avoids hard-crashing older mixed forks.
             TaskHandle global = tryFoliaGlobalLater(plugin, safe(plugin, runnable), 1L);
             if (global != null) return;
         }
@@ -70,7 +65,6 @@ public final class SchedulerAdapter {
             TaskHandle handle = tryFoliaGlobalLater(plugin, safe(plugin, runnable), delayTicks);
             if (handle != null) return handle;
         }
-
         BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, safe(plugin, runnable), delayTicks);
         return task::cancel;
     }
@@ -117,7 +111,6 @@ public final class SchedulerAdapter {
             TaskHandle handle = tryFoliaGlobalTimer(plugin, safe(plugin, runnable), delayTicks, periodTicks);
             if (handle != null) return handle;
         }
-
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, safe(plugin, runnable), delayTicks, periodTicks);
         return task::cancel;
     }
@@ -159,7 +152,6 @@ public final class SchedulerAdapter {
         return task::cancel;
     }
 
-    // --- Folia bridges (cached reflection) ----------------------------------
     @SuppressWarnings("unchecked")
     private static TaskHandle tryFoliaEntityLater(Plugin plugin, Entity entity, Runnable runnable, long delayTicks) {
         try {
@@ -243,7 +235,6 @@ public final class SchedulerAdapter {
         }
     }
 
-    // --- Lazy cached resolvers ----------------------------------------------
     private static Method entityGetScheduler(Entity entity) throws ReflectiveOperationException {
         Method method = entityGetScheduler;
         if (method == null) {
@@ -301,7 +292,6 @@ public final class SchedulerAdapter {
             try {
                 task.getClass().getMethod("cancel").invoke(task);
             } catch (ReflectiveOperationException ignored) {
-                // No-op: scheduler task is already gone or implementation changed.
             }
         };
     }

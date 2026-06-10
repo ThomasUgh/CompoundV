@@ -97,6 +97,7 @@ public class AbilityManager {
 
     public void handleDeath(Player player) {
         if (!playerData.containsKey(player.getUniqueId())) return;
+        if (!plugin.getConfig().getBoolean("abilities.lose_on_death", true)) return;
         Ability a = activeAbility.remove(player.getUniqueId());
         if (a != null) a.remove(player);
         playerData.remove(player.getUniqueId());

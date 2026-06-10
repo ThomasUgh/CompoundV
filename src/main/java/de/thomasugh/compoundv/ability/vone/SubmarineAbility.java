@@ -2,6 +2,7 @@ package de.thomasugh.compoundv.ability.vone;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
+import de.thomasugh.compoundv.util.AttributeUtil;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.Bukkit;
@@ -9,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -28,6 +30,7 @@ import java.util.UUID;
 public class SubmarineAbility implements Ability {
 
     private final CompoundV plugin;
+    private final NamespacedKey healthKey;
     private final Map<UUID, Boolean> sonarActive = new HashMap<>();
     private final Map<UUID, Integer> ticker = new HashMap<>();
     private final Map<UUID, Long> dashCooldown = new HashMap<>();
@@ -35,6 +38,7 @@ public class SubmarineAbility implements Ability {
 
     public SubmarineAbility(CompoundV plugin) {
         this.plugin = plugin;
+        this.healthKey = new NamespacedKey(plugin, "submarine_hearts");
     }
 
     @Override public String getId() { return "submarine"; }
@@ -47,6 +51,8 @@ public class SubmarineAbility implements Ability {
     public void apply(Player player) {
         applyStaticEffects(player);
         applyWaterCombatEffects(player);
+        AttributeUtil.setMaxHealthBonus(player, healthKey,
+                plugin.getConfig().getDouble("abilities.submarine.extra_hearts", 10.0) * 2.0);
     }
 
     @Override
@@ -67,6 +73,7 @@ public class SubmarineAbility implements Ability {
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.REGENERATION);
         player.removePotionEffect(PotionEffects.NIGHT_VISION);
+        AttributeUtil.setMaxHealthBonus(player, healthKey, 0.0);
     }
 
     @Override

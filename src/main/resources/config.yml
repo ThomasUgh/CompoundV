@@ -98,8 +98,6 @@ combat:
     # false = only abilities that explicitly allow the fallback can use it.
     apply_to_all_ability_damage: true
     permission: compoundv.damage-bypass
-    # true = bypass respects WorldGuard regions (no ability PvP where pvp flag is denied, e.g. spawn). Needs WorldGuard.
-    respect_worldguard_regions: true
 
 heat_vision:
   # Entity raytrace hit radius in blocks. 0.05 is the old/default thin beam.
@@ -154,6 +152,9 @@ heat_vision:
       active_sound: { pitch: 1.20 }
 
 abilities:
+  # false = keep your powers after death
+  lose_on_death: true
+
   # The Patriot: shared flight/landing tuning + higher-pitched Heatvision sound.
   the_patriot:
     shared:

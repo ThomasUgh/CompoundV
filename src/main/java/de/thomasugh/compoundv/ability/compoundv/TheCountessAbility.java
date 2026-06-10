@@ -1,4 +1,6 @@
 package de.thomasugh.compoundv.ability.compoundv;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
+
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
@@ -129,20 +131,23 @@ public class TheCountessAbility implements Ability {
         if (world == null) return;
         event.getEntity().remove();
 
-        float power = (float) plugin.getConfig().getDouble("abilities.the_countess.fireball_explosion_power", 1.0);
-        world.createExplosion(impact, power, true, false, owner);
         double radius = plugin.getConfig().getDouble("abilities.the_countess.fireball_damage_radius", 2.6);
         double minHearts = plugin.getConfig().getDouble("abilities.the_countess.fireball_damage_min_hearts", 2.0);
         double maxHearts = plugin.getConfig().getDouble("abilities.the_countess.fireball_damage_max_hearts", 4.0);
         if (maxHearts < minHearts) maxHearts = minHearts;
         double damage = ThreadLocalRandom.current().nextDouble(minHearts, maxHearts + 0.0001) * 2.0;
+        world.spawnParticle(Particle.EXPLOSION, impact, 2, 0.3, 0.3, 0.3, 0);
+        world.playSound(impact, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.2f);
         for (Entity entity : world.getNearbyEntities(impact, radius, radius, radius)) {
             if (!(entity instanceof LivingEntity target) || target.equals(owner)) continue;
             double distance = Math.max(0.2, target.getLocation().distance(impact));
             if (distance > radius) continue;
             double factor = Math.max(0.35, 1.0 - (distance / radius));
-            target.damage(damage * factor, owner);
+            if (!AbilityKillTracker.damage(plugin, target, owner, damage * factor, "death_messages.the_countess", true)) continue;
             target.setFireTicks(Math.max(target.getFireTicks(), 80));
+            Vector push = target.getLocation().toVector().subtract(impact.toVector());
+            if (push.lengthSquared() < 0.0001) push = owner.getLocation().getDirection().clone();
+            target.setVelocity(target.getVelocity().add(push.normalize().multiply(0.6 * factor).setY(0.3 * factor)));
         }
         world.spawnParticle(Particle.FLAME, impact, 45, 0.75, 0.45, 0.75, 0.08);
     }

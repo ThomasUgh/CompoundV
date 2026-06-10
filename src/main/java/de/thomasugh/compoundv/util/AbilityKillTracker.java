@@ -34,9 +34,9 @@ public final class AbilityKillTracker {
         return marker;
     }
 
-    public static void damage(CompoundV plugin, LivingEntity target, Player attacker,
-                              double damage, String messageKey, boolean allowDirectFallback) {
-        if (plugin == null || target == null || attacker == null || damage <= 0.0) return;
+    public static boolean damage(CompoundV plugin, LivingEntity target, Player attacker,
+                                 double damage, String messageKey, boolean allowDirectFallback) {
+        if (plugin == null || target == null || attacker == null || damage <= 0.0) return false;
 
         mark(target, attacker, messageKey);
         double healthBefore = safeHealth(target);
@@ -44,13 +44,19 @@ public final class AbilityKillTracker {
 
         target.damage(Math.max(0.0, damage), attacker);
 
+        boolean landed = target.isDead()
+                || safeHealth(target) < healthBefore - 0.0001
+                || safeAbsorption(target) < absorptionBefore - 0.0001;
+        if (landed) return true;
+
         if (!shouldDirectFallback(plugin, target, attacker, allowDirectFallback, healthBefore, absorptionBefore)) {
-            return;
+            return false;
         }
 
         mark(target, attacker, messageKey);
         double nextHealth = Math.max(0.0, target.getHealth() - Math.max(0.0, damage));
         target.setHealth(nextHealth);
+        return true;
     }
 
     private static boolean shouldDirectFallback(CompoundV plugin, LivingEntity target, Player attacker,
@@ -70,12 +76,6 @@ public final class AbilityKillTracker {
         boolean permitted = attacker.hasPermission("compoundv.admin")
                 || (permission != null && !permission.isBlank() && attacker.hasPermission(permission));
         if (!permitted) return false;
-
-        if (target instanceof Player
-                && plugin.getConfig().getBoolean("combat.protection_bypass.respect_worldguard_regions", true)
-                && !RegionProtection.isPvpAllowed(attacker, target.getLocation())) {
-            return false;
-        }
 
         double healthAfter = safeHealth(target);
         double absorptionAfter = safeAbsorption(target);
