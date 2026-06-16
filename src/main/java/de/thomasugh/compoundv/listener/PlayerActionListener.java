@@ -2,6 +2,7 @@ package de.thomasugh.compoundv.listener;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
+import de.thomasugh.compoundv.util.VOneAbilities;
 import de.thomasugh.compoundv.ability.compoundv.FireAbility;
 import de.thomasugh.compoundv.ability.compoundv.BloodweaverAbility;
 import de.thomasugh.compoundv.ability.compoundv.FireSonicAbility;
@@ -294,7 +295,6 @@ public class PlayerActionListener implements Listener {
         }
     }
 
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPotionLaunch(ProjectileLaunchEvent e) {
         if (!(e.getEntity() instanceof ThrownPotion potion)) return;
@@ -524,7 +524,6 @@ public class PlayerActionListener implements Listener {
             return;
         }
 
-
         if (ab instanceof TheVeteranAbility veteran && canUseSneakLeftClickAny(p, a)) {
             cancelAbilityInteraction(e);
             veteran.handleSneakLeftClick(p);
@@ -585,7 +584,6 @@ public class PlayerActionListener implements Listener {
     private boolean canUseSneakLeftClickAny(Player p, Action action) {
         return p.isSneaking() && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
     }
-
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onArmSwing(PlayerAnimationEvent e) {
@@ -712,7 +710,6 @@ public class PlayerActionListener implements Listener {
         if (!prevGround && currGround && p.getFlySpeed() > 0.1001f) {
             p.setFlySpeed(0.1f);
         }
-
 
         if (!prevGround || currGround
                 || p.getVelocity().getY() <= 0.15
@@ -914,7 +911,6 @@ public class PlayerActionListener implements Listener {
         target.setVelocity(target.getVelocity().add(dir));
     }
 
-
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSonicBoomFallExplosionPlayerDamage(EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
@@ -950,6 +946,32 @@ public class PlayerActionListener implements Listener {
                 && e.getDamager() instanceof Projectile) {
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onVOneIncomingDamage(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Player p)) return;
+        if (!plugin.getConfig().getBoolean("abilities.v_one_defense.enabled", true)) return;
+
+        Ability ability = manager.getAbility(p);
+        if (ability == null) return;
+
+        String id = ability.getId();
+        double multiplier;
+        if (VOneAbilities.isUpgrade(id)) {
+
+            multiplier = plugin.getConfig().getDouble(
+                    "abilities.v_one_defense.upgrade_damage_taken_multiplier", 0.9);
+        } else if (VOneAbilities.isPure(id)) {
+
+            multiplier = plugin.getConfig().getDouble(
+                    "abilities.v_one_defense.pure_damage_taken_multiplier", 0.8);
+        } else {
+            return;
+        }
+
+        if (multiplier == 1.0) return;
+        e.setDamage(Math.max(0.0, e.getDamage() * Math.max(0.0, multiplier)));
     }
 
     @EventHandler
