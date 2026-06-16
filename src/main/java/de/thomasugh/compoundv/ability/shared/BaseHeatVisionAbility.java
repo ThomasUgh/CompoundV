@@ -253,6 +253,24 @@ public abstract class BaseHeatVisionAbility implements Ability {
             return false;
         }
 
+        // Bambus durchschneiden (zwei Block-Namen je nach Wachstumsstadium).
+        if (plugin.getConfig().getBoolean("heat_vision.break_bamboo", true)
+                && (name.equals("BAMBOO") || name.equals("BAMBOO_SAPLING"))) {
+            return true;
+        }
+
+        // Spinnenweben zerstoeren (COBWEB ab 1.20.5, WEB als Legacy-Name).
+        if (plugin.getConfig().getBoolean("heat_vision.break_cobwebs", true)
+                && (name.equals("COBWEB") || name.equals("WEB"))) {
+            return true;
+        }
+
+        // Nether-Pflanzen zerstoeren (vergleichbar mit der Overworld-Vegetation).
+        if (plugin.getConfig().getBoolean("heat_vision.break_nether_plants", true)
+                && isNetherPlant(name)) {
+            return true;
+        }
+
         return name.equals("GRASS")
                 || name.equals("SHORT_GRASS")
                 || name.equals("TALL_GRASS")
@@ -283,6 +301,18 @@ public abstract class BaseHeatVisionAbility implements Ability {
                 || name.endsWith("_SPROUTS")
                 || name.contains("VINE")
                 || name.endsWith("_BUSH");
+    }
+
+    private boolean isNetherPlant(String name) {
+        return name.equals("NETHER_SPROUTS")
+                || name.equals("WARPED_ROOTS")
+                || name.equals("CRIMSON_ROOTS")
+                || name.equals("WARPED_FUNGUS")
+                || name.equals("CRIMSON_FUNGUS")
+                || name.equals("WEEPING_VINES")
+                || name.equals("WEEPING_VINES_PLANT")
+                || name.equals("TWISTING_VINES")
+                || name.equals("TWISTING_VINES_PLANT");
     }
 
     private boolean isProtectedFlowerLikeBlock(String name) {

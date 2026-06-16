@@ -28,7 +28,8 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
         return switch (stage) {
             case 2 -> "&a";
             case 3 -> "&6";
-            case 4 -> "&c";
+            case 4 -> "&5";
+            case 5 -> "&c";
             default -> "&b";
         };
     }
@@ -44,6 +45,7 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
             case 2 -> " &7II";
             case 3 -> " &7III";
             case 4 -> " &7IV";
+            case 5 -> " &7V";
             default -> " &7I";
         };
         return actionBarColorCode() + actionBarLabel() + "&r" + suffix;
@@ -57,6 +59,7 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
             case 2 -> 35.0;
             case 3 -> 37.0;
             case 4 -> 40.0;
+            case 5 -> 44.0;
             default -> 30.0;
         });
     }
@@ -66,7 +69,8 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
         double hearts = plugin.getConfig().getDouble(stagePath("damage_hearts"), switch (stage) {
             case 2 -> 2.0;
             case 3 -> 2.25;
-            case 4 -> 2.7;
+            case 4 -> 2.5;
+            case 5 -> 2.7;
             default -> 1.35;
         });
         return Math.max(0.0, hearts) * 2.0;
@@ -77,7 +81,8 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
         return switch (stage) {
             case 2 -> Color.fromRGB(45, 255, 105);
             case 3 -> Color.fromRGB(255, 135, 25);
-            case 4 -> Color.fromRGB(255, 35, 18);
+            case 4 -> Color.fromRGB(170, 50, 255);  // lila
+            case 5 -> Color.fromRGB(255, 35, 18);   // rot
             default -> Color.fromRGB(45, 210, 255);
         };
     }
@@ -87,7 +92,8 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
         return switch (stage) {
             case 2 -> Color.fromRGB(155, 255, 175);
             case 3 -> Color.fromRGB(255, 190, 80);
-            case 4 -> Color.fromRGB(255, 100, 65);
+            case 4 -> Color.fromRGB(205, 130, 255); // lila
+            case 5 -> Color.fromRGB(255, 100, 65);  // rot
             default -> Color.fromRGB(150, 235, 255);
         };
     }
@@ -99,11 +105,12 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
     }
 
     @Override protected int glowParticles() {
-        return Math.max(0, plugin.getConfig().getInt(stagePath("glow_particles"), stage == 4 ? 1 : super.glowParticles()));
+        return Math.max(0, plugin.getConfig().getInt(stagePath("glow_particles"), stage >= 4 ? 1 : super.glowParticles()));
     }
 
     @Override protected int impactParticles() {
-        return Math.max(0, plugin.getConfig().getInt(stagePath("impact_particles"), stage == 4 ? 16 : stage == 3 ? 14 : super.impactParticles()));
+        return Math.max(0, plugin.getConfig().getInt(stagePath("impact_particles"),
+                stage == 5 ? 18 : stage == 4 ? 16 : stage == 3 ? 14 : super.impactParticles()));
     }
 
     @Override protected float size() {
@@ -124,7 +131,7 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
 
         // Global particle tuning is the default for every Heatvision tier.
         // Stage-specific tuning only wins when explicitly enabled so changing
-        // heat_vision.particles.step/core_size/glow_size always affects I-IV.
+        // heat_vision.particles.step/core_size/glow_size always affects I-V.
         if (plugin.getConfig().getBoolean(stagePath("custom_particles"), false)) {
             return plugin.getConfig().getDouble(stagePath(key), global);
         }

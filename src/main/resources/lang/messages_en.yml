@@ -88,9 +88,9 @@ ability:
   heat_vision:
     description:
       - "<prefix>&8• &bHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle the beam."
-      - "<prefix>&8• &7Stages: &bI&7 = 1.35 hearts / 30 blocks, &aII&7 = 2 hearts / 35 blocks."
-      - "<prefix>&8• &7More stages: &6III&7 = 2.25 hearts / 37 blocks, &cIV&7 = 2.7 hearts / 40 blocks."
-      - "<prefix>&8• &7Can melt ice, snow blocks, flat snow layers, and cook raw mob drops."
+      - "<prefix>&8• &7Stages: &bI&7 = 1.35 hearts / 30 blocks, &aII&7 = 2 hearts / 35 blocks, &6III&7 = 2.25 hearts / 37 blocks."
+      - "<prefix>&8• &7More stages: &5IV (purple)&7 = 2.5 hearts / 40 blocks, &cV (red)&7 = 2.7 hearts / 44 blocks."
+      - "<prefix>&8• &7Melts ice/snow, cooks raw mob drops, and destroys bamboo, cobwebs and nether plants."
   ice_cube:
     description:
       - "<prefix>&8• &bFrost Walker&7: water freezes under you while moving."

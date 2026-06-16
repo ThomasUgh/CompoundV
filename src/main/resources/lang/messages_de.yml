@@ -81,9 +81,9 @@ ability:
   heat_vision:
     description:
     - '<prefix>&8• &bHeat Vision&7: Drücke &dF &8(Swap Item with Offhand)&7 zum Umschalten des Strahls.'
-    - '<prefix>&8• &7Stufen: &bI&7 = 1,35 Herzen / 30 Blöcke, &aII&7 = 2 Herzen / 35 Blöcke.'
-    - '<prefix>&8• &7Weitere Stufen: &6III&7 = 2,25 Herzen / 37 Blöcke, &cIV&7 = 2,7 Herzen / 40 Blöcke.'
-    - <prefix>&8• &7Kann Eis, Schneeblöcke und flache Schneeschichten schmelzen und rohe Mob-Drops braten.
+    - '<prefix>&8• &7Stufen: &bI&7 = 1,35 Herzen / 30 Blöcke, &aII&7 = 2 Herzen / 35 Blöcke, &6III&7 = 2,25 Herzen / 37 Blöcke.'
+    - '<prefix>&8• &7Weitere Stufen: &5IV (lila)&7 = 2,5 Herzen / 40 Blöcke, &cV (rot)&7 = 2,7 Herzen / 44 Blöcke.'
+    - <prefix>&8• &7Schmilzt Eis/Schnee, brät rohe Mob-Drops und zerstört Bambus, Spinnenweben und Nether-Pflanzen.
   ice_cube:
     description:
     - '<prefix>&8• &bFrost Walker&7: Wasser friert unter dir beim Laufen ein.'

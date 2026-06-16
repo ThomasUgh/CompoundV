@@ -94,6 +94,10 @@ public final class AbilityAliases {
             Map.entry("heat_vision_4", "heat_vision_4"),
             Map.entry("heat_vision_iv", "heat_vision_4"),
             Map.entry("heatvisioniv", "heat_vision_4"),
+            Map.entry("heatvision5", "heat_vision_5"),
+            Map.entry("heat_vision_5", "heat_vision_5"),
+            Map.entry("heat_vision_v", "heat_vision_5"),
+            Map.entry("heatvisionv", "heat_vision_5"),
 
             Map.entry("flight", "fly"),
             Map.entry("invisibility", "the_ghost"),

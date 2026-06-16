@@ -124,7 +124,8 @@ public final class CompoundV extends JavaPlugin {
         registry.register(new HeatVisionAbility(this, "heat_vision", "Heat Vision I", 1, 0x2DD2FF));
         registry.register(new HeatVisionAbility(this, "heat_vision_2", "Heat Vision II", 2, 0x2DFF69));
         registry.register(new HeatVisionAbility(this, "heat_vision_3", "Heat Vision III", 3, 0xFF8C1A));
-        registry.register(new HeatVisionAbility(this, "heat_vision_4", "Heat Vision IV", 4, 0xFF2A1A));
+        registry.register(new HeatVisionAbility(this, "heat_vision_4", "Heat Vision IV", 4, 0xAA32FF));
+        registry.register(new HeatVisionAbility(this, "heat_vision_5", "Heat Vision V", 5, 0xFF2A1A));
         registry.register(new SpeedsterAbility(this));
         registry.register(new StrengthAbility(this));
         registry.register(new TheGhostAbility(this));

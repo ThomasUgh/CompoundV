@@ -42,6 +42,7 @@ compound_v:
     heat_vision_2: 7
     heat_vision_3: 6
     heat_vision_4: 5
+    heat_vision_5: 4
     ice_cube: 8
     speedster: 10
     strength: 18
@@ -74,6 +75,7 @@ temp_v:
     heat_vision_2: 7
     heat_vision_3: 6
     heat_vision_4: 5
+    heat_vision_5: 4
     speedster: 20
     strength: 25
     the_ghost: 15
