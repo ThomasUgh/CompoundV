@@ -81,8 +81,8 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
         return switch (stage) {
             case 2 -> Color.fromRGB(45, 255, 105);
             case 3 -> Color.fromRGB(255, 135, 25);
-            case 4 -> Color.fromRGB(170, 50, 255);  // lila
-            case 5 -> Color.fromRGB(255, 35, 18);   // rot
+            case 4 -> Color.fromRGB(170, 50, 255);
+            case 5 -> Color.fromRGB(255, 35, 18);
             default -> Color.fromRGB(45, 210, 255);
         };
     }
@@ -92,8 +92,8 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
         return switch (stage) {
             case 2 -> Color.fromRGB(155, 255, 175);
             case 3 -> Color.fromRGB(255, 190, 80);
-            case 4 -> Color.fromRGB(205, 130, 255); // lila
-            case 5 -> Color.fromRGB(255, 100, 65);  // rot
+            case 4 -> Color.fromRGB(205, 130, 255);
+            case 5 -> Color.fromRGB(255, 100, 65);
             default -> Color.fromRGB(150, 235, 255);
         };
     }
@@ -129,9 +129,6 @@ public class HeatVisionAbility extends BaseHeatVisionAbility {
         String globalPath = "heat_vision.particles." + key;
         double global = plugin.getConfig().getDouble(globalPath, fallback);
 
-        // Global particle tuning is the default for every Heatvision tier.
-        // Stage-specific tuning only wins when explicitly enabled so changing
-        // heat_vision.particles.step/core_size/glow_size always affects I-V.
         if (plugin.getConfig().getBoolean(stagePath("custom_particles"), false)) {
             return plugin.getConfig().getDouble(stagePath(key), global);
         }

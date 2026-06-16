@@ -1,7 +1,6 @@
 package de.thomasugh.compoundv.ability.compoundv;
 import de.thomasugh.compoundv.util.AbilityKillTracker;
 
-
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.util.AttributeUtil;
@@ -29,6 +28,7 @@ public class TheRunnerAbility implements Ability {
     private final CompoundV plugin;
     private final NamespacedKey healthModKey;
     private final NamespacedKey attackSpeedKey;
+    private final NamespacedKey stepKey;
     private final Map<UUID, Integer> speedLevels = new HashMap<>();
     private final Map<UUID, Map<UUID, Long>> impactCooldowns = new HashMap<>();
 
@@ -36,6 +36,7 @@ public class TheRunnerAbility implements Ability {
         this.plugin = plugin;
         this.healthModKey = new NamespacedKey(plugin, "runner_hearts");
         this.attackSpeedKey = new NamespacedKey(plugin, "runner_attack_speed");
+        this.stepKey = new NamespacedKey(plugin, "runner_step");
     }
 
     @Override public String getId() { return "the_runner"; }
@@ -67,6 +68,9 @@ public class TheRunnerAbility implements Ability {
         AttributeUtil.setAttackSpeedBonus(player, attackSpeedKey,
                 plugin.getConfig().getDouble("abilities.the_runner.attack_speed_bonus", 1024.0));
 
+        AttributeUtil.setStepHeightBonus(player, stepKey,
+                plugin.getConfig().getDouble("abilities.the_runner.step_height_bonus", 0.9));
+
         speedLevels.put(player.getUniqueId(), startSpeed);
         applySpeed(player, startSpeed);
     }
@@ -81,6 +85,7 @@ public class TheRunnerAbility implements Ability {
         player.removePotionEffect(PotionEffects.STRENGTH);
         AttributeUtil.setMaxHealthBonus(player, healthModKey, 0);
         AttributeUtil.setAttackSpeedBonus(player, attackSpeedKey, 0);
+        AttributeUtil.setStepHeightBonus(player, stepKey, 0);
     }
 
     @Override
@@ -181,7 +186,6 @@ public class TheRunnerAbility implements Ability {
         }
         return levels;
     }
-
 
     private boolean didHitEntityOnPath(Location from, Location to, LivingEntity target,
                                       double radius, double verticalRadius, double pathStep) {

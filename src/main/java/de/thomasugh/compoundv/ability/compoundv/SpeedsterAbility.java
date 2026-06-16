@@ -2,7 +2,9 @@ package de.thomasugh.compoundv.ability.compoundv;
 
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
+import de.thomasugh.compoundv.util.AttributeUtil;
 import de.thomasugh.compoundv.util.MessageUtil;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import de.thomasugh.compoundv.util.PotionEffects;
@@ -14,9 +16,13 @@ import java.util.UUID;
 public class SpeedsterAbility implements Ability {
 
     private final CompoundV plugin;
+    private final NamespacedKey stepKey;
     private final Map<UUID, Boolean> speedOn = new HashMap<>();
 
-    public SpeedsterAbility(CompoundV p) { plugin = p; }
+    public SpeedsterAbility(CompoundV p) {
+        plugin = p;
+        stepKey = new NamespacedKey(p, "speedster_step");
+    }
 
     @Override public String    getId()          { return "speedster"; }
     @Override public String    getDisplayName() { return "Speedster"; }
@@ -31,6 +37,9 @@ public class SpeedsterAbility implements Ability {
                 Integer.MAX_VALUE, Math.max(0, str - 1), false, false, true));
         p.addPotionEffect(new PotionEffect(PotionEffects.RESISTANCE,
                 Integer.MAX_VALUE, Math.max(0, res - 1), false, false, true));
+
+        double stepBonus = plugin.getConfig().getDouble("abilities.speedster.step_height_bonus", 0.9);
+        AttributeUtil.setStepHeightBonus(p, stepKey, stepBonus);
     }
 
     @Override
@@ -39,6 +48,7 @@ public class SpeedsterAbility implements Ability {
         p.removePotionEffect(PotionEffects.STRENGTH);
         p.removePotionEffect(PotionEffects.RESISTANCE);
         p.removePotionEffect(PotionEffects.SPEED);
+        AttributeUtil.setStepHeightBonus(p, stepKey, 0);
     }
 
     @Override
