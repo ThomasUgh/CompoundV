@@ -193,14 +193,14 @@ public abstract class BaseHeatVisionAbility implements Ability {
                 return;
             }
             if (bGlass && mat.name().contains("GLASS")) {
-                w.playSound(b.getLocation().add(0.5,0.5,0.5), Sound.BLOCK_GLASS_BREAK, 1f, 1f);
-                b.setType(Material.AIR, false); return;
+                breakBlockLikeMining(b, w);
+                return;
             }
             if (bLeaves && mat.name().contains("LEAVES")) {
-                b.setType(Material.AIR, false);
+                breakBlockLikeMining(b, w);
                 for (int i = 1; i <= 2; i++) {
                     Block next = b.getLocation().add(dir.clone().multiply(i)).getBlock();
-                    if (next.getType().name().contains("LEAVES")) next.setType(Material.AIR, false); else break;
+                    if (next.getType().name().contains("LEAVES")) breakBlockLikeMining(next, w); else break;
                 }
                 return;
             }
@@ -241,9 +241,45 @@ public abstract class BaseHeatVisionAbility implements Ability {
     }
 
     private void clearVegetationBlock(Block block, World world) {
-        Location loc = block.getLocation().add(0.5, 0.45, 0.5);
-        world.spawnParticle(Particle.SMOKE, loc, 4, 0.12, 0.12, 0.12, 0.01);
-        world.spawnParticle(Particle.FLAME, loc, 1, 0.08, 0.08, 0.08, 0.0);
+        String n = block.getType().name();
+        if (n.equals("BAMBOO") || n.equals("BAMBOO_SAPLING")) {
+            breakBambooColumn(block, world);
+            return;
+        }
+        breakBlockLikeMining(block, world);
+    }
+
+    private void breakBambooColumn(Block start, World world) {
+        breakBlockLikeMining(start, world);
+        Block above = start.getRelative(org.bukkit.block.BlockFace.UP);
+        int guard = 0;
+        while (guard++ < 24) {
+            if (!world.isChunkLoaded(above.getX() >> 4, above.getZ() >> 4)) break;
+            String n = above.getType().name();
+            if (n.equals("BAMBOO") || n.equals("BAMBOO_SAPLING")) {
+                breakBlockLikeMining(above, world);
+                above = above.getRelative(org.bukkit.block.BlockFace.UP);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private void breakBlockLikeMining(Block block, World world) {
+        if (block.getType() == Material.AIR) return;
+        Location loc = block.getLocation().add(0.5, 0.5, 0.5);
+        org.bukkit.block.data.BlockData data = block.getBlockData();
+        try {
+            org.bukkit.SoundGroup group = data.getSoundGroup();
+            world.playSound(loc, group.getBreakSound(), Math.max(0.35f, group.getVolume() * 0.8f), group.getPitch());
+        } catch (Throwable ignored) {
+            world.playSound(loc, Sound.BLOCK_GLASS_BREAK, 0.7f, 1.1f);
+        }
+        try {
+            world.spawnParticle(Particle.BLOCK, loc, 18, 0.25, 0.25, 0.25, 0.0, data);
+        } catch (Throwable ignored) {
+            world.spawnParticle(Particle.SMOKE, loc, 5, 0.14, 0.14, 0.14, 0.01);
+        }
         block.setType(Material.AIR, false);
     }
 
@@ -253,19 +289,16 @@ public abstract class BaseHeatVisionAbility implements Ability {
             return false;
         }
 
-        // Bambus durchschneiden (zwei Block-Namen je nach Wachstumsstadium).
         if (plugin.getConfig().getBoolean("heat_vision.break_bamboo", true)
                 && (name.equals("BAMBOO") || name.equals("BAMBOO_SAPLING"))) {
             return true;
         }
 
-        // Spinnenweben zerstoeren (COBWEB ab 1.20.5, WEB als Legacy-Name).
         if (plugin.getConfig().getBoolean("heat_vision.break_cobwebs", true)
                 && (name.equals("COBWEB") || name.equals("WEB"))) {
             return true;
         }
 
-        // Nether-Pflanzen zerstoeren (vergleichbar mit der Overworld-Vegetation).
         if (plugin.getConfig().getBoolean("heat_vision.break_nether_plants", true)
                 && isNetherPlant(name)) {
             return true;
