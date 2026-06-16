@@ -115,6 +115,10 @@ heat_vision:
   # (snow melt, water sizzle, vegetation clearing) are scanned. Higher = cheaper.
   # Damage and raytrace are NOT affected by this; only visual block effects.
   block_effect_interval_ticks: 4
+  # Heat Vision cuts/destroys these block groups along the beam path.
+  break_bamboo: true        # Bambus durchschneiden
+  break_cobwebs: true       # Spinnenweben zerstoeren
+  break_nether_plants: true # Nether-Pflanzen (Sprossen, Wurzeln, Pilze, Ranken)
   active_sound:
     enabled: true
     repeat_interval_ticks: 2
@@ -153,11 +157,19 @@ heat_vision:
       core_particles: 2
       active_sound: { pitch: 1.05 }
     stage_4:
-      damage_hearts: 2.7
+      # Stage IV is now PURPLE (2.5 hearts / 40 blocks).
+      damage_hearts: 2.5
       range: 40.0
       core_particles: 2
       impact_particles: 16
       active_sound: { pitch: 1.20 }
+    stage_5:
+      # Stage V is the old red stage (2.7 hearts / 44 blocks).
+      damage_hearts: 2.7
+      range: 44.0
+      core_particles: 2
+      impact_particles: 18
+      active_sound: { pitch: 1.30 }
 
 abilities:
   # false = keep your powers after death
