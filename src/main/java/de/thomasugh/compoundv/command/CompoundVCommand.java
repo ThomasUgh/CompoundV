@@ -5,6 +5,7 @@ import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.ability.AbilityRegistry;
 import de.thomasugh.compoundv.data.CompoundPotion;
 import de.thomasugh.compoundv.data.PlayerAbilityData;
+import de.thomasugh.compoundv.gui.AbilityShowcaseGui;
 import de.thomasugh.compoundv.locale.LocaleManager;
 import de.thomasugh.compoundv.manager.AbilityManager;
 import de.thomasugh.compoundv.manager.PotionRollManager;
@@ -53,6 +54,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             case "info"   -> handleInfo(sender, args);
             case "stats"  -> handleStats(sender, args);
             case "tutorial", "guide", "book" -> handleTutorial(sender);
+            case "showcase", "abilities", "gui", "powers" -> handleShowcase(sender);
             case "reload" -> handleReload(sender);
             case "help"   -> { if (requirePermission(sender, "compoundv.command.help")) help(sender); }
             default       -> { if (requirePermission(sender, "compoundv.command.help")) help(sender); }
@@ -274,6 +276,17 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(loc().msg("stats.footer"));
     }
 
+    private void handleShowcase(CommandSender sender) {
+        if (!requirePermission(sender, "compoundv.command.showcase")) {
+            return;
+        }
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(loc().msg("general.only_players"));
+            return;
+        }
+        new AbilityShowcaseGui(plugin).open(player, 0);
+    }
+
     private void handleTutorial(CommandSender sender) {
         if (!requirePermission(sender, "compoundv.command.tutorial")) {
             return;
@@ -303,6 +316,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
         s.sendMessage(loc().msg("command.info_self"));
         s.sendMessage(loc().msg("command.stats"));
         s.sendMessage(loc().msg("command.tutorial"));
+        s.sendMessage(loc().msg("command.showcase"));
         s.sendMessage(loc().msg("command.reload"));
         s.sendMessage(loc().msg("command.abilities_list",
                 "list", String.join(", ", registry.ids())));
@@ -329,6 +343,7 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             if (hasCommandPermission(s, "compoundv.command.info")) out.add("info");
             if (hasCommandPermission(s, "compoundv.command.stats")) out.add("stats");
             if (hasCommandPermission(s, "compoundv.command.tutorial")) out.add("tutorial");
+            if (hasCommandPermission(s, "compoundv.command.showcase")) out.add("showcase");
             if (hasCommandPermission(s, "compoundv.command.reload")) out.add("reload");
             if (hasCommandPermission(s, "compoundv.command.help")) out.add("help");
         } else if (args.length == 2) {

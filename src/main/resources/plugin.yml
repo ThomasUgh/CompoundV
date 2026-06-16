@@ -11,7 +11,7 @@ commands:
   compoundv:
     description: CompoundV main command
     aliases: [cv]
-    usage: /cv <give|remove|info|stats|tutorial|reload|help>
+    usage: /cv <give|remove|info|stats|tutorial|showcase|reload|help>
 
 permissions:
   compoundv.use:
@@ -40,6 +40,9 @@ permissions:
     default: true
   compoundv.command.tutorial:
     description: Allows /cv tutorial
+    default: true
+  compoundv.command.showcase:
+    description: Allows /cv showcase (ability overview GUI)
     default: true
   compoundv.command.give:
     description: Allows /cv give

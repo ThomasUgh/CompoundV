@@ -366,6 +366,7 @@ command:
   remove: <prefix>&8• &7/cv remove &a<Spieler>
   info_self: <prefix>&8• &7/cv info &d[Spieler]
   tutorial: <prefix>&8• &7/cv tutorial &8- &7gibt dir das Compound-V-Handbuch
+  showcase: <prefix>&8• &7/cv showcase &8- &7öffnet die Fähigkeiten-Übersicht
   reload: <prefix>&8• &7/cv reload
   abilities_list: '<prefix>&8• &7Fähigkeiten: &a{list}'
   footer: <prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -687,3 +688,18 @@ death_messages:
   ice_cube: "{victim} wurde von {killer} eingefroren."
   bloodweaver_lash: "{victim} wurde von {killer}s Blood Lash aufgeschnitten."
   bloodweaver_rupture: "{victim} wurde von {killer}s Blutkontrolle zerrissen."
+  size_changer_stomp: "{victim} wurde von {killer} zertrampelt."
+
+# Ability-Showcase-GUI (/cv showcase)
+showcase:
+  title: '&8» &b&lCompoundV &7&lFähigkeiten'
+  prev: '&e« Vorherige Seite'
+  next: '&eNächste Seite »'
+  info_title: '&bCompoundV Showcase'
+  info_page: '&7Seite &f{page}&7/&f{pages}'
+  info_count: '&7Fähigkeiten gesamt: &f{count}'
+  info_close: '&8» &7Klick zum Schließen'
+  category_compound_v: '&7Kategorie: &aCompound V'
+  category_v_one: '&7Kategorie: &9V One'
+  category_v_one_upgrade: '&7Kategorie: &3V-One-Upgrade'
+  no_description: 'Keine Beschreibung verfügbar.'

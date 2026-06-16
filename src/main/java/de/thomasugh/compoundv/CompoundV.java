@@ -163,6 +163,7 @@ public final class CompoundV extends JavaPlugin {
         pluginManager.registerEvents(new PlayerActionListener(this, abilityManager, rollManager), this);
         pluginManager.registerEvents(new WorkbenchRecipeListener(this), this);
         pluginManager.registerEvents(new DeathRespawnListener(this, abilityManager), this);
+        pluginManager.registerEvents(new de.thomasugh.compoundv.gui.AbilityShowcaseListener(this), this);
     }
 
     private void registerCommands() {

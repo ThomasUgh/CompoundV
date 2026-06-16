@@ -395,6 +395,7 @@ command:
   info_self: "<prefix>&8• &7/cv info &d[player]"
   stats: "<prefix>&8• &7/cv stats &d[player] &8- &7shows the active ability and controls"
   tutorial: "<prefix>&8• &7/cv tutorial &8- &7gives you the Compound V handbook"
+  showcase: "<prefix>&8• &7/cv showcase &8- &7opens the ability overview"
   reload: "<prefix>&8• &7/cv reload"
   abilities_list: "<prefix>&8• &7Abilities: &a{list}"
   footer: "<prefix>&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -729,3 +730,18 @@ death_messages:
   ice_cube: "{victim} was frozen out by {killer}."
   bloodweaver_lash: "{victim} was cut open by {killer}'s Blood Lash."
   bloodweaver_rupture: "{victim} was ruptured by {killer}'s blood control."
+  size_changer_stomp: "{victim} was stomped by {killer}."
+
+# Ability showcase GUI (/cv showcase)
+showcase:
+  title: '&8» &b&lCompoundV &7&lAbilities'
+  prev: '&e« Previous page'
+  next: '&eNext page »'
+  info_title: '&bCompoundV Showcase'
+  info_page: '&7Page &f{page}&7/&f{pages}'
+  info_count: '&7Total abilities: &f{count}'
+  info_close: '&8» &7Click to close'
+  category_compound_v: '&7Category: &aCompound V'
+  category_v_one: '&7Category: &9V One'
+  category_v_one_upgrade: '&7Category: &3V One upgrade'
+  no_description: 'No description available.'
