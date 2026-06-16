@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class ConfigMigrationService {
 
-    private static final int CURRENT_CONFIG_VERSION = 6;
+    private static final int CURRENT_CONFIG_VERSION = 7;
 
     private final JavaPlugin plugin;
 
@@ -31,6 +31,7 @@ public final class ConfigMigrationService {
         changed |= mergeBundledDefaults();
         changed |= migrateLegacyAliases();
         changed |= migrateVersion111Step32Defaults();
+        changed |= migrateVersion115Features();
         changed |= cleanupObsoleteEntries();
         changed |= pruneToBundledConfigShape();
 
@@ -280,6 +281,53 @@ public final class ConfigMigrationService {
         return changed;
     }
 
+    private boolean migrateVersion115Features() {
+        boolean changed = false;
+
+        changed |= replaceIfNumericEquals("heat_vision.stages.stage_4.damage_hearts", 2.7, 2.5);
+        changed |= setIfMissing("heat_vision.stages.stage_5.damage_hearts", 2.7);
+        changed |= setIfMissing("heat_vision.stages.stage_5.range", 44.0);
+        changed |= setIfMissing("heat_vision.stages.stage_5.core_particles", 2);
+        changed |= setIfMissing("heat_vision.stages.stage_5.impact_particles", 18);
+        changed |= setIfMissing("heat_vision.stages.stage_5.active_sound.pitch", 1.30);
+
+        changed |= setIfMissing("heat_vision.break_bamboo", true);
+        changed |= setIfMissing("heat_vision.break_cobwebs", true);
+        changed |= setIfMissing("heat_vision.break_nether_plants", true);
+
+        changed |= replaceIfNumericEquals("abilities.the_patriot.compound_v.heat_vision_range", 44.0, 45.0);
+
+        changed |= setIfMissing("compound_v.chances.heat_vision_5", 4);
+        changed |= setIfMissing("temp_v.chances.heat_vision_5", 4);
+
+        changed |= setIfMissing("abilities.v_one_defense.enabled", true);
+        changed |= setIfMissing("abilities.v_one_defense.pure_damage_taken_multiplier", 0.8);
+        changed |= setIfMissing("abilities.v_one_defense.upgrade_damage_taken_multiplier", 0.9);
+
+        changed |= replaceIfNumericEquals("abilities.size_changer.big_jump_boost_level", 0, 2);
+        changed |= setIfMissing("abilities.size_changer.big_step_height_bonus", 0.4);
+        changed |= replaceIfNumericEquals("abilities.size_changer_v_one.big_jump_boost_level", 0, 4);
+        changed |= setIfMissing("abilities.size_changer_v_one.big_step_height_bonus", 0.9);
+
+        changed |= setIfMissing("abilities.speedster.strength_level", 1);
+        changed |= setIfMissing("abilities.speedster.resistance_level", 1);
+        changed |= setIfMissing("abilities.speedster.speed_level", 4);
+        changed |= setIfMissing("abilities.speedster.step_height_bonus", 0.9);
+        changed |= setIfMissing("abilities.the_runner.step_height_bonus", 0.9);
+
+        for (String key : new String[]{"abilities.size_changer", "abilities.size_changer_v_one"}) {
+            changed |= setIfMissing(key + ".stomp_enabled", true);
+            changed |= setIfMissing(key + ".stomp_min_hearts", 0.5);
+            changed |= setIfMissing(key + ".stomp_max_hearts", 1.0);
+            changed |= setIfMissing(key + ".stomp_cooldown_ms", 500);
+            changed |= setIfMissing(key + ".stomp_horizontal_range", 0.9);
+            changed |= setIfMissing(key + ".stomp_below_range", 1.2);
+            changed |= setIfMissing(key + ".stomp_check_period_ticks", 2);
+        }
+
+        return changed;
+    }
+
     private boolean cleanupObsoleteEntries() {
         boolean changed = false;
         String[] obsolete = {
@@ -471,7 +519,6 @@ public final class ConfigMigrationService {
         return changed;
     }
 
-
     private boolean migrateVersion103Defaults() {
         boolean changed = false;
 
@@ -540,7 +587,6 @@ public final class ConfigMigrationService {
             plugin.getConfig().set("abilities.the_veteran.pre_charge_hold_ticks", null);
             changed = true;
         }
-
 
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_entity_damage_multiplier", 0.95, 1.045);
         changed |= replaceIfNumericEquals("abilities.the_veteran.beam_block_damage_multiplier", 1.10, 1.21);
@@ -787,7 +833,6 @@ public final class ConfigMigrationService {
         return changed;
     }
 
-
     private boolean migrateVersion110Step19Defaults() {
         boolean changed = false;
 
@@ -1025,7 +1070,6 @@ public final class ConfigMigrationService {
         return changed;
     }
 
-
     private boolean migrateVersion110Step23Defaults() {
         boolean changed = false;
 
@@ -1081,10 +1125,8 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.the_detonator.melee_explosion_power", 1.15);
         changed |= setIfMissing("abilities.the_detonator.melee_explosion_damage_hearts", 2.0);
 
-
         return changed;
     }
-
 
     private boolean migrateVersion110Step24Defaults() {
         boolean changed = false;
@@ -1146,7 +1188,6 @@ public final class ConfigMigrationService {
         return changed;
     }
 
-
     private boolean migrateVersion110Step26Defaults() {
         boolean changed = false;
 
@@ -1196,7 +1237,6 @@ public final class ConfigMigrationService {
         plugin.getConfig().set(path, null);
         return true;
     }
-
 
     private boolean setValueIfPresent(String path, Object value) {
         if (!plugin.getConfig().contains(path)) return false;

@@ -4,12 +4,16 @@ import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
 import de.thomasugh.compoundv.server.TaskHandle;
+import de.thomasugh.compoundv.util.AbilityKillTracker;
 import de.thomasugh.compoundv.util.AttributeUtil;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -32,10 +36,13 @@ public class SizeChangerAbility implements Ability {
     private final int color;
     private final NamespacedKey scaleKey;
     private final NamespacedKey healthKey;
+    private final NamespacedKey stepKey;
     private final Map<UUID, Mode> activeMode = new HashMap<>();
     private final Map<UUID, Long> cooldownUntil = new HashMap<>();
     private final Map<UUID, Long> lastHandledAt = new HashMap<>();
     private final Map<UUID, TaskHandle> revertTasks = new HashMap<>();
+    private final Map<UUID, TaskHandle> stompTasks = new HashMap<>();
+    private final Map<UUID, Map<UUID, Long>> stompCooldowns = new HashMap<>();
 
     public SizeChangerAbility(CompoundV plugin) {
         this(plugin, "size_changer", "SizeChanger", "abilities.size_changer", 0x9C64FF);
@@ -49,6 +56,7 @@ public class SizeChangerAbility implements Ability {
         this.color = color;
         this.scaleKey = new NamespacedKey(plugin, id + "_scale");
         this.healthKey = new NamespacedKey(plugin, id + "_hearts");
+        this.stepKey = new NamespacedKey(plugin, id + "_step");
     }
 
     @Override public String getId() { return id; }
@@ -136,7 +144,13 @@ public class SizeChangerAbility implements Ability {
         AttributeUtil.setMaxHealthBonus(player, healthKey, extraHearts * 2.0);
 
         long durationTicks = plugin.getConfig().getLong(path("big_duration_ticks"), 1200L);
-        int jumpBoostLevel = plugin.getConfig().getInt(path("big_jump_boost_level"), 0);
+
+        double stepBonus = plugin.getConfig().getDouble(path("big_step_height_bonus"),
+                id.equalsIgnoreCase("size_changer_v_one") ? 0.9 : 0.4);
+        AttributeUtil.setStepHeightBonus(player, stepKey, stepBonus);
+
+        int jumpBoostLevel = plugin.getConfig().getInt(path("big_jump_boost_level"),
+                id.equalsIgnoreCase("size_changer_v_one") ? 4 : 2);
         if (jumpBoostLevel > 0) {
             player.addPotionEffect(new PotionEffect(PotionEffects.JUMP_BOOST,
                     (int) Math.min(Integer.MAX_VALUE, durationTicks + 20L),
@@ -153,6 +167,7 @@ public class SizeChangerAbility implements Ability {
                 new Particle.DustOptions(org.bukkit.Color.fromRGB(155, 100, 255), 1.2f));
         player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.55f, 1.4f);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("size_changer.big_on"));
+        startStompTask(player);
     }
 
     private void activateSmall(Player player) {
@@ -183,9 +198,11 @@ public class SizeChangerAbility implements Ability {
     private void revertToNormal(Player player, boolean notify, boolean beginCooldown) {
         UUID uuid = player.getUniqueId();
         cancelRevertTask(uuid);
+        cancelStompTask(uuid);
         activeMode.put(uuid, Mode.NORMAL);
         AttributeUtil.setScaleBonus(player, scaleKey, 0);
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0);
+        AttributeUtil.setStepHeightBonus(player, stepKey, 0);
         player.removePotionEffect(PotionEffects.JUMP_BOOST);
         if (beginCooldown) {
             startCooldown(player);
@@ -200,6 +217,83 @@ public class SizeChangerAbility implements Ability {
     private void startCooldown(Player player) {
         long cooldownMs = plugin.getConfig().getLong(path("cooldown_ms"), 60000L);
         cooldownUntil.put(player.getUniqueId(), System.currentTimeMillis() + Math.max(0L, cooldownMs));
+    }
+
+    private void startStompTask(Player player) {
+        UUID uuid = player.getUniqueId();
+        cancelStompTask(uuid);
+        if (!plugin.getConfig().getBoolean(path("stomp_enabled"), true)) {
+            return;
+        }
+        long period = Math.max(1L, plugin.getConfig().getLong(path("stomp_check_period_ticks"), 2L));
+        stompTasks.put(uuid, SchedulerAdapter.runTimer(plugin, player, () -> {
+            if (!player.isOnline() || getMode(player) != Mode.BIG) {
+                cancelStompTask(uuid);
+                return;
+            }
+            tryStomp(player);
+        }, period, period));
+    }
+
+    private void tryStomp(Player player) {
+        if (player.isFlying()) {
+            return;
+        }
+        boolean descending = player.getVelocity().getY() < -0.08 || player.getFallDistance() > 0.4f;
+        if (!descending) {
+            return;
+        }
+
+        double minHearts = plugin.getConfig().getDouble(path("stomp_min_hearts"), 0.5);
+        double maxHearts = Math.max(minHearts, plugin.getConfig().getDouble(path("stomp_max_hearts"), 1.0));
+        double hearts = minHearts + Math.random() * (maxHearts - minHearts);
+        double damage = Math.max(0.0, hearts * 2.0);
+        if (damage <= 0.0) {
+            return;
+        }
+
+        double horiz = plugin.getConfig().getDouble(path("stomp_horizontal_range"), 0.9);
+        double below = plugin.getConfig().getDouble(path("stomp_below_range"), 1.2);
+        long cdMs = Math.max(0L, plugin.getConfig().getLong(path("stomp_cooldown_ms"), 500L));
+        double feetY = player.getLocation().getY();
+        long now = System.currentTimeMillis();
+        Map<UUID, Long> cds = stompCooldowns.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>());
+
+        boolean hitAny = false;
+        for (Entity entity : player.getNearbyEntities(horiz, below, horiz)) {
+            if (!(entity instanceof LivingEntity living)) {
+                continue;
+            }
+            if (entity.getUniqueId().equals(player.getUniqueId()) || living.isDead() || !living.isValid()) {
+                continue;
+            }
+            if (living.getLocation().getY() > feetY + 0.1) {
+                continue;
+            }
+            Long until = cds.get(entity.getUniqueId());
+            if (until != null && until > now) {
+                continue;
+            }
+            cds.put(entity.getUniqueId(), now + cdMs);
+            boolean landed = AbilityKillTracker.damage(plugin, living, player, damage,
+                    "death_messages.size_changer_stomp", true);
+            if (landed) {
+                hitAny = true;
+                living.getWorld().spawnParticle(Particle.BLOCK, living.getLocation().add(0, 0.1, 0),
+                        10, 0.25, 0.05, 0.25, 0.0, Material.DIRT.createBlockData());
+            }
+        }
+
+        if (hitAny) {
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_BIG_FALL, 0.55f, 0.8f);
+            player.setFallDistance(0f);
+        }
+    }
+
+    private void cancelStompTask(UUID uuid) {
+        TaskHandle task = stompTasks.remove(uuid);
+        if (task != null) task.cancel();
+        stompCooldowns.remove(uuid);
     }
 
     private void cancelRevertTask(UUID uuid) {

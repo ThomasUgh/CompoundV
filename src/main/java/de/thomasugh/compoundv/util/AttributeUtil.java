@@ -40,6 +40,12 @@ public final class AttributeUtil {
                 amount, AttributeModifier.Operation.ADD_NUMBER);
     }
 
+    public static void setStepHeightBonus(Player player, NamespacedKey key, double amount) {
+        setAttributeModifier(player,
+                resolveAttribute("STEP_HEIGHT", "GENERIC_STEP_HEIGHT", "PLAYER_STEP_HEIGHT"), key,
+                amount, AttributeModifier.Operation.ADD_NUMBER);
+    }
+
     private static void setAttributeModifier(Player player, Attribute attribute, NamespacedKey key,
                                              double amount, AttributeModifier.Operation operation) {
         if (attribute == null) return;
@@ -101,7 +107,7 @@ public final class AttributeUtil {
                     NamespacedKey.class, double.class, AttributeModifier.Operation.class);
             return modern.newInstance(key, amount, operation);
         } catch (ReflectiveOperationException ignored) {
-            // Fall through to the legacy constructor.
+
         }
 
         try {
