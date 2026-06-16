@@ -333,11 +333,11 @@ abilities:
     resistance_level: 1
     big_damage_multiplier: 1.25
     big_extra_hearts: 0.0
-    # Grosse Variante: hoeher springen (Jump Boost) + Step-Assist (Stufenhoehe).
-    # 0.4 Step-Bonus = ~1,0 Block, 0.9 = ~1,5 Bloecke (Basis ist 0,6).
+    # Big variant: jump higher (Jump Boost) + step assist (step height).
+    # 0.4 step bonus = ~1.0 block, 0.9 = ~1.5 blocks (base is 0.6).
     big_jump_boost_level: 2
     big_step_height_bonus: 0.4
-    # Stomp: beim Landen auf Mobs/Spielern (im Sturzflug) 0,5-1 Herz Schaden.
+    # Stomp: landing on mobs/players while descending deals 0.5-1 heart of damage.
     stomp_enabled: true
     stomp_min_hearts: 0.5
     stomp_max_hearts: 1.0
@@ -372,12 +372,12 @@ abilities:
       beam_height: 110
 
 
-  # Speedster: Geschwindigkeits-Toggle (F) + dauerhafter Step-Assist.
+  # Speedster: speed toggle (F) + permanent step assist.
   speedster:
     strength_level: 1
     resistance_level: 1
     speed_level: 4
-    # Step-Assist: 0.9 Bonus ergibt ~1,5 Bloecke Stufenhoehe (Basis 0,6).
+    # Step assist: 0.9 bonus gives ~1.5 blocks step height (base 0.6).
     step_height_bonus: 0.9
 
   # The Runner: speed stages. Level 20 is the final high-speed stage with extra impact damage.
@@ -386,7 +386,7 @@ abilities:
     strength_level: 2
     extra_hearts: 5.0
     attack_speed_bonus: 1024.0
-    # Step-Assist: ueber 1-Block-Hindernisse stapfen.
+    # Step assist: step over 1-block obstacles.
     step_height_bonus: 0.9
     speed_levels: [11, 12, 15, 20]
     default_speed_level: 11
