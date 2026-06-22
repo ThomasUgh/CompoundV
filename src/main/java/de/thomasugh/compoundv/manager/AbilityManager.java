@@ -195,8 +195,10 @@ public class AbilityManager {
             player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.55f, 1.6f);
         }
 
+        int grantParticles = plugin.getPerformanceManager() != null
+                ? plugin.getPerformanceManager().scaleParticles(40) : 40;
         player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,
-                player.getLocation().add(0, 1, 0), 40, 0.5, 0.6, 0.5, 0.15);
+                player.getLocation().add(0, 1, 0), grantParticles, 0.5, 0.6, 0.5, 0.15);
     }
 
     public void cleanup() {

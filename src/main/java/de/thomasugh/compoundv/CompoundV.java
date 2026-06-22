@@ -34,6 +34,8 @@ import de.thomasugh.compoundv.ability.vone.HealAngelAbility;
 import de.thomasugh.compoundv.ability.vone.SubmarineAbility;
 import de.thomasugh.compoundv.command.CompoundVCommand;
 import de.thomasugh.compoundv.config.ConfigMigrationService;
+import de.thomasugh.compoundv.config.ConfigValidator;
+import de.thomasugh.compoundv.server.PerformanceManager;
 import de.thomasugh.compoundv.listener.DeathRespawnListener;
 import de.thomasugh.compoundv.listener.WorkbenchRecipeListener;
 import de.thomasugh.compoundv.listener.PlayerActionListener;
@@ -69,6 +71,7 @@ public final class CompoundV extends JavaPlugin {
     private ServerCompatibility compatibility;
     private UpdateCheckerService updateChecker;
     private MetricsService metricsService;
+    private PerformanceManager performanceManager;
 
     @Override
     public void onEnable() {
@@ -90,12 +93,16 @@ public final class CompoundV extends JavaPlugin {
         if (abilityManager != null) {
             abilityManager.cleanup();
         }
+        if (performanceManager != null) {
+            performanceManager.shutdown();
+        }
         instance = null;
     }
 
     private void prepareConfiguration() {
         saveDefaultConfig();
         new ConfigMigrationService(this).migrate();
+        new ConfigValidator(this).validateAndClamp();
         new LanguageResourceInstaller(this).installOrUpdate();
     }
 
@@ -115,6 +122,8 @@ public final class CompoundV extends JavaPlugin {
         abilityManager = new AbilityManager(this, registry, persistence);
         rollManager = new PotionRollManager(this, abilityManager);
         metricsService = new MetricsService(this);
+        performanceManager = new PerformanceManager(this);
+        performanceManager.start();
     }
 
     private void registerAbilities() {
@@ -194,6 +203,10 @@ public final class CompoundV extends JavaPlugin {
                 + " abilities (language: " + localeManager.getLanguage()
                 + ", server: " + compatibility.serverName()
                 + ", folia: " + compatibility.isFolia() + ")");
+    }
+
+    public PerformanceManager getPerformanceManager() {
+        return performanceManager;
     }
 
     public static CompoundV getInstance() {

@@ -304,6 +304,10 @@ public class CompoundVCommand implements CommandExecutor, TabCompleter {
             return;
         }
         plugin.reloadConfig();
+        new de.thomasugh.compoundv.config.ConfigValidator(plugin).validateAndClamp();
+        if (plugin.getPerformanceManager() != null) {
+            plugin.getPerformanceManager().reload();
+        }
         plugin.getLocaleManager().reload();
         sender.sendMessage(loc().msg("general.reloaded"));
     }

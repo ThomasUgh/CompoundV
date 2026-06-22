@@ -23,6 +23,15 @@ updates:
   op_chat_delay_ticks: 60
 
 # avoids giving the same power again right after, so repeated drinks feel more random
+
+# Global performance limiter (preconfigured safe defaults)
+performance:
+  particle_multiplier: 1.0  # global particle multiplier (0.1-3.0)
+  tps_adaptive_particles: true # auto-reduce particles when TPS is low
+  min_tps: 17.0 # TPS threshold for adaptive scaling (5-20)
+  max_scan_entities: 60 # max entities scanned per ability sweep (8-512)
+  max_concurrent_cinematics: 3 # max simultaneous ascension cinematics (1-32)
+  config_validation: warn_and_clamp # off | warn_only | warn_and_clamp
 randomization:
   anti_repeat: true
   # how many of your most recent powers to skip when possible (0 = off)
