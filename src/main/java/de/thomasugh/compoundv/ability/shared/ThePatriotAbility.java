@@ -36,6 +36,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ThePatriotAbility extends BaseHeatVisionAbility {
 
+    private static final String RED_TEAM = "cv_red_glow";
+
     private final String id, tierKey;
     private final int color;
     private final NamespacedKey healthModKey;
@@ -184,14 +186,15 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
 
     private void refreshGlow(Player p) {
         double r = plugin.getConfig().getDouble(s("glow_radius"), 50);
-        Team team = redTeam();
+        int cap = plugin.getPerformanceManager() != null
+                ? plugin.getPerformanceManager().maxScanEntities() : Integer.MAX_VALUE;
+        int scanned = 0;
         Set<UUID> currentTargets = new HashSet<>();
         for (Entity e : p.getNearbyEntities(r, r, r)) {
             if (!(e instanceof LivingEntity le) || e == p) continue;
+            if (scanned++ >= cap) break;
             currentTargets.add(le.getUniqueId());
-            le.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
-                    45, 0, false, false, false));
-            if (team != null) team.addEntry(scoreboardEntry(e));
+            applyRedGlow(le);
         }
         clearStaleGlow(p, currentTargets);
         visibleTargets.put(p.getUniqueId(), currentTargets);
@@ -200,27 +203,23 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
     private void clearGlow(Player p) {
         Set<UUID> oldTargets = visibleTargets.remove(p.getUniqueId());
         if (oldTargets == null) return;
-        Team team = redTeam();
         for (UUID targetId : oldTargets) {
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                living.removePotionEffect(PotionEffects.GLOWING);
+                removeRedGlow(living);
             }
-            if (team != null && entity != null) team.removeEntry(scoreboardEntry(entity));
         }
     }
 
     private void clearStaleGlow(Player player, Set<UUID> currentTargets) {
         Set<UUID> oldTargets = visibleTargets.get(player.getUniqueId());
         if (oldTargets == null) return;
-        Team team = redTeam();
         for (UUID targetId : oldTargets) {
             if (currentTargets.contains(targetId)) continue;
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                living.removePotionEffect(PotionEffects.GLOWING);
+                removeRedGlow(living);
             }
-            if (team != null && entity != null) team.removeEntry(scoreboardEntry(entity));
         }
     }
 
@@ -231,11 +230,38 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         return entity.getUniqueId().toString();
     }
 
-    private void renderPrivateGlowOutline(Player viewer, LivingEntity target, Particle.DustOptions dust) {
-        double eyeHeight = Math.max(0.8, target.getEyeHeight());
-        org.bukkit.Location base = target.getLocation().add(0, Math.min(1.15, eyeHeight * 0.55), 0);
-        viewer.spawnParticle(Particle.DUST, base, 10, 0.30, Math.min(0.75, eyeHeight * 0.38), 0.30, 0, dust);
-        viewer.spawnParticle(Particle.FLAME, base, 2, 0.18, 0.26, 0.18, 0.01);
+    private void applyRedGlow(LivingEntity target) {
+        addToRedTeam(target);
+        if (!target.isGlowing()) target.setGlowing(true);
+    }
+
+    private void removeRedGlow(LivingEntity target) {
+        removeFromRedTeam(target);
+        if (target.isGlowing()) target.setGlowing(false);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void addToRedTeam(Entity entity) {
+        Team team = redTeam();
+        if (team == null) return;
+        try {
+            String entry = scoreboardEntry(entity);
+            if (!team.hasEntry(entry)) team.addEntry(entry);
+        } catch (Throwable ignored) {
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void removeFromRedTeam(Entity entity) {
+        try {
+            var manager = Bukkit.getScoreboardManager();
+            if (manager == null) return;
+            Team team = manager.getMainScoreboard().getTeam(RED_TEAM);
+            if (team == null) return;
+            String entry = scoreboardEntry(entity);
+            if (team.hasEntry(entry)) team.removeEntry(entry);
+        } catch (Throwable ignored) {
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -244,13 +270,11 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
             var manager = Bukkit.getScoreboardManager();
             if (manager == null) return null;
             var sb = manager.getMainScoreboard();
-            Team t = sb.getTeam("cv_red_glow");
-            if (t == null) t = sb.registerNewTeam("cv_red_glow");
+            Team t = sb.getTeam(RED_TEAM);
+            if (t == null) t = sb.registerNewTeam(RED_TEAM);
             t.setColor(ChatColor.RED);
             return t;
         } catch (Throwable ignored) {
-            // Folia can reject global scoreboard team changes from region/entity threads.
-            // The glowing potion effect still works; color is optional.
             return null;
         }
     }
