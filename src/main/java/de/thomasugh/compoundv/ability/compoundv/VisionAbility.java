@@ -3,6 +3,7 @@ package de.thomasugh.compoundv.ability.compoundv;
 import de.thomasugh.compoundv.CompoundV;
 import de.thomasugh.compoundv.ability.Ability;
 import de.thomasugh.compoundv.util.MessageUtil;
+import de.thomasugh.compoundv.util.PrivateGlowUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -22,6 +23,8 @@ import java.util.Set;
 import java.util.UUID;
 
 public class VisionAbility implements Ability {
+
+    private static final String VISION_TEAM = "cv_vision_glow";
 
     private final CompoundV plugin;
     private final Map<UUID, Boolean> xrayActive = new HashMap<>();
@@ -82,14 +85,15 @@ public class VisionAbility implements Ability {
 
     private void refreshXray(Player player) {
         double radius = plugin.getConfig().getDouble("abilities.vision.xray_radius", 35.0);
-        Team team = visionTeam();
+        int cap = plugin.getPerformanceManager() != null
+                ? plugin.getPerformanceManager().maxScanEntities() : Integer.MAX_VALUE;
+        int scanned = 0;
         Set<UUID> currentTargets = new HashSet<>();
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (!(entity instanceof LivingEntity living) || entity.equals(player)) continue;
+            if (scanned++ >= cap) break;
             currentTargets.add(living.getUniqueId());
-            living.addPotionEffect(new PotionEffect(PotionEffects.GLOWING,
-                    45, 0, false, false, false));
-            if (team != null) team.addEntry(entity.getUniqueId().toString());
+            PrivateGlowUtil.applyGlow(player, living, ChatColor.RED, VISION_TEAM, 45);
         }
         clearStaleGlow(player, currentTargets);
         visibleTargets.put(player.getUniqueId(), currentTargets);
@@ -98,27 +102,23 @@ public class VisionAbility implements Ability {
     private void clearXray(Player player) {
         Set<UUID> oldTargets = visibleTargets.remove(player.getUniqueId());
         if (oldTargets == null) return;
-        Team team = visionTeam();
         for (UUID targetId : oldTargets) {
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                living.removePotionEffect(PotionEffects.GLOWING);
+                PrivateGlowUtil.clearGlow(player, living, VISION_TEAM);
             }
-            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
     private void clearStaleGlow(Player player, Set<UUID> currentTargets) {
         Set<UUID> oldTargets = visibleTargets.get(player.getUniqueId());
         if (oldTargets == null) return;
-        Team team = visionTeam();
         for (UUID targetId : oldTargets) {
             if (currentTargets.contains(targetId)) continue;
             Entity entity = Bukkit.getEntity(targetId);
             if (entity instanceof LivingEntity living) {
-                living.removePotionEffect(PotionEffects.GLOWING);
+                PrivateGlowUtil.clearGlow(player, living, VISION_TEAM);
             }
-            if (team != null) team.removeEntry(targetId.toString());
         }
     }
 
@@ -126,21 +126,6 @@ public class VisionAbility implements Ability {
         LocationSafe.spawnEntityOutline(viewer, target, dust);
     }
 
-    @SuppressWarnings("deprecation")
-    private Team visionTeam() {
-        try {
-            var manager = Bukkit.getScoreboardManager();
-            if (manager == null) return null;
-            var sb = manager.getMainScoreboard();
-            Team team = sb.getTeam("cv_vision_glow");
-            if (team == null) team = sb.registerNewTeam("cv_vision_glow");
-            team.setColor(ChatColor.AQUA);
-            return team;
-        } catch (Throwable ignored) {
-            // Folia can reject global scoreboard team changes from region/entity threads.
-            return null;
-        }
-    }
     private static final class LocationSafe {
         private static void spawnEntityOutline(Player viewer, LivingEntity target, Particle.DustOptions dust) {
             double eyeHeight = Math.max(0.8, target.getEyeHeight());

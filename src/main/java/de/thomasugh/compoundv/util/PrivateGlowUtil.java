@@ -53,6 +53,64 @@ public final class PrivateGlowUtil {
         }
     }
 
+    public static boolean isPrivateSupported() {
+        resolveMethods();
+        return sendPotionEffectChange != null;
+    }
+
+    public static void applyGlow(Player viewer, LivingEntity target, ChatColor color, String teamName, int durationTicks) {
+        if (viewer == null || target == null) return;
+        ensureTeam(target, color, teamName);
+        resolveMethods();
+        if (sendPotionEffectChange != null && PotionEffects.GLOWING != null) {
+            try {
+                PotionEffect effect = new PotionEffect(PotionEffects.GLOWING, durationTicks, 0, false, false, false);
+                sendPotionEffectChange.invoke(viewer, target, effect);
+                return;
+            } catch (Throwable ignored) {
+            }
+        }
+        if (PotionEffects.GLOWING != null) {
+            target.addPotionEffect(new PotionEffect(PotionEffects.GLOWING, durationTicks, 0, false, false, false));
+        }
+    }
+
+    public static void clearGlow(Player viewer, LivingEntity target, String teamName) {
+        if (target == null) return;
+        resolveMethods();
+        boolean cleared = false;
+        try {
+            if (viewer != null && sendPotionEffectChangeRemove != null && PotionEffects.GLOWING != null) {
+                sendPotionEffectChangeRemove.invoke(viewer, target, PotionEffects.GLOWING);
+                cleared = true;
+            } else if (viewer != null && sendPotionEffectChange != null && PotionEffects.GLOWING != null) {
+                PotionEffect clearEffect = new PotionEffect(PotionEffects.GLOWING, 1, 0, false, false, false);
+                sendPotionEffectChange.invoke(viewer, target, clearEffect);
+                cleared = true;
+            }
+        } catch (Throwable ignored) {
+        }
+        if (!cleared && PotionEffects.GLOWING != null) {
+            target.removePotionEffect(PotionEffects.GLOWING);
+        }
+        removeFromTeam(target, teamName);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void removeFromTeam(Entity entity, String teamName) {
+        if (teamName == null) return;
+        try {
+            Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+            Team team = scoreboard.getTeam(teamName);
+            if (team == null) return;
+            String entry = scoreboardEntry(entity);
+            if (team.hasEntry(entry)) {
+                team.removeEntry(entry);
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
     @SuppressWarnings("deprecation")
     private static void ensureTeam(Entity entity, ChatColor color, String teamName) {
         try {
