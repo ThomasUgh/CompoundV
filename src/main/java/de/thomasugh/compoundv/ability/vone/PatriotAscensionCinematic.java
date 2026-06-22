@@ -39,6 +39,7 @@ public final class PatriotAscensionCinematic {
     public void cancel(UUID uuid) {
         if (uuid != null) {
             active.remove(uuid);
+        if (plugin.getPerformanceManager() != null) plugin.getPerformanceManager().releaseCinematic(uuid);
         }
     }
 
@@ -48,6 +49,9 @@ public final class PatriotAscensionCinematic {
 
         final UUID uuid = player.getUniqueId();
         cancelExisting(player, uuid);
+        if (plugin.getPerformanceManager() != null && !plugin.getPerformanceManager().tryAcquireCinematic(uuid)) {
+            return;
+        }
         active.add(uuid);
 
         final long chargeTicks = Math.max(0L, plugin.getConfig().getLong(BASE + ".charge_up_ticks", 40L));
@@ -117,6 +121,7 @@ public final class PatriotAscensionCinematic {
             }
         }
         active.remove(uuid);
+        if (plugin.getPerformanceManager() != null) plugin.getPerformanceManager().releaseCinematic(uuid);
         if (player != null) {
             trySetWalkSpeed(player, 0.2f);
             player.removePotionEffect(PotionEffects.SLOWNESS);
@@ -178,6 +183,7 @@ public final class PatriotAscensionCinematic {
 
     private void release(UUID uuid, Player p, float originalWalk) {
         active.remove(uuid);
+        if (plugin.getPerformanceManager() != null) plugin.getPerformanceManager().releaseCinematic(uuid);
         tasks.remove(uuid);
         if (p == null) return;
         trySetWalkSpeed(p, originalWalk <= 0f ? 0.2f : originalWalk);
