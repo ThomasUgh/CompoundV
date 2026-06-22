@@ -148,6 +148,9 @@ public class PotionRollManager {
                         + "' in " + type.getConfigKey() + ".chances. Use V One as an upgrade instead.");
                 continue;
             }
+            if (!plugin.getConfig().getBoolean("abilities." + abilityId + ".enabled", true)) {
+                continue;
+            }
             map.merge(abilityId, weight, Integer::sum);
         }
         return map;

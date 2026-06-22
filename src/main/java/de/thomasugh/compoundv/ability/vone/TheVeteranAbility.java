@@ -319,6 +319,8 @@ public class TheVeteranAbility implements Ability {
         double maxRadius = veteranDouble("mushroom_cloud.radius", 8.0);
         double particleMultiplier = Math.max(0.0, veteranDouble("mushroom_cloud.particle_multiplier", 0.18));
         if (particleMultiplier <= 0.0) return;
+        int renderPeriod = (periodTicks % 2 == 0) ? 2 : 1;
+        double renderMultiplier = Math.max(particleMultiplier, 0.22);
         int soundDurationTicks = Math.max(0, veteranInt("mushroom_cloud.sound_duration_ticks", 0));
         int soundIntervalTicks = Math.max(periodTicks, Math.max(1, Math.round(40.0f / periodTicks)) * periodTicks);
 
@@ -347,10 +349,10 @@ public class TheVeteranAbility implements Ability {
                 double capRadius = 6.2 + rise * maxRadius;
                 double outerRingRadius = capRadius * 1.08;
 
-                int stemParticles = scaledParticles(12, 42.0 * fade, particleMultiplier);
-                int capParticles = scaledParticles(34, 122.0 * fade, particleMultiplier);
-                int ringParticles = scaledParticles(22, 54.0 * fade, particleMultiplier);
-                int undersideParticles = scaledParticles(14, 48.0 * fade, particleMultiplier);
+                int stemParticles = scaledParticles(12, 42.0 * fade, renderMultiplier);
+                int capParticles = scaledParticles(34, 122.0 * fade, renderMultiplier);
+                int ringParticles = scaledParticles(22, 54.0 * fade, renderMultiplier);
+                int undersideParticles = scaledParticles(14, 48.0 * fade, renderMultiplier);
 
                 Particle.DustOptions darkSmoke = new Particle.DustOptions(Color.fromRGB(44, 48, 46), 2.7f);
                 Particle.DustOptions ash = new Particle.DustOptions(Color.fromRGB(104, 112, 106), 2.4f);
@@ -386,30 +388,30 @@ public class TheVeteranAbility implements Ability {
                 }
 
                 if (progress < 0.72) {
-                    w.spawnParticle(Particle.FLAME, base.clone().add(0, 2.0 + rise * 4.4, 0), scaledParticles(18, particleMultiplier), 4.5 + rise * 3.0, 1.3, 4.5 + rise * 3.0, 0.06);
-                    w.spawnParticle(Particle.DUST, capUnderside, scaledParticles(34, particleMultiplier), capRadius * 0.66, 0.85, capRadius * 0.66, 0, ember);
-                    w.spawnParticle(Particle.DUST, base.clone().add(0, 2.2 + rise * 2.1, 0), scaledParticles(10, particleMultiplier), 2.5 + rise * 1.1, 0.75, 2.5 + rise * 1.1, 0, hotCore);
+                    w.spawnParticle(Particle.FLAME, base.clone().add(0, 2.0 + rise * 4.4, 0), scaledParticles(18, renderMultiplier), 4.5 + rise * 3.0, 1.3, 4.5 + rise * 3.0, 0.06);
+                    w.spawnParticle(Particle.DUST, capUnderside, scaledParticles(34, renderMultiplier), capRadius * 0.66, 0.85, capRadius * 0.66, 0, ember);
+                    w.spawnParticle(Particle.DUST, base.clone().add(0, 2.2 + rise * 2.1, 0), scaledParticles(10, renderMultiplier), 2.5 + rise * 1.1, 0.75, 2.5 + rise * 1.1, 0, hotCore);
                 }
 
                 if (progress < 0.36) {
                     double shockRadius = 7.0 + progress * maxRadius * 1.25;
-                    w.spawnParticle(Particle.CLOUD, base.clone().add(0, 0.35, 0), scaledParticles(12, particleMultiplier), shockRadius * 0.78, 0.12, shockRadius * 0.78, 0.08);
-                    w.spawnParticle(Particle.LARGE_SMOKE, base.clone().add(0, 0.75, 0), scaledParticles(8, particleMultiplier), shockRadius * 0.56, 0.22, shockRadius * 0.56, 0.02);
+                    w.spawnParticle(Particle.CLOUD, base.clone().add(0, 0.35, 0), scaledParticles(12, renderMultiplier), shockRadius * 0.78, 0.12, shockRadius * 0.78, 0.08);
+                    w.spawnParticle(Particle.LARGE_SMOKE, base.clone().add(0, 0.75, 0), scaledParticles(8, renderMultiplier), shockRadius * 0.56, 0.22, shockRadius * 0.56, 0.02);
                 }
 
                 if (progress > 0.18 && age % (periodTicks * 2) == 0) {
-                    w.spawnParticle(Particle.SMOKE, cap.clone().subtract(0, 4.5, 0), scaledParticles(14, particleMultiplier), capRadius * 0.95, 2.2, capRadius * 0.95, 0.018);
-                    w.spawnParticle(Particle.DUST, cap.clone().subtract(0, 3.7, 0), scaledParticles(8, particleMultiplier), capRadius * 0.75, 1.8, capRadius * 0.75, 0, ash);
+                    w.spawnParticle(Particle.SMOKE, cap.clone().subtract(0, 4.5, 0), scaledParticles(14, renderMultiplier), capRadius * 0.95, 2.2, capRadius * 0.95, 0.018);
+                    w.spawnParticle(Particle.DUST, cap.clone().subtract(0, 3.7, 0), scaledParticles(8, renderMultiplier), capRadius * 0.75, 1.8, capRadius * 0.75, 0, ash);
                 }
 
                 if (age <= soundDurationTicks && age % soundIntervalTicks == 0) {
-                    w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 2.6 + rise * 3.3, 0), scaledParticles(6, particleMultiplier), 6.5 + rise * 5.8, 1.5, 6.5 + rise * 5.8, 0.0);
+                    w.spawnParticle(Particle.EXPLOSION, base.clone().add(0, 2.6 + rise * 3.3, 0), scaledParticles(6, renderMultiplier), 6.5 + rise * 5.8, 1.5, 6.5 + rise * 5.8, 0.0);
                     w.playSound(base, Sound.ENTITY_GENERIC_EXPLODE, 1.45f, 0.22f + (float) progress * 0.24f);
                 }
 
-                age += periodTicks;
+                age += renderPeriod;
             }
-        }, 0L, periodTicks);
+        }, 0L, renderPeriod);
     }
 
     private void fireChestBeam(Player shooter, UUID uuid, UUID token) {

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class ConfigMigrationService {
 
-    private static final int CURRENT_CONFIG_VERSION = 7;
+    private static final int CURRENT_CONFIG_VERSION = 8;
 
     private final JavaPlugin plugin;
 
@@ -32,6 +32,7 @@ public final class ConfigMigrationService {
         changed |= migrateLegacyAliases();
         changed |= migrateVersion111Step32Defaults();
         changed |= migrateVersion115Features();
+        changed |= migrateVersion116Features();
         changed |= cleanupObsoleteEntries();
         changed |= pruneToBundledConfigShape();
 
@@ -277,6 +278,41 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("abilities.lose_on_death", true);
         changed |= setIfMissing("randomization.anti_repeat", true);
         changed |= setIfMissing("randomization.avoid_recent_count", 2);
+
+        return changed;
+    }
+
+    private boolean migrateVersion116Features() {
+        boolean changed = false;
+
+        changed |= setIfMissing("performance.particle_multiplier", 1.0);
+        changed |= setIfMissing("performance.tps_adaptive_particles", true);
+        changed |= setIfMissing("performance.min_tps", 17.0);
+        changed |= setIfMissing("performance.max_scan_entities", 60);
+        changed |= setIfMissing("performance.max_concurrent_cinematics", 3);
+        changed |= setIfMissing("performance.config_validation", "warn_and_clamp");
+
+        for (String id : new String[]{
+                "the_patriot", "bloodweaver", "stormstrike", "ice_cube", "fire_sonic",
+                "size_changer", "size_changer_v_one", "the_patriot_v_one", "speedster",
+                "the_runner", "the_veteran", "the_diver", "heal_angel", "submarine",
+                "the_detonator", "the_headpopper"}) {
+            changed |= setIfMissing("abilities." + id + ".enabled", true);
+        }
+
+        changed |= setIfMissing("abilities.size_changer.stomp_walk_sound_enabled", true);
+        changed |= setIfMissing("abilities.size_changer.stomp_walk_sound", "entity.iron_golem.step");
+        changed |= setIfMissing("abilities.size_changer.stomp_walk_sound_volume", 0.85);
+        changed |= setIfMissing("abilities.size_changer.stomp_walk_sound_pitch", 0.8);
+        changed |= setIfMissing("abilities.size_changer.stomp_walk_interval_ms", 320);
+        changed |= setIfMissing("abilities.size_changer.stomp_walk_min_distance", 0.06);
+
+        changed |= setIfMissing("abilities.size_changer_v_one.stomp_walk_sound_enabled", true);
+        changed |= setIfMissing("abilities.size_changer_v_one.stomp_walk_sound", "entity.iron_golem.step");
+        changed |= setIfMissing("abilities.size_changer_v_one.stomp_walk_sound_volume", 0.9);
+        changed |= setIfMissing("abilities.size_changer_v_one.stomp_walk_sound_pitch", 0.7);
+        changed |= setIfMissing("abilities.size_changer_v_one.stomp_walk_interval_ms", 300);
+        changed |= setIfMissing("abilities.size_changer_v_one.stomp_walk_min_distance", 0.06);
 
         return changed;
     }
