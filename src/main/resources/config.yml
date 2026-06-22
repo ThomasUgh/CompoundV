@@ -354,7 +354,14 @@ abilities:
     stomp_horizontal_range: 0.9
     stomp_below_range: 1.2
     stomp_check_period_ticks: 2
+    stomp_walk_sound_enabled: true
+    stomp_walk_sound: "entity.iron_golem.step"
+    stomp_walk_sound_volume: 0.85
+    stomp_walk_sound_pitch: 0.8
+    stomp_walk_interval_ms: 320
+    stomp_walk_min_distance: 0.06
   size_changer_v_one:
+    enabled: true
     strength_level: 1
     resistance_level: 1
     big_damage_multiplier: 1.75
@@ -368,9 +375,16 @@ abilities:
     stomp_horizontal_range: 0.9
     stomp_below_range: 1.2
     stomp_check_period_ticks: 2
+    stomp_walk_sound_enabled: true
+    stomp_walk_sound: "entity.iron_golem.step"
+    stomp_walk_sound_volume: 0.9
+    stomp_walk_sound_pitch: 0.7
+    stomp_walk_interval_ms: 300
+    stomp_walk_min_distance: 0.06
 
   # The Patriot + V One: short ascension animation (look up + heat-vision beam upward).
   the_patriot_v_one:
+    enabled: true
     ascension_cinematic:
       enabled: true
       start_delay_ticks: 45

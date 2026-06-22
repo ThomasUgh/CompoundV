@@ -10,6 +10,7 @@ import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -43,6 +44,8 @@ public class SizeChangerAbility implements Ability {
     private final Map<UUID, TaskHandle> revertTasks = new HashMap<>();
     private final Map<UUID, TaskHandle> stompTasks = new HashMap<>();
     private final Map<UUID, Map<UUID, Long>> stompCooldowns = new HashMap<>();
+    private final Map<UUID, Long> lastStepSoundAt = new HashMap<>();
+    private final Map<UUID, Location> lastStepLocation = new HashMap<>();
 
     public SizeChangerAbility(CompoundV plugin) {
         this(plugin, "size_changer", "SizeChanger", "abilities.size_changer", 0x9C64FF);
@@ -231,6 +234,7 @@ public class SizeChangerAbility implements Ability {
                 cancelStompTask(uuid);
                 return;
             }
+            tryWalkStomp(player);
             tryStomp(player);
         }, period, period));
     }
@@ -290,10 +294,55 @@ public class SizeChangerAbility implements Ability {
         }
     }
 
+    private void tryWalkStomp(Player player) {
+        if (!plugin.getConfig().getBoolean(path("stomp_walk_sound_enabled"), true)) {
+            return;
+        }
+        UUID uuid = player.getUniqueId();
+        Location current = player.getLocation();
+        Location previous = lastStepLocation.put(uuid, current.clone());
+        if (current.getWorld() == null) {
+            return;
+        }
+        if (previous == null || previous.getWorld() == null || !previous.getWorld().equals(current.getWorld())) {
+            return;
+        }
+
+        Material ground = current.clone().subtract(0, 0.2, 0).getBlock().getType();
+        if (ground.isAir() || !ground.isSolid()) {
+            return;
+        }
+
+        double dx = current.getX() - previous.getX();
+        double dz = current.getZ() - previous.getZ();
+        double horizontal = Math.sqrt(dx * dx + dz * dz);
+        if (horizontal < Math.max(0.0, plugin.getConfig().getDouble(path("stomp_walk_min_distance"), 0.06))) {
+            return;
+        }
+
+        long intervalMs = Math.max(0L, plugin.getConfig().getLong(path("stomp_walk_interval_ms"), 320L));
+        long now = System.currentTimeMillis();
+        if (now - lastStepSoundAt.getOrDefault(uuid, 0L) < intervalMs) {
+            return;
+        }
+        lastStepSoundAt.put(uuid, now);
+
+        String sound = plugin.getConfig().getString(path("stomp_walk_sound"), "entity.iron_golem.step");
+        if (sound == null || sound.isBlank()) {
+            return;
+        }
+        float volume = (float) plugin.getConfig().getDouble(path("stomp_walk_sound_volume"), 0.85);
+        float pitch = (float) plugin.getConfig().getDouble(path("stomp_walk_sound_pitch"), 0.8);
+        current.getWorld().playSound(current, sound, Math.max(0.0f, volume), Math.max(0.01f, pitch));
+        current.getWorld().spawnParticle(Particle.CLOUD, current.clone().add(0, 0.05, 0), 4, 0.22, 0.02, 0.22, 0.01);
+    }
+
     private void cancelStompTask(UUID uuid) {
         TaskHandle task = stompTasks.remove(uuid);
         if (task != null) task.cancel();
         stompCooldowns.remove(uuid);
+        lastStepSoundAt.remove(uuid);
+        lastStepLocation.remove(uuid);
     }
 
     private void cancelRevertTask(UUID uuid) {
