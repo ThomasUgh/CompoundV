@@ -194,6 +194,7 @@ abilities:
 
   # The Patriot: shared flight/landing tuning + higher-pitched Heatvision sound.
   the_patriot:
+    enabled: true  # set false to exclude this ability from random rolls
     shared:
       launch_velocity: 3.85
       heat_vision_active_sound:
@@ -248,6 +249,7 @@ abilities:
 
   # Bloodweaver: Marie-Moreau-like blood control. F = Blood Lash, Sneak + Left-Click = charged Blood Rupture.
   bloodweaver:
+    enabled: true
     shared:
       heat_vision_received_damage_multiplier: 0.5
       lash:
@@ -298,6 +300,7 @@ abilities:
 
   # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:
+    enabled: true
     beam_damage_hearts: 0.95625
     beam_hit_radius: 6.5         # Damage radius around the visible beam particles
     lightning_tick_damage_hearts: 0.54
@@ -308,6 +311,7 @@ abilities:
 
   # IceCube: Frost Walker, slippery movement and F ice spikes.
   ice_cube:
+    enabled: true
     frost_walker_radius: 2
     frosted_ice_keep_ms: 4500
     spike_cooldown_ms: 3000
@@ -332,12 +336,14 @@ abilities:
 
   # FireSonic is intentionally weaker than Heat Vision but ticks at a similar speed.
   fire_sonic:
+    enabled: true
     beam_damage_hearts: 0.75
     beam_fire_ticks: 70
     melee_fire_ticks: 80
 
   # SizeChanger keeps the size fantasy, but transformation damage is heavily reduced.
   size_changer:
+    enabled: true
     strength_level: 1
     resistance_level: 1
     big_damage_multiplier: 1.25
@@ -397,6 +403,7 @@ abilities:
 
   # Speedster: speed toggle (F) + permanent step assist.
   speedster:
+    enabled: true
     strength_level: 1
     resistance_level: 1
     speed_level: 4
@@ -405,6 +412,7 @@ abilities:
 
   # The Runner: speed stages. Level 20 is the final high-speed stage with extra impact damage.
   the_runner:
+    enabled: true
     resistance_level: 1
     strength_level: 2
     extra_hearts: 5.0
@@ -428,6 +436,7 @@ abilities:
   # The Veteran: Sneak + Left-Click charges a heavy chest blast.
   # Lower defaults avoid public-server ping spikes. Use /compoundv reload after config changes.
   the_veteran:
+    enabled: true
     resistance_level: 4
     strength_level: 5
     extra_hearts: 20.0
@@ -499,15 +508,18 @@ abilities:
 
   # The Diver: F uses Riptide Dash. Sneak + Left-Click toggles Sonar.
   the_diver:
+    enabled: true
     sonar_radius: 45.0
     riptide_velocity: 3.85
     riptide_cooldown_ms: 1800
 
   # Submarine: F uses the stronger dash. Sneak + Left-Click toggles Sonar.
   heal_angel:
+    enabled: true
     resistance_level: 3
 
   submarine:
+    enabled: true
     strength_level: 3
     extra_hearts: 10.0
     sonar_radius: 65.0
@@ -516,6 +528,7 @@ abilities:
 
   # The Detonator: the countdown starts with Sneak + Left-Click, including air clicks.
   the_detonator:
+    enabled: true
     explosion_charge_ticks: 60
     explosion_cooldown_ms: 10000
     cancel_charge_when_sneak_released: false
@@ -526,6 +539,7 @@ abilities:
   # they are now exposed here so they can be tuned.
   the_headpopper:
     # Permanent buffs while the ability is held (level, 1 = effect tier I).
+    enabled: true
     strength_level: 2
     resistance_level: 2
     regeneration_level: 1
