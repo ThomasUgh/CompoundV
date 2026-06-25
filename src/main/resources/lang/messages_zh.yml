@@ -1,4 +1,4 @@
-language_file_version: 28
+language_file_version: 30
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&c你没有权限这么做。
@@ -82,13 +82,13 @@ ability:
     - <prefix>&8• &7可融化冰、雪块、薄雪层，并烤熟生肉掉落。
   ice_cube:
     description:
-      - "<prefix>&8• &bFrost Walker&7：移动时脚下的水会结冰。"
-      - "<prefix>&8• &bIce Slide&7：所有方块都像冰一样滑；在冰上获得 &eSpeed II&7。"
-      - "<prefix>&8• &b冰刺&7：按 &dF &8(Swap Item with Offhand)&7 发射小型冰刺。冷却：&e3s&7。"
-      - "<prefix>&8• &7冰刺造成 &bSlowness III&7 &e5s&7，并造成 &7Weakness II&7 &e10s&7。"
-      - "<prefix>&8• &7近战命中造成 &bSlowness I&7 &e5s&7。"
-      - "<prefix>&8• &b冰墙&7：&d潜行 + 左键&7 会在前方约 &e4 格&7 生成临时冰墙。冷却：&e60秒&7。"
-      - "<prefix>&8• &7被动增益：&aStrength I&7 和 &9Resistance I&7。"
+    - "<prefix>&8• &bFrost Walker&7：移动时脚下的水会结冰。"
+    - "<prefix>&8• &bIce Slide&7：所有方块都像冰一样滑；在冰上获得 &eSpeed II&7。"
+    - "<prefix>&8• &b冰刺&7：按 &dF &8(Swap Item with Offhand)&7 发射小型冰刺。冷却：&e3s&7。"
+    - "<prefix>&8• &7冰刺造成 &bSlowness III&7 &e5s&7，并造成 &7Weakness II&7 &e10s&7。"
+    - "<prefix>&8• &7近战命中造成 &bSlowness I&7 &e5s&7。"
+    - "<prefix>&8• &b冰墙&7：&d潜行 + 左键&7 会在前方约 &e4 格&7 生成临时冰墙。冷却：&e60秒&7。"
+    - "<prefix>&8• &7被动增益：&aStrength I&7 和 &9Resistance I&7。"
   the_diver:
     description:
     - <prefix>&8• &7风格：类似 &bThe Deep&7。
@@ -227,6 +227,23 @@ ability:
     - <prefix>&8• &d潜行 + 左键&7：蓄力 &e5 秒&7 后胸束。
     - <prefix>&8• &7光束：高伤害、烧方块、移除玩家能力。
     - <prefix>&8• &7释放时近距强爆与蘑菇云。
+  bloodweaver:
+    description:
+    - '<prefix>&8• &7风格: 如 &cMarie Moreau&7。'
+    - '<prefix>&8• &dF &8(与副手交换物品)&7 发射 &cBlood Lash&7，射程达 &e25 格&7。冷却: &e3s&7。'
+    - <prefix>&8• &7Blood Lash 造成 &c2-4 颗心&7 伤害，减速目标并施加 &e3s&7 流血。
+    - <prefix>&8• &7每 &e第三次近战命中&7 施加 &e2s&7 流血，&c0.5 颗心/秒&7。
+    - <prefix>&8• &d潜行 + 左键&7 并持续潜行 &e3s&7 以在 &e15 格&7 半径内释放 &cBlood Rupture&7。
+    - <prefix>&8• &7Blood Rupture 将目标抬升 &e3 格&7，定身 &e5s&7，造成 &c2 颗心/秒&7 并击退幸存者。
+    - '<prefix>&8• &7消耗: &c2 颗心&7 和 &e20s&7 虚弱。被动: &9抗性 III&7、&a力量 II&7、&d再生 II&7、&c+5 颗心&7。'
+    - <prefix>&8• &7受到的 &cHeat Vision 伤害减少 50%&7。
+  bloodweaver_v_one:
+    description:
+    - <prefix>&8• Bloodweaver 的 &3V One 升级&7。
+    - <prefix>&8• &dF &8(与副手交换物品)&7 发射 &cBlood Lash&7，射程达 &e25 格&7，伤害 &c2.5-5 颗心&7。
+    - <prefix>&8• &d潜行 + 左键&7 并持续潜行 &e3s&7 以释放更强的 &cBlood Rupture&7。
+    - <prefix>&8• &7Blood Rupture 定身并抬升目标 &e7s&7，造成 &c2 颗心/秒&7，随后击退幸存者。
+    - '<prefix>&8• &7被动: &9抗性 III&7、&a力量 II&7、&d再生 II&7、&c+10 颗心&7 及 &c50% Heat Vision 减免&7。'
 toggle:
   heat_vision_on: '{label} &a已开启'
   heat_vision_off: '{label} &7已关闭'
@@ -356,6 +373,7 @@ command:
   usage_give: <prefix>&c用法：&7/cv give <玩家> <bottle|ability> [药剂类型]
   usage_remove: <prefix>&c用法：&7/cv remove <玩家>
   tutorial_given: <prefix>&a你收到了 Compound V 手册。
+  showcase: <prefix>&8• &7/cv showcase &8- &7打开能力总览
 info:
   plugin_header: <prefix>&8━━━━━━━━ &aCompoundV 信息 &8━━━━━━━━
   plugin_version: <prefix>&8• &7版本：&a{version}
@@ -654,3 +672,31 @@ death_messages:
   stormstrike: "{victim} 被 {killer} 过载击倒。"
   the_headpopper: "{victim} 在 {killer} 附近产生了非常糟糕的念头。"
   ice_cube: "{victim} 被 {killer} 冻住了。"
+  bloodweaver_lash: '{victim} 被 {killer} 的 Blood Lash 划开。'
+  bloodweaver_rupture: '{victim} 被 {killer} 的血液操控撕裂。'
+  fire_sonic: '{killer} 用音波烈焰将 {victim} 焚烧殆尽。'
+  shockwave: '{killer} 的冲击波将 {victim} 击碎。'
+  size_changer_stomp: '{victim} 被 {killer} 踩扁了。'
+  the_countess: '{killer} 将 {victim} 化为灰烬。'
+  the_runner: '{killer} 径直穿过了 {victim} 的身体。'
+bloodweaver:
+  lash_cooldown: '<prefix>&7Blood Lash 冷却: &e{seconds}s&7.'
+  lash_hit: <prefix>&cBlood Lash&7 命中。
+  lash_missed: <prefix>&7Blood Lash 未命中。
+  rupture_cancelled: <prefix>&7Blood Rupture 已取消。
+  rupture_charge_progress: <prefix>&cBlood Rupture&7 将在 &e{seconds}s&7 后释放。
+  rupture_charge_start: <prefix>&cBlood Rupture&7 蓄力中，保持潜行。
+  rupture_cooldown: '<prefix>&7Blood Rupture 冷却: &e{seconds}s&7.'
+  rupture_released: '<prefix>&cBlood Rupture&7 已释放。目标: &e{targets}&7.'
+showcase:
+  category_compound_v: '&7类别: &aCompound V'
+  category_v_one: '&7类别: &9V One'
+  category_v_one_upgrade: '&7类别: &3V One 升级'
+  info_close: '&8» &7点击关闭'
+  info_count: '&7能力总数: &f{count}'
+  info_page: '&7第 &f{page}&7/&f{pages} 页'
+  info_title: '&bCompoundV 展示'
+  next: '&e下一页 »'
+  no_description: 暂无描述。
+  prev: '&e« 上一页'
+  title: '&8» &b&lCompoundV &7&l能力'

@@ -1,4 +1,4 @@
-language_file_version: 29
+language_file_version: 30
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cDafür hast du keine Berechtigung.
@@ -691,6 +691,10 @@ death_messages:
   size_changer_stomp: "{victim} wurde von {killer} zertrampelt."
 
 # Ability-Showcase-GUI (/cv showcase)
+  fire_sonic: '{victim} wurde von {killer}s Schallflammen eingeäschert.'
+  shockwave: '{victim} wurde von {killer}s Schockwelle zerschmettert.'
+  the_countess: '{victim} wurde von {killer} zu Asche verbrannt.'
+  the_runner: '{victim} wurde von {killer} glatt durchbohrt.'
 showcase:
   title: '&8» &b&lCompoundV &7&lFähigkeiten'
   prev: '&e« Vorherige Seite'

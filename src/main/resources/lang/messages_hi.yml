@@ -1,4 +1,4 @@
-language_file_version: 28
+language_file_version: 30
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cआपके पास यह करने की अनुमति नहीं है।
@@ -81,13 +81,13 @@ ability:
     - <prefix>&8• &7Can melt ice, snow ब्लॉक, flat snow layers, और cook raw mob drops.
   ice_cube:
     description:
-      - "<prefix>&8• &bFrost Walker&7: चलते समय पानी तुम्हारे नीचे जमता है."
-      - "<prefix>&8• &bIce Slide&7: हर ब्लॉक फिसलन जैसा लगता है; बर्फ पर तुम्हें &eSpeed II&7 मिलता है."
-      - "<prefix>&8• &bIce Spike&7: &dF &8(Swap Item with Offhand)&7 दबाकर छोटी बर्फीली नोक दागो. Cooldown: &e3s&7."
-      - "<prefix>&8• &7Ice spikes &bSlowness III&7 को &e5s&7 और &7Weakness II&7 को &e10s&7 के लिए लगाती हैं."
-      - "<prefix>&8• &7Melee hits &bSlowness I&7 को &e5s&7 के लिए लगाते हैं."
-      - "<prefix>&8• &bIce Wall&7: &dSneak + Left-Click&7 से लगभग &e4 blocks&7 आगे temporary wall बनती है. Cooldown: &e60s&7."
-      - "<prefix>&8• &7Passive boosts: &aStrength I&7 और &9Resistance I&7."
+    - "<prefix>&8• &bFrost Walker&7: चलते समय पानी तुम्हारे नीचे जमता है."
+    - "<prefix>&8• &bIce Slide&7: हर ब्लॉक फिसलन जैसा लगता है; बर्फ पर तुम्हें &eSpeed II&7 मिलता है."
+    - "<prefix>&8• &bIce Spike&7: &dF &8(Swap Item with Offhand)&7 दबाकर छोटी बर्फीली नोक दागो. Cooldown: &e3s&7."
+    - "<prefix>&8• &7Ice spikes &bSlowness III&7 को &e5s&7 और &7Weakness II&7 को &e10s&7 के लिए लगाती हैं."
+    - "<prefix>&8• &7Melee hits &bSlowness I&7 को &e5s&7 के लिए लगाते हैं."
+    - "<prefix>&8• &bIce Wall&7: &dSneak + Left-Click&7 से लगभग &e4 blocks&7 आगे temporary wall बनती है. Cooldown: &e60s&7."
+    - "<prefix>&8• &7Passive boosts: &aStrength I&7 और &9Resistance I&7."
   the_diver:
     description:
     - '<prefix>&8• &7स्टाइल: जैसा &bThe Deep&7.'
@@ -227,6 +227,23 @@ ability:
     - '<prefix>&8• &7Beam: high damage, block जलन और player क्षमता removal.'
     - <prefix>&8• &7Starts साथ a strong point-blank blast और mushroom cloud.
   granted_tip: <prefix>&8• &7Use &f/cv stats&7 anytime to view your current ability and controls.
+  bloodweaver:
+    description:
+    - '<prefix>&8• &7शैली: &cMarie Moreau&7 जैसी।'
+    - '<prefix>&8• &dF &8(ऑफहैंड से आइटम बदलें)&7 &cBlood Lash&7 को &e25 ब्लॉक&7 तक दागता है। कूलडाउन: &e3s&7.'
+    - <prefix>&8• &7Blood Lash &c2-4 दिल&7 नुकसान देता है, लक्ष्य को धीमा करता है और &e3s&7 तक रक्तस्राव लगाता है।
+    - <prefix>&8• &7हर &eतीसरा मेली हिट&7 &e2s&7 का रक्तस्राव &c0.5 दिल/से&7 के साथ लगाता है।
+    - <prefix>&8• &dSneak + बायाँ-क्लिक&7 और &e3s&7 तक झुके रहकर &e15 ब्लॉक&7 दायरे में &cBlood Rupture&7 चलाएँ।
+    - <prefix>&8• &7Blood Rupture लक्ष्यों को &e3 ब्लॉक&7 ऊपर उठाता है, &e5s&7 तक जकड़ता है, &c2 दिल/से&7 नुकसान देता है और बचे हुओं को पीछे फेंकता है।
+    - '<prefix>&8• &7लागत: &c2 दिल&7 और &e20s&7 तक Weakness। पैसिव: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+5 दिल&7.'
+    - <prefix>&8• &7&c50% कम Heat Vision नुकसान&7 लेता है।
+  bloodweaver_v_one:
+    description:
+    - <prefix>&8• Bloodweaver के लिए &3V One अपग्रेड&7।
+    - <prefix>&8• &dF &8(ऑफहैंड से आइटम बदलें)&7 &cBlood Lash&7 को &e25 ब्लॉक&7 तक &c2.5-5 दिल&7 नुकसान के साथ दागता है।
+    - <prefix>&8• &dSneak + बायाँ-क्लिक&7 और &e3s&7 तक झुके रहकर मजबूत &cBlood Rupture&7 चलाएँ।
+    - <prefix>&8• &7Blood Rupture लक्ष्यों को &e7s&7 तक जकड़कर ऊपर उठाता है, &c2 दिल/से&7 नुकसान देता है और बचे हुओं को पीछे फेंकता है।
+    - '<prefix>&8• &7पैसिव: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+10 दिल&7 और &c50% Heat Vision कमी&7।'
 toggle:
   heat_vision_on: '{label} &aसक्रिय'
   heat_vision_off: '{label} &7deसक्रिय'
@@ -356,6 +373,7 @@ command:
   usage_remove: '<prefix>&cउपयोग: &7/cv remove <player>'
   tutorial_given: <prefix>&aYou received the Compound V handbook.
   stats: <prefix>&8• &7/cv stats &d[player] &8- &7shows the active ability and controls
+  showcase: <prefix>&8• &7/cv showcase &8- &7क्षमताओं का अवलोकन खोलता है
 info:
   plugin_header: <prefix>&8━━━━━━━━ &aCompoundV Info &8━━━━━━━━
   plugin_version: '<prefix>&8• &7वर्ज़न: &a{version}'
@@ -654,3 +672,31 @@ death_messages:
   stormstrike: "{victim} को {killer} ने ओवरचार्ज कर दिया."
   the_headpopper: "{victim} ने {killer} के पास बहुत गलत सोच लिया."
   ice_cube: "{victim} को {killer} ने जमा दिया."
+  bloodweaver_lash: '{killer} के Blood Lash ने {victim} को चीर डाला।'
+  bloodweaver_rupture: '{killer} के रक्त-नियंत्रण ने {victim} को फाड़ दिया।'
+  fire_sonic: '{killer} ने अपनी ध्वनि-ज्वालाओं से {victim} को भस्म कर दिया।'
+  shockwave: '{killer} की शॉकवेव ने {victim} को कुचल दिया।'
+  size_changer_stomp: '{killer} ने {victim} को कुचल डाला।'
+  the_countess: '{killer} ने {victim} को राख कर दिया।'
+  the_runner: '{killer} {victim} के आर-पार दौड़ गया।'
+bloodweaver:
+  lash_cooldown: '<prefix>&7Blood Lash कूलडाउन: &e{seconds}s&7.'
+  lash_hit: <prefix>&cBlood Lash&7 लगा।
+  lash_missed: <prefix>&7Blood Lash चूक गया।
+  rupture_cancelled: <prefix>&7Blood Rupture रद्द किया गया।
+  rupture_charge_progress: <prefix>&cBlood Rupture&7 &e{seconds}s&7 में।
+  rupture_charge_start: <prefix>&cBlood Rupture&7 चार्ज हो रहा है। झुके रहें।
+  rupture_cooldown: '<prefix>&7Blood Rupture कूलडाउन: &e{seconds}s&7.'
+  rupture_released: '<prefix>&cBlood Rupture&7 छोड़ा गया। लक्ष्य: &e{targets}&7.'
+showcase:
+  category_compound_v: '&7श्रेणी: &aCompound V'
+  category_v_one: '&7श्रेणी: &9V One'
+  category_v_one_upgrade: '&7श्रेणी: &3V One अपग्रेड'
+  info_close: '&8» &7बंद करने के लिए क्लिक करें'
+  info_count: '&7कुल क्षमताएँ: &f{count}'
+  info_page: '&7पृष्ठ &f{page}&7/&f{pages}'
+  info_title: '&bCompoundV प्रदर्शन'
+  next: '&eअगला पृष्ठ »'
+  no_description: कोई विवरण उपलब्ध नहीं।
+  prev: '&e« पिछला पृष्ठ'
+  title: '&8» &b&lCompoundV &7&lक्षमताएँ'

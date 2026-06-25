@@ -1,4 +1,4 @@
-language_file_version: 28
+language_file_version: 30
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cNo tienes permiso para hacer esto.
@@ -81,13 +81,13 @@ ability:
     - <prefix>&8• &7Can melt ice, snow bloques, flat snow layers, y cook raw mob drops.
   ice_cube:
     description:
-      - "<prefix>&8• &bFrost Walker&7: el agua se congela bajo tus pies al moverte."
-      - "<prefix>&8• &bIce Slide&7: todos los bloques se sienten resbaladizos; sobre hielo obtienes &eSpeed II&7."
-      - "<prefix>&8• &bPúa de hielo&7: pulsa &dF &8(Swap Item with Offhand)&7 para disparar una púa helada. Cooldown: &e3s&7."
-      - "<prefix>&8• &7Las púas aplican &bSlowness III&7 por &e5s&7 y &7Weakness II&7 por &e10s&7."
-      - "<prefix>&8• &7Los golpes cuerpo a cuerpo aplican &bSlowness I&7 por &e5s&7."
-      - "<prefix>&8• &bMuro de hielo&7: &dAgáchate + clic izquierdo&7 crea un muro temporal a unos &e4 bloques&7 delante. Enfriamiento: &e60s&7."
-      - "<prefix>&8• &7Efectos pasivos: &aStrength I&7 y &9Resistance I&7."
+    - "<prefix>&8• &bFrost Walker&7: el agua se congela bajo tus pies al moverte."
+    - "<prefix>&8• &bIce Slide&7: todos los bloques se sienten resbaladizos; sobre hielo obtienes &eSpeed II&7."
+    - "<prefix>&8• &bPúa de hielo&7: pulsa &dF &8(Swap Item with Offhand)&7 para disparar una púa helada. Cooldown: &e3s&7."
+    - "<prefix>&8• &7Las púas aplican &bSlowness III&7 por &e5s&7 y &7Weakness II&7 por &e10s&7."
+    - "<prefix>&8• &7Los golpes cuerpo a cuerpo aplican &bSlowness I&7 por &e5s&7."
+    - "<prefix>&8• &bMuro de hielo&7: &dAgáchate + clic izquierdo&7 crea un muro temporal a unos &e4 bloques&7 delante. Enfriamiento: &e60s&7."
+    - "<prefix>&8• &7Efectos pasivos: &aStrength I&7 y &9Resistance I&7."
   the_diver:
     description:
     - '<prefix>&8• &7Estilo: como &bThe Deep&7.'
@@ -227,6 +227,23 @@ ability:
     - '<prefix>&8• &7Beam: high damage, block quemadura y player habilidad removal.'
     - <prefix>&8• &7Starts con a strong point-blank blast y mushroom cloud.
   granted_tip: <prefix>&8• &7Use &f/cv stats&7 anytime to view your current ability and controls.
+  bloodweaver:
+    description:
+    - '<prefix>&8• &7Estilo: como &cMarie Moreau&7.'
+    - '<prefix>&8• &dF &8(Intercambiar objeto con la otra mano)&7 dispara &cBlood Lash&7 hasta &e25 bloques&7. Enfriamiento: &e3s&7.'
+    - <prefix>&8• &7Blood Lash inflige &c2-4 corazones&7, ralentiza al objetivo y aplica sangrado durante &e3s&7.
+    - <prefix>&8• &7Cada &etercer golpe cuerpo a cuerpo&7 aplica &e2s&7 de sangrado con &c0.5 corazones/s&7.
+    - <prefix>&8• &dAgáchate + Clic izquierdo&7 y sigue agachado &e3s&7 para lanzar &cBlood Rupture&7 en un radio de &e15 bloques&7.
+    - <prefix>&8• &7Blood Rupture eleva a los objetivos &e3 bloques&7, los inmoviliza &e5s&7, inflige &c2 corazones/s&7 y lanza a los supervivientes.
+    - '<prefix>&8• &7Coste: &c2 corazones&7 y Debilidad durante &e20s&7. Pasivo: &9Resistencia III&7, &aFuerza II&7, &dRegeneración II&7, &c+5 corazones&7.'
+    - <prefix>&8• &7Recibe &c50% menos daño de Heat Vision&7.
+  bloodweaver_v_one:
+    description:
+    - <prefix>&8• &3Mejora V One&7 para Bloodweaver.
+    - <prefix>&8• &dF &8(Intercambiar objeto con la otra mano)&7 dispara &cBlood Lash&7 hasta &e25 bloques&7 con &c2.5-5 corazones&7 de daño.
+    - <prefix>&8• &dAgáchate + Clic izquierdo&7 y sigue agachado &e3s&7 para lanzar el &cBlood Rupture&7 más fuerte.
+    - <prefix>&8• &7Blood Rupture inmoviliza y eleva a los objetivos &e7s&7, infligiendo &c2 corazones/s&7 antes de lanzar a los supervivientes.
+    - '<prefix>&8• &7Pasivo: &9Resistencia III&7, &aFuerza II&7, &dRegeneración II&7, &c+10 corazones&7 y &c50% de reducción de Heat Vision&7.'
 toggle:
   heat_vision_on: '{label} &aactivado'
   heat_vision_off: '{label} &7deactivado'
@@ -356,6 +373,7 @@ command:
   usage_remove: '<prefix>&cUso: &7/cv remove <player>'
   tutorial_given: <prefix>&aYou received the Compound V handbook.
   stats: <prefix>&8• &7/cv stats &d[player] &8- &7shows the active ability and controls
+  showcase: <prefix>&8• &7/cv showcase &8- &7abre el resumen de habilidades
 info:
   plugin_header: <prefix>&8━━━━━━━━ &aCompoundV Info &8━━━━━━━━
   plugin_version: '<prefix>&8• &7Versión: &a{version}'
@@ -654,3 +672,31 @@ death_messages:
   stormstrike: "{victim} fue sobrecargado por {killer}."
   the_headpopper: "{victim} tuvo un pensamiento muy malo cerca de {killer}."
   ice_cube: "{victim} fue congelado por {killer}."
+  bloodweaver_lash: '{victim} fue abierto en canal por el Blood Lash de {killer}.'
+  bloodweaver_rupture: '{victim} fue reventado por el control de sangre de {killer}.'
+  fire_sonic: '{victim} fue incinerado por las llamas sónicas de {killer}.'
+  shockwave: '{victim} fue aplastado por la onda de choque de {killer}.'
+  size_changer_stomp: '{victim} fue pisoteado por {killer}.'
+  the_countess: '{victim} fue reducido a cenizas por {killer}.'
+  the_runner: '{victim} fue atravesado de lado a lado por {killer}.'
+bloodweaver:
+  lash_cooldown: '<prefix>&7Enfriamiento de Blood Lash: &e{seconds}s&7.'
+  lash_hit: <prefix>&cBlood Lash&7 acertó.
+  lash_missed: <prefix>&7Blood Lash falló.
+  rupture_cancelled: <prefix>&7Blood Rupture cancelado.
+  rupture_charge_progress: <prefix>&cBlood Rupture&7 en &e{seconds}s&7.
+  rupture_charge_start: <prefix>&cBlood Rupture&7 cargando. Sigue agachado.
+  rupture_cooldown: '<prefix>&7Enfriamiento de Blood Rupture: &e{seconds}s&7.'
+  rupture_released: '<prefix>&cBlood Rupture&7 liberado. Objetivos: &e{targets}&7.'
+showcase:
+  category_compound_v: '&7Categoría: &aCompound V'
+  category_v_one: '&7Categoría: &9V One'
+  category_v_one_upgrade: '&7Categoría: &3Mejora V One'
+  info_close: '&8» &7Haz clic para cerrar'
+  info_count: '&7Habilidades totales: &f{count}'
+  info_page: '&7Página &f{page}&7/&f{pages}'
+  info_title: '&bVitrina de CompoundV'
+  next: '&ePágina siguiente »'
+  no_description: No hay descripción disponible.
+  prev: '&e« Página anterior'
+  title: '&8» &b&lCompoundV &7&lHabilidades'

@@ -1,4 +1,4 @@
-language_file_version: 28
+language_file_version: 30
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cУ вас нет прав для этого действия.
@@ -81,13 +81,13 @@ ability:
     - <prefix>&8• &7Can melt ice, snow блоков, flat snow layers, и cook raw mob drops.
   ice_cube:
     description:
-      - "<prefix>&8• &bFrost Walker&7: вода замерзает под тобой во время движения."
-      - "<prefix>&8• &bIce Slide&7: каждый блок становится скользким; на льду ты получаешь &eSpeed II&7."
-      - "<prefix>&8• &bЛедяной шип&7: нажми &dF &8(Swap Item with Offhand)&7, чтобы выпустить маленький ледяной шип. Перезарядка: &e3s&7."
-      - "<prefix>&8• &7Шипы накладывают &bSlowness III&7 на &e5s&7 и &7Weakness II&7 на &e10s&7."
-      - "<prefix>&8• &7Удары в ближнем бою накладывают &bSlowness I&7 на &e5s&7."
-      - "<prefix>&8• &bЛедяная стена&7: &dShift + ЛКМ&7 создаёт временную стену примерно в &e4 блоках&7 перед тобой. Кулдаун: &e60с&7."
-      - "<prefix>&8• &7Пассивные эффекты: &aStrength I&7 и &9Resistance I&7."
+    - "<prefix>&8• &bFrost Walker&7: вода замерзает под тобой во время движения."
+    - "<prefix>&8• &bIce Slide&7: каждый блок становится скользким; на льду ты получаешь &eSpeed II&7."
+    - "<prefix>&8• &bЛедяной шип&7: нажми &dF &8(Swap Item with Offhand)&7, чтобы выпустить маленький ледяной шип. Перезарядка: &e3s&7."
+    - "<prefix>&8• &7Шипы накладывают &bSlowness III&7 на &e5s&7 и &7Weakness II&7 на &e10s&7."
+    - "<prefix>&8• &7Удары в ближнем бою накладывают &bSlowness I&7 на &e5s&7."
+    - "<prefix>&8• &bЛедяная стена&7: &dShift + ЛКМ&7 создаёт временную стену примерно в &e4 блоках&7 перед тобой. Кулдаун: &e60с&7."
+    - "<prefix>&8• &7Пассивные эффекты: &aStrength I&7 и &9Resistance I&7."
   the_diver:
     description:
     - '<prefix>&8• &7Стиль: как &bThe Deep&7.'
@@ -227,6 +227,23 @@ ability:
     - '<prefix>&8• &7Beam: high damage, block горение и player способность removal.'
     - <prefix>&8• &7Starts с a strong point-blank blast и mushroom cloud.
   granted_tip: <prefix>&8• &7Use &f/cv stats&7 anytime to view your current ability and controls.
+  bloodweaver:
+    description:
+    - '<prefix>&8• &7Стиль: как у &cMarie Moreau&7.'
+    - '<prefix>&8• &dF &8(Обмен предмета со второй рукой)&7 запускает &cBlood Lash&7 на &e25 блоков&7. Перезарядка: &e3s&7.'
+    - <prefix>&8• &7Blood Lash наносит &c2-4 сердца&7, замедляет цель и накладывает кровотечение на &e3s&7.
+    - <prefix>&8• &7Каждый &eтретий удар в ближнем бою&7 накладывает &e2s&7 кровотечения с &c0.5 сердца/с&7.
+    - <prefix>&8• &dКрадись + ЛКМ&7 и продолжай красться &e3s&7, чтобы применить &cBlood Rupture&7 в радиусе &e15 блоков&7.
+    - <prefix>&8• &7Blood Rupture поднимает цели на &e3 блока&7, обездвиживает на &e5s&7, наносит &c2 сердца/с&7 и отбрасывает выживших.
+    - '<prefix>&8• &7Цена: &c2 сердца&7 и Слабость на &e20s&7. Пассивно: &9Сопротивление III&7, &aСила II&7, &dРегенерация II&7, &c+5 сердец&7.'
+    - <prefix>&8• &7Получает &c50% меньше урона от Heat Vision&7.
+  bloodweaver_v_one:
+    description:
+    - <prefix>&8• &3Улучшение V One&7 для Bloodweaver.
+    - <prefix>&8• &dF &8(Обмен предмета со второй рукой)&7 запускает &cBlood Lash&7 на &e25 блоков&7 с уроном &c2.5-5 сердец&7.
+    - <prefix>&8• &dКрадись + ЛКМ&7 и продолжай красться &e3s&7, чтобы применить усиленный &cBlood Rupture&7.
+    - <prefix>&8• &7Blood Rupture обездвиживает и поднимает цели на &e7s&7, нанося &c2 сердца/с&7, затем отбрасывает выживших.
+    - '<prefix>&8• &7Пассивно: &9Сопротивление III&7, &aСила II&7, &dРегенерация II&7, &c+10 сердец&7 и &c50% снижение урона Heat Vision&7.'
 toggle:
   heat_vision_on: '{label} &aактивировано'
   heat_vision_off: '{label} &7deактивировано'
@@ -356,6 +373,7 @@ command:
   usage_remove: '<prefix>&cИспользование: &7/cv remove <player>'
   tutorial_given: <prefix>&aYou received the Compound V handbook.
   stats: <prefix>&8• &7/cv stats &d[player] &8- &7shows the active ability and controls
+  showcase: <prefix>&8• &7/cv showcase &8- &7открывает обзор способностей
 info:
   plugin_header: <prefix>&8━━━━━━━━ &aCompoundV Info &8━━━━━━━━
   plugin_version: '<prefix>&8• &7Версия: &a{version}'
@@ -654,3 +672,31 @@ death_messages:
   stormstrike: "{victim} был перегружен игроком {killer}."
   the_headpopper: "{victim} подумал об очень плохом рядом с {killer}."
   ice_cube: "{victim} был заморожен игроком {killer}."
+  bloodweaver_lash: '{victim} был вспорот Blood Lash игрока {killer}.'
+  bloodweaver_rupture: '{victim} был разорван контролем крови игрока {killer}.'
+  fire_sonic: '{killer} испепелил игрока {victim} звуковым пламенем.'
+  shockwave: '{killer} раздавил игрока {victim} ударной волной.'
+  size_changer_stomp: '{killer} растоптал игрока {victim}.'
+  the_countess: '{killer} обратил игрока {victim} в пепел.'
+  the_runner: '{killer} пробежал прямо сквозь игрока {victim}.'
+bloodweaver:
+  lash_cooldown: '<prefix>&7Перезарядка Blood Lash: &e{seconds}s&7.'
+  lash_hit: <prefix>&cBlood Lash&7 попал.
+  lash_missed: <prefix>&7Blood Lash промахнулся.
+  rupture_cancelled: <prefix>&7Blood Rupture отменён.
+  rupture_charge_progress: <prefix>&cBlood Rupture&7 через &e{seconds}s&7.
+  rupture_charge_start: <prefix>&cBlood Rupture&7 заряжается. Продолжайте красться.
+  rupture_cooldown: '<prefix>&7Перезарядка Blood Rupture: &e{seconds}s&7.'
+  rupture_released: '<prefix>&cBlood Rupture&7 выпущен. Цели: &e{targets}&7.'
+showcase:
+  category_compound_v: '&7Категория: &aCompound V'
+  category_v_one: '&7Категория: &9V One'
+  category_v_one_upgrade: '&7Категория: &3Улучшение V One'
+  info_close: '&8» &7Нажмите, чтобы закрыть'
+  info_count: '&7Всего способностей: &f{count}'
+  info_page: '&7Страница &f{page}&7/&f{pages}'
+  info_title: '&bВитрина CompoundV'
+  next: '&eСледующая страница »'
+  no_description: Описание недоступно.
+  prev: '&e« Предыдущая страница'
+  title: '&8» &b&lCompoundV &7&lСпособности'
