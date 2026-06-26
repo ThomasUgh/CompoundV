@@ -29,7 +29,10 @@ public final class UpdateCheckerService implements Listener {
     private static final String MODRINTH_PROJECT_URL = "https://modrinth.com/plugin/compoundv";
     private static final String MODRINTH_VERSIONS_ENDPOINT =
             "https://api.modrinth.com/v2/project/" + MODRINTH_PROJECT_SLUG + "/version?include_changelog=false";
-    private static final Pattern VERSION_NUMBER_PATTERN = Pattern.compile("\\\"version_number\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"");
+    private static final Pattern VERSION_NUMBER_PATTERN =
+            Pattern.compile("\"version_number\"\s*:\s*\"([^\"]+)\"");
+    private static final Pattern VERSION_TYPE_PATTERN =
+            Pattern.compile("\"version_type\"\s*:\s*\"([^\"]+)\"");
 
     private final CompoundV plugin;
     private volatile UpdateResult lastResult;
@@ -51,8 +54,10 @@ public final class UpdateCheckerService implements Listener {
                     lastResult = result;
                     if (!result.updateAvailable()) return;
                     if (notifyConsole()) {
-                        plugin.getLogger().info("New update available: " + result.latestVersion()
-                                + " (current: " + result.currentVersion() + ") - " + MODRINTH_PROJECT_URL);
+                        String behind = result.versionsBehind() > 1
+                                ? " [" + result.versionsBehind() + " versions behind]" : "";
+                        plugin.getLogger().info("New update available -> newest: " + result.latestVersion()
+                                + " (current: " + result.currentVersion() + ")" + behind + " - " + MODRINTH_PROJECT_URL);
                     }
                 })
                 .exceptionally(throwable -> {
@@ -80,29 +85,80 @@ public final class UpdateCheckerService implements Listener {
         UpdateResult result = lastResult;
         if (result == null || !result.updateAvailable()) return;
 
-        String line = ChatColor.DARK_GRAY + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+        String line = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "                                            ";
+        String behind = behindLabel(result.versionsBehind());
+
         player.sendMessage(line);
-        player.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.AQUA + "CompoundV" + ChatColor.DARK_GRAY + "] "
-                + ChatColor.YELLOW + ChatColor.BOLD.toString() + "Modrinth update available");
-        player.sendMessage(ChatColor.GRAY + "Current: " + ChatColor.WHITE + result.currentVersion()
-                + ChatColor.DARK_GRAY + "  →  " + ChatColor.GRAY + "Latest: " + ChatColor.AQUA + result.latestVersion());
-        player.sendMessage(ChatColor.GRAY + "Download: " + ChatColor.AQUA + MODRINTH_PROJECT_URL);
+        player.sendMessage(" " + ChatColor.AQUA + ChatColor.BOLD + "CompoundV" + ChatColor.DARK_GRAY + " » "
+                + ChatColor.GOLD + ChatColor.BOLD + "UPDATE AVAILABLE");
+        player.sendMessage(" " + ChatColor.GRAY + "You are running " + ChatColor.WHITE + result.currentVersion());
+        player.sendMessage(" " + ChatColor.GRAY + "Latest release: " + ChatColor.AQUA + ChatColor.BOLD
+                + result.latestVersion() + ChatColor.RESET + " " + ChatColor.YELLOW + ChatColor.BOLD + "✦ NEWEST"
+                + (behind.isEmpty() ? "" : ChatColor.GRAY + "  (" + behind + ")"));
+        sendDownloadLink(player);
         player.sendMessage(line);
+    }
+
+    private void sendDownloadLink(Player player) {
+        try {
+            net.md_5.bungee.api.chat.TextComponent component =
+                    new net.md_5.bungee.api.chat.TextComponent(" \u279C Click here to download the newest version");
+            component.setColor(net.md_5.bungee.api.ChatColor.GREEN);
+            component.setBold(true);
+            component.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(
+                    net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, MODRINTH_PROJECT_URL));
+            player.spigot().sendMessage(component);
+        } catch (Throwable ignored) {
+            player.sendMessage(" " + ChatColor.GRAY + "Download: " + ChatColor.GREEN + MODRINTH_PROJECT_URL);
+        }
+    }
+
+    private String behindLabel(int versionsBehind) {
+        if (versionsBehind <= 1) return "";
+        return versionsBehind + " versions behind";
     }
 
     private UpdateResult fetchUpdateResult(String currentVersion) {
-        List<String> versions = fetchVersionNumbers();
-        if (versions.isEmpty()) return null;
+        String body = fetchResponseBody();
+        if (body == null || body.isBlank()) return null;
 
-        String latest = versions.get(0);
-        for (String version : versions) {
+        List<String> numbers = parseMatches(VERSION_NUMBER_PATTERN, body);
+        if (numbers.isEmpty()) return null;
+        List<String> types = parseMatches(VERSION_TYPE_PATTERN, body);
+
+        List<String> candidates = new ArrayList<>();
+        boolean canFilter = !includePrereleases() && types.size() == numbers.size();
+        for (int i = 0; i < numbers.size(); i++) {
+            if (canFilter && !"release".equalsIgnoreCase(types.get(i))) continue;
+            candidates.add(numbers.get(i));
+        }
+        if (candidates.isEmpty()) candidates = numbers;
+
+        String latest = candidates.get(0);
+        for (String version : candidates) {
             if (compareVersions(version, latest) > 0) latest = version;
         }
 
-        return new UpdateResult(currentVersion, latest, compareVersions(latest, currentVersion) > 0);
+        int versionsBehind = 0;
+        for (String version : candidates) {
+            if (compareVersions(version, currentVersion) > 0) versionsBehind++;
+        }
+
+        boolean available = compareVersions(latest, currentVersion) > 0;
+        return new UpdateResult(currentVersion, latest, available, versionsBehind);
     }
 
-    private List<String> fetchVersionNumbers() {
+    private List<String> parseMatches(Pattern pattern, String body) {
+        Matcher matcher = pattern.matcher(body);
+        List<String> values = new ArrayList<>();
+        while (matcher.find()) {
+            String value = matcher.group(1).trim();
+            if (!value.isBlank()) values.add(value);
+        }
+        return values;
+    }
+
+    private String fetchResponseBody() {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(MODRINTH_VERSIONS_ENDPOINT);
@@ -127,14 +183,7 @@ public final class UpdateCheckerService implements Listener {
                     body.append(line);
                 }
             }
-
-            Matcher matcher = VERSION_NUMBER_PATTERN.matcher(body);
-            List<String> versions = new ArrayList<>();
-            while (matcher.find()) {
-                String version = matcher.group(1).trim();
-                if (!version.isBlank()) versions.add(version);
-            }
-            return versions;
+            return body.toString();
         } catch (Exception ex) {
             throw new IllegalStateException(ex.getMessage(), ex);
         } finally {
@@ -152,6 +201,10 @@ public final class UpdateCheckerService implements Listener {
 
     private boolean notifyOpsInChat() {
         return plugin.getConfig().getBoolean("updates.op_chat", true);
+    }
+
+    private boolean includePrereleases() {
+        return plugin.getConfig().getBoolean("updates.include_prereleases", false);
     }
 
     private int compareVersions(String left, String right) {
@@ -187,7 +240,7 @@ public final class UpdateCheckerService implements Listener {
         return tokens;
     }
 
-    private record UpdateResult(String currentVersion, String latestVersion, boolean updateAvailable) { }
+    private record UpdateResult(String currentVersion, String latestVersion, boolean updateAvailable, int versionsBehind) { }
 
     private record Token(boolean numeric, long number, String text) implements Comparable<Token> {
         static final Token ZERO = new Token(true, 0L, "");

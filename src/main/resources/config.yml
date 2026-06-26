@@ -21,6 +21,8 @@ updates:
   op_chat: true
   # Delay the OP join notice so it appears after most join messages. 60 ticks = 3 seconds.
   op_chat_delay_ticks: 60
+  # Also offer beta/alpha builds. false = only stable releases are suggested.
+  include_prereleases: false
 
 # avoids giving the same power again right after, so repeated drinks feel more random
 

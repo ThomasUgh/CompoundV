@@ -292,6 +292,8 @@ public final class ConfigMigrationService {
         changed |= setIfMissing("performance.max_concurrent_cinematics", 3);
         changed |= setIfMissing("performance.config_validation", "warn_and_clamp");
 
+        changed |= setIfMissing("updates.include_prereleases", false);
+
         for (String id : new String[]{
                 "the_patriot", "bloodweaver", "stormstrike", "ice_cube", "fire_sonic",
                 "size_changer", "size_changer_v_one", "the_patriot_v_one", "speedster",
