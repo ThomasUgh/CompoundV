@@ -53,7 +53,8 @@ public class WorkbenchRecipeListener implements Listener {
                 CustomRecipe.serum("stabilized_v_null_pathogen", SerumType.AIRBORNE_V_PATHOGEN, Material.ANCIENT_DEBRIS, SerumType.STABILIZED_V_NULL_PATHOGEN),
                 CustomRecipe.serum("v_null", SerumType.STABILIZED_V_NULL_PATHOGEN, Material.TOTEM_OF_UNDYING, CompoundPotion.V_NULL),
                 CustomRecipe.bottle("v_null_splash", CompoundPotion.V_NULL, Material.POTION, Material.GUNPOWDER, CompoundPotion.V_NULL, Material.SPLASH_POTION),
-                CustomRecipe.bottle("v_null_lingering", CompoundPotion.V_NULL, Material.SPLASH_POTION, Material.DRAGON_BREATH, CompoundPotion.V_NULL, Material.LINGERING_POTION)
+                CustomRecipe.bottle("v_null_lingering", CompoundPotion.V_NULL, Material.SPLASH_POTION, Material.DRAGON_BREATH, CompoundPotion.V_NULL, Material.LINGERING_POTION),
+                CustomRecipe.bottle("v_null_arrow", CompoundPotion.V_NULL, Material.POTION, Material.ARROW, CompoundPotion.V_NULL, Material.TIPPED_ARROW)
         );
         cleanupNativeWorkbenchRecipes();
     }
@@ -110,8 +111,8 @@ public class WorkbenchRecipeListener implements Listener {
             return true;
         }
 
-        if (cursor.isSimilar(result) && cursor.getAmount() < cursor.getMaxStackSize()) {
-            cursor.setAmount(cursor.getAmount() + 1);
+        if (cursor.isSimilar(result) && cursor.getAmount() + result.getAmount() <= cursor.getMaxStackSize()) {
+            cursor.setAmount(cursor.getAmount() + result.getAmount());
             player.setItemOnCursor(cursor);
             return true;
         }
@@ -224,6 +225,10 @@ public class WorkbenchRecipeListener implements Listener {
         ItemStack createResult(CompoundV plugin) {
             if (sourceKind == SourceKind.WATER) return ItemUtil.createAwkwardPotion();
             if (resultSerum != null) return ItemUtil.createSerum(plugin, resultSerum);
+            if (resultMaterial == Material.TIPPED_ARROW) {
+                int amount = plugin.getConfig().getInt("v_null.arrow.craft_amount", 2);
+                return ItemUtil.createVNullArrow(plugin, amount);
+            }
             return ItemUtil.createBottle(plugin, resultBottle, resultMaterial);
         }
     }

@@ -385,7 +385,11 @@ public class PlayerActionListener implements Listener {
         }
         if (ab instanceof BloodweaverAbility bloodweaver) {
             e.setCancelled(true);
-            bloodweaver.shootBloodLash(e.getPlayer());
+            if (e.getPlayer().isSneaking()) {
+                bloodweaver.toggleSuperheroSense(e.getPlayer());
+            } else {
+                bloodweaver.shootBloodLash(e.getPlayer());
+            }
             return;
         }
         if (ab == null || !ab.hasToggle()) return;
@@ -649,6 +653,8 @@ public class PlayerActionListener implements Listener {
         Ability ability = manager.getAbility(p);
         if (ability instanceof TheRunnerAbility runner) {
             runner.handleMoveThroughEntities(p, e.getFrom(), e.getTo());
+            runner.tryRunSound(p, e.getFrom(), e.getTo());
+            runner.tryWallCrash(p, e.getFrom(), e.getTo());
         }
 
         if (!(ability instanceof ThePatriotAbility)
@@ -972,6 +978,65 @@ public class PlayerActionListener implements Listener {
 
         if (multiplier == 1.0) return;
         e.setDamage(Math.max(0.0, e.getDamage() * Math.max(0.0, multiplier)));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onVNullArrowShoot(org.bukkit.event.entity.EntityShootBowEvent e) {
+        if (!(e.getProjectile() instanceof org.bukkit.entity.AbstractArrow arrow)) return;
+        ItemStack consumable = e.getConsumable();
+        if (!ItemUtil.isVNullArrow(consumable)) return;
+
+        arrow.getPersistentDataContainer().set(CompoundV.V_NULL_ARROW_KEY,
+                org.bukkit.persistence.PersistentDataType.STRING, "v_null");
+        arrow.setPickupStatus(org.bukkit.entity.AbstractArrow.PickupStatus.DISALLOWED);
+        arrow.getWorld().spawnParticle(Particle.DUST, arrow.getLocation(), 6, 0.08, 0.08, 0.08, 0,
+                new Particle.DustOptions(org.bukkit.Color.fromRGB(25, 120, 55), 0.9f));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onVNullArrowHit(EntityDamageByEntityEvent e) {
+        if (!(e.getDamager() instanceof org.bukkit.entity.AbstractArrow arrow)) return;
+        if (!arrow.getPersistentDataContainer().has(CompoundV.V_NULL_ARROW_KEY,
+                org.bukkit.persistence.PersistentDataType.STRING)) return;
+        if (!(e.getEntity() instanceof LivingEntity target)) return;
+
+        arrow.getPersistentDataContainer().remove(CompoundV.V_NULL_ARROW_KEY);
+        Location impact = target.getLocation().add(0, Math.min(1.4, Math.max(0.7, target.getEyeHeight())), 0);
+        target.getWorld().spawnParticle(Particle.DUST, impact, 26, 0.28, 0.34, 0.28, 0,
+                new Particle.DustOptions(org.bukkit.Color.fromRGB(25, 120, 55), 1.1f));
+        target.getWorld().spawnParticle(Particle.SNEEZE, impact, 10, 0.24, 0.28, 0.24, 0.02);
+        target.getWorld().playSound(impact, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 0.35f, 1.75f);
+        plugin.getSideEffectManager().applyVNull(target);
+        SchedulerAdapter.runLater(plugin, arrow, () -> {
+            if (arrow.isValid()) arrow.remove();
+        }, 1L);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onStormstrikeWaterIceVulnerability(EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Player victim)) return;
+        if (!(manager.getAbility(victim) instanceof StormstrikeAbility)) return;
+
+        Player attacker = null;
+        if (e.getDamager() instanceof Player directAttacker) {
+            attacker = directAttacker;
+        } else if (e.getDamager() instanceof Projectile projectile
+                && projectile.getShooter() instanceof Player shooter) {
+            attacker = shooter;
+        }
+        if (attacker == null || attacker.equals(victim)) return;
+
+        Ability attackerAbility = manager.getAbility(attacker);
+        if (attackerAbility == null) return;
+        String id = attackerAbility.getId().toLowerCase();
+        if (!id.equals("ice_cube") && !id.equals("the_diver") && !id.equals("submarine")) return;
+
+        double multiplier = plugin.getConfig().getDouble("abilities.stormstrike.water_ice_damage_taken_multiplier", 1.75);
+        if (multiplier <= 1.0) return;
+        e.setDamage(e.getDamage() * multiplier);
+        victim.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,
+                victim.getLocation().add(0, 1.0, 0), 18, 0.32, 0.42, 0.32, 0.10);
+        victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.30f, 1.85f);
     }
 
     @EventHandler

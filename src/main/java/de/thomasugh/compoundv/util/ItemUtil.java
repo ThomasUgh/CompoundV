@@ -108,6 +108,43 @@ public final class ItemUtil {
 
 
 
+    public static ItemStack createVNullArrow(CompoundV plugin, int amount) {
+        ItemStack item = new ItemStack(Material.TIPPED_ARROW, Math.max(1, amount));
+        ItemMeta rawMeta = item.getItemMeta();
+        if (rawMeta == null) {
+            return item;
+        }
+
+        if (rawMeta instanceof PotionMeta meta) {
+            meta.setColor(CompoundPotion.V_NULL.getPotionColor());
+        }
+
+        LocaleManager loc = plugin.getLocaleManager();
+        rawMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', loc.msg("v_null_arrow.name")));
+
+        List<String> lore = new ArrayList<>();
+        lore.add(loc.msg("v_null_arrow.lore_1"));
+        lore.add(loc.msg("v_null_arrow.lore_2"));
+        lore.replaceAll(line -> ChatColor.translateAlternateColorCodes('&', line));
+        rawMeta.setLore(lore);
+
+        rawMeta.getPersistentDataContainer().set(CompoundV.V_NULL_ARROW_KEY, PersistentDataType.STRING, "v_null");
+        applyGlint(rawMeta);
+        addItemFlagIfPresent(rawMeta, "HIDE_ADDITIONAL_TOOLTIP");
+        addItemFlagIfPresent(rawMeta, "HIDE_ATTRIBUTES");
+        addItemFlagIfPresent(rawMeta, "HIDE_POTION_EFFECTS");
+
+        item.setItemMeta(rawMeta);
+        return item;
+    }
+
+    public static boolean isVNullArrow(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return false;
+        if (item.getType() != Material.TIPPED_ARROW && item.getType() != Material.ARROW) return false;
+        return item.getItemMeta().getPersistentDataContainer()
+                .has(CompoundV.V_NULL_ARROW_KEY, PersistentDataType.STRING);
+    }
+
     public static ItemStack createWaterPotion() {
         ItemStack item = new ItemStack(Material.POTION);
         PotionMeta meta = (PotionMeta) item.getItemMeta();

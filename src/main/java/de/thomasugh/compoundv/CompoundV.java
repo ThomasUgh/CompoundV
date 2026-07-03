@@ -60,6 +60,7 @@ public final class CompoundV extends JavaPlugin {
     public static NamespacedKey BOTTLE_KEY;
     public static NamespacedKey SERUM_KEY;
     public static NamespacedKey ACTIVATOR_KEY;
+    public static NamespacedKey V_NULL_ARROW_KEY;
 
     private AbilityRegistry registry;
     private AbilityManager abilityManager;
@@ -110,6 +111,7 @@ public final class CompoundV extends JavaPlugin {
         BOTTLE_KEY = new NamespacedKey(this, "compound_v_bottle");
         SERUM_KEY = new NamespacedKey(this, "compound_v_serum");
         ACTIVATOR_KEY = new NamespacedKey(this, "cv_activator");
+        V_NULL_ARROW_KEY = new NamespacedKey(this, "cv_v_null_arrow");
     }
 
     private void initializeServices() {

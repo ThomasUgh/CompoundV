@@ -157,9 +157,16 @@ public class SideEffectManager {
 
         if (source == CompoundPotion.V_ONE) {
             int seconds = randomInt("v_null.v_one.min_seconds", 60, "v_null.v_one.max_seconds", 120);
-            add(player, PotionEffects.WITHER, seconds * 20, 0);
-            add(player, PotionEffects.POISON, seconds * 20, 0);
-            add(player, PotionEffects.SLOWNESS, plugin.getConfig().getInt("v_null.v_one.slowness_seconds", 30) * 20, 0);
+            int witherLevel = Math.max(1, plugin.getConfig().getInt("v_null.v_one.wither_level", 2));
+            int poisonLevel = Math.max(1, plugin.getConfig().getInt("v_null.v_one.poison_level", 2));
+            int slownessLevel = Math.max(1, plugin.getConfig().getInt("v_null.v_one.slowness_level", 2));
+            int weaknessSeconds = Math.max(0, plugin.getConfig().getInt("v_null.v_one.weakness_seconds", 45));
+            add(player, PotionEffects.WITHER, seconds * 20, witherLevel - 1);
+            add(player, PotionEffects.POISON, seconds * 20, poisonLevel - 1);
+            add(player, PotionEffects.SLOWNESS, plugin.getConfig().getInt("v_null.v_one.slowness_seconds", 30) * 20, slownessLevel - 1);
+            if (weaknessSeconds > 0) {
+                add(player, PotionEffects.WEAKNESS, weaknessSeconds * 20, 0);
+            }
             player.sendMessage(plugin.getLocaleManager().msg("v_null.hit_v_one"));
             playVNull(player);
             return;
