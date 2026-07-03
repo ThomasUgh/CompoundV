@@ -31,6 +31,10 @@ public class TheRunnerAbility implements Ability {
     private final NamespacedKey stepKey;
     private final Map<UUID, Integer> speedLevels = new HashMap<>();
     private final Map<UUID, Map<UUID, Long>> impactCooldowns = new HashMap<>();
+    private final Map<UUID, Long> lastRunSoundAt = new HashMap<>();
+    private final Map<UUID, Double> lastMoveDelta = new HashMap<>();
+    private final Map<UUID, Vector> lastMoveDirection = new HashMap<>();
+    private final Map<UUID, Long> wallCrashCooldownUntil = new HashMap<>();
 
     public TheRunnerAbility(CompoundV plugin) {
         this.plugin = plugin;
@@ -80,6 +84,10 @@ public class TheRunnerAbility implements Ability {
         UUID uuid = player.getUniqueId();
         speedLevels.remove(uuid);
         impactCooldowns.remove(uuid);
+        lastRunSoundAt.remove(uuid);
+        lastMoveDelta.remove(uuid);
+        lastMoveDirection.remove(uuid);
+        wallCrashCooldownUntil.remove(uuid);
         player.removePotionEffect(PotionEffects.SPEED);
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.STRENGTH);
@@ -159,6 +167,82 @@ public class TheRunnerAbility implements Ability {
             playImpactEffects(player, target);
             playerCooldowns.put(targetId, now + cooldownMs);
         }
+    }
+
+    public void tryRunSound(Player player, Location from, Location to) {
+        if (to == null || !plugin.getConfig().getBoolean("abilities.the_runner.run_sound_enabled", true)) return;
+        if (!speedLevels.containsKey(player.getUniqueId())) return;
+        if (player.isFlying() || !player.isOnGround()) return;
+
+        double dx = to.getX() - from.getX();
+        double dz = to.getZ() - from.getZ();
+        double horizontal = Math.sqrt(dx * dx + dz * dz);
+        double minDistance = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_runner.run_sound_min_distance", 0.16));
+        if (horizontal < minDistance) return;
+
+        UUID uuid = player.getUniqueId();
+        long intervalMs = Math.max(0L, plugin.getConfig().getLong("abilities.the_runner.run_sound_interval_ms", 240L));
+        long now = System.currentTimeMillis();
+        if (now - lastRunSoundAt.getOrDefault(uuid, 0L) < intervalMs) return;
+        lastRunSoundAt.put(uuid, now);
+
+        String sound = plugin.getConfig().getString("abilities.the_runner.run_sound", "entity.horse.gallop");
+        if (sound == null || sound.isBlank()) return;
+        float volume = (float) plugin.getConfig().getDouble("abilities.the_runner.run_sound_volume", 0.45);
+        float pitch = (float) plugin.getConfig().getDouble("abilities.the_runner.run_sound_pitch", 1.35);
+        Location loc = player.getLocation();
+        loc.getWorld().playSound(loc, sound, Math.max(0.0f, volume), Math.max(0.01f, pitch));
+        loc.getWorld().spawnParticle(Particle.CLOUD, loc.clone().add(0, 0.08, 0), 3, 0.18, 0.02, 0.18, 0.008);
+    }
+
+    public void tryWallCrash(Player player, Location from, Location to) {
+        if (to == null || !plugin.getConfig().getBoolean("abilities.the_runner.wall_crash_enabled", true)) return;
+
+        UUID uuid = player.getUniqueId();
+        double dx = to.getX() - from.getX();
+        double dz = to.getZ() - from.getZ();
+        double horizontal = Math.sqrt(dx * dx + dz * dz);
+        Double previousDelta = lastMoveDelta.put(uuid, horizontal);
+        Vector previousDirection = lastMoveDirection.get(uuid);
+        if (horizontal > 0.01) {
+            lastMoveDirection.put(uuid, new Vector(dx, 0.0, dz).normalize());
+        }
+
+        Integer level = speedLevels.get(uuid);
+        int minLevel = plugin.getConfig().getInt("abilities.the_runner.wall_crash_min_speed_level", 11);
+        if (level == null || level < minLevel) return;
+        if (player.isFlying() || player.isInsideVehicle()) return;
+        if (previousDelta == null || previousDirection == null) return;
+
+        double minSpeed = plugin.getConfig().getDouble("abilities.the_runner.wall_crash_min_speed", 0.42);
+        double maxStopDelta = plugin.getConfig().getDouble("abilities.the_runner.wall_crash_max_stop_delta", 0.05);
+        if (previousDelta < minSpeed || horizontal > maxStopDelta) return;
+        if (!isSolidWallAhead(player, previousDirection)) return;
+
+        long now = System.currentTimeMillis();
+        long cooldownMs = Math.max(0L, plugin.getConfig().getLong("abilities.the_runner.wall_crash_cooldown_ms", 1500L));
+        if (wallCrashCooldownUntil.getOrDefault(uuid, 0L) > now) return;
+        wallCrashCooldownUntil.put(uuid, now + cooldownMs);
+
+        double baseHearts = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_runner.wall_crash_damage_hearts", 2.0));
+        double perLevelHearts = Math.max(0.0, plugin.getConfig().getDouble("abilities.the_runner.wall_crash_damage_per_speed_level_hearts", 0.25));
+        double damage = (baseHearts + Math.max(0, level - minLevel) * perLevelHearts) * 2.0;
+        if (damage <= 0.0) return;
+
+        player.damage(damage);
+        Location loc = player.getLocation().add(0, 1.0, 0);
+        loc.getWorld().spawnParticle(Particle.CRIT, loc, 16, 0.30, 0.35, 0.30, 0.12);
+        loc.getWorld().spawnParticle(Particle.CLOUD, loc, 10, 0.28, 0.25, 0.28, 0.05);
+        loc.getWorld().playSound(loc, Sound.ENTITY_PLAYER_BIG_FALL, 0.85f, 0.75f);
+        loc.getWorld().playSound(loc, Sound.BLOCK_STONE_HIT, 0.85f, 0.55f);
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("the_runner.wall_crash"));
+    }
+
+    private boolean isSolidWallAhead(Player player, Vector direction) {
+        Location base = player.getLocation();
+        Location feet = base.clone().add(direction.clone().multiply(0.7)).add(0, 0.3, 0);
+        Location head = base.clone().add(direction.clone().multiply(0.7)).add(0, 1.4, 0);
+        return feet.getBlock().getType().isSolid() || head.getBlock().getType().isSolid();
     }
 
     private void applySpeed(Player player, int level) {
