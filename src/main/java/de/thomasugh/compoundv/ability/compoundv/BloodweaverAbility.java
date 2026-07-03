@@ -8,6 +8,8 @@ import de.thomasugh.compoundv.util.AbilityKillTracker;
 import de.thomasugh.compoundv.util.AttributeUtil;
 import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.PotionEffects;
+import de.thomasugh.compoundv.util.RedGlowUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.GameMode;
@@ -50,6 +52,9 @@ public final class BloodweaverAbility implements Ability {
     private final Map<UUID, Set<TaskHandle>> lockTasks = new HashMap<>();
     private final Map<UUID, Set<LivingEntity>> lockedTargets = new HashMap<>();
     private final Map<UUID, Integer> meleeHitCounts = new HashMap<>();
+    private final Map<UUID, Boolean> senseActive = new HashMap<>();
+    private final Map<UUID, Integer> senseTicker = new HashMap<>();
+    private final Map<UUID, Set<UUID>> senseTargets = new HashMap<>();
 
     public BloodweaverAbility(CompoundV plugin, String id, String tierKey, int color) {
         this.plugin = plugin;
@@ -63,6 +68,59 @@ public final class BloodweaverAbility implements Ability {
     @Override public String getDisplayName() { return isVOne() ? "Bloodweaver V One" : "Bloodweaver"; }
     @Override public int getColor() { return color; }
     @Override public String getDescriptionKey() { return "ability." + id + ".description"; }
+    @Override public boolean needsTick() { return true; }
+
+    @Override
+    public void onTick(Player player) {
+        if (!senseActive.getOrDefault(player.getUniqueId(), false)) return;
+        if (senseTicker.merge(player.getUniqueId(), 1, Integer::sum) % 20 == 0) refreshSense(player);
+    }
+
+    public void toggleSuperheroSense(Player player) {
+        UUID uuid = player.getUniqueId();
+        boolean next = !senseActive.getOrDefault(uuid, false);
+        senseActive.put(uuid, next);
+        if (next) {
+            refreshSense(player);
+            player.addPotionEffect(new PotionEffect(PotionEffects.NIGHT_VISION,
+                    Integer.MAX_VALUE, 0, false, false, false));
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("bloodweaver.sense_on"));
+            player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_HEARTBEAT, 0.55f, 1.35f);
+        } else {
+            clearSense(player);
+            player.removePotionEffect(PotionEffects.NIGHT_VISION);
+            MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("bloodweaver.sense_off"));
+            player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 0.45f, 1.55f);
+        }
+    }
+
+    private void refreshSense(Player player) {
+        double radius = Math.max(1.0, sharedConfigDouble("superhero_sense.radius", 50.0));
+        Set<UUID> currentTargets = new HashSet<>();
+        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+            if (!(entity instanceof Player target) || target == player) continue;
+            if (plugin.getAbilityManager().getAbility(target) == null) continue;
+            currentTargets.add(target.getUniqueId());
+            RedGlowUtil.applyRedGlow(target);
+        }
+        Set<UUID> oldTargets = senseTargets.put(player.getUniqueId(), currentTargets);
+        if (oldTargets == null) return;
+        for (UUID targetId : oldTargets) {
+            if (currentTargets.contains(targetId)) continue;
+            Entity entity = Bukkit.getEntity(targetId);
+            if (entity instanceof LivingEntity living) RedGlowUtil.removeRedGlow(living);
+        }
+    }
+
+    private void clearSense(Player player) {
+        senseTicker.remove(player.getUniqueId());
+        Set<UUID> oldTargets = senseTargets.remove(player.getUniqueId());
+        if (oldTargets == null) return;
+        for (UUID targetId : oldTargets) {
+            Entity entity = Bukkit.getEntity(targetId);
+            if (entity instanceof LivingEntity living) RedGlowUtil.removeRedGlow(living);
+        }
+    }
 
     @Override
     public void apply(Player player) {
@@ -85,6 +143,11 @@ public final class BloodweaverAbility implements Ability {
         meleeHitCounts.remove(uuid);
         cancelCharge(uuid);
         cancelLockTasks(uuid);
+        if (senseActive.getOrDefault(uuid, false)) {
+            clearSense(player);
+            player.removePotionEffect(PotionEffects.NIGHT_VISION);
+        }
+        senseActive.remove(uuid);
         player.removePotionEffect(PotionEffects.RESISTANCE);
         player.removePotionEffect(PotionEffects.STRENGTH);
         player.removePotionEffect(PotionEffects.REGENERATION);
@@ -121,7 +184,7 @@ public final class BloodweaverAbility implements Ability {
         double minHearts = configDouble("lash.min_damage_hearts", isVOne() ? 2.5 : 2.0);
         double maxHearts = configDouble("lash.max_damage_hearts", isVOne() ? 5.0 : 4.0);
         if (maxHearts < minHearts) maxHearts = minHearts;
-        double damage = (minHearts + ThreadLocalRandom.current().nextDouble(maxHearts - minHearts + 0.0001)) * 2.0;
+        double damage = (minHearts + ThreadLocalRandom.current().nextDouble(maxHearts - minHearts + 0.0001)) * 2.0 * damageMultiplier();
         AbilityKillTracker.damage(plugin, target, player, Math.max(0.0, damage), "death_messages.bloodweaver_lash", true);
 
         int slownessTicks = Math.max(20, configInt("lash.slowness_ticks", 60));
@@ -151,7 +214,7 @@ public final class BloodweaverAbility implements Ability {
 
         int ticks = Math.max(20, configInt("melee_bleed.duration_ticks", 40));
         int interval = Math.max(1, configInt("melee_bleed.interval_ticks", 20));
-        double damage = Math.max(0.0, configDouble("melee_bleed.damage_hearts", 0.5)) * 2.0;
+        double damage = Math.max(0.0, configDouble("melee_bleed.damage_hearts", 0.5)) * 2.0 * damageMultiplier();
         applyTimedBleed(player, target, ticks, interval, damage, "death_messages.bloodweaver_lash");
 
         Location loc = target.getLocation().add(0, Math.min(1.4, Math.max(0.8, target.getEyeHeight())), 0);
@@ -255,7 +318,7 @@ public final class BloodweaverAbility implements Ability {
 
     private void lockAndDamageTarget(Player owner, LivingEntity target, int durationTicks, Set<TaskHandle> ownerTasks) {
         Location start = target.getLocation().clone();
-        double damagePerSecond = Math.max(0.0, configDouble("rupture.damage_hearts_per_second", 2.0)) * 2.0;
+        double damagePerSecond = Math.max(0.0, configDouble("rupture.damage_hearts_per_second", 2.0)) * 2.0 * damageMultiplier();
         int tickPeriod = Math.max(2, configInt("rupture.tick_period", 4));
         int particleInterval = Math.max(tickPeriod, configInt("rupture.particle_interval_ticks", 10));
         int damageInterval = Math.max(1, configInt("rupture.damage_interval_ticks", 20));
@@ -316,7 +379,7 @@ public final class BloodweaverAbility implements Ability {
     private void applyLashBleed(Player owner, LivingEntity target) {
         int ticks = Math.max(20, configInt("lash.bleed_ticks", 60));
         int interval = Math.max(1, configInt("lash.bleed_interval_ticks", 20));
-        double damage = Math.max(0.0, configDouble("lash.bleed_damage_hearts", 0.5)) * 2.0;
+        double damage = Math.max(0.0, configDouble("lash.bleed_damage_hearts", 0.5)) * 2.0 * damageMultiplier();
         applyTimedBleed(owner, target, ticks, interval, damage, "death_messages.bloodweaver_lash");
     }
 
@@ -444,6 +507,14 @@ public final class BloodweaverAbility implements Ability {
         if (tasks == null) return;
         tasks.remove(task);
         if (tasks.isEmpty()) lockTasks.remove(uuid);
+    }
+
+    private double damageMultiplier() {
+        return Math.max(0.0, sharedConfigDouble("damage_multiplier", 1.10));
+    }
+
+    private double sharedConfigDouble(String key, double def) {
+        return plugin.getConfig().getDouble(sharedPath(key), def);
     }
 
     private boolean isVOne() {
