@@ -144,7 +144,7 @@ Simple, clean, permanent creative-style flight. Includes a basic Jump Start.
 </details>
 
 <details>
-<summary><b>🔥 Heat Vision I / II / III / IV</b></summary>
+<summary><b>🔥 Heat Vision I / II / III / IV / V</b></summary>
 <br>
 
 Four separately rollable tiers of eye-laser. Color indicates tier: blue → green → orange → red.
