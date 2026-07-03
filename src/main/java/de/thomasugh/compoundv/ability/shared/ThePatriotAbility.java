@@ -6,7 +6,6 @@ import de.thomasugh.compoundv.util.MessageUtil;
 import de.thomasugh.compoundv.util.TeleportUtil;
 import org.bukkit.Bukkit;
 import de.thomasugh.compoundv.server.SchedulerAdapter;
-import org.bukkit.ChatColor;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -22,7 +21,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import de.thomasugh.compoundv.util.PotionEffects;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -35,8 +33,6 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ThePatriotAbility extends BaseHeatVisionAbility {
-
-    private static final String RED_TEAM = "cv_red_glow";
 
     private final String id, tierKey;
     private final int color;
@@ -223,60 +219,12 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         }
     }
 
-    private String scoreboardEntry(Entity entity) {
-        if (entity instanceof Player player) {
-            return player.getName();
-        }
-        return entity.getUniqueId().toString();
-    }
-
     private void applyRedGlow(LivingEntity target) {
-        addToRedTeam(target);
-        if (!target.isGlowing()) target.setGlowing(true);
+        de.thomasugh.compoundv.util.RedGlowUtil.applyRedGlow(target);
     }
 
     private void removeRedGlow(LivingEntity target) {
-        removeFromRedTeam(target);
-        if (target.isGlowing()) target.setGlowing(false);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void addToRedTeam(Entity entity) {
-        Team team = redTeam();
-        if (team == null) return;
-        try {
-            String entry = scoreboardEntry(entity);
-            if (!team.hasEntry(entry)) team.addEntry(entry);
-        } catch (Throwable ignored) {
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void removeFromRedTeam(Entity entity) {
-        try {
-            var manager = Bukkit.getScoreboardManager();
-            if (manager == null) return;
-            Team team = manager.getMainScoreboard().getTeam(RED_TEAM);
-            if (team == null) return;
-            String entry = scoreboardEntry(entity);
-            if (team.hasEntry(entry)) team.removeEntry(entry);
-        } catch (Throwable ignored) {
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private Team redTeam() {
-        try {
-            var manager = Bukkit.getScoreboardManager();
-            if (manager == null) return null;
-            var sb = manager.getMainScoreboard();
-            Team t = sb.getTeam(RED_TEAM);
-            if (t == null) t = sb.registerNewTeam(RED_TEAM);
-            t.setColor(ChatColor.RED);
-            return t;
-        } catch (Throwable ignored) {
-            return null;
-        }
+        de.thomasugh.compoundv.util.RedGlowUtil.removeRedGlow(target);
     }
 
     public boolean isLaunching(Player p) { return launching.contains(p.getUniqueId()); }
@@ -481,7 +429,9 @@ public class ThePatriotAbility extends BaseHeatVisionAbility {
         World world = player.getWorld();
         Location eye = player.getEyeLocation();
         Vector direction = eye.getDirection().normalize();
-        double range = Math.max(1.0, plugin.getConfig().getDouble(s("speed_dash.range"), 25.0));
+        double baseRange = Math.max(1.0, plugin.getConfig().getDouble(s("speed_dash.range"), 25.0));
+        double rangeMultiplier = Math.max(0.1, plugin.getConfig().getDouble(t("speed_dash_range_multiplier"), isVOne() ? 1.20 : 1.10));
+        double range = baseRange * rangeMultiplier;
 
         RayTraceResult hit = world.rayTraceBlocks(eye, direction, range, FluidCollisionMode.NEVER, true);
         double maxDistance = range;
