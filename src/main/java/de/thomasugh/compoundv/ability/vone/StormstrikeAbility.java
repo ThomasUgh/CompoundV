@@ -47,6 +47,7 @@ public class StormstrikeAbility implements Ability {
     private final Map<UUID, Integer> beamDamageCounter = new HashMap<>();
     private final Map<UUID, Long> beamCooldownUntil = new HashMap<>();
     private final Map<UUID, Integer> meleeCounter = new HashMap<>();
+    private final Map<UUID, Integer> waterTicks = new HashMap<>();
     private final NamespacedKey healthKey;
 
     public StormstrikeAbility(CompoundV plugin) {
@@ -90,6 +91,7 @@ public class StormstrikeAbility implements Ability {
         beamDamageCounter.remove(uuid);
         beamCooldownUntil.remove(uuid);
         meleeCounter.remove(uuid);
+        waterTicks.remove(uuid);
         AttributeUtil.setMaxHealthBonus(player, healthKey, 0.0);
         player.setFlySpeed(0.1f);
         player.removePotionEffect(PotionEffects.STRENGTH);
@@ -121,6 +123,7 @@ public class StormstrikeAbility implements Ability {
         beamActive.put(uuid, true);
         beamTicks.put(uuid, 0);
         beamDamageCounter.remove(uuid);
+        applyWaterAbilityRisk(player);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.45f, 1.85f);
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.45f, 1.7f);
         MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.beam_on"));
@@ -129,6 +132,7 @@ public class StormstrikeAbility implements Ability {
     @Override
     public void onTick(Player player) {
         renderFlightParticles(player);
+        tickWaterRisk(player);
 
         if (!beamActive.getOrDefault(player.getUniqueId(), false)) return;
 
@@ -140,6 +144,47 @@ public class StormstrikeAbility implements Ability {
         }
 
         fireStormBeam(player);
+    }
+
+    private void tickWaterRisk(Player player) {
+        if (!plugin.getConfig().getBoolean("abilities.stormstrike.water_risk.enabled", true)) return;
+        UUID uuid = player.getUniqueId();
+        if (!player.isInWater()) {
+            waterTicks.remove(uuid);
+            return;
+        }
+
+        int interval = Math.max(1, plugin.getConfig().getInt("abilities.stormstrike.water_risk.damage_interval_ticks", 20));
+        int ticks = waterTicks.merge(uuid, 1, Integer::sum);
+        if (ticks % interval != 0) return;
+
+        double damage = Math.max(0.0, plugin.getConfig().getDouble("abilities.stormstrike.water_risk.damage_hearts", 1.0)) * 2.0;
+        if (damage <= 0.0) return;
+
+        player.damage(damage);
+        renderWaterShock(player);
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.water_shock"));
+    }
+
+    private void applyWaterAbilityRisk(Player player) {
+        if (!plugin.getConfig().getBoolean("abilities.stormstrike.water_risk.enabled", true)) return;
+        if (!player.isInWater()) return;
+
+        double damage = Math.max(0.0, plugin.getConfig().getDouble("abilities.stormstrike.water_risk.ability_self_damage_hearts", 2.0)) * 2.0;
+        if (damage <= 0.0) return;
+
+        player.damage(damage);
+        renderWaterShock(player);
+        MessageUtil.sendActionBar(player, plugin.getLocaleManager().msg("stormstrike.water_shock"));
+    }
+
+    private void renderWaterShock(Player player) {
+        Location center = player.getLocation().add(0, 0.9, 0);
+        World world = player.getWorld();
+        world.spawnParticle(Particle.ELECTRIC_SPARK, center, 30, 0.42, 0.55, 0.42, 0.18);
+        world.spawnParticle(Particle.BUBBLE_POP, center, 14, 0.35, 0.45, 0.35, 0.04);
+        world.playSound(center, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 0.35f, 1.95f);
+        world.playSound(center, Sound.BLOCK_FIRE_EXTINGUISH, 0.45f, 1.45f);
     }
 
     private void stopBeam(Player player, boolean overheated) {
@@ -282,6 +327,7 @@ public class StormstrikeAbility implements Ability {
 
         launching.add(uuid);
         launchCooldown.put(uuid, now);
+        applyWaterAbilityRisk(player);
 
         Location location = player.getLocation();
         World world = player.getWorld();
@@ -361,6 +407,7 @@ public class StormstrikeAbility implements Ability {
         }
 
         lightningCooldown.put(uuid, now + Math.max(0L, cooldownMs));
+        applyWaterAbilityRisk(player);
 
         int minBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_min_bolts", 2);
         int maxBolts = plugin.getConfig().getInt("abilities.stormstrike.lightning_max_bolts", 2);
@@ -447,8 +494,6 @@ public class StormstrikeAbility implements Ability {
     }
 
     public void handleMeleeHit(Player attacker, LivingEntity target) {
-        // Stormstrike melee no longer spawns lightning or spark hits.
-        // Lightning is intentionally limited to Sneak + Left-Click and the F beam.
     }
 
     public void triggerFallImpact(Player player, double fallenBlocks) {
