@@ -231,6 +231,7 @@ abilities:
         pitch: 1.35
     compound_v:
       resistance_level: 3
+      speed_dash_range_multiplier: 1.10
       heat_vision_range: 45.0
       heat_vision_damage_hearts: 4.5
       heat_vision_damage_multiplier: 1.0
@@ -239,6 +240,7 @@ abilities:
       heat_vision_impact_particles: 17
     v_one:
       resistance_level: 4
+      speed_dash_range_multiplier: 1.20
       heat_vision_range: 50.0
       heat_vision_damage_hearts: 4.725
       heat_vision_damage_multiplier: 1.0
@@ -254,6 +256,10 @@ abilities:
     enabled: true
     shared:
       heat_vision_received_damage_multiplier: 0.5
+      # Multiplies all Bloodweaver attack damage (lash, bleed, rupture).
+      damage_multiplier: 1.10
+      superhero_sense:
+        radius: 50.0
       lash:
         range: 25.0
         hit_radius: 0.75
@@ -303,6 +309,13 @@ abilities:
   # Stormstrike: F = beam, Sneak + Left-Click = 2 lightning strikes.
   stormstrike:
     enabled: true
+    # Risk counter: water shocks Stormstrike, ice/water powers hit harder.
+    water_risk:
+      enabled: true
+      damage_hearts: 1.0
+      damage_interval_ticks: 20
+      ability_self_damage_hearts: 2.0
+    water_ice_damage_taken_multiplier: 1.75
     beam_damage_hearts: 0.95625
     beam_hit_radius: 6.5         # Damage radius around the visible beam particles
     lightning_tick_damage_hearts: 0.54
@@ -434,6 +447,21 @@ abilities:
     impact_path_step: 0.28
     impact_cooldown_ms: 750
     impact_knockback: 1.15
+    # Running sound while a speed level is active and the player is moving.
+    run_sound_enabled: true
+    run_sound: "entity.horse.gallop"
+    run_sound_volume: 0.45
+    run_sound_pitch: 1.35
+    run_sound_interval_ms: 240
+    run_sound_min_distance: 0.16
+    # Risk counter: sprinting into a wall at high speed hurts.
+    wall_crash_enabled: true
+    wall_crash_min_speed_level: 11
+    wall_crash_min_speed: 0.42
+    wall_crash_max_stop_delta: 0.05
+    wall_crash_damage_hearts: 2.0
+    wall_crash_damage_per_speed_level_hearts: 0.25
+    wall_crash_cooldown_ms: 1500
 
   # The Veteran: Sneak + Left-Click charges a heavy chest blast.
   # Lower defaults avoid public-server ping spikes. Use /compoundv reload after config changes.
@@ -533,7 +561,22 @@ abilities:
     enabled: true
     explosion_charge_ticks: 60
     explosion_cooldown_ms: 10000
-    cancel_charge_when_sneak_released: false
+    cancel_charge_when_sneak_released: true
+    explosion_hold_grace_ms: 400
+
+  # Teleporter: F = Blink teleport.
+  teleporter:
+    enabled: true
+    range: 35.0
+    cooldown_ms: 2000
+    strength_level: 1
+    resistance_level: 1
+  teleporter_v_one:
+    enabled: true
+    range: 50.0
+    cooldown_ms: 2000
+    strength_level: 2
+    resistance_level: 3
 
   # The Headpopper (Victoria Neuman): Sneak + Left-Click marks the entity you are
   # looking at, then pops it after a countdown. Toggling the ability releases an
@@ -573,11 +616,18 @@ v_null:
     min_seconds: 60
     max_seconds: 120
     slowness_seconds: 30
+    wither_level: 2
+    poison_level: 2
+    slowness_level: 2
+    weakness_seconds: 45
   splash:
-    radius: 4.0
+    radius: 5.0
   lingering:
-    radius: 4.0
+    radius: 5.0
     duration_ticks: 160
+  arrow:
+    # Crafted from 1 V-Null Virus potion + 1 arrow in the workbench.
+    craft_amount: 2
   unpowered:
     effect_seconds: 0
   mobs:

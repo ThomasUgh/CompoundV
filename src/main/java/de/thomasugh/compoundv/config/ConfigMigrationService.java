@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class ConfigMigrationService {
 
-    private static final int CURRENT_CONFIG_VERSION = 8;
+    private static final int CURRENT_CONFIG_VERSION = 9;
 
     private final JavaPlugin plugin;
 
@@ -33,6 +33,7 @@ public final class ConfigMigrationService {
         changed |= migrateVersion111Step32Defaults();
         changed |= migrateVersion115Features();
         changed |= migrateVersion116Features();
+        changed |= migrateVersion117Features();
         changed |= cleanupObsoleteEntries();
         changed |= pruneToBundledConfigShape();
 
@@ -380,6 +381,69 @@ public final class ConfigMigrationService {
                 changed = true;
             }
         }
+        return changed;
+    }
+
+    private boolean migrateVersion117Features() {
+        boolean changed = false;
+
+        changed |= setIfMissing("abilities.the_patriot.compound_v.speed_dash_range_multiplier", 1.10);
+        changed |= setIfMissing("abilities.the_patriot.v_one.speed_dash_range_multiplier", 1.20);
+
+        changed |= setIfMissing("abilities.bloodweaver.shared.damage_multiplier", 1.10);
+        changed |= setIfMissing("abilities.bloodweaver.shared.superhero_sense.radius", 50.0);
+
+        changed |= setIfMissing("abilities.stormstrike.water_risk.enabled", true);
+        changed |= setIfMissing("abilities.stormstrike.water_risk.damage_hearts", 1.0);
+        changed |= setIfMissing("abilities.stormstrike.water_risk.damage_interval_ticks", 20);
+        changed |= setIfMissing("abilities.stormstrike.water_risk.ability_self_damage_hearts", 2.0);
+        changed |= setIfMissing("abilities.stormstrike.water_ice_damage_taken_multiplier", 1.75);
+
+        changed |= setIfMissing("abilities.the_runner.run_sound_enabled", true);
+        changed |= setIfMissing("abilities.the_runner.run_sound", "entity.horse.gallop");
+        changed |= setIfMissing("abilities.the_runner.run_sound_volume", 0.45);
+        changed |= setIfMissing("abilities.the_runner.run_sound_pitch", 1.35);
+        changed |= setIfMissing("abilities.the_runner.run_sound_interval_ms", 240);
+        changed |= setIfMissing("abilities.the_runner.run_sound_min_distance", 0.16);
+        changed |= setIfMissing("abilities.the_runner.wall_crash_enabled", true);
+        changed |= setIfMissing("abilities.the_runner.wall_crash_min_speed_level", 11);
+        changed |= setIfMissing("abilities.the_runner.wall_crash_min_speed", 0.42);
+        changed |= setIfMissing("abilities.the_runner.wall_crash_max_stop_delta", 0.05);
+        changed |= setIfMissing("abilities.the_runner.wall_crash_damage_hearts", 2.0);
+        changed |= setIfMissing("abilities.the_runner.wall_crash_damage_per_speed_level_hearts", 0.25);
+        changed |= setIfMissing("abilities.the_runner.wall_crash_cooldown_ms", 1500);
+
+        changed |= setIfMissing("abilities.the_detonator.explosion_hold_grace_ms", 400);
+        if (allowValueRewrites
+                && !plugin.getConfig().getBoolean("abilities.the_detonator.cancel_charge_when_sneak_released", true)) {
+            plugin.getConfig().set("abilities.the_detonator.cancel_charge_when_sneak_released", true);
+            changed = true;
+        }
+        if (allowValueRewrites && plugin.getConfig().getLong("abilities.the_detonator.explosion_hold_grace_ms", 400L) == 2500L) {
+            plugin.getConfig().set("abilities.the_detonator.explosion_hold_grace_ms", 400);
+            changed = true;
+        }
+
+        changed |= setIfMissing("abilities.teleporter.enabled", true);
+        changed |= setIfMissing("abilities.teleporter.range", 35.0);
+        changed |= setIfMissing("abilities.teleporter.cooldown_ms", 2000);
+        changed |= setIfMissing("abilities.teleporter.strength_level", 1);
+        changed |= setIfMissing("abilities.teleporter.resistance_level", 1);
+        changed |= setIfMissing("abilities.teleporter_v_one.enabled", true);
+        changed |= setIfMissing("abilities.teleporter_v_one.range", 50.0);
+        changed |= setIfMissing("abilities.teleporter_v_one.cooldown_ms", 2000);
+        changed |= setIfMissing("abilities.teleporter_v_one.strength_level", 2);
+        changed |= setIfMissing("abilities.teleporter_v_one.resistance_level", 3);
+        changed |= replaceIfNumericEquals("abilities.teleporter_v_one.resistance_level", 2, 3);
+
+        changed |= setIfMissing("v_null.v_one.wither_level", 2);
+        changed |= setIfMissing("v_null.v_one.poison_level", 2);
+        changed |= setIfMissing("v_null.v_one.slowness_level", 2);
+        changed |= setIfMissing("v_null.v_one.weakness_seconds", 45);
+        changed |= replaceIfNumericEquals("v_null.splash.radius", 4.0, 5.0);
+        changed |= replaceIfNumericEquals("v_null.lingering.radius", 4.0, 5.0);
+        changed |= setIfMissing("v_null.arrow.craft_amount", 2);
+
         return changed;
     }
 
