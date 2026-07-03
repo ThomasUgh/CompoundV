@@ -1,4 +1,4 @@
-language_file_version: 30
+language_file_version: 31
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -50,7 +50,7 @@ ability:
     - "<prefix>&8• &cHeat Vision&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vaihtaaksesi. Oletus: &e5 sydäntä&7, &e44 lohkoa&7."
     - "<prefix>&8• &bXRay&7: &dHiivi + vasen klikkaus ilmaan&7 paljastaaksesi lähellä olevat olennot."
     - "<prefix>&8• &6Jump Start&7: &dHiivi&7, katso ylös ja hyppää ponnistaaksesi."
-    - "<prefix>&8• &cSpeed Dash&7: &dHiivi + työkalupalkin rullaus&7 syöksyäksesi jopa &e25 lohkoa&7 eteenpäin."
+    - "<prefix>&8• &cSpeed Dash&7: &dHiivi + työkalupalkin rullaus&7 syöksyäksesi jopa &e27.5 lohkoa&7 eteenpäin."
     - "<prefix>&8• &cForward Leap&7: &dHiivi + hyppy + liiku eteenpäin&7 saadaksesi tasaisen 10–15 lohkon syöksyn."
     - "<prefix>&8• &7Passiiviset tehosteet: &aVoima&7, &9Kestävyys&7, &dRegeneraatio&7 ja &cbonus-sydämet&7."
   the_patriot_v_one:
@@ -60,7 +60,7 @@ ability:
     - "<prefix>&8• &cHeat Vision&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vaihtaaksesi. Oletus: &e4.725 sydäntä&7, &e50 lohkoa&7."
     - "<prefix>&8• &bXRay&7: &dHiivi + vasen klikkaus ilmaan&7 paljastaaksesi lähellä olevat olennot."
     - "<prefix>&8• &6Jump Start&7: &dHiivi&7, katso ylös ja hyppää ponnistaaksesi."
-    - "<prefix>&8• &cSpeed Dash&7: &dHiivi + työkalupalkin rullaus&7 syöksyäksesi jopa &e25 lohkoa&7 eteenpäin."
+    - "<prefix>&8• &cSpeed Dash&7: &dHiivi + työkalupalkin rullaus&7 syöksyäksesi jopa &e30 lohkoa&7 eteenpäin."
     - "<prefix>&8• &cForward Leap&7: &dHiivi + hyppy + liiku eteenpäin&7 saadaksesi tasaisen 10–15 lohkon syöksyn."
     - "<prefix>&8• &7Passiiviset tehosteet: &aVoima&7, &9Kestävyys&7, &dRegeneraatio&7, &6Tulenkestävyys&7 ja &cbonus-sydämet&7."
   sonic_boom:
@@ -128,6 +128,7 @@ ability:
     - "<prefix>&8• &eRunner Speed&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 vaihtaaksesi nopeuksia Speed X, XI, XII, XV ja pois."
     - "<prefix>&8• &eImpact Run&7: olentojen läpi juokseminen nopeudella X+ tekee &c6 sydäntä&7, plus &c+1 sydän&7 jokaiselta ylimääräiseltä nopeustasolta."
     - "<prefix>&8• &7Passiiviset tehosteet: &aVoima II&7, &9Kestävyys I&7, &c5 ylimääräistä sydäntä&7 ja ei lähitaistelun jäähtymistä."
+    - "<prefix>&8• &cRiski&7: seinään juokseminen kovassa vauhdissa vahingoittaa sinua."
   teleporter:
     description:
     - "<prefix>&8• &5Blink&7: paina &dF &8(Vaihda esine kakkoskäteen)&7 teleporttaaksesi jopa &e35 lohkoa&7."
@@ -180,6 +181,7 @@ ability:
     - "<prefix>&8• &dHiivi + vasen klikkaus&7 kutsuu &e4 oikeaa salamaniskua&7. Joka 5. lähitaisteluosuma kutsuu salamaniskun."
     - "<prefix>&8• &7Hiipien laskeutumisisku: 6 salamaniskua 10 lohkon säteellä. Jäähtyminen: &e100s&7."
     - "<prefix>&8• &7Passiiviset tehosteet: &aVoima III&7, &9Kestävyys III&7 ja &c10 ylimääräistä sydäntä&7."
+    - "<prefix>&8• &cRiski&7: vesi sähköttää sinua ja voimien käyttö vedessä sattuu. &bJää-/vesivoimat&7 tekevät sinuun &c+75% vahinkoa&7."
   fire_sonic:
     description:
     - "<prefix>&8• &cFlame Aura&7: jokainen lähitaisteluosuma sytyttää voimakkaan palovamman."
@@ -217,6 +219,8 @@ ability:
     - "<prefix>&8• &7Blood Rupture nostaa kohteet &e3 lohkoa&7, juurruttaa ne &e5s&7, tekee &c2 sydäntä/s&7 ja heittää selviytyjät taakse."
     - "<prefix>&8• &7Hinta: &c2 sydäntä&7 ja &7Heikkous &e20s&7. Passiivinen: &9Kestävyys III&7, &aVoima II&7, &dRegeneraatio II&7, &c+5 sydäntä&7."
     - "<prefix>&8• &7Saa &c50% vähemmän Heat Vision -vahinkoa&7."
+    - "<prefix>&8• &cSupe-röntgen&7: &dHiivi + F&7 korostaa lähellä olevat &cV-voimaiset pelaajat&7 punaisella."
+    - "<prefix>&8• &7Kaikki Bloodweaverin hyökkäykset tekevät &c+10% vahinkoa&7."
   bloodweaver_v_one:
     description:
     - "<prefix>&8• &3V One -parannus&7 Bloodweaverille."
@@ -224,6 +228,8 @@ ability:
     - "<prefix>&8• &dHiivi + vasen klikkaus&7 ja jatka hiipimistä &e3s&7 loihtiaksesi vahvemman &cBlood Rupturen&7."
     - "<prefix>&8• &7Blood Rupture juurruttaa ja nostaa kohteet &e7s&7, tehden &c2 sydäntä/s&7 ennen kuin heittää selviytyjät taakse."
     - "<prefix>&8• &7Passiivinen: &9Kestävyys III&7, &aVoima II&7, &dRegeneraatio II&7, &c+10 sydäntä&7 ja &c50% Heat Vision -vähennys&7."
+    - "<prefix>&8• &cSupe-röntgen&7: &dHiivi + F&7 korostaa lähellä olevat &cV-voimaiset pelaajat&7 punaisella."
+    - "<prefix>&8• &7Kaikki Bloodweaverin hyökkäykset tekevät &c+10% vahinkoa&7."
   spider_weaver:
     description:
     - "<prefix>&8• &7Tyyli: kuten &fWebweaver&7."
@@ -303,6 +309,7 @@ sonic_boom:
   beam_cooldown: "&3Sonic Beam &cvalmis {seconds}s kuluttua"
 
 stormstrike:
+  water_shock: "&bVesi &coikosulkee myrskyvoimasi!"
   released: "&bStormstrike &7vapautettu"
   cooldown: "&bStormstrike &cvalmis {seconds}s kuluttua"
   beam_on: "&fStorm Beam &aaktivoitu"
@@ -701,6 +708,8 @@ tutorial_book:
   - "&4lisätään voimiin."
 
 bloodweaver:
+  sense_on: "&cSupe-röntgen &akäytössä"
+  sense_off: "&7Supe-röntgen pois käytöstä"
   lash_hit: "<prefix>&cBlood Lash&7 osui."
   lash_missed: "<prefix>&7Blood Lash ohi."
   lash_cooldown: "<prefix>&7Blood Lash -jäähtyminen: &e{seconds}s&7."
@@ -747,3 +756,11 @@ showcase:
   no_description: Ei kuvausta saatavilla.
   prev: '&e« Edellinen sivu'
   title: '&8» &b&lCompoundV &7&lKyvyt'
+
+the_runner:
+  wall_crash: "&cTörmäsit seinään!"
+
+v_null_arrow:
+  name: "&2&lV-Null-nuoli"
+  lore_1: "&7V-Null-patogeenilla päällystetty nuoli."
+  lore_2: "&8Tartuttaa V-voimaiset kohteet osumasta."

@@ -1,4 +1,4 @@
-language_file_version: 30
+language_file_version: 31
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cDafür hast du keine Berechtigung.
@@ -43,7 +43,7 @@ ability:
     - '<prefix>&8• &cHeat Vision&7: Drücke &dF &8(Swap Item with Offhand)&7 zum Umschalten. Standard: &e5 Herzen&7, &e44 Blöcke&7.'
     - '<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen.'
     - '<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen.'
-    - '<prefix>&8• &cSpeed Dash&7: &dSchleichen + Hotbar scrollen&7 für bis zu &e25 Blöcke&7 nach vorne.'
+    - '<prefix>&8• &cSpeed Dash&7: &dSchleichen + Hotbar scrollen&7 für bis zu &e27.5 Blöcke&7 nach vorne.'
     - '<prefix>&8• &cForward Leap&7: &dSchleichen + Sprung + nach vorne laufen&7 für einen flachen 10-15 Block-Satz.'
     - '<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7 und &cExtra-Herzen&7.'
   the_patriot_v_one:
@@ -53,7 +53,7 @@ ability:
     - '<prefix>&8• &cHeat Vision&7: Drücke &dF &8(Swap Item with Offhand)&7 zum Umschalten. Standard: &e4,725 Herzen&7, &e50 Blöcke&7.'
     - '<prefix>&8• &bXRay&7: &dSchleichen + Linksklick in die Luft&7, um nahe Entities zu sehen.'
     - '<prefix>&8• &6Jump Start&7: &dSchleichen&7, hochschauen und springen.'
-    - '<prefix>&8• &cSpeed Dash&7: &dSchleichen + Hotbar scrollen&7 für bis zu &e25 Blöcke&7 nach vorne.'
+    - '<prefix>&8• &cSpeed Dash&7: &dSchleichen + Hotbar scrollen&7 für bis zu &e30 Blöcke&7 nach vorne.'
     - '<prefix>&8• &cForward Leap&7: &dSchleichen + Sprung + nach vorne laufen&7 für einen flachen 10-15 Block-Satz.'
     - '<prefix>&8• &7Passive Effekte: &aStärke&7, &9Resistenz&7, &dRegeneration&7, &6Feuerresistenz&7 und &cExtra-Herzen&7.'
   sonic_boom:
@@ -121,6 +121,7 @@ ability:
     - '<prefix>&8• &eRunner Speed&7: Drücke &dF &8(Swap Item with Offhand)&7, um Speed X, XI, XII, XV und aus durchzuschalten.'
     - '<prefix>&8• &eImpact Run&7: Wenn du ab Speed X durch Entities rennst, verursachst du &c6 Herzen&7 Schaden, plus &c+1 Herz&7 pro weiterer Speed-Stufe.'
     - '<prefix>&8• &7Passive Effekte: &aStärke II&7, &9Resistenz I&7, &c5 Extra-Herzen&7 und kein Nahkampf-Cooldown.'
+    - "<prefix>&8• &cRisiko&7: Mit hohem Tempo gegen eine Wand zu rennen verursacht Eigenschaden."
   teleporter:
     description:
     - '<prefix>&8• &5Blink&7: Drücke &dF &8(Swap Item with Offhand)&7, um bis zu &e35 Blöcke&7 zu teleportieren.'
@@ -173,6 +174,7 @@ ability:
     - <prefix>&8• &dSneak + Linksklick&7 erzeugt &e4 Blitze&7. Jeder 5. Schlag erzeugt einen Blitzeinschlag.
     - '<prefix>&8• &7Sneak-Explo-Fall: 6 Blitze im 10-Block-Radius. Cooldown: &e100s&7.'
     - '<prefix>&8• &7Passive Effekte: &aStärke III&7, &9Resistenz III&7 und &c10 Extra-Herzen&7.'
+    - "<prefix>&8• &cRisiko&7: Wasser schockt dich, Kräfte im Wasser verletzen dich. &bEis-/Wasserkräfte&7 machen &c+75% Schaden&7 gegen dich."
   fire_sonic:
     description:
     - '<prefix>&8• &cFlammenAura&7: Jeder Schlag verursacht starke Verbrennung.'
@@ -210,6 +212,8 @@ ability:
     - '<prefix>&8• &7Blood Rupture hebt Ziele &e3 Blöcke&7 an, fixiert sie &e5s&7, verursacht &c2 Herzen/s&7 und schleudert Überlebende zurück.'
     - '<prefix>&8• &7Kosten: &c2 Herzen&7 und &7Schwäche für &e20s&7. Passiv: &9Resistenz III&7, &aStärke II&7, &dRegeneration II&7, &c+5 Herzen&7.'
     - '<prefix>&8• &7Erhält &c50% weniger Heat-Vision-Schaden&7.'
+    - "<prefix>&8• &cSupe-XRay&7: &dSneak + F&7 markiert nahe &cV-Träger&7 rot."
+    - "<prefix>&8• &7Alle Bloodweaver-Angriffe verursachen &c+10% Schaden&7."
   bloodweaver_v_one:
     description:
     - '<prefix>&8• &3V One Upgrade&7 für Bloodweaver.'
@@ -217,6 +221,8 @@ ability:
     - '<prefix>&8• &dSneak + Linksklick&7 und &e3s&7 weiter sneaken: stärkere &cBlood Rupture&7.'
     - '<prefix>&8• &7Blood Rupture fixiert und hebt Ziele für &e7s&7 an, verursacht &c2 Herzen/s&7 und schleudert Überlebende zurück.'
     - '<prefix>&8• &7Passiv: &9Resistenz III&7, &aStärke II&7, &dRegeneration II&7, &c+10 Herzen&7 und &c50% Heat-Vision-Reduktion&7.'
+    - "<prefix>&8• &cSupe-XRay&7: &dSneak + F&7 markiert nahe &cV-Träger&7 rot."
+    - "<prefix>&8• &7Alle Bloodweaver-Angriffe verursachen &c+10% Schaden&7."
   spider_weaver:
     description:
     - '<prefix>&8• &7Style: like &fWebweaver&7.'
@@ -238,7 +244,7 @@ ability:
   the_detonator:
     description:
     - '<prefix>&8• &7Stil: wie &cNaqib&7.'
-    - '<prefix>&8• &dSneak + Linksklick&7 löst eine riesige Explosion bei dir aus. Cooldown: &e10s&7. Du bekommst keinen Eigenschaden.'
+    - '<prefix>&8• &dSneak + Linksklick&7 startet einen abbrechbaren Countdown (Sneak loslassen bricht ab), dann folgt eine riesige Explosion bei dir. Cooldown: &e10s&7. Du bekommst keinen Eigenschaden.'
     - '<prefix>&8• &7Passiv: &aStärke II&7, &9Resistenz I&7 und &6Feuerresistenz&7.'
     - <prefix>&8• &7Schläge verbrennen Ziele. Jeder 3. Schlag löst einen kleinen Explosionsschlag aus.
   the_veteran:
@@ -290,6 +296,7 @@ sonic_boom:
   ring_cooldown: '&3Sonic Ring &cbereit in {seconds}s'
   beam_cooldown: '&3Sonic Beam &cbereit in {seconds}s'
 stormstrike:
+  water_shock: "&bWasser &cschließt deine Sturmkräfte kurz!"
   released: '&bStormstrike &7ausgelöst'
   cooldown: '&bStormstrike &cbereit in {seconds}s'
   beam_on: '&fStorm Beam &aaktiviert'
@@ -659,6 +666,8 @@ tutorial_book:
   - '&4zusätzlich zur Kraft.'
 
 bloodweaver:
+  sense_on: "&cSupe-XRay &aaktiviert"
+  sense_off: "&7Supe-XRay deaktiviert"
   lash_hit: '<prefix>&cBlood Lash&7 getroffen.'
   lash_missed: '<prefix>&7Blood Lash verfehlt.'
   lash_cooldown: '<prefix>&7Blood Lash Cooldown: &e{seconds}s&7.'
@@ -707,3 +716,11 @@ showcase:
   category_v_one: '&7Kategorie: &9V One'
   category_v_one_upgrade: '&7Kategorie: &3V-One-Upgrade'
   no_description: 'Keine Beschreibung verfügbar.'
+
+the_runner:
+  wall_crash: "&cGegen die Wand gekracht!"
+
+v_null_arrow:
+  name: "&2&lV-Null-Pfeil"
+  lore_1: "&7Pfeil mit V-Null-Erreger beschichtet."
+  lore_2: "&8Infiziert V-Träger beim Treffer."

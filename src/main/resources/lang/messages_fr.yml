@@ -1,4 +1,4 @@
-language_file_version: 30
+language_file_version: 31
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cTu n'as pas la permission de faire cela.
@@ -116,6 +116,7 @@ ability:
     - '<prefix>&8• &eRunner Speed&7: appuie sur &dF &8(Swap Item with Offhand)&7 pour faire défiler Speed X, XI, XII, XV et off.'
     - '<prefix>&8• &eImpact Run&7: running via entities at Speed X+ deals &c6 cœurs&7, plus &c+1 heart&7 per extra speed level.'
     - '<prefix>&8• &7Bonus passifs : &aForce II&7, &9Résistance I&7, &c5 extra cœurs&7 et aucune recharge en mêlée.'
+    - "<prefix>&8• &cRisque&7 : foncer dans un mur à grande vitesse t'inflige des dégâts."
   teleporter:
     description:
     - '<prefix>&8• &5Blink&7: appuie sur &dF &8(Swap Item with Offhand)&7 pour te téléporter up to &e35 blocs&7.'
@@ -168,6 +169,7 @@ ability:
     - <prefix>&8• &dSneak + clic gauche&7 summons &e4 lightning strikes&7. Every 5th melee coup calls a lightning strike.
     - '<prefix>&8• &7Sneak fall impact: 6 lightning strikes in a 10-block radius. Recharge : &e100s&7.'
     - '<prefix>&8• &7Bonus passifs : &aForce III&7, &9Résistance III&7 et &c10 extra cœurs&7.'
+    - "<prefix>&8• &cRisque&7 : l'eau t'électrocute et utiliser tes pouvoirs dans l'eau te blesse. Les &bpouvoirs de glace/eau&7 t'infligent &c+75% de dégâts&7."
   fire_sonic:
     description:
     - '<prefix>&8• &cFlame Aura&7: chaque melee coup applies heavy brûlure.'
@@ -237,6 +239,8 @@ ability:
     - <prefix>&8• &7Blood Rupture soulève les cibles de &e3 blocs&7, les immobilise &e5s&7, inflige &c2 cœurs/s&7 et repousse les survivants.
     - '<prefix>&8• &7Coût : &c2 cœurs&7 et Faiblesse pendant &e20s&7. Passif : &9Résistance III&7, &aForce II&7, &dRégénération II&7, &c+5 cœurs&7.'
     - <prefix>&8• &7Reçoit &c50% de dégâts de Heat Vision en moins&7.
+    - "<prefix>&8• &cSupe XRay&7 : &dAccroupi + F&7 surligne en rouge les &cjoueurs dotés de V&7 proches."
+    - "<prefix>&8• &7Toutes les attaques de Bloodweaver infligent &c+10% de dégâts&7."
   bloodweaver_v_one:
     description:
     - <prefix>&8• &3Amélioration V One&7 pour Bloodweaver.
@@ -244,6 +248,8 @@ ability:
     - <prefix>&8• &dAccroupi + Clic gauche&7 et reste accroupi &e3s&7 pour lancer le &cBlood Rupture&7 plus puissant.
     - <prefix>&8• &7Blood Rupture immobilise et soulève les cibles &e7s&7, infligeant &c2 cœurs/s&7 avant de repousser les survivants.
     - '<prefix>&8• &7Passif : &9Résistance III&7, &aForce II&7, &dRégénération II&7, &c+10 cœurs&7 et &c50% de réduction de Heat Vision&7.'
+    - "<prefix>&8• &cSupe XRay&7 : &dAccroupi + F&7 surligne en rouge les &cjoueurs dotés de V&7 proches."
+    - "<prefix>&8• &7Toutes les attaques de Bloodweaver infligent &c+10% de dégâts&7."
 toggle:
   heat_vision_on: '{label} &aactivé'
   heat_vision_off: '{label} &7deactivé'
@@ -286,6 +292,7 @@ sonic_boom:
   ring_cooldown: '&3Anneau sonique &cprêt dans {seconds}s'
   beam_cooldown: '&3Rayon sonique &cprêt dans {seconds}s'
 stormstrike:
+  water_shock: "&bL'eau &ccourt-circuite tes pouvoirs de tempête !"
   released: '&bStormstrike &7libéré'
   cooldown: '&bStormstrike &cprêt dans {seconds}s'
   beam_on: '&fStorm Beam &aactivé'
@@ -680,6 +687,8 @@ death_messages:
   the_countess: '{victim} a été réduit en cendres par {killer}.'
   the_runner: '{victim} a été transpercé de part en part par {killer}.'
 bloodweaver:
+  sense_on: "&cSupe XRay &aactivé"
+  sense_off: "&7Supe XRay désactivé"
   lash_cooldown: '<prefix>&7Recharge de Blood Lash : &e{seconds}s&7.'
   lash_hit: <prefix>&cBlood Lash&7 a touché.
   lash_missed: <prefix>&7Blood Lash a raté.
@@ -700,3 +709,11 @@ showcase:
   no_description: Aucune description disponible.
   prev: '&e« Page précédente'
   title: '&8» &b&lCompoundV &7&lCapacités'
+
+the_runner:
+  wall_crash: "&cCrash contre le mur !"
+
+v_null_arrow:
+  name: "&2&lFlèche V-Null"
+  lore_1: "&7Flèche enduite du pathogène V-Null."
+  lore_2: "&8Infecte les cibles dotées de V à l'impact."

@@ -1,4 +1,4 @@
-language_file_version: 30
+language_file_version: 31
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&c你没有权限这么做。
@@ -117,6 +117,7 @@ ability:
     - <prefix>&8• &e跑者速度&7：按 &dF &8(副手交换)&7 循环速度 X、XI、XII、XV 与关闭。
     - <prefix>&8• &e冲撞奔跑&7：速度 X+ 撞实体造成 &c6 心&7，每多一级速度 &c+1 心&7。
     - <prefix>&8• &7被动：&a力量 II&7、&9抗性 I&7、&c5 颗额外心&7、无近战冷却。
+    - "<prefix>&8• &c风险&7: 高速撞墙会对自己造成伤害。"
   teleporter:
     description:
     - <prefix>&8• &5闪现&7：按 &dF &8(副手交换)&7 传送最多 &e35 格&7。
@@ -169,6 +170,7 @@ ability:
     - <prefix>&8• &d潜行 + 左键&7 召唤 &e4 道真闪电&7，每第 5 次近战也落雷。
     - <prefix>&8• &7潜行落地冲击：10 格内 6 道闪电，冷却 &e100 秒&7。
     - <prefix>&8• &7被动：&a力量 III&7、&9抗性 III&7、&c10 颗额外心&7。
+    - "<prefix>&8• &c风险&7: 水会电击你，在水中使用能力会受伤。&b冰/水系能力&7 对你造成 &c+75% 伤害&7。"
   fire_sonic:
     description:
     - <prefix>&8• &c烈焰光环&7：每次近战造成重度燃烧。
@@ -237,6 +239,8 @@ ability:
     - <prefix>&8• &7Blood Rupture 将目标抬升 &e3 格&7，定身 &e5s&7，造成 &c2 颗心/秒&7 并击退幸存者。
     - '<prefix>&8• &7消耗: &c2 颗心&7 和 &e20s&7 虚弱。被动: &9抗性 III&7、&a力量 II&7、&d再生 II&7、&c+5 颗心&7。'
     - <prefix>&8• &7受到的 &cHeat Vision 伤害减少 50%&7。
+    - "<prefix>&8• &c超人透视&7: &d潜行 + F&7 以红色高亮附近 &c拥有 V 之力的玩家&7。"
+    - "<prefix>&8• &7所有 Bloodweaver 攻击造成 &c+10% 伤害&7。"
   bloodweaver_v_one:
     description:
     - <prefix>&8• Bloodweaver 的 &3V One 升级&7。
@@ -244,6 +248,8 @@ ability:
     - <prefix>&8• &d潜行 + 左键&7 并持续潜行 &e3s&7 以释放更强的 &cBlood Rupture&7。
     - <prefix>&8• &7Blood Rupture 定身并抬升目标 &e7s&7，造成 &c2 颗心/秒&7，随后击退幸存者。
     - '<prefix>&8• &7被动: &9抗性 III&7、&a力量 II&7、&d再生 II&7、&c+10 颗心&7 及 &c50% Heat Vision 减免&7。'
+    - "<prefix>&8• &c超人透视&7: &d潜行 + F&7 以红色高亮附近 &c拥有 V 之力的玩家&7。"
+    - "<prefix>&8• &7所有 Bloodweaver 攻击造成 &c+10% 伤害&7。"
 toggle:
   heat_vision_on: '{label} &a已开启'
   heat_vision_off: '{label} &7已关闭'
@@ -286,6 +292,7 @@ sonic_boom:
   ring_cooldown: '&3音爆环 {seconds} 秒后可再用'
   beam_cooldown: '&3音爆束 {seconds} 秒后可再用'
 stormstrike:
+  water_shock: "&b水 &c让你的风暴之力短路！"
   released: '&bStormstrike &7已释放'
   cooldown: '&bStormstrike &c{seconds} 秒后可再用'
   beam_on: '&f风暴束 &a已开启'
@@ -680,6 +687,8 @@ death_messages:
   the_countess: '{killer} 将 {victim} 化为灰烬。'
   the_runner: '{killer} 径直穿过了 {victim} 的身体。'
 bloodweaver:
+  sense_on: "&c超人透视 &a已启用"
+  sense_off: "&7超人透视已禁用"
   lash_cooldown: '<prefix>&7Blood Lash 冷却: &e{seconds}s&7.'
   lash_hit: <prefix>&cBlood Lash&7 命中。
   lash_missed: <prefix>&7Blood Lash 未命中。
@@ -700,3 +709,11 @@ showcase:
   no_description: 暂无描述。
   prev: '&e« 上一页'
   title: '&8» &b&lCompoundV &7&l能力'
+
+the_runner:
+  wall_crash: "&c撞墙了！"
+
+v_null_arrow:
+  name: "&2&lV-Null 箭"
+  lore_1: "&7涂有 V-Null 病原体的箭。"
+  lore_2: "&8命中时感染拥有 V 之力的目标。"

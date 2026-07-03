@@ -1,4 +1,4 @@
-language_file_version: 30
+language_file_version: 31
 prefix: '&8[&b&lCV&r&8] '
 general:
   no_permission: <prefix>&cआपके पास यह करने की अनुमति नहीं है।
@@ -116,6 +116,7 @@ ability:
     - '<prefix>&8• &eRunner Speed&7: दबाएँ &dF &8(Swap Item with Offhand)&7 स्विच करने के लिए Speed X, XI, XII, XV और off.'
     - '<prefix>&8• &eImpact Run&7: running से entities at Speed X+ deals &c6 दिल&7, plus &c+1 heart&7 per extra speed level.'
     - '<prefix>&8• &7निष्क्रिय बूस्ट: &aताकत II&7, &9रेज़िस्टेंस I&7, &c5 extra दिल&7 और कोई melee cooldown नहीं.'
+    - "<prefix>&8• &cजोखिम&7: तेज़ गति से दीवार में दौड़ने पर खुद को नुकसान होता है।"
   teleporter:
     description:
     - '<prefix>&8• &5ब्लिंक&7: दबाएँ &dF &8(Swap Item with Offhand)&7 टेलीपोर्ट करने के लिए up to &e35 ब्लॉक&7.'
@@ -168,6 +169,7 @@ ability:
     - <prefix>&8• &dSneak + Left-Click&7 summons &e4 lightning strikes&7. Every 5th melee हिट calls a lightning strike.
     - '<prefix>&8• &7Sneak fall impact: 6 lightning strikes in a 10-block radius. कूलडाउन: &e100s&7.'
     - '<prefix>&8• &7निष्क्रिय बूस्ट: &aताकत III&7, &9रेज़िस्टेंस III&7 और &c10 extra दिल&7.'
+    - "<prefix>&8• &cजोखिम&7: पानी तुम्हें झटका देता है और पानी में शक्तियाँ उपयोग करने से नुकसान होता है। &bबर्फ/पानी की शक्तियाँ&7 तुम्हें &c+75% नुकसान&7 देती हैं।"
   fire_sonic:
     description:
     - '<prefix>&8• &cFlame Aura&7: हर melee हिट applies heavy जलन.'
@@ -237,6 +239,8 @@ ability:
     - <prefix>&8• &7Blood Rupture लक्ष्यों को &e3 ब्लॉक&7 ऊपर उठाता है, &e5s&7 तक जकड़ता है, &c2 दिल/से&7 नुकसान देता है और बचे हुओं को पीछे फेंकता है।
     - '<prefix>&8• &7लागत: &c2 दिल&7 और &e20s&7 तक Weakness। पैसिव: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+5 दिल&7.'
     - <prefix>&8• &7&c50% कम Heat Vision नुकसान&7 लेता है।
+    - "<prefix>&8• &cSupe XRay&7: &dSneak + F&7 पास के &cV-शक्ति वाले खिलाड़ियों&7 को लाल रंग में दिखाता है।"
+    - "<prefix>&8• &7सभी Bloodweaver हमले &c+10% नुकसान&7 देते हैं।"
   bloodweaver_v_one:
     description:
     - <prefix>&8• Bloodweaver के लिए &3V One अपग्रेड&7।
@@ -244,6 +248,8 @@ ability:
     - <prefix>&8• &dSneak + बायाँ-क्लिक&7 और &e3s&7 तक झुके रहकर मजबूत &cBlood Rupture&7 चलाएँ।
     - <prefix>&8• &7Blood Rupture लक्ष्यों को &e7s&7 तक जकड़कर ऊपर उठाता है, &c2 दिल/से&7 नुकसान देता है और बचे हुओं को पीछे फेंकता है।
     - '<prefix>&8• &7पैसिव: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+10 दिल&7 और &c50% Heat Vision कमी&7।'
+    - "<prefix>&8• &cSupe XRay&7: &dSneak + F&7 पास के &cV-शक्ति वाले खिलाड़ियों&7 को लाल रंग में दिखाता है।"
+    - "<prefix>&8• &7सभी Bloodweaver हमले &c+10% नुकसान&7 देते हैं।"
 toggle:
   heat_vision_on: '{label} &aसक्रिय'
   heat_vision_off: '{label} &7deसक्रिय'
@@ -286,6 +292,7 @@ sonic_boom:
   ring_cooldown: '&3सोनिक रिंग &cतैयार होगा {seconds}s'
   beam_cooldown: '&3सोनिक बीम &cतैयार होगा {seconds}s'
 stormstrike:
+  water_shock: "&bपानी &cतुम्हारी तूफ़ानी शक्तियों को शॉर्ट-सर्किट करता है!"
   released: '&bStormstrike &7रिलीज़ हुआ'
   cooldown: '&bStormstrike &cतैयार होगा {seconds}s'
   beam_on: '&fStorm Beam &aसक्रिय'
@@ -680,6 +687,8 @@ death_messages:
   the_countess: '{killer} ने {victim} को राख कर दिया।'
   the_runner: '{killer} {victim} के आर-पार दौड़ गया।'
 bloodweaver:
+  sense_on: "&cSupe XRay &aचालू"
+  sense_off: "&7Supe XRay बंद"
   lash_cooldown: '<prefix>&7Blood Lash कूलडाउन: &e{seconds}s&7.'
   lash_hit: <prefix>&cBlood Lash&7 लगा।
   lash_missed: <prefix>&7Blood Lash चूक गया।
@@ -700,3 +709,11 @@ showcase:
   no_description: कोई विवरण उपलब्ध नहीं।
   prev: '&e« पिछला पृष्ठ'
   title: '&8» &b&lCompoundV &7&lक्षमताएँ'
+
+the_runner:
+  wall_crash: "&cदीवार से टकरा गए!"
+
+v_null_arrow:
+  name: "&2&lV-Null तीर"
+  lore_1: "&7V-Null रोगाणु से लिपटा तीर।"
+  lore_2: "&8हिट पर V-शक्ति वाले लक्ष्यों को संक्रमित करता है।"

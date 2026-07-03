@@ -1,4 +1,4 @@
-language_file_version: 30
+language_file_version: 31
 prefix: "&8[&b&lCV&r&8] "
 
 general:
@@ -50,7 +50,7 @@ ability:
     - "<prefix>&8• &cHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle. Default: &e5 hearts&7, &e44 blocks&7."
     - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
     - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
-    - "<prefix>&8• &cSpeed Dash&7: &dSneak + hotbar scroll&7 to burst up to &e25 blocks&7 forward."
+    - "<prefix>&8• &cSpeed Dash&7: &dSneak + hotbar scroll&7 to burst up to &e27.5 blocks&7 forward."
     - "<prefix>&8• &cForward Leap&7: &dSneak + jump + move forward&7 for a flat 10-15 block burst."
     - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7 and &cBonus Hearts&7."
   the_patriot_v_one:
@@ -60,7 +60,7 @@ ability:
     - "<prefix>&8• &cHeat Vision&7: press &dF &8(Swap Item with Offhand)&7 to toggle. Default: &e4.725 hearts&7, &e50 blocks&7."
     - "<prefix>&8• &bXRay&7: &dSneak + Left-Click Air&7 to reveal nearby entities."
     - "<prefix>&8• &6Jump Start&7: &dSneak&7, look up and jump to launch."
-    - "<prefix>&8• &cSpeed Dash&7: &dSneak + hotbar scroll&7 to burst up to &e25 blocks&7 forward."
+    - "<prefix>&8• &cSpeed Dash&7: &dSneak + hotbar scroll&7 to burst up to &e30 blocks&7 forward."
     - "<prefix>&8• &cForward Leap&7: &dSneak + jump + move forward&7 for a flat 10-15 block burst."
     - "<prefix>&8• &7Passive boosts: &aStrength&7, &9Resistance&7, &dRegeneration&7, &6Fire Resistance&7 and &cBonus Hearts&7."
   sonic_boom:
@@ -128,6 +128,7 @@ ability:
     - "<prefix>&8• &eRunner Speed&7: press &dF &8(Swap Item with Offhand)&7 to cycle Speed X, XI, XII, XV and off."
     - "<prefix>&8• &eImpact Run&7: running through entities at Speed X+ deals &c6 hearts&7, plus &c+1 heart&7 per extra speed level."
     - "<prefix>&8• &7Passive boosts: &aStrength II&7, &9Resistance I&7, &c5 extra hearts&7 and no melee cooldown."
+    - "<prefix>&8• &cRisk&7: sprinting into a wall at high speed deals self damage."
   teleporter:
     description:
     - "<prefix>&8• &5Blink&7: press &dF &8(Swap Item with Offhand)&7 to teleport up to &e35 blocks&7."
@@ -180,6 +181,7 @@ ability:
     - "<prefix>&8• &dSneak + Left-Click&7 summons &e4 real lightning strikes&7. Every 5th melee hit calls a lightning strike."
     - "<prefix>&8• &7Sneak fall impact: 6 lightning strikes in a 10-block radius. Cooldown: &e100s&7."
     - "<prefix>&8• &7Passive boosts: &aStrength III&7, &9Resistance III&7 and &c10 extra hearts&7."
+    - "<prefix>&8• &cRisk&7: water shocks you and using powers in water hurts. &bIce/water powers&7 deal &c+75% damage&7 to you."
   fire_sonic:
     description:
     - "<prefix>&8• &cFlame Aura&7: every melee hit applies heavy burn."
@@ -217,6 +219,8 @@ ability:
     - "<prefix>&8• &7Blood Rupture lifts targets &e3 blocks&7, roots them for &e5s&7, deals &c2 hearts/s&7 and throws survivors back."
     - "<prefix>&8• &7Cost: &c2 hearts&7 and &7Weakness for &e20s&7. Passive: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+5 hearts&7."
     - "<prefix>&8• &7Receives &c50% less Heat Vision damage&7."
+    - "<prefix>&8• &cSupe XRay&7: &dSneak + F&7 highlights nearby &cV-powered players&7 in red."
+    - "<prefix>&8• &7All Bloodweaver attacks deal &c+10% damage&7."
   bloodweaver_v_one:
     description:
     - "<prefix>&8• &3V One Upgrade&7 for Bloodweaver."
@@ -224,6 +228,8 @@ ability:
     - "<prefix>&8• &dSneak + Left-Click&7 and keep sneaking for &e3s&7 to cast the stronger &cBlood Rupture&7."
     - "<prefix>&8• &7Blood Rupture roots and lifts targets for &e7s&7, dealing &c2 hearts/s&7 before throwing survivors back."
     - "<prefix>&8• &7Passive: &9Resistance III&7, &aStrength II&7, &dRegeneration II&7, &c+10 hearts&7 and &c50% Heat Vision reduction&7."
+    - "<prefix>&8• &cSupe XRay&7: &dSneak + F&7 highlights nearby &cV-powered players&7 in red."
+    - "<prefix>&8• &7All Bloodweaver attacks deal &c+10% damage&7."
   spider_weaver:
     description:
     - "<prefix>&8• &7Style: like &fWebweaver&7."
@@ -303,6 +309,7 @@ sonic_boom:
   beam_cooldown: "&3Sonic Beam &cready in {seconds}s"
 
 stormstrike:
+  water_shock: "&bWater &cshort-circuits your storm powers!"
   released: "&bStormstrike &7released"
   cooldown: "&bStormstrike &cready in {seconds}s"
   beam_on: "&fStorm Beam &aactivated"
@@ -701,6 +708,8 @@ tutorial_book:
   - "&4added to powers."
 
 bloodweaver:
+  sense_on: "&cSupe XRay &aenabled"
+  sense_off: "&7Supe XRay disabled"
   lash_hit: "<prefix>&cBlood Lash&7 hit."
   lash_missed: "<prefix>&7Blood Lash missed."
   lash_cooldown: "<prefix>&7Blood Lash cooldown: &e{seconds}s&7."
@@ -749,3 +758,11 @@ showcase:
   category_v_one: '&7Category: &9V One'
   category_v_one_upgrade: '&7Category: &3V One upgrade'
   no_description: 'No description available.'
+
+the_runner:
+  wall_crash: "&cWall crash!"
+
+v_null_arrow:
+  name: "&2&lV-Null Arrow"
+  lore_1: "&7Arrow coated in V-Null pathogen."
+  lore_2: "&8Infects V-powered targets on hit."
