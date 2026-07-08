@@ -1,5 +1,5 @@
 name: CompoundV
-version: 1.1.6
+version: 1.1.7
 main: de.thomasugh.compoundv.CompoundV
 api-version: '1.20'
 folia-supported: true
